@@ -16,7 +16,7 @@ const schema: RJSFSchema = {
   },
 }
 
-const log = (type) => console.log.bind(console, type);
+const log = (type: any) => console.log.bind(console, type);
 
 export const JudiciaryForm = ({}: JudiciaryBoardProps) => {
   return (
