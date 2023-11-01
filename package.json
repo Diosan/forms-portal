@@ -9,13 +9,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rjsf/core": "^5.13.3",
+    "@rjsf/utils": "^5.13.3",
+    "@rjsf/validator-ajv8": "^5.13.3",
+    "@types/react-jsonschema-form": "^1.7.10",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-jsonschema-form": "^1.8.1"
   },
   "devDependencies": {
-    "@types/react": "^18.0.27",
+    "@types/react": "^18.2.33",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
+    "tslib": "^2.6.2",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"
   }
