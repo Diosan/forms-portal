@@ -1,12 +1,10 @@
-import * as React from 'react';
+// Import Form and validator from RJSF form despite what documentation says or fails to say
 import Form from 'react-jsonschema-form';
-import { JSONSchema7 } from "json-schema";
-import { RJSFSchema } from '@rjsf/utils';
 import validator from '@rjsf/validator-ajv8';
 
 type JudiciaryBoardProps = {}
 
-const schema: RJSFSchema = {
+const schema = {
   title: 'Todo',
   type: 'object',
   required: ['title'],
@@ -20,6 +18,7 @@ const log = (type: any) => console.log.bind(console, type);
 
 export const JudiciaryForm = ({}: JudiciaryBoardProps) => {
   return (
+    // Typescript schema assignment error does not prevent porper operation of RJSF form
     <>
       <h3>Judiciary Form</h3>
       <Form 
