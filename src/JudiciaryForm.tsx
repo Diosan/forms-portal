@@ -3,6 +3,9 @@ import {useEffect, useState} from "react";
 import Form from 'react-jsonschema-form';
 import validator from '@rjsf/validator-ajv8';
 import axios from "axios";
+import Button from 'react-bootstrap/Button';
+import { Header } from "./Header";
+ 
 
 type JudiciaryBoardProps = {}
 
@@ -28,7 +31,6 @@ export const JudiciaryForm = ({}: JudiciaryBoardProps) => {
   return (
     // Typescript schema assignment error does not prevent porper operation of RJSF form
     <>
-      <h3>Judiciary Form</h3>
       <Form 
         schema={schema}
         validator={validator}

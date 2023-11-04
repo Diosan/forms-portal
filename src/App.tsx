@@ -2,6 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import { JudiciaryForm } from './JudiciaryForm'
+import { Header } from './Header'
+import "bootstrap/dist/css/bootstrap.min.css"
 
 // function App() {
 //   const [count, setCount] = useState(0)
@@ -34,7 +36,11 @@ import { JudiciaryForm } from './JudiciaryForm'
 
 function App() {
   return (
-    <JudiciaryForm />
+    <>
+      <Header />
+      <JudiciaryForm />
+    </>
+   
   )
 }
 
