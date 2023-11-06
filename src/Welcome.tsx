@@ -32,11 +32,11 @@ export const Welcome = ({}: WelcomeProps) => {
                         <form>
                             <div className="mb-3">
                                 {/* <label for="exampleInputEmail1" className="form-label">Email address</label> */}
-                                <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="email" />
+                                <input type="email" className="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="email" />
                             </div>
                             <div className="mb-3">
                                 {/* <label for="exampleInputPassword1" className="form-label">Password</label> */}
-                                <input type="password" className="form-control" id="exampleInputPassword1" placeholder="password" />
+                                <input type="password" className="form-control" id="loginPassword" placeholder="password" />
                             </div>
                             {/* <div className="mb-3 form-check">
                                 <input type="checkbox" className="form-check-input" id="exampleCheck1" />
@@ -53,13 +53,28 @@ export const Welcome = ({}: WelcomeProps) => {
                         
                         <form>
                             <div className="mb-3">
-                                <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="email" />
+                                <select className='form-select' id="agency">
+                                    <option selected>Select your agency</option>
+                                    <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                                </select>
+                            </div>
+                            <div className="mb-3">
+                                <input type="text" className="form-control" id="firstName" placeholder="Regimental Number" />
+                            </div>
+                            <div className="mb-3">
+                                <input type="text" className="form-control" id="firstName" placeholder="First Name" />
+                            </div>
+                            <div className="mb-3">
+                                <input type="text" className="form-control" id="lastName" placeholder="Last Name" />
+                            </div>
+                            <div className="mb-3">
+                                <input type="email" className="form-control" id="email1" placeholder="email" />
                             </div>
                             <div className="mb-3">                                
-                                <input type="password" className="form-control" id="exampleInputPassword1" placeholder="password" />
+                                <input type="password" className="form-control" id="password" placeholder="password" />
                             </div>
                             <div className="d-grid gap-2">
-                                <button type="submit" className="btn btn-secondary">Sign In</button>
+                                <button type="submit" className="btn btn-secondary">Register</button>
                             </div>                        
                         </form>
 
