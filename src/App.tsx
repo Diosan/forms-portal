@@ -2,8 +2,12 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import { JudiciaryForm } from './JudiciaryForm'
+import { Welcome } from './Welcome'
 import { Header } from './Header'
-import "bootstrap/dist/css/bootstrap.min.css"
+import Container from 'react-bootstrap/Container';
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+
 
 // function App() {
 //   const [count, setCount] = useState(0)
@@ -37,8 +41,10 @@ import "bootstrap/dist/css/bootstrap.min.css"
 function App() {
   return (
     <>
-      <Header />
-      <JudiciaryForm />
+      <Header />     
+      {/* <JudiciaryForm /> */}
+      <Welcome />
+            
     </>
    
   )

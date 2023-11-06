@@ -5,12 +5,12 @@ body {
 }
 
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   width: 100%;
   margin: 0;
   padding: 2rem;
   text-align: center;
-  background-color: azure;
+  background-color: white;
   color: #000;
 }
 
@@ -25,6 +25,33 @@ body {
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+/* .navbar-brand img {
+  margin-right: 15px;
+} */
+
+.navbar-nav {
+  margin-right: 20px;
+}
+
+.nav-link {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.nav-item.jud-header-item {
+  border-left: #888 solid 1px;
+}
+
+
+.nav-item button {
+  margin-right: 20px;
+  margin-left: 20px  
+}
+
+.navbar-brand .site-name {
+  margin: 15px 0;
 }
 
 @keyframes logo-spin {

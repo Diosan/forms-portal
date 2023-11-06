@@ -1,0 +1,44 @@
+
+
+.welcome-message {
+    color: #555;
+} 
+
+.tab-content.welcome {
+    border-left: #888 1px solid;
+    border-bottom: #888 1px solid;
+    border-right: #888 1px solid;
+    max-width: 800px;
+    margin: 0 auto;
+    border-bottom-left-radius: 3%;
+    border-bottom-right-radius: 3%;
+}
+
+.nav.nav-tabs.welcome {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tab-pane.welcome {
+    padding: 40px;
+}
+
+.nav-link.welcome {
+    border-color: #888 !important;
+    margin-left: 3px;
+    margin-right: 3px;
+    background-color: #ccc;
+    color: #444;
+    font-weight: bold;
+    
+}
+
+.nav-link.welcome.active {
+    border-color: #888 !important;
+    border-bottom: none;
+}
+
+#welcome_signin, #welcome_register {
+    text-align: left;
+}
+

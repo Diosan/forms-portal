@@ -3,11 +3,9 @@ import {useEffect, useState} from "react";
 import Form from 'react-jsonschema-form';
 import validator from '@rjsf/validator-ajv8';
 import axios from "axios";
-import Button from 'react-bootstrap/Button';
-import { Header } from "./Header";
  
 
-type JudiciaryBoardProps = {}
+type JudiciaryFormProps = {}
 
 
 
@@ -16,14 +14,13 @@ type JudiciaryBoardProps = {}
 
 const log = (type: any) => console.log.bind(console, type);
 
-export const JudiciaryForm = ({}: JudiciaryBoardProps) => {
+export const JudiciaryForm = ({}: JudiciaryFormProps) => {
 
   const [schema, setSchema] = useState({});
   
   useEffect(() => {
     axios.get('http://localhost:3000/schema')
     .then((response) => {
-      console.log(response.data);
       setSchema(response.data);
     })
   }, []);
