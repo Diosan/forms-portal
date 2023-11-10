@@ -4,8 +4,10 @@ import './App.css'
 import { JudiciaryForm } from './JudiciaryForm'
 import { Welcome } from './Welcome'
 import { Header } from './Header'
-import Container from 'react-bootstrap/Container';
+import Container from 'react-bootstrap/Container'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { store } from './store'
+import { Provider } from 'react-redux'
 
 
 
@@ -41,10 +43,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 function App() {
   return (
     <>
-      <Header />     
-      {/* <JudiciaryForm /> */}
-      <Welcome />
-            
+      {/* <Provider store={store}> */}
+        <Header />     
+        <Welcome />
+      {/* </Provider>             */}
     </>
    
   )

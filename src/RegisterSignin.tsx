@@ -44,13 +44,13 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                             
                             <form>
                                 <div className="mb-3">
-                                    <select className='form-select' id="agency">
-                                        <option selected>Select your agency</option>
+                                    <select className='form-select' id="agency" placeholder="Select your agency">
+                                        <option>Select your agency</option>
                                         <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                                     </select>
                                 </div>
                                 <div className="mb-3">
-                                    <input type="text" className="form-control" id="firstName" placeholder="Regimental Number" />
+                                    <input type="text" className="form-control" id="regNumber" placeholder="Regimental Number" />
                                 </div>
                                 <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" placeholder="First Name" />

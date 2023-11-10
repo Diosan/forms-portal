@@ -8,17 +8,14 @@ export const Welcome = ({}: WelcomeProps) => {
     return (
     <>
         <div className="container">
-            <br /> <br />
-            <h3 className='welcome-message'>Welcome to the Judiciary Form Portal</h3> 
             
             <br /> <br />
-          
+            <h3 className='welcome-message'>Welcome to the Judiciary Form Portal</h3>             
+            <br /> <br />
 
-            <a className="btn btn-outline-primary btn-lg">Connect with TTPS</a>
+            {/* <a className="btn btn-outline-primary btn-lg">Connect with TTPS</a> */}
 
-
-
-
+            <RegisterSignin />
 
         </div>
     </>
