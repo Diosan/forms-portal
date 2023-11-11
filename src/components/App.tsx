@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import '../assets/App.css'
-import { JudiciaryForm } from './JudiciaryForm'
+// import { JudiciaryForm } from './JudiciaryForm'
 import { Welcome } from './Welcome'
 import { Header } from './Header'
 import Container from 'react-bootstrap/Container'

@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './components/App'
 import { Header } from './components/Header'
-import { JudiciaryForm } from './components/JudiciaryForm'
+import { Submission } from './components/Submission'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/submission",
-    element: <JudiciaryForm />
+    element: <Submission />
   }
 ])
 

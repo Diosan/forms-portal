@@ -5,20 +5,20 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
         <>
             
                 <div className='row'>
-                    <ul className="nav nav-tabs justify-content-center welcome">
+                    <ul className="nav nav-tabs justify-content-center">
                         <li className="nav-item active">
-                            <a className="nav-link active welcome" aria-current="page" data-bs-toggle="tab" href="#welcome_signin">Sign In</a>
+                            <a className="nav-link active jud-tab" aria-current="page" data-bs-toggle="tab" href="#welcome_signin">Sign In</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link welcome"  data-bs-toggle="tab" href="#welcome_register">Register</a>
+                            <a className="nav-link jud-tab"  data-bs-toggle="tab" href="#welcome_register">Register</a>
                         </li>
                     </ul>
                 </div>
     
                 <div className='row'> 
                       
-                    <div className="tab-content welcome">
-                        <div id="welcome_signin" className="tab-pane fade show welcome active" role="tabpanel">
+                    <div className="tab-content">
+                        <div id="welcome_signin" className="tab-pane fade show active" role="tabpanel">
                         
                             <form>
                                 <div className="mb-3">
@@ -40,7 +40,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                             </form>
     
                         </div>
-                        <div id="welcome_register" className="tab-pane fade welcome" role="tabpanel">
+                        <div id="welcome_register" className="tab-pane fade" role="tabpanel">
                             
                             <form>
                                 <div className="mb-3">
