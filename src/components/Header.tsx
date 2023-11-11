@@ -19,10 +19,10 @@ export const Header = (({}: HeaderProps) => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item active jud-header-item">
-                            <a className="nav-link" href="#">Home {/* <span className="sr-only">(current)</span> */} </a> 
+                            <a className="nav-link" href="/">Home {/* <span className="sr-only">(current)</span> */} </a> 
                         </li>
                         <li className="nav-item jud-header-item">
-                            <a className="nav-link" href="#">Forms</a>
+                            <a className="nav-link" href="/submission">Forms</a>
                         </li>
                         {/* <li className="nav-item">
                             <Button>SIGN IN</Button>

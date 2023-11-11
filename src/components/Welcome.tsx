@@ -1,5 +1,5 @@
 import Button from 'react-bootstrap/Button';
-import './Welcome.css'
+import '../assets/Welcome.css'
 import { RegisterSignin } from './RegisterSignin';
 
 type WelcomeProps = {}

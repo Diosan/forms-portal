@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import './App.css'
+import '../assets/App.css'
 import { JudiciaryForm } from './JudiciaryForm'
 import { Welcome } from './Welcome'
 import { Header } from './Header'
 import Container from 'react-bootstrap/Container'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { store } from './store'
+// import { store } from './store'
 import { Provider } from 'react-redux'
 
 
@@ -41,10 +41,11 @@ import { Provider } from 'react-redux'
 // }
 
 function App() {
+  // console.log(store.getState())
   return (
     <>
       {/* <Provider store={store}> */}
-        <Header />     
+        {/* <Header />      */}
         <Welcome />
       {/* </Provider>             */}
     </>
