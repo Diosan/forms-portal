@@ -1,24 +1,51 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
 import {useEffect, useState} from "react";
-import Form from 'react-jsonschema-form';
-import validator from '@rjsf/validator-ajv8';
 import axios from "axios";
 import "../assets/Submission.css"
+import "../assets/javascript/submission"
+import { Step } from "./Step";
  
 
 type SubmissionProps = {}
 
+type submissionStep = {
+  id: number,
+  title: string
+}
 
-const log = (type: any) => console.log.bind(console, type);
 
 export const Submission = ({}: SubmissionProps) => {
 
   const [schema, setSchema] = useState({});
+
+  const [currentStep, setCurrentStep] = useState(1)
+
+  const submissionSteps: submissionStep[] = [
+    {id: 1, title: 'Step 1'},
+    {id: 2, title: 'Step 2'},
+    {id: 3, title: 'Step 3'},
+    {id: 4, title: 'Step 4'},
+    {id: 5, title: 'Step 5'}
+  ]
+
+  // const submissionSteps = [1,2,3,4,5]
+
+  const nextStep = () => {
+    if (currentStep < submissionSteps.length) setCurrentStep(currentStep + 1)
+  }
+
+  const previousStep = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1)
+  }
+
+  const finishSubmission = () => {
+
+  }
   
   useEffect(() => {
     axios.get('http://localhost:3000/schema')
     .then((response) => {
-      setSchema(response.data);
+      setSchema(response.data)
     })
   }, []);
 
@@ -26,93 +53,44 @@ export const Submission = ({}: SubmissionProps) => {
     // Typescript schema assignment error does not prevent porper operation of RJSF form
     <>
 
-      {/* <Form 
-        schema={schema}
-        validator={validator}
-        // onChange={log('changed')}
-        onSubmit={log('submitted')}
-        onError={log('errors')} 
-      /> */}
+
 
           <div className="container">
 
-                {/* <div className='row'>
-                    <ul className="nav nav-tabs justify-content-center ">
-                        <li className="nav-item active">
-                            <a className="nav-link active jud-tab" aria-current="page" data-bs-toggle="tab" href="#submission_1st">1st Step</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link jud-tab"  data-bs-toggle="tab" href="#submission_2nd">2nd Step</a>
-                        </li>
-                    </ul>
-                </div> */}
-    
-                {/* <div className='row'> 
-                      
-                    <div className="tab-content submission">
-                        <div id="submission_1st" className="tab-pane fade show active" role="tabpanel">
+
+                <div id="regForm">
+
+                  <br />
+                  <h3 className='page-title'>Complaint Without Oath</h3>             
+                  <br /> <br />
+
+                  {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} /> )}
+
+                  
+
+                  <div style={{overflow:'auto'}}>
+                      <div style={{float:'right'}}>
+                        {currentStep > 1 ? <a id="prevBtn" className="btn btn-secondary" onClick={previousStep} >❮ Previous</a>  : ''  }
+                        {currentStep < submissionSteps.length 
+                          ? <a id="nextBtn" className="btn btn-secondary" onClick={nextStep} >Next ❯</a> 
+                          : <a id="nextBtn" className="btn btn-success" onClick={finishSubmission} >Finish ❯</a>}                        
                         
-                          <h3>First Step</h3>
-    
-                        </div>
-                        <div id="submission_2nd" className="tab-pane fade" role="tabpanel">
-                            
-                          <h3>Second Step</h3>
-    
-                        </div>
-                    </div>
-
-                </div>  */}
-
-
-                <form id="regForm" action="">
-
-                <br />
-                <h3 className='page-title'>Complaint Without Oath</h3>             
-                <br /> <br />
-
-                
-                <div className="tab" style={{display: 'block'}}>Name:
-                <div className="mb-3">
-                                    <input type="text" className="form-control" id="firstName" placeholder="First Name" />
-                                </div>
-                                <div className="mb-3">
-                                    <input type="text" className="form-control" id="lastName" placeholder="Last Name" />
-                                </div>
-                </div>
-
-                <div className="tab">Contact Info:
-                  <p><input placeholder="E-mail..." /></p>
-                  <p><input placeholder="Phone..." /></p>
-                </div>
-
-                <div className="tab">Birthday:
-                  <p><input placeholder="dd" /></p>
-                  <p><input placeholder="mm" /></p>
-                  <p><input placeholder="yyyy" /></p>
-                </div>
-
-                <div className="tab">Login Info:
-                  <p><input placeholder="Username..." /></p>
-                  <p><input placeholder="Password..." /></p>
-                </div>
-
-                <div style={{overflow:'auto'}}>
-                  <div style={{float:'right'}}>
-                    {/* <button type="button" id="prevBtn" className="btn btn-secondary" disabled>❮ Previous</button> */}
-                    <button type="button" id="nextBtn" className="btn btn-secondary" >Next ❯</button>
+                      </div>
                   </div>
-                </div>
 
-                
-                <div style={{textAlign:'center', marginTop:'20px'}}>
-                  <span className="step"></span>
-                  <span className="step"></span>
-                  <span className="step"></span>
-                  <span className="step"></span>
-                </div>
+                      
+                  <div style={{textAlign:'center', marginTop:'20px'}}>
 
-                </form>
+                      {submissionSteps.map(step => {
+                        if (step.id == currentStep) {
+                          return <span className="step active"></span>
+                        }
+                        return <span className="step"></span> 
+                      })}
+
+                  </div>
+
+                </div>
 
           </div>  
 

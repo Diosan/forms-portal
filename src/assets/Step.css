@@ -1,0 +1,10 @@
+
+.mb-3.jud-step [type="submit"], .control-label {
+    display: none;
+}
+
+.mb-3.jud-step .form-control {
+    margin: 15px 0;
+}
+
+
