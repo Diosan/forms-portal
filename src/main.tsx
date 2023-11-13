@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import App from './components/App'
 import { Header } from './components/Header'
 import { Submission } from './components/Submission'
+import Transcend from "./components/Transcend"
+import SimpleRef from './components/SimpleRef'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
   {
     path: "/submission",
     element: <Submission />
+  },
+  {
+    path: "/transcend",
+    element: <Transcend />
+  },
+  {
+    path: "/simple_ref",
+    element: <SimpleRef />
   }
 ])
 

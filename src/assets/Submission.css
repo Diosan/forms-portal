@@ -1,6 +1,6 @@
 #regForm {
     background-color: #f1f1f1;
-    margin: 100px auto;
+    margin: 50px auto;
     padding: 20px;
     width: 100%;
     min-width: 300px;
@@ -41,4 +41,8 @@
 
   #nextBtn {
     margin-left: 10px;
+  }
+
+  fieldset {
+    min-height: 500px;
   }

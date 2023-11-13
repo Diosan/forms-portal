@@ -24,8 +24,7 @@ export const Submission = ({}: SubmissionProps) => {
     {id: 1, title: 'Step 1'},
     {id: 2, title: 'Step 2'},
     {id: 3, title: 'Step 3'},
-    {id: 4, title: 'Step 4'},
-    {id: 5, title: 'Step 5'}
+    {id: 4, title: 'Step 4'}
   ]
 
   // const submissionSteps = [1,2,3,4,5]

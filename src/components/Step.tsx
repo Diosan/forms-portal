@@ -1,5 +1,7 @@
-import {useEffect, useState} from "react";
+import React from "react";
+import {useEffect, useState, useRef} from "react";
 import axios from "axios";
+import { RJSFSchema, UiSchema } from '@rjsf/utils';
 import Form from 'react-jsonschema-form';
 import validator from '@rjsf/validator-ajv8';
 import '../assets/Step.css'
@@ -7,7 +9,8 @@ import '../assets/Step.css'
 type StepProps = {
     isActive: boolean,
     step: number,
-    title: string
+    title: string//,
+    // myRef: typeof React.createRef
 }
 
 const log = (type: any) => console.log.bind(console, type);
@@ -15,11 +18,13 @@ const log = (type: any) => console.log.bind(console, type);
 export const Step = ({isActive, step, title}: StepProps) => {
 
     const [schema, setSchema] = useState({});
+    const [UI, setUI] = useState({});
 
     useEffect(() => {
-        axios.get('http://localhost:3000/schema')
+        axios.get('http://localhost:3000/schema/' + step)
         .then((response) => {
-          setSchema(response.data)
+          setSchema(response.data.schema)
+          setUI(response.data.UI)
         })
       }, []);
 
@@ -42,6 +47,7 @@ export const Step = ({isActive, step, title}: StepProps) => {
                 <div className="mb-3 jud-step">
                     <Form 
                         schema={schema}
+                        uiSchema={UI}
                         validator={validator}
                         // onChange={log('changed')}
                         onSubmit={log('submitted')}
