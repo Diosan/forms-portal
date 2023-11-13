@@ -21,6 +21,11 @@ export const Step = ({isActive, step, title}: StepProps) => {
     const [schema, setSchema] = useState({})
     const [UI, setUI] = useState({})
 
+    const testRef = () => {
+        // alert('Button works')
+        formElement.current?.requestSubmit
+    }
+
     useEffect(() => {
         axios.get('http://localhost:3000/schema/' + step)
         .then((response) => {
@@ -36,6 +41,12 @@ export const Step = ({isActive, step, title}: StepProps) => {
     return (
         <>
 
+            <a id="refSubmit" 
+                className="btn btn-success" 
+                onClick={testRef} 
+            >
+                Test Ref ❯
+            </a>
 
             <div className="tab" style={{display: 'block'}}><h5 className="step-title">{title}:</h5>
                 {/* <div className="mb-3">

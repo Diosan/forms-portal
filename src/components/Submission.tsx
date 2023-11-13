@@ -42,10 +42,10 @@ export const Submission = ({}: SubmissionProps) => {
   }
   
   useEffect(() => {
-    axios.get('http://localhost:3000/schema')
-    .then((response) => {
-      setSchema(response.data)
-    })
+    // axios.get('http://localhost:3000/schema')
+    // .then((response) => {
+    //   setSchema(response.data)
+    // })
   }, []);
 
   return (
@@ -63,7 +63,7 @@ export const Submission = ({}: SubmissionProps) => {
                   <h3 className='page-title'>Complaint Without Oath</h3>             
                   <br /> <br />
 
-                  {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} /> )}
+                  {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} key={step.id} /> )}
 
                   
 
@@ -82,9 +82,9 @@ export const Submission = ({}: SubmissionProps) => {
 
                       {submissionSteps.map(step => {
                         if (step.id == currentStep) {
-                          return <span className="step active"></span>
+                          return <span className="step active" key={step.id}></span>
                         }
-                        return <span className="step"></span> 
+                        return <span className="step" key={step.id}></span> 
                       })}
 
                   </div>
