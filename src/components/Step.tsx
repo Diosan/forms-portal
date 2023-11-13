@@ -17,8 +17,9 @@ const log = (type: any) => console.log.bind(console, type);
 
 export const Step = ({isActive, step, title}: StepProps) => {
 
-    const [schema, setSchema] = useState({});
-    const [UI, setUI] = useState({});
+    const formElement = useRef<HTMLFormElement>(null)
+    const [schema, setSchema] = useState({})
+    const [UI, setUI] = useState({})
 
     useEffect(() => {
         axios.get('http://localhost:3000/schema/' + step)
@@ -44,10 +45,16 @@ export const Step = ({isActive, step, title}: StepProps) => {
                     <input type="text" className="form-control" id="lastName" placeholder={"Last Name " + step} />
                 </div> */}
 
+                {/* <form ref={formElement}>
+
+                </form> */}
+
                 <div className="mb-3 jud-step">
                     <Form 
                         schema={schema}
                         uiSchema={UI}
+                        // @ts-ignore
+                        ref={formElement}
                         validator={validator}
                         // onChange={log('changed')}
                         onSubmit={log('submitted')}
