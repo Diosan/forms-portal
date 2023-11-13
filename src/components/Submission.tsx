@@ -63,11 +63,11 @@ export const Submission = ({}: SubmissionProps) => {
                   <h3 className='page-title'>Complaint Without Oath</h3>             
                   <br /> <br />
 
-                  {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} key={step.id} /> )}
+                  {/* {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} key={step.id} /> )} */}
 
                   
 
-                  <div style={{overflow:'auto'}}>
+                  {/* <div style={{overflow:'auto'}}>
                       <div style={{float:'right'}}>
                         {currentStep > 1 ? <a id="prevBtn" className="btn btn-secondary" onClick={previousStep} >❮ Previous</a>  : ''  }
                         {currentStep < submissionSteps.length 
@@ -75,10 +75,10 @@ export const Submission = ({}: SubmissionProps) => {
                           : <a id="nextBtn" className="btn btn-success" onClick={finishSubmission} >Finish ❯</a>}                        
                         
                       </div>
-                  </div>
+                  </div> */}
 
                       
-                  <div style={{textAlign:'center', marginTop:'20px'}}>
+                  {/* <div style={{textAlign:'center', marginTop:'20px'}}>
 
                       {submissionSteps.map(step => {
                         if (step.id == currentStep) {
@@ -87,7 +87,7 @@ export const Submission = ({}: SubmissionProps) => {
                         return <span className="step" key={step.id}></span> 
                       })}
 
-                  </div>
+                  </div> */}
 
                 </div>
 
