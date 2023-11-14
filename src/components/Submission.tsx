@@ -75,7 +75,7 @@ export const Submission = ({}: SubmissionProps) => {
                 <div id="regForm">
 
                   <br />
-                  <h3 className='page-title'> Complaint Without Oath </h3>             
+                  <h3 className='page-title'> Complaint With Oath </h3>             
                   <br /> <br />
 
                     <Charges />
