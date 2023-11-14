@@ -8,6 +8,8 @@ import validator from '@rjsf/validator-ajv8';
 import "../assets/Submission.css"
 // import "../assets/javascript/submission"
 import { Step } from "./Step";
+import { Complainant } from "./Complainant";
+import { Charges } from "./Charges";
  
 
 type SubmissionProps = {}
@@ -17,10 +19,11 @@ type submissionStep = {
   title: string
 }
 
-const log = (type: any) => console.log.bind(console, type);
+const log = (type: any) => console.log.bind(console, type)
 
 const processForm = (form: any) => {
   console.log('Submitted form data: ', form.formData)
+  alert('Hurrah!');
 }
 
 
@@ -52,13 +55,13 @@ export const Submission = ({}: SubmissionProps) => {
 
   }
   
-  useEffect(() => {
-    axios.get(API_URL + '/schema/main')
-    .then((response) => {
-      setSchema(response.data.schema)
-      setUI(response.data.UI)
-    })
-  }, []);
+  // useEffect(() => {
+  //   axios.get(API_URL + '/schema/main')
+  //   .then((response) => {
+  //     setSchema(response.data.schema)
+  //     setUI(response.data.UI)
+  //   })
+  // }, []);
 
   return (
     // Typescript schema assignment error does not prevent porper operation of RJSF form
@@ -75,17 +78,23 @@ export const Submission = ({}: SubmissionProps) => {
                   <h3 className='page-title'> Complaint Without Oath </h3>             
                   <br /> <br />
 
+                    <Charges />
 
+                    {/* <Complainant /> */}
 
-                    <Form 
+                    {/* <Form 
                         schema={schema}
                         uiSchema={UI}
                         // @ts-ignore
                         validator={validator}
                         // onChange={log('changed')}
                         onSubmit={processForm}
-                        onError={log('errors')} 
-                    />
+                        onError={log('errors')}
+                    >
+                          <div className="progress-buttons">
+                            <button className="btn btn-secondary" type="submit">Next ❯</button>
+                          </div>
+                    </Form> */}
 
 
                   {/* {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} key={step.id} /> )} */}
