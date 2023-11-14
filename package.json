@@ -20,6 +20,7 @@
     "@types/react-jsonschema-form": "^1.7.10",
     "axios": "^1.6.0",
     "bootstrap": "^5.3.2",
+    "dotenv": "^16.3.1",
     "jquery": "^3.7.1",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",

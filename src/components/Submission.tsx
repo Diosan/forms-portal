@@ -1,8 +1,12 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
 import {useEffect, useState} from "react";
+import { API_URL} from "../config/api"
 import axios from "axios";
+import { RJSFSchema, UiSchema } from '@rjsf/utils';
+import Form from 'react-jsonschema-form';
+import validator from '@rjsf/validator-ajv8';
 import "../assets/Submission.css"
-import "../assets/javascript/submission"
+// import "../assets/javascript/submission"
 import { Step } from "./Step";
  
 
@@ -13,10 +17,17 @@ type submissionStep = {
   title: string
 }
 
+const log = (type: any) => console.log.bind(console, type);
+
+const processForm = (form: any) => {
+  console.log('Submitted form data: ', form.formData)
+}
+
 
 export const Submission = ({}: SubmissionProps) => {
 
-  const [schema, setSchema] = useState({});
+  const [schema, setSchema] = useState({})
+  const [UI, setUI] = useState({})
 
   const [currentStep, setCurrentStep] = useState(1)
 
@@ -42,10 +53,11 @@ export const Submission = ({}: SubmissionProps) => {
   }
   
   useEffect(() => {
-    // axios.get('http://localhost:3000/schema')
-    // .then((response) => {
-    //   setSchema(response.data)
-    // })
+    axios.get(API_URL + '/schema/main')
+    .then((response) => {
+      setSchema(response.data.schema)
+      setUI(response.data.UI)
+    })
   }, []);
 
   return (
@@ -60,8 +72,21 @@ export const Submission = ({}: SubmissionProps) => {
                 <div id="regForm">
 
                   <br />
-                  <h3 className='page-title'>Complaint Without Oath</h3>             
+                  <h3 className='page-title'> Complaint Without Oath </h3>             
                   <br /> <br />
+
+
+
+                    <Form 
+                        schema={schema}
+                        uiSchema={UI}
+                        // @ts-ignore
+                        validator={validator}
+                        // onChange={log('changed')}
+                        onSubmit={processForm}
+                        onError={log('errors')} 
+                    />
+
 
                   {/* {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} key={step.id} /> )} */}
 

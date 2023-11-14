@@ -4,17 +4,24 @@
     padding: 20px;
     width: 100%;
     min-width: 300px;
-    max-width: 800px;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-control {
+  margin-bottom: 20px;
 }
 
 /* Hide all steps by default: */
-.tab {
+/* .tab {
     display: none;
     text-align: left;
-}
+} */
 
 /* Make circles that indicate the steps of the form: */
-.step {
+/* .step {
     height: 15px;
     width: 15px;
     margin: 0 2px;
@@ -23,26 +30,26 @@
     border-radius: 50%;
     display: inline-block;
     opacity: 0.5;
-  }
+  } */
   
-  .step.active {
+  /* .step.active {
     opacity: 1;
-  }
+  } */
   
   /* Mark the steps that are finished and valid: */
-  .step.finish {
+  /* .step.finish {
     background-color: #04AA6D;
-  }
+  } */
 
-  .step-title {
+  /* .step-title {
     color: #444;
     margin-bottom: 15px;
-  }
+  } */
 
-  #nextBtn {
+  /* #nextBtn {
     margin-left: 10px;
-  }
+  } */
 
-  fieldset {
+  /* fieldset {
     min-height: 500px;
-  }
+  } */
