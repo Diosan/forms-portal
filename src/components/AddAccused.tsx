@@ -1,30 +1,36 @@
 import React, { useRef, useEffect, useState } from "react"
-import { addPerson } from "../store/features/personSlice"
+import { addAccused } from "../store/features/accusedSlice"
 import { useAppDispatch } from "../store/store"
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import { API_URL} from "../config/api"
-import axios from "axios";
+import axios from "axios"
 
 const log = (type: any) => console.log.bind(console, type)
 
 
 
 const AddAccused = () => {
-  const name = useRef<string>("");
+  const name = useRef<string>("")
   const dispatch = useAppDispatch();
 
   const processForm = (form: any) => {
     console.log('Submitted form data: ', form.formData)
-    dispatch(addPerson({ name: form.formData.firstName + ' ' + form.formData.lastName }))
-    alert('Hurrah!');
+    dispatch(addAccused({ 
+        name: form.formData.firstName + ' ' + form.formData.lastName,
+        address: form.formData.address 
+    }))
+    // alert('Hurrah!');
+    setFormData({})
+    
   }
 
   const [accusedSchema, setAccusedSchema] = useState({})
   const [accusedUI, setAccusedUI] = useState({})
   const [chargeSchema, setChargeSchema] = useState({})
   const [chargeUI, setChargeUI] = useState({})
+  const [formData, setFormData] = useState({})
 
     useEffect(() => {
         axios.get(API_URL + '/schema/accused')
@@ -37,8 +43,8 @@ const AddAccused = () => {
     useEffect(() => {
         axios.get(API_URL + '/schema/charge')
         .then((response) => {
-        setChargeSchema(response.data.schema)
-        setChargeUI(response.data.UI)
+            setChargeSchema(response.data.schema)
+            setChargeUI(response.data.UI)
         })
     }, []);  
 
@@ -62,6 +68,7 @@ const AddAccused = () => {
         uiSchema={accusedUI}
         // @ts-ignore
         validator={validator}
+        formData={formData}
         onSubmit={processForm}
         onError={log('errors')}
     >
