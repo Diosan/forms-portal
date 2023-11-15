@@ -25,6 +25,18 @@
   margin-left: 5px;
 }
 
+.control-label {
+  font-weight: bold;
+}
+
+.accused-card {
+  margin-bottom: 30px;
+}
+
+.add-charge fieldset {
+ width: 70%;
+}
+
 /* Hide all steps by default: */
 /* .tab {
     display: none;

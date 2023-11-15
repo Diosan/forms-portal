@@ -24,7 +24,7 @@ const AddCharge = ({accused_id}: ChargeProps) => {
         ICCS: 'ABC123', // form.formData.ICCS,
         UNODC: 'XYZ890', // form.formData.UNODC, 
         name: form.formData.name,
-        count: 1 // form.formData.count 
+        count: form.formData.count // form.formData.count 
     }))
     // alert('Hurrah!');
     setFormData({})
@@ -57,9 +57,9 @@ const AddCharge = ({accused_id}: ChargeProps) => {
         onSubmit={processForm}
         onError={log('errors')}
     >
-       
-            <button className="btn btn-secondary float-end" type="submit">Add Charge</button>
-        
+        <div className="d-grid gap-2">
+            <button className="btn btn-secondary" type="submit">Add Charge</button>
+        </div>
     </Form>
 
 
