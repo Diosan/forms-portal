@@ -1,12 +1,14 @@
 import React from "react";
 import { useAppSelector  } from "../store/store";
+import AddCharge from "./AddCharge";
+import ChargeList from "./ChargeList";
 
 
 const AccusedList = () => {
     // const persons = useAppSelector((state) => state.person.persons)
     const accuseds = useAppSelector((state) => state.accused.accuseds)
     return <div>
-        <p>List Of Accused</p>
+       
 
             {accuseds.map((accused) => (
                 // <tr key={person.id}>
@@ -21,8 +23,11 @@ const AccusedList = () => {
                         <p className="card-text">{accused.address}</p>
                         {/* <a href="#" className="card-link">Card link</a>
                         <a href="#" className="card-link">Another link</a> */}
+                        <AddCharge accused_id={accused.id} />
+                        <ChargeList />
                     </div>
                 </div>
+
             ))}
 
     </div>

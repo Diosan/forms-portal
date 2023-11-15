@@ -5,6 +5,9 @@
     width: 100%;
     min-width: 300px;
 }
+.rjsf {
+  margin-bottom: 50px;
+}
 
 .form-group {
   text-align: left;

@@ -1,15 +1,15 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
-import {useEffect, useState} from "react";
+import {useEffect, useState} from "react"
 import { API_URL} from "../config/api"
-import axios from "axios";
-import { RJSFSchema, UiSchema } from '@rjsf/utils';
-import Form from 'react-jsonschema-form';
-import validator from '@rjsf/validator-ajv8';
+import axios from "axios"
+import { RJSFSchema, UiSchema } from '@rjsf/utils'
+import Form from 'react-jsonschema-form'
+import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
 // import "../assets/javascript/submission"
-import { Step } from "./Step";
-import { Complainant } from "./Complainant";
-import { Charges } from "./Charges";
+import { Step } from "./Step"
+import { Complainant } from "./Complainant"
+import { Charges } from "./Charges"
  
 
 type SubmissionProps = {}

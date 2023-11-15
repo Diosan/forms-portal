@@ -6,7 +6,8 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux"
 export const store=configureStore({
     reducer: {
         person: PersonSlice.reducer,
-        accused: AccusedSlice.reducer
+        accused: AccusedSlice.reducer,
+        charge: AccusedSlice.reducer
     }
 })
 

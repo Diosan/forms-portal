@@ -72,8 +72,8 @@ const AddAccused = () => {
         onSubmit={processForm}
         onError={log('errors')}
     >
-        <div className="progress-buttons">
-            <button type="submit">Add Accused</button>
+        <div className="d-grid gap-2">
+            <button className="btn btn-secondary" type="submit">Add Accused</button>
         </div>
     </Form>
 
