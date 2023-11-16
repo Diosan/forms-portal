@@ -1,6 +1,60 @@
+import { useState } from "react"
+import { API_URL} from "../config/api"
+import axios from "axios"
+
 type RegisterSigninProps = {}
 
 export const RegisterSignin = ({}: RegisterSigninProps) => {
+
+    const [agency, setAgency] = useState('TTPS')
+    const [regNumber, setRegNumber] = useState('')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const agencyChange = (event: any) => {
+        setAgency(event.target.value)
+    }
+
+    const regNumberChange = (event: any) => {
+        setRegNumber(event.target.value)
+    }
+
+    const firstNameChange = (event: any) => {
+        setFirstName(event.target.value)
+    }
+
+    const lastNameChange = (event: any) => {
+        setLastName(event.target.value)
+    }
+
+    const emailChange = (event: any) => {
+        setEmail(event.target.value)
+    }
+
+    const passwordChange = (event: any) => {
+        setPassword(event.target.value)
+    }
+
+    const register = () => {
+        
+        let user = {
+            agency: agency,
+            reg_number: regNumber,
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password
+        }
+
+        axios.post(API_URL + '/api/users', user)
+        .then((response) => {
+            console.log('Registration response: ', response.data)
+        })
+
+    }
+
     return (
         <>
             
@@ -33,41 +87,42 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                                     <input type="checkbox" className="form-check-input" id="exampleCheck1" />
                                     <label className="form-check-label" for="exampleCheck1">Check me out</label>
                                 </div> */}
-                                <div className="d-grid gap-2">
-                                    <button type="submit" className="btn btn-secondary">Sign In</button>
-                                </div>
+
                                 
                             </form>
+                            <div className="d-grid gap-2">
+                                <a className="btn btn-secondary" onClick={register}>Sign In</a>
+                            </div>
     
                         </div>
                         <div id="welcome_register" className="tab-pane fade" role="tabpanel">
                             
                             <form>
                                 <div className="mb-3">
-                                    <select className='form-select' id="agency" placeholder="Select your agency">
+                                    <select className='form-select' id="agency" value={agency} onChange={agencyChange} placeholder="Select your agency">
                                         <option>Select your agency</option>
-                                        <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                                        <option>TTPS (Trinidad & Tobago Police Service)</option>
                                     </select>
                                 </div>
                                 <div className="mb-3">
-                                    <input type="text" className="form-control" id="regNumber" placeholder="Regimental Number" />
+                                    <input type="text" className="form-control" id="regNumber" value={regNumber} onChange={regNumberChange} placeholder="Regimental Number" />
                                 </div>
                                 <div className="mb-3">
-                                    <input type="text" className="form-control" id="firstName" placeholder="First Name" />
+                                    <input type="text" className="form-control" id="firstName" value={firstName} onChange={firstNameChange} placeholder="First Name" />
                                 </div>
                                 <div className="mb-3">
-                                    <input type="text" className="form-control" id="lastName" placeholder="Last Name" />
+                                    <input type="text" className="form-control" id="lastName" value={lastName} onChange={lastNameChange} placeholder="Last Name" />
                                 </div>
                                 <div className="mb-3">
-                                    <input type="email" className="form-control" id="email1" placeholder="email" />
+                                    <input type="email" className="form-control" id="email1" value={email} onChange={emailChange} placeholder="email" />
                                 </div>
                                 <div className="mb-3">                                
-                                    <input type="password" className="form-control" id="password" placeholder="password" />
-                                </div>
-                                <div className="d-grid gap-2">
-                                    <button type="submit" className="btn btn-secondary">Register</button>
-                                </div>                        
+                                    <input type="password" className="form-control" id="password" value={password} onChange={passwordChange} placeholder="password" />
+                                </div>                       
                             </form>
+                            <div className="d-grid gap-2">
+                                <a className="btn btn-secondary" onClick={register} >Register</a>
+                            </div> 
     
                         </div>
                     </div>
