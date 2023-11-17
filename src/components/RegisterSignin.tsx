@@ -48,6 +48,8 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
             password: password
         }
 
+        console.log('Registration URL: ' + API_URL + '/api/users')
+
         axios.post(API_URL + '/api/users', user)
         .then((response) => {
             console.log('Registration response: ', response.data)
