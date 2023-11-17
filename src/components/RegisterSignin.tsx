@@ -48,11 +48,25 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
             password: password
         }
 
-        console.log('Registration URL: ' + API_URL + '/api/users')
+        // console.log('Registration URL: ' + API_URL + '/api/users')
 
         axios.post(API_URL + '/api/users', user)
         .then((response) => {
-            console.log('Registration response: ', response.data)
+            
+            switch(response.data.outcome) {
+                case 'success':
+                    console.log(response.data.message)
+                    break
+                case 'error':
+                    console.log('Registration error: ' + response.data.error)
+                    break
+                default:
+                    console.log('Unknown registration outcome')
+                    break
+            }
+
+        }, (error) => {
+            console.log('Registration error: ', error.response)
         })
 
     }
