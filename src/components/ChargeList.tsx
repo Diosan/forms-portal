@@ -13,19 +13,21 @@ const ChargeList = () => {
 
             <table className="charge-table">
                 <thead>
-                    <th>Charge Name</th>
-                    <th>ICCS</th>
-                    <th>UNODC</th>
-                    <th>Counts</th>
+                    <tr>
+                        <th>Charge Name</th>
+                        <th>ICCS</th>
+                        <th>UNODC</th>
+                        <th>Counts</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {charges.map((charge) => (
-                    <tr>
-                        <td>{ charge.name }</td>
-                        <td>{ charge.ICCS }</td>
-                        <td>{ charge.UNODC }</td>
-                        <td>{ charge.count }</td>
-                    </tr>
+                        <tr key={charge.id}>
+                            <td>{ charge.name }</td>
+                            <td>{ charge.ICCS }</td>
+                            <td>{ charge.UNODC }</td>
+                            <td>{ charge.count }</td>
+                        </tr>
                     ))}
                 </tbody>
             </table>

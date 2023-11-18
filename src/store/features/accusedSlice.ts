@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface Charge {
+    id: number
     accused_id: number
     ICCS: string
     UNODC: string
@@ -44,6 +45,7 @@ export const AccusedSlice = createSlice({
             }>) => {
                 // alert('addCharge triggered');
                 state.charges.push({
+                    id: state.charges.length,
                     accused_id: action.payload.accused_id,
                     ICCS: action.payload.ICCS,
                     UNODC: action.payload.UNODC,
