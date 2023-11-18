@@ -60,8 +60,11 @@ export const Charges = ({}: ChargesProps) => {
                 </div>
             </Form> */}
 
+            
             <AddAccused />
             <AccusedList />
+
+
 
         </Provider>
 

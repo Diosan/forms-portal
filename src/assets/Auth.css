@@ -1,0 +1,17 @@
+.otp-card {
+    border: 0;
+    color: #444;
+}
+
+.otp-input {
+    height: 60px;
+    font-size: 35px !important;
+}
+
+.otp-button {
+    height: 60px;
+}
+
+.otp-row {
+    padding: 0 25%;
+}
