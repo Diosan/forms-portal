@@ -28,6 +28,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     const [registrationSuccess, setRegistrationSuccess] = useState({success: false, message: ''})
     const [regEmail, setRegEmail] = useState('')
     const [regOTP, setRegOTP] = useState('')
+    const [registrationVerifyError, setRegistrationVerifyError] = useState(false)
 
     const [signinError, setSigninError] = useState(false)
     const [signinSuccess, setSigninSuccess] = useState({success: false, message: ''})
@@ -175,7 +176,30 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     }
 
     const registrationVerify = (event: any) => {
+
         event.preventDefault()
+
+        axios.post(API_URL + '/api/authenticate/verify-otp', {email: regEmail, otp: regOTP})
+        .then((response) => {
+            switch(response.data.outcome) {
+                case 'success':
+                    // alert('OTP succesfully verified')
+                    navigate("/submission");
+                    // setSigninError(false)
+                    // setSigninSuccess({success: true, message: response.data.message})
+                    break
+                case 'error':
+                    // alert('OTP verification failed')
+                    // setSigninSuccess({success: false, message: ''})
+                    setRegistrationVerifyError(true)
+                    break
+                default:
+                    console.log('Unknown verification outcome')
+                    break
+            }
+            
+        })
+
     }
 
     const verifyOTP = (email: string, otp: string) => {
@@ -259,6 +283,8 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                         </div>
                         <div id="welcome_register" className="tab-pane fade" role="tabpanel">
 
+
+
                             { registrationSuccess.success ?                                                                                                                                       
                                 <>
                                     <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{registrationSuccess.message}</div>
@@ -269,7 +295,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                                             <span className="mobile-text">Enter the code we just send on your email <b>{regEmail}</b></span>
                                             <div className="d-flex flex-row mt-5 otp-row">
                                                 <input type="text" className="form-control otp-input" placeholder="  ###### " value={regOTP} onChange={regOTPChange} />
-                                                <a className="btn btn-secondary otp-button" >Verify</a>
+                                                <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
                                             </div>
                                             <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
                                         </div>
@@ -306,6 +332,11 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
                                     </form>
                                 </>
+                            }
+
+                            { registrationVerifyError ?                                                                                                                                       
+                                <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">Registration verification error</div></>
+                                : <></>
                             }
 
                             { registrationError ?                                                                                                                                       
