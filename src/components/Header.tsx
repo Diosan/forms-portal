@@ -21,9 +21,11 @@ export const Header = (({}: HeaderProps) => {
                         <li className="nav-item active jud-header-item">
                             <a className="nav-link" href="/">Home {/* <span className="sr-only">(current)</span> */} </a> 
                         </li>
-                        <li className="nav-item jud-header-item">
+
+                        {/* <li className="nav-item jud-header-item">
                             <a className="nav-link" href="/submission">Complaint With Oath</a>
-                        </li>
+                        </li> */}
+
                         {/* <li className="nav-item">
                             <Button>SIGN IN</Button>
                         </li> */}

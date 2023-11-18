@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Navigate, useNavigate } from "react-router-dom"
 import { API_URL} from "../config/api"
 import axios from "axios"
 import '../assets/Auth.css'
@@ -10,6 +11,8 @@ type Error = {
 }
 
 export const RegisterSignin = ({}: RegisterSigninProps) => {
+
+    const navigate = useNavigate();
 
     let regErrs: Error[] = []
 
@@ -32,6 +35,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     const [signinEmail, setSigninEmail] = useState('')
     const [signinPassword, setSigninPassword] = useState('')
     const [signinOTP, setSigninOTP] = useState('')
+    const [signinVerifyError, setSigninVerifyError] = useState(false)
 
     const agencyChange = (event: any) => {
         setAgency(event.target.value)
@@ -151,15 +155,15 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
         .then((response) => {
             switch(response.data.outcome) {
                 case 'success':
-                    alert('OTP scccesfully verified')
+                    // alert('OTP succesfully verified')
+                    navigate("/submission");
                     // setSigninError(false)
                     // setSigninSuccess({success: true, message: response.data.message})
                     break
                 case 'error':
-                    alert('OTP verification failed')
+                    // alert('OTP verification failed')
                     // setSigninSuccess({success: false, message: ''})
-                    // setSigninError(true)
-                    // setSigninErrorMessage(response.data.error)
+                    setSigninVerifyError(true)
                     break
                 default:
                     console.log('Unknown verification outcome')
@@ -199,7 +203,15 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
                             { signinSuccess.success ?
                                 <>
-                                    <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{signinSuccess.message}</div>
+                                    <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{signinSuccess.message}</div>    
+                                </>
+                                : <></>
+                            }    
+                        
+                            
+                            { signinSuccess.success ?
+                                <>
+                                    
                                     <form onSubmit={signinVerify} >
                                         <div className="card py-5 px-3 otp-card fade show">
                                             <h5 className="m-0">Email verification</h5>
@@ -237,6 +249,12 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
                                 </>
                             }
+
+                            { signinVerifyError ?                                                                                                                                       
+                                <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">Sign in verification error</div></>
+                                : <></>
+                            }
+
     
                         </div>
                         <div id="welcome_register" className="tab-pane fade" role="tabpanel">
