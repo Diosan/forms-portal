@@ -24,12 +24,14 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     const [regErrorMessage, setRegErrorMessage] = useState('')
     const [registrationSuccess, setRegistrationSuccess] = useState({success: false, message: ''})
     const [regEmail, setRegEmail] = useState('')
+    const [regOTP, setRegOTP] = useState('')
 
     const [signinError, setSigninError] = useState(false)
     const [signinSuccess, setSigninSuccess] = useState({success: false, message: ''})
     const [signinErrorMessage, setSigninErrorMessage] = useState('')
     const [signinEmail, setSigninEmail] = useState('')
     const [signinPassword, setSigninPassword] = useState('')
+    const [signinOTP, setSigninOTP] = useState('')
 
     const agencyChange = (event: any) => {
         setAgency(event.target.value)
@@ -63,6 +65,13 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
         setSigninPassword(event.target.value)
     }
 
+    const signinOTPChange = (event: any) => {
+        setSigninOTP(event.target.value)
+    }
+
+    const regOTPChange = (event: any) => {
+        setRegOTP(event.target.value)
+    }
 
 
     const register = (event: any) => {
@@ -134,6 +143,41 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
             
     }
 
+    const signinVerify = (event: any) => {
+
+        event.preventDefault()
+
+        axios.post(API_URL + '/api/authenticate/verify-otp', {email: signinEmail, otp: signinOTP})
+        .then((response) => {
+            switch(response.data.outcome) {
+                case 'success':
+                    alert('OTP scccesfully verified')
+                    // setSigninError(false)
+                    // setSigninSuccess({success: true, message: response.data.message})
+                    break
+                case 'error':
+                    alert('OTP verification failed')
+                    // setSigninSuccess({success: false, message: ''})
+                    // setSigninError(true)
+                    // setSigninErrorMessage(response.data.error)
+                    break
+                default:
+                    console.log('Unknown verification outcome')
+                    break
+            }
+            
+        })
+
+    }
+
+    const registrationVerify = (event: any) => {
+        event.preventDefault()
+    }
+
+    const verifyOTP = (email: string, otp: string) => {
+
+    }
+
     return (
         <>
             
@@ -156,14 +200,14 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                             { signinSuccess.success ?
                                 <>
                                     <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{signinSuccess.message}</div>
-                                    <form>
+                                    <form onSubmit={signinVerify} >
                                         <div className="card py-5 px-3 otp-card fade show">
                                             <h5 className="m-0">Email verification</h5>
                                             <br/>
                                             <span className="mobile-text">Enter the code we just send on your email <b>{signinEmail}</b></span>
                                             <div className="d-flex flex-row mt-5 otp-row">
-                                                <input type="text" className="form-control otp-input" placeholder="  ###### " />
-                                                <a className="btn btn-secondary otp-button" >Verify</a>
+                                                <input type="text" className="form-control otp-input" placeholder="  ###### " value={signinOTP} onChange={signinOTPChange} />
+                                                <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
                                             </div>
                                             <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
                                         </div>
@@ -200,13 +244,13 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                             { registrationSuccess.success ?                                                                                                                                       
                                 <>
                                     <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{registrationSuccess.message}</div>
-                                    <form>
+                                    <form onSubmit={registrationVerify}>
                                         <div className="card py-5 px-3 otp-card fade show">
                                             <h5 className="m-0">Email verification</h5>
                                             <br/>
                                             <span className="mobile-text">Enter the code we just send on your email <b>{regEmail}</b></span>
                                             <div className="d-flex flex-row mt-5 otp-row">
-                                                <input type="text" className="form-control otp-input" placeholder="  ###### " />
+                                                <input type="text" className="form-control otp-input" placeholder="  ###### " value={regOTP} onChange={regOTPChange} />
                                                 <a className="btn btn-secondary otp-button" >Verify</a>
                                             </div>
                                             <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
