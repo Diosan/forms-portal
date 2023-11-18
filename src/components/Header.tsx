@@ -10,7 +10,7 @@ export const Header = (({}: HeaderProps) => {
             
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <a className="navbar-brand" href="#">
-                    <img src="logo.png" width="150" className="d-inline-block align-top" alt="" />
+                    <img src="jswflogo.svg" width="150" className="d-inline-block align-top" alt="" />
                     {/* <div className="site-name">Forms Portal</div> */}
                 </a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

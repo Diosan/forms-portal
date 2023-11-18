@@ -19,11 +19,17 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
     const [registrationError, setRegistrationError] = useState(false)
     const [regErrorMessage, setRegErrorMessage] = useState('')
     const [registrationSuccess, setRegistrationSuccess] = useState({success: false, message: ''})
     const [regEmail, setRegEmail] = useState('')
-    const [signinSuccess, setSigninSuccess] = useState(false)
+
+    const [signinError, setSigninError] = useState(false)
+    const [signinSuccess, setSigninSuccess] = useState({success: false, message: ''})
+    const [signinErrorMessage, setSigninErrorMessage] = useState('')
+    const [signinEmail, setSigninEmail] = useState('')
+    const [signinPassword, setSigninPassword] = useState('')
 
     const agencyChange = (event: any) => {
         setAgency(event.target.value)
@@ -48,6 +54,16 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     const passwordChange = (event: any) => {
         setPassword(event.target.value)
     }
+
+    const signinEmailChange = (event: any) => {
+        setSigninEmail(event.target.value)
+    }
+
+    const signinPasswordChange = (event: any) => {
+        setSigninPassword(event.target.value)
+    }
+
+
 
     const register = (event: any) => {
 
@@ -92,8 +108,30 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     }
 
     const signIn = (event: any) => {
+
         event.preventDefault()
-        setSigninSuccess(true)    
+
+        axios.post(API_URL + '/api/authenticate/login', {email: signinEmail, password: signinPassword})
+        .then((response) => {
+            switch(response.data.outcome) {
+                case 'success':
+                    console.log(response.data.message)
+                    setSigninError(false)
+                    setSigninSuccess({success: true, message: response.data.message})
+                    break
+                case 'error':
+                    console.log('Registration error: ' + response.data.error)
+                    setSigninSuccess({success: false, message: ''})
+                    setSigninError(true)
+                    setSigninErrorMessage(response.data.error)
+                    break
+                default:
+                    console.log('Unknown registration outcome')
+                    break
+            }
+            
+        })
+            
     }
 
     return (
@@ -115,17 +153,17 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                     <div className="tab-content">
                         <div id="welcome_signin" className="tab-pane fade show active" role="tabpanel">
 
-                            { signinSuccess ?
+                            { signinSuccess.success ?
                                 <>
-                                    <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">Successfully logged in</div>
+                                    <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{signinSuccess.message}</div>
                                     <form>
                                         <div className="card py-5 px-3 otp-card fade show">
                                             <h5 className="m-0">Email verification</h5>
                                             <br/>
-                                            <span className="mobile-text">Enter the code we just send on your email <b>{regEmail}</b></span>
+                                            <span className="mobile-text">Enter the code we just send on your email <b>{signinEmail}</b></span>
                                             <div className="d-flex flex-row mt-5 otp-row">
                                                 <input type="text" className="form-control otp-input" placeholder="  ###### " />
-                                                <a className="btn btn-secondary otp-button" >Verify Code</a>
+                                                <a className="btn btn-secondary otp-button" >Verify</a>
                                             </div>
                                             <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
                                         </div>
@@ -136,10 +174,10 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                                     <form onSubmit={signIn}>
 
                                         <div className="mb-3">
-                                            <input type="email" className="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="email" required />
+                                            <input type="email" className="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="email" value={signinEmail} onChange={signinEmailChange} required />
                                         </div>
                                         <div className="mb-3">
-                                            <input type="password" className="form-control" id="loginPassword" placeholder="password" required />
+                                            <input type="password" className="form-control" id="loginPassword" placeholder="password" value={signinPassword} onChange={signinPasswordChange} required />
                                         </div>
 
                                         <div className="d-grid gap-2">
@@ -148,7 +186,10 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
                                     </form>
 
-
+                                    { signinError ?                                                                                                                                       
+                                        <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">{signinErrorMessage}</div></>
+                                        : ''
+                                    }
 
                                 </>
                             }
@@ -166,7 +207,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                                             <span className="mobile-text">Enter the code we just send on your email <b>{regEmail}</b></span>
                                             <div className="d-flex flex-row mt-5 otp-row">
                                                 <input type="text" className="form-control otp-input" placeholder="  ###### " />
-                                                <a className="btn btn-secondary otp-button" >Verify Code</a>
+                                                <a className="btn btn-secondary otp-button" >Verify</a>
                                             </div>
                                             <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
                                         </div>
