@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom"
 import { API_URL} from "../config/api"
 import axios from "axios"
 import '../assets/Auth.css'
+import AuthService from "../services/AuthService"
 
 type RegisterSigninProps = {}
 
@@ -12,7 +13,9 @@ type Error = {
 
 export const RegisterSignin = ({}: RegisterSigninProps) => {
 
-    const navigate = useNavigate();
+    const auth = new AuthService
+
+    const navigate = useNavigate()
 
     let regErrs: Error[] = []
 
@@ -157,6 +160,8 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
             switch(response.data.outcome) {
                 case 'success':
                     // alert('OTP succesfully verified')
+                    // localStorage.setItem("id_token", response.data.token)
+                    auth.setToken(response.data.token)
                     navigate("/submission");
                     // setSigninError(false)
                     // setSigninSuccess({success: true, message: response.data.message})
@@ -207,147 +212,158 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     }
 
     return (
+
         <>
+        
+            { auth.loggedIn() ?
+                 <Navigate to="/" replace={true} /> 
+                 :  <>
             
-                <div className='row'>
-                    <ul className="nav nav-tabs justify-content-center">
-                        <li className="nav-item active">
-                            <a className="nav-link active jud-tab" aria-current="page" data-bs-toggle="tab" href="#welcome_signin">Sign In</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link jud-tab"  data-bs-toggle="tab" href="#welcome_register">Register</a>
-                        </li>
-                    </ul>
-                </div>
-    
-                <div className='row'> 
-                      
-                    <div className="tab-content">
-                        <div id="welcome_signin" className="tab-pane fade show active" role="tabpanel">
-
-                            { signinSuccess.success ?
-                                <>
-                                    <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{signinSuccess.message}</div>    
-                                </>
-                                : <></>
-                            }    
-                        
-                            
-                            { signinSuccess.success ?
-                                <>
-                                    
-                                    <form onSubmit={signinVerify} >
-                                        <div className="card py-5 px-3 otp-card fade show">
-                                            <h5 className="m-0">Email verification</h5>
-                                            <br/>
-                                            <span className="mobile-text">Enter the code we just send on your email <b>{signinEmail}</b></span>
-                                            <div className="d-flex flex-row mt-5 otp-row">
-                                                <input type="text" className="form-control otp-input" placeholder="  ###### " value={signinOTP} onChange={signinOTPChange} />
-                                                <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
-                                            </div>
-                                            <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
-                                        </div>
-                                    </form>
-                                </>
-                                : <>
-
-                                    <form onSubmit={signIn}>
-
-                                        <div className="mb-3">
-                                            <input type="email" className="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="email" value={signinEmail} onChange={signinEmailChange} required />
-                                        </div>
-                                        <div className="mb-3">
-                                            <input type="password" className="form-control" id="loginPassword" placeholder="password" value={signinPassword} onChange={signinPasswordChange} required />
-                                        </div>
-
-                                        <div className="d-grid gap-2">
-                                            <button type="submit" className="btn btn-secondary">Sign In</button>
-                                        </div>
-
-                                    </form>
-
-                                    { signinError ?                                                                                                                                       
-                                        <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">{signinErrorMessage}</div></>
-                                        : ''
-                                    }
-
-                                </>
-                            }
-
-                            { signinVerifyError ?                                                                                                                                       
-                                <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">Sign in verification error</div></>
-                                : <></>
-                            }
-
-    
-                        </div>
-                        <div id="welcome_register" className="tab-pane fade" role="tabpanel">
-
-
-
-                            { registrationSuccess.success ?                                                                                                                                       
-                                <>
-                                    <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{registrationSuccess.message}</div>
-                                    <form onSubmit={registrationVerify}>
-                                        <div className="card py-5 px-3 otp-card fade show">
-                                            <h5 className="m-0">Email verification</h5>
-                                            <br/>
-                                            <span className="mobile-text">Enter the code we just send on your email <b>{regEmail}</b></span>
-                                            <div className="d-flex flex-row mt-5 otp-row">
-                                                <input type="text" className="form-control otp-input" placeholder="  ###### " value={regOTP} onChange={regOTPChange} />
-                                                <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
-                                            </div>
-                                            <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
-                                        </div>
-                                    </form>
-                                </>
-                                    
-                                : <>
-                                    <form onSubmit={register} >
-                                        <div className="mb-3">
-                                            <select className='form-select' id="agency" value={agency} onChange={agencyChange} placeholder="Select your agency">
-                                                <option>Select your agency</option>
-                                                <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
-                                            </select>
-                                        </div>
-                                        <div className="mb-3">
-                                            <input type="text" className="form-control" id="regNumber" value={regNumber} onChange={regNumberChange} placeholder="Regimental Number" required />
-                                        </div>
-                                        <div className="mb-3">
-                                            <input type="text" className="form-control" id="firstName" value={firstName} onChange={firstNameChange} placeholder="First Name" required />
-                                        </div>
-                                        <div className="mb-3">
-                                            <input type="text" className="form-control" id="lastName" value={lastName} onChange={lastNameChange} placeholder="Last Name" required />
-                                        </div>
-                                        <div className="mb-3">
-                                            <input type="email" className="form-control" id="email1" value={email} onChange={emailChange} placeholder="email" required />
-                                        </div>
-                                        <div className="mb-3">                                
-                                            <input type="password" className="form-control" id="password" value={password} onChange={passwordChange} placeholder="password" required />
-                                        </div>
-
-                                        <div className="d-grid gap-2">
-                                            <button type="submit" className="btn btn-secondary" >Register</button>
-                                        </div>
-
-                                    </form>
-                                </>
-                            }
-
-                            { registrationVerifyError ?                                                                                                                                       
-                                <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">Registration verification error</div></>
-                                : <></>
-                            }
-
-                            { registrationError ?                                                                                                                                       
-                                <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">{regErrorMessage}</div></>
-                                : ''
-                            }
-    
-                        </div>
-                    </div>
-                </div>    
-    
+                 <div className='row'>
+                     <ul className="nav nav-tabs justify-content-center">
+                         <li className="nav-item active">
+                             <a className="nav-link active jud-tab" aria-current="page" data-bs-toggle="tab" href="#welcome_signin">Sign In</a>
+                         </li>
+                         <li className="nav-item">
+                             <a className="nav-link jud-tab"  data-bs-toggle="tab" href="#welcome_register">Register</a>
+                         </li>
+                     </ul>
+                 </div>
+     
+                 <div className='row'> 
+                       
+                     <div className="tab-content">
+                         <div id="welcome_signin" className="tab-pane fade show active" role="tabpanel">
+ 
+                             { signinSuccess.success ?
+                                 <>
+                                     <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{signinSuccess.message}</div>    
+                                 </>
+                                 : <></>
+                             }    
+                         
+                             
+                             { signinSuccess.success ?
+                                 <>
+                                     
+                                     <form onSubmit={signinVerify} >
+                                         <div className="card py-5 px-3 otp-card fade show">
+                                             <h5 className="m-0">Email verification</h5>
+                                             <br/>
+                                             <span className="mobile-text">Enter the code we just sent to your email <b>{signinEmail}</b></span>
+                                             <div className="d-flex flex-row mt-5 otp-row">
+                                                 <input type="text" className="form-control otp-input" placeholder="  ###### " value={signinOTP} onChange={signinOTPChange} />
+                                                 <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
+                                             </div>
+                                             <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
+                                         </div>
+                                     </form>
+                                 </>
+                                 : <>
+ 
+                                     <form onSubmit={signIn}>
+ 
+                                         <div className="mb-3">
+                                             <input type="email" className="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="email" value={signinEmail} onChange={signinEmailChange} required />
+                                         </div>
+                                         <div className="mb-3">
+                                             <input type="password" className="form-control" id="loginPassword" placeholder="password" value={signinPassword} onChange={signinPasswordChange} required />
+                                         </div>
+ 
+                                         <div className="d-grid gap-2">
+                                             <button type="submit" className="btn btn-secondary">Sign In</button>
+                                         </div>
+ 
+                                     </form>
+ 
+                                     { signinError ?                                                                                                                                       
+                                         <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">{signinErrorMessage}</div></>
+                                         : ''
+                                     }
+ 
+                                 </>
+                             }
+ 
+                             { signinVerifyError ?                                                                                                                                       
+                                 <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">Sign in verification error</div></>
+                                 : <></>
+                             }
+ 
+     
+                         </div>
+                         <div id="welcome_register" className="tab-pane fade" role="tabpanel">
+ 
+ 
+ 
+                             { registrationSuccess.success ?                                                                                                                                       
+                                 <>
+                                     <br/><div className="alert alert-success fade show text-success fw-bold text-center" role="alert">{registrationSuccess.message}</div>
+                                     <form onSubmit={registrationVerify}>
+                                         <div className="card py-5 px-3 otp-card fade show">
+                                             <h5 className="m-0">Email verification</h5>
+                                             <br/>
+                                             <span className="mobile-text">Enter the code we just send on your email <b>{regEmail}</b></span>
+                                             <div className="d-flex flex-row mt-5 otp-row">
+                                                 <input type="text" className="form-control otp-input" placeholder="  ###### " value={regOTP} onChange={regOTPChange} />
+                                                 <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
+                                             </div>
+                                             <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
+                                         </div>
+                                     </form>
+                                 </>
+                                     
+                                 : <>
+                                     <form onSubmit={register} >
+                                         <div className="mb-3">
+                                             <select className='form-select' id="agency" value={agency} onChange={agencyChange} placeholder="Select your agency">
+                                                 <option>Select your agency</option>
+                                                 <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                                             </select>
+                                         </div>
+                                         <div className="mb-3">
+                                             <input type="text" className="form-control" id="regNumber" value={regNumber} onChange={regNumberChange} placeholder="Regimental Number" required />
+                                         </div>
+                                         <div className="mb-3">
+                                             <input type="text" className="form-control" id="firstName" value={firstName} onChange={firstNameChange} placeholder="First Name" required />
+                                         </div>
+                                         <div className="mb-3">
+                                             <input type="text" className="form-control" id="lastName" value={lastName} onChange={lastNameChange} placeholder="Last Name" required />
+                                         </div>
+                                         <div className="mb-3">
+                                             <input type="email" className="form-control" id="email1" value={email} onChange={emailChange} placeholder="email" required />
+                                         </div>
+                                         <div className="mb-3">                                
+                                             <input type="password" className="form-control" id="password" value={password} onChange={passwordChange} placeholder="password" required />
+                                         </div>
+ 
+                                         <div className="d-grid gap-2">
+                                             <button type="submit" className="btn btn-secondary" >Register</button>
+                                         </div>
+ 
+                                     </form>
+                                 </>
+                             }
+ 
+                             { registrationVerifyError ?                                                                                                                                       
+                                 <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">Registration verification error</div></>
+                                 : <></>
+                             }
+ 
+                             { registrationError ?                                                                                                                                       
+                                 <><br/><div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">{regErrorMessage}</div></>
+                                 : ''
+                             }
+     
+                         </div>
+                     </div>
+                 </div>    
+     
+                    </>
+            }
+        
         </>
-        )
+
+
+
+    )
 }
