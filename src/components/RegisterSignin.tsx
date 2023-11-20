@@ -162,7 +162,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                     // alert('OTP succesfully verified')
                     // localStorage.setItem("id_token", response.data.token)
                     auth.setToken(response.data.token)
-                    navigate("/submission");
+                    navigate("/submissions")
                     // setSigninError(false)
                     // setSigninSuccess({success: true, message: response.data.message})
                     break
@@ -189,7 +189,8 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
             switch(response.data.outcome) {
                 case 'success':
                     // alert('OTP succesfully verified')
-                    navigate("/submission");
+                    auth.setToken(response.data.token)
+                    navigate("/submissions");
                     // setSigninError(false)
                     // setSigninSuccess({success: true, message: response.data.message})
                     break
@@ -214,9 +215,9 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     return (
 
         <>
-        
+
             { auth.loggedIn() ?
-                 <Navigate to="/" replace={true} /> 
+                 <Navigate to="/submissions" replace={true} /> 
                  :  <>
             
                  <div className='row'>

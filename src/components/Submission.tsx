@@ -34,6 +34,39 @@ export const Submission = ({}: SubmissionProps) => {
 
   const auth = new AuthService
 
+  const [submissionTitle, setSubmissionTitle] = useState('')
+  const [submissionTitleSaved, setSubmissionTitleSaved] = useState(false)
+  const submissionTitleChange = (event: any) => {
+    setSubmissionTitle(event.target.value)
+  }
+  const saveTitle = (event: any) => {
+    event.preventDefault()
+
+    let submission = {
+      title: submissionTitle
+    }
+
+    // axios.post(API_URL + '/api/submissions', submission)
+    // .then((response) => {
+
+    //   switch(response.data.outcome) {
+    //     case 'success':
+    //       break
+    //     case 'error':
+    //       break
+    //     default:
+    //       break
+    //   }
+
+    // })
+
+    setSubmissionTitleSaved(true)
+  }
+
+  const editTitle = () => {
+    setSubmissionTitleSaved(false)
+  }
+
   const [schema, setSchema] = useState({})
   const [UI, setUI] = useState({})
 
@@ -82,10 +115,38 @@ export const Submission = ({}: SubmissionProps) => {
               <div id="regForm" className="fade show">
 
                 <br />
-                <h3 className='page-title'> Complaint With Oath </h3>             
+                <h3 className='page-title'> Complaint With Oath { submissionTitleSaved ? '(' + submissionTitle + ')' : '' } </h3>
+                { !submissionTitleSaved ?
+                  <></>
+                  : <>
+                    <a href="#" className="float-end" onClick={editTitle}>Edit</a>
+                  </>
+                }
+                             
                 <br /> <br />
 
-                  <Charges />
+                { !submissionTitleSaved ? 
+                  <>
+                    <form onSubmit={saveTitle} >
+                      <fieldset>
+                        <div className="form-group field field-string">
+                          <label className="control-label">
+                            Submission Title
+                          </label>
+                          <input className="form-control" type="text" value={submissionTitle} onChange={submissionTitleChange} />
+                        </div>
+                        <button type="submit" className="btn btn-secondary float-end">Save</button>
+                      </fieldset>
+                    </form><br/><br/>
+                  </>
+                  : <></>
+                }
+
+
+                { !submissionTitleSaved ? <></> : <Complainant />}
+
+                { !submissionTitleSaved ? <></> : <Charges />}
+                
 
                   {/* <Complainant /> */}
 

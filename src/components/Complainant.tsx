@@ -40,7 +40,7 @@ export const Complainant = ({}: ComplainantProps) => {
             onError={log('errors')}
         >
             <div className="progress-buttons">
-                <button className="btn btn-secondary" type="submit">Next ❯</button>
+                <button className="btn btn-secondary" type="submit">Save</button>
             </div>
         </Form>
     )

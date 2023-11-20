@@ -12,6 +12,7 @@ import {
 import './index.css'
 import './assets/App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { Submissions } from './components/Submissions'
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/submission",
     element: <Submission />
+  },
+  {
+    path: "/submissions",
+    element: <Submissions />
   },
   {
     path: "/transcend",

@@ -41,6 +41,23 @@
   color: #444;
 }
 
+.submissions-container {
+  background-color: #f1f1f1;
+  padding: 50px 100px;
+}
+
+.submission-card {
+  margin-bottom: 20px !important;
+}
+
+.new-submission-btn {
+  margin-bottom: 50px;
+}
+
+.submissions-title {
+  margin: 40px 0;
+}
+
 /* Hide all steps by default: */
 /* .tab {
     display: none;
