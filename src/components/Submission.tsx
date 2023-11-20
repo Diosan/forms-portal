@@ -46,19 +46,19 @@ export const Submission = ({}: SubmissionProps) => {
       title: submissionTitle
     }
 
-    // axios.post(API_URL + '/api/submissions', submission)
-    // .then((response) => {
+    axios.post(API_URL + '/api/submissions', submission)
+    .then((response) => {
 
-    //   switch(response.data.outcome) {
-    //     case 'success':
-    //       break
-    //     case 'error':
-    //       break
-    //     default:
-    //       break
-    //   }
+      switch(response.data.outcome) {
+        case 'success':
+          break
+        case 'error':
+          break
+        default:
+          break
+      }
 
-    // })
+    })
 
     setSubmissionTitleSaved(true)
   }

@@ -15,10 +15,32 @@ import { Navigate, useNavigate } from "react-router-dom"
 
 type SubmissionsProps = {}
 
+interface Submission {
+    description: string,
+    userId: number,
+    createdAt: string,
+    updatedAt: string
+}
+
 export const Submissions = ({}: SubmissionsProps) => {
+
+    const [submissions, setSubmissions] = useState<Submission[]>([]);
+
     const navigate = useNavigate()
 
     const auth = new AuthService
+
+
+    useEffect(() => {
+        axios.get(API_URL + '/api/submissions')
+        .then((response) => {
+            console.log('Submissions fetched from server: ', response.data);
+            setSubmissions(response.data.submissions.rows)
+            // setSubmissions([])
+            // let dSubmissions: Submission[] = [{description: "Testing description rendering", userId: 4}]
+            // setSubmissions(dSubmissions)
+        })
+    }, []); 
 
     return (
         <>
@@ -49,8 +71,21 @@ export const Submissions = ({}: SubmissionsProps) => {
                         </div>
                         
                         <div className="row">
-                            <div className="card submission-card"></div>
-                            <div className="card submission-card"></div>
+                            {submissions.map((submission: Submission) => 
+                                <>
+                                    <div className="card submission-card">
+                                        <div className="card-body">
+                                            <h5 className="card-title">{submission.description}</h5>                                   
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                                {/* <>
+                                    <div className="card submission-card"></div>
+                                </> */}
+                            
+                            {/* <div className="card submission-card"></div> */}
                         </div>
                     </div>
 

@@ -1,9 +1,13 @@
 
 import Button from 'react-bootstrap/Button';
+import AuthService from "../services/AuthService"
 
 type HeaderProps = {}
 
 export const Header = (({}: HeaderProps) => {
+
+    const auth = new AuthService
+
     return (
 
         <>
@@ -22,13 +26,19 @@ export const Header = (({}: HeaderProps) => {
                             <a className="nav-link" href="/">Home {/* <span className="sr-only">(current)</span> */} </a> 
                         </li>
 
-                        <li className="nav-item jud-header-item">
-                            <a className="nav-link" href="/submissions"> My Submissions</a>
-                        </li>
+                        { auth.loggedIn() ? 
+                            <>
+                                <li className="nav-item jud-header-item">
+                                    <a className="nav-link" href="/submissions"> My Submissions</a>
+                                </li>
 
-                        <li className="nav-item jud-header-item">
-                            <a className="nav-link" href="/new"> New Complaint With Oath</a>
-                        </li>
+                                <li className="nav-item jud-header-item">
+                                    <a className="nav-link" href="/new"> New Complaint With Oath</a>
+                                </li>                           
+                            </>
+                            : <></>
+                        }
+
 
                         {/* <li className="nav-item">
                             <Button>SIGN IN</Button>
