@@ -34,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/simple_ref",
     element: <SimpleRef />
+  },
+  {
+    path: "/sign",
+    element: <SimpleRef />
   }
 ])
 
