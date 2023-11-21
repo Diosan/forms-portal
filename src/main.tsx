@@ -13,6 +13,7 @@ import './index.css'
 import './assets/App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Submissions } from './components/Submissions'
+import { Sign } from './components/Sign'
 
 const router = createBrowserRouter([
   {
@@ -36,8 +37,8 @@ const router = createBrowserRouter([
     element: <SimpleRef />
   },
   {
-    path: "/sign",
-    element: <SimpleRef />
+    path: "/sign/:id",
+    element: <Sign />
   }
 ])
 
