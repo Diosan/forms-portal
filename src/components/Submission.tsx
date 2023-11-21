@@ -34,16 +34,52 @@ export const Submission = ({}: SubmissionProps) => {
 
   const auth = new AuthService
 
+
   const [submissionTitle, setSubmissionTitle] = useState('')
   const [submissionTitleSaved, setSubmissionTitleSaved] = useState(false)
   const submissionTitleChange = (event: any) => {
     setSubmissionTitle(event.target.value)
   }
-  const saveTitle = (event: any) => {
+
+  const [submissionId, setSubmissionId] = useState(0)
+
+  const [submissionStatus, setSubmissionStatus] = useState('started')
+
+  const [complainantAgency, setComplainantAgency] = useState('')
+  const [complainantFirstName, setComplainantFirstName] = useState('')
+  const [complainantLastName, setComplainantLastName] = useState('')
+  const [complainantEmail, setComplainantEmail] = useState('')
+  const [complainantRegNum, setComplainantRegNum] = useState('')
+
+  const complainantAgencyChange = (event: any) => {
+    setComplainantAgency(event.target.value)
+  }
+
+  const complainantRegNumberChange = (event: any) => {
+      setComplainantRegNum(event.target.value)
+  }
+
+  const complainantFirstNameChange = (event: any) => {
+      setComplainantFirstName(event.target.value)
+  }
+
+  const complainantLastNameChange = (event: any) => {
+      setComplainantLastName(event.target.value)
+  }
+
+const complainantEmailChange = (event: any) => {
+    setComplainantEmail(event.target.value)
+}
+
+const saveTitle = async (event: any) => {
     event.preventDefault()
 
+    // console.log('Before decoding token')
+    let decoded = await auth.decodedToken()
+
     let submission = {
-      title: submissionTitle
+      title: submissionTitle,
+      email: decoded.email
     }
 
     axios.post(API_URL + '/api/submissions', submission)
@@ -51,6 +87,8 @@ export const Submission = ({}: SubmissionProps) => {
 
       switch(response.data.outcome) {
         case 'success':
+          console.log('Successfully saved Title. Response Data : ', response.data);
+          setSubmissionId(response.data.submission_id)
           break
         case 'error':
           break
@@ -61,6 +99,44 @@ export const Submission = ({}: SubmissionProps) => {
     })
 
     setSubmissionTitleSaved(true)
+  }
+
+  const saveComplainant = async (event: any) => {
+    event.preventDefault()
+
+    
+
+    let complainant = {
+      agency: "TTPS",
+      firstName: complainantFirstName,
+      lastName: complainantLastName,
+      email: complainantEmail,
+      regNum: complainantRegNum,
+      submissionId: submissionId
+    }
+
+    console.log('Saving complainant: ', complainant)
+
+    await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
+    .then((response) => {
+
+      switch(response.data.outcome) {
+        case 'success':
+          console.log('Complainant successfully saved')
+          setSubmissionStatus('complainant_saved')
+          break
+        case 'error':
+          console.log('Error saving complainant')
+          break
+        default:
+          console.log('Unknown complainant save outcome')
+          break
+      }
+
+    })
+
+    console.log('Complainant saved ?')
+
   }
 
   const editTitle = () => {
@@ -142,10 +218,53 @@ export const Submission = ({}: SubmissionProps) => {
                   : <></>
                 }
 
+                {submissionStatus == 'started' ?
+                  <>
+                    <div className="card fade show">
+                      <form onSubmit={saveComplainant}>
 
-                { !submissionTitleSaved ? <></> : <Complainant />}
+                        <div className="mb-3">
+                            <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency">
+                                <option>Select complainant agency</option>
+                                <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
+                        </div>                    
+                        <div className="mb-3">
+                            <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
+                        </div>
+                        <div className="mb-3">
+                            <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
+                        </div>
+                        <div className="mb-3">
+                            <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="email" required />
+                        </div>
 
-                { !submissionTitleSaved ? <></> : <Charges />}
+                        {/* <div className="d-grid gap-2"> */}
+                            <button type="submit" className="btn btn-secondary float-end" >Save</button>
+                        {/* </div> */}
+    
+
+                      </form>
+                    </div>                  
+                  </>
+                  : <>
+                    <div className="card fade show">
+                      <div className="card-body">
+                        <h5 className="card-title">Complainant</h5>
+                      </div>
+                    </div>
+                  </>            
+                }
+
+
+
+
+                {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
+
+                {/* { !submissionTitleSaved ? <></> : <Charges />} */}
                 
 
                   {/* <Complainant /> */}

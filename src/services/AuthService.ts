@@ -14,7 +14,7 @@ export default class AuthService {
     isTokenExpired = (token: any) => {
         try {
           const decoded: any = jwtDecode<JwtPayload>(token)
-          console.log('Decoded JWT Token: ', decoded)
+          // console.log('Decoded JWT Token: ', decoded)
           if (decoded.exp < Date.now() / 1000) {
             // Checking if token is expired.
             return true;
@@ -28,6 +28,13 @@ export default class AuthService {
     loggedIn = () => {
         const token = this.getToken()
         return !!token && !this.isTokenExpired(token)
+    }
+
+    decodedToken = async () => {
+      let token: any = await localStorage.getItem("id_token")
+      const decoded: any = jwtDecode<JwtPayload>(token)
+      // console.log('Decoded Token: ', decoded)
+      return decoded
     }
 
     login = () => {

@@ -16,6 +16,7 @@ import { Navigate, useNavigate } from "react-router-dom"
 type SubmissionsProps = {}
 
 interface Submission {
+    id: number,
     description: string,
     userId: number,
     createdAt: string,
@@ -34,7 +35,7 @@ export const Submissions = ({}: SubmissionsProps) => {
     useEffect(() => {
         axios.get(API_URL + '/api/submissions')
         .then((response) => {
-            console.log('Submissions fetched from server: ', response.data);
+            // console.log('Submissions fetched from server: ', response.data);
             setSubmissions(response.data.submissions.rows)
             // setSubmissions([])
             // let dSubmissions: Submission[] = [{description: "Testing description rendering", userId: 4}]
@@ -72,13 +73,13 @@ export const Submissions = ({}: SubmissionsProps) => {
                         
                         <div className="row">
                             {submissions.map((submission: Submission) => 
-                                <>
-                                    <div className="card submission-card">
+                                
+                                    <div className="card submission-card" key={submission.id}>
                                         <div className="card-body">
                                             <h5 className="card-title">{submission.description}</h5>                                   
                                         </div>
                                     </div>
-                                </>
+                                
                             )}
 
                                 {/* <>
