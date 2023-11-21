@@ -239,7 +239,7 @@ const saveTitle = async (event: any) => {
                             <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
                         </div>
                         <div className="mb-3">
-                            <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="email" required />
+                            <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
                         </div>
 
                         {/* <div className="d-grid gap-2"> */}
@@ -253,7 +253,14 @@ const saveTitle = async (event: any) => {
                   : <>
                     <div className="card fade show">
                       <div className="card-body">
-                        <h5 className="card-title">Complainant</h5>
+                        <h5 className="card-title">Complainant</h5><br/> <br/>
+                        <div className="text-left complainant-details">
+                          <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
+                          <br/><label>Agency:</label> {complainantAgency}
+                          <br/><label>Regimental Number:</label> {complainantRegNum}
+                          <br/><label>Email:</label> {complainantEmail}
+                        </div>
+                        
                       </div>
                     </div>
                   </>            

@@ -58,6 +58,15 @@
   margin: 40px 0;
 }
 
+.complainant-details {
+  width: 100%;
+  text-align: left;
+}
+
+.complainant-details label {
+  font-weight: bold;
+}
+
 /* Hide all steps by default: */
 /* .tab {
     display: none;
