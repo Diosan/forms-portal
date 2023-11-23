@@ -67,11 +67,11 @@ export const Submission = ({}: SubmissionProps) => {
       setComplainantLastName(event.target.value)
   }
 
-const complainantEmailChange = (event: any) => {
-    setComplainantEmail(event.target.value)
-}
+  const complainantEmailChange = (event: any) => {
+      setComplainantEmail(event.target.value)
+  }
 
-const saveTitle = async (event: any) => {
+  const saveTitle = async (event: any) => {
     event.preventDefault()
 
     // console.log('Before decoding token')

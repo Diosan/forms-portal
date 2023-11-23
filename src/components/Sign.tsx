@@ -29,17 +29,34 @@ export const Sign = ({}: SignProps) => {
 
     const { id } = useParams()
 
+    const navigate = useNavigate()
+
+    const auth = new AuthService
+
     
 
     const [submission, setSubmission] = useState({})
+    const [complainantName, setComplainantName] = useState('')
+    const [complainantAgency, setComplainantAgency] = useState('')
+    const [complainantRegNum, setComplainantRegNum] = useState('')
+    const [complainantEmail, setComplainantEmail] = useState('')
+    const [title, setTitle] = useState('')
 
     useEffect(() => {
-    //   alert('Passed URL ID is ' + id)
-      axios.get(API_URL + '/api/submissions' + id)
-      .then((response) => {
-        // setSchema(response.data.schema)
-        // setUI(response.data.UI)
-      })
+      
+        if(auth.loggedIn()) {
+            axios.get(API_URL + '/api/submissions/' + id)
+            .then((response) => {
+                console.log('Fetched submission: ', response.data)
+                setTitle(response.data.submission.description)
+                setComplainantName(response.data.complainant.firstName + ' ' + response.data.complainant.lastName)
+                setComplainantAgency(response.data.complainant.agency)
+                setComplainantRegNum(response.data.complainant.regNum)
+                setComplainantEmail(response.data.complainant.email)
+            })
+        } else {
+            navigate("/")
+        }
     }, []);
 
     return (
@@ -48,17 +65,17 @@ export const Sign = ({}: SignProps) => {
             <div className="container">
 
                 <div id="regForm" className="fade show">
-                    <h3 className='page-title'> Complaint With Oath</h3>
+                    <h3 className='page-title'> Complaint With Oath ({title})</h3>
                 </div>
 
                 <div className="card fade show">
                     <div className="card-body">
                     <h5 className="card-title">Complainant</h5><br/> <br/>
                     <div className="text-left complainant-details">
-                        <label>Name:</label> 
-                        <br/><label>Agency:</label> 
-                        <br/><label>Regimental Number:</label> 
-                        <br/><label>Email:</label> 
+                        <label>Name:</label> {complainantName}
+                        <br/><label>Agency:</label>  {complainantAgency} 
+                        <br/><label>Regimental Number:</label> {complainantRegNum} 
+                        <br/><label>Email:</label> {complainantEmail}
                         <br/><br/><br/><a className="btn btn-secondary float-end" >Sign</a>
                     </div>
                     
