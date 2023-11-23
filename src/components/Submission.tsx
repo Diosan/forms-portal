@@ -37,6 +37,8 @@ export const Submission = ({}: SubmissionProps) => {
 
   const [submissionTitle, setSubmissionTitle] = useState('')
   const [submissionTitleSaved, setSubmissionTitleSaved] = useState(false)
+  const [editingSubmissionTitle, setEditingSubmissionTitle] = useState(false)
+  const [submissionComplainantSaved, setSubmissionComplainantSaved] = useState(false)
   const submissionTitleChange = (event: any) => {
     setSubmissionTitle(event.target.value)
   }
@@ -140,7 +142,7 @@ export const Submission = ({}: SubmissionProps) => {
   }
 
   const editTitle = () => {
-    setSubmissionTitleSaved(false)
+    setEditingSubmissionTitle(true)
   }
 
   const [schema, setSchema] = useState({})
@@ -192,7 +194,7 @@ export const Submission = ({}: SubmissionProps) => {
 
                 <br />
                 <h3 className='page-title'> Complaint With Oath { submissionTitleSaved ? '(' + submissionTitle + ')' : '' } </h3>
-                { !submissionTitleSaved ?
+                { !submissionTitleSaved || editingSubmissionTitle ?
                   <></>
                   : <>
                     <a href="#" className="float-end" onClick={editTitle}>Edit</a>
@@ -201,7 +203,7 @@ export const Submission = ({}: SubmissionProps) => {
                              
                 <br /> <br />
 
-                { !submissionTitleSaved ? 
+                { !submissionTitleSaved  || editingSubmissionTitle ? 
                   <>
                     <form onSubmit={saveTitle} >
                       <fieldset>
@@ -218,53 +220,73 @@ export const Submission = ({}: SubmissionProps) => {
                   : <></>
                 }
 
-                {submissionStatus == 'started' ?
-                  <>
-                    <div className="card fade show">
-                      <form onSubmit={saveComplainant}>
+                
 
-                        <div className="mb-3">
-                            <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency">
-                                <option>Select complainant agency</option>
-                                <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
-                            </select>
-                        </div>
-                        <div className="mb-3">
-                            <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
-                        </div>                    
-                        <div className="mb-3">
-                            <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
-                        </div>
-                        <div className="mb-3">
-                            <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
-                        </div>
-                        <div className="mb-3">
-                            <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
-                        </div>
+                  {submissionTitleSaved ?
+                    <>
 
-                        {/* <div className="d-grid gap-2"> */}
-                            <button type="submit" className="btn btn-secondary float-end" >Save</button>
-                        {/* </div> */}
-    
+                      {!submissionComplainantSaved ?
+                        <>
+                          <div className="card fade show">
 
-                      </form>
-                    </div>                  
-                  </>
-                  : <>
-                    <div className="card fade show">
-                      <div className="card-body">
-                        <h5 className="card-title">Complainant</h5><br/> <br/>
-                        <div className="text-left complainant-details">
-                          <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
-                          <br/><label>Agency:</label> {complainantAgency}
-                          <br/><label>Regimental Number:</label> {complainantRegNum}
-                          <br/><label>Email:</label> {complainantEmail}
-                        </div>
-                        
-                      </div>
-                    </div>
-                  </>            
-                }
+                            <form onSubmit={saveComplainant}>
+
+                              <div className="mb-3">
+                                  <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency">
+                                      <option>Select complainant agency</option>
+                                      <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                                  </select>
+                              </div>
+                              <div className="mb-3">
+                                  <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
+                              </div>                    
+                              <div className="mb-3">
+                                  <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
+                              </div>
+                              <div className="mb-3">
+                                  <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
+                              </div>
+                              <div className="mb-3">
+                                  <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
+                              </div>
+
+                              {/* <div className="d-grid gap-2"> */}
+                                  <button type="submit" className="btn btn-secondary float-end" >Save</button>
+                              {/* </div> */}
+
+
+                            </form>
+
+                          </div> 
+                        </>
+                        : <></>
+                      }
+
+                      { submissionComplainantSaved ?
+                        <>
+                          <div className="card fade show">
+                            <div className="fade show">
+                              <a href="#" className="float-end" onClick={editTitle}>Edit</a>
+                            </div> 
+                            <div className="card-body">
+                              <h5 className="card-title">Complainant</h5><br/> <br/>
+                              <div className="text-left complainant-details">
+                                <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
+                                <br/><label>Agency:</label> {complainantAgency}
+                                <br/><label>Regimental Number:</label> {complainantRegNum}
+                                <br/><label>Email:</label> {complainantEmail}
+                              </div>
+                              
+                            </div>
+                          </div>
+                        </>
+                        : <></>
+                      }
+                 
+                    </>
+                    : <></>            
+                  }
+
 
 
 
