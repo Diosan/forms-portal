@@ -79,26 +79,61 @@ export const Submission = ({}: SubmissionProps) => {
     // console.log('Before decoding token')
     let decoded = await auth.decodedToken()
 
-    let submission = {
-      title: submissionTitle,
-      email: decoded.email
+
+
+    if(submissionTitleSaved) {
+      console.log('submissionId is ' + submissionId)
+      let submission = {
+        id: submissionId,
+        title: submissionTitle,
+        email: decoded.email
+      }
+      console.log('Submission is : ', submission)
+      await axios.post(API_URL + '/api/submissions/update_title', submission)
+      .then((response) => {
+
+        console.log('Posted update to submission title')
+  
+        switch(response.data.outcome) {
+          case 'success':
+            console.log('Successfully updated submission title. Response Data : ', response.data);
+            setEditingSubmissionTitle(false)
+            break
+          case 'error':
+            console.log('Error updating submission title')
+            break
+          default:
+            console.log('Unknown outcome updating submission title')
+            break
+        }
+  
+      })
+      // .catch((error) => {
+      //   console.log('Error posting update to submission title', error)
+      // })
+      
+    } else {
+      let submission = {
+        title: submissionTitle,
+        email: decoded.email
+      }
+      axios.post(API_URL + '/api/submissions', submission)
+      .then((response) => {
+  
+        switch(response.data.outcome) {
+          case 'success':
+            console.log('Successfully saved Title. Response Data : ', response.data);
+            setSubmissionId(response.data.submission_id)
+            break
+          case 'error':
+            break
+          default:
+            break
+        }
+  
+      })
     }
 
-    axios.post(API_URL + '/api/submissions', submission)
-    .then((response) => {
-
-      switch(response.data.outcome) {
-        case 'success':
-          console.log('Successfully saved Title. Response Data : ', response.data);
-          setSubmissionId(response.data.submission_id)
-          break
-        case 'error':
-          break
-        default:
-          break
-      }
-
-    })
 
     setSubmissionTitleSaved(true)
   }
@@ -195,34 +230,34 @@ export const Submission = ({}: SubmissionProps) => {
                 <br />
                 <h3 className='page-title'> Complaint With Oath { submissionTitleSaved ? '(' + submissionTitle + ')' : '' } </h3>
                 { !submissionTitleSaved || editingSubmissionTitle ?
-                  <></>
-                  : <>
-                    <a href="#" className="float-end" onClick={editTitle}>Edit</a>
-                  </>
+                    <></>
+                    : <>
+                      <a href="#" className="float-end" onClick={editTitle}>Edit</a>
+                    </>
                 }
                              
                 <br /> <br />
 
                 { !submissionTitleSaved  || editingSubmissionTitle ? 
-                  <>
-                    <form onSubmit={saveTitle} >
-                      <fieldset>
-                        <div className="form-group field field-string">
-                          <label className="control-label">
-                            Submission Title
-                          </label>
-                          <input className="form-control" type="text" value={submissionTitle} onChange={submissionTitleChange} />
-                        </div>
-                        <button type="submit" className="btn btn-secondary float-end">Save</button>
-                      </fieldset>
-                    </form><br/><br/>
-                  </>
-                  : <></>
+                    <>
+                      <form onSubmit={saveTitle} >
+                        <fieldset>
+                          <div className="form-group field field-string">
+                            <label className="control-label">
+                              Submission Title
+                            </label>
+                            <input className="form-control" type="text" value={submissionTitle} onChange={submissionTitleChange} />
+                          </div>
+                          <button type="submit" className="btn btn-secondary float-end">Save</button>
+                        </fieldset>
+                      </form><br/><br/>
+                    </>
+                    : <></>
                 }
 
                 
 
-                  {submissionTitleSaved ?
+                { submissionTitleSaved ?
                     <>
 
                       {!submissionComplainantSaved ?
@@ -282,10 +317,10 @@ export const Submission = ({}: SubmissionProps) => {
                         </>
                         : <></>
                       }
-                 
+                  
                     </>
                     : <></>            
-                  }
+                }
 
 
 
