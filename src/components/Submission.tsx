@@ -250,11 +250,23 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
   useEffect( () => {
     (async () => {
-      if(!new_submission) {    
+      if(!new_submission) { 
+        setSubmissionId(parseInt('' + id))   
         let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
         console.log('Returned submission: ', returned_submission.data)
         setSubmissionTitle(returned_submission.data.submission.description)
         setSubmissionTitleSaved(true)
+        if(returned_submission.data.submission.status == 'complainant_saved') {
+          console.log('Complainant has been saved')
+          setSubmissionComplainantSaved(true)
+          setComplainantFirstName(returned_submission.data.complainant.firstName)
+          setComplainantLastName(returned_submission.data.complainant.lastName)
+          setComplainantAgency(returned_submission.data.complainant.agency)
+          setComplainantRegNum(returned_submission.data.complainant.regNum)
+          setComplainantEmail(returned_submission.data.complainant.email)
+        } else {
+          console.log('Submission: ', returned_submission.data.submission)
+        }
       }
     })();
   }, []);
@@ -350,7 +362,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                               <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
                             </div> 
                             <div className="card-body">
-                              <h5 className="card-title">Complainant</h5><br/> <br/>
+                              <h5 className="card-title">Complainant</h5><br/>
                               <div className="text-left complainant-details">
                                 <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
                                 <br/><label>Agency:</label> {complainantAgency}
@@ -375,7 +387,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
-                { !submissionComplainantSaved ? <></> : <Charges />}
+                { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} />}
                 
 
                   {/* <Complainant /> */}

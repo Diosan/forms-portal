@@ -11,7 +11,9 @@ import { Provider } from "react-redux"
 import { store } from "../store/store"
 import AddAccused from "./AddAccused";
 
-type ChargesProps = {}
+type ChargesProps = {
+    submission_id: number
+}
 
 const log = (type: any) => console.log.bind(console, type)
 
@@ -20,7 +22,7 @@ const processForm = (form: any) => {
     alert('Hurrah!');
 }
 
-export const Charges = ({}: ChargesProps) => {
+export const Charges = ({submission_id}: ChargesProps) => {
     
 
     const [accusedSchema, setAccusedSchema] = useState({})
