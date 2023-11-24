@@ -11,10 +11,10 @@ import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
 import AuthService from "../services/AuthService"
-import { Navigate, useNavigate } from "react-router-dom"
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 type SubmissionProps = {
-  new: boolean,
+  new_submission: boolean
 }
 
 type submissionStep = {
@@ -31,7 +31,9 @@ const processForm = (form: any) => {
 }
 
 
-export const Submission = ({new: boolean}: SubmissionProps) => {
+export const Submission = ({new_submission}: SubmissionProps) => {
+
+
 
   const navigate = useNavigate()
 
@@ -243,6 +245,19 @@ export const Submission = ({new: boolean}: SubmissionProps) => {
   //     setUI(response.data.UI)
   //   })
   // }, []);
+
+  const { id } = useParams()
+
+  useEffect( () => {
+    (async () => {
+      if(!new_submission) {    
+        let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
+        console.log('Returned submission: ', returned_submission.data)
+        setSubmissionTitle(returned_submission.data.submission.description)
+        setSubmissionTitleSaved(true)
+      }
+    })();
+  }, []);
 
   return (
     // Typescript schema assignment error does not prevent porper operation of RJSF form
