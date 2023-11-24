@@ -22,7 +22,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/submission",
-    element: <Submission />
+    element: <Submission new={true} id={0} />
   },
   {
     path: "/submissions",

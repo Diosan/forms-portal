@@ -13,11 +13,15 @@ import { Charges } from "./Charges"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 
-type SubmissionProps = {}
+type SubmissionProps = {
+  new: boolean,
+  id: number
+}
 
 type submissionStep = {
-  id: number,
-  title: string
+  id: number
+  // ,
+  // title: string
 }
 
 const log = (type: any) => console.log.bind(console, type)
@@ -28,7 +32,7 @@ const processForm = (form: any) => {
 }
 
 
-export const Submission = ({}: SubmissionProps) => {
+export const Submission = ({new: boolean, id: number}: SubmissionProps) => {
 
   const navigate = useNavigate()
 
