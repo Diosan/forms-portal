@@ -52,6 +52,7 @@ export const Submission = ({}: SubmissionProps) => {
   const [complainantLastName, setComplainantLastName] = useState('')
   const [complainantEmail, setComplainantEmail] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
+  const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -154,23 +155,45 @@ export const Submission = ({}: SubmissionProps) => {
 
     console.log('Saving complainant: ', complainant)
 
-    await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
-    .then((response) => {
+    if(!submissionComplainantSaved) {
+      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
+      .then((response) => {
+  
+        switch(response.data.outcome) {
+          case 'success':
+            console.log('Complainant successfully saved')
+            setSubmissionComplainantSaved(true)
+            break
+          case 'error':
+            console.log('Error saving complainant')
+            break
+          default:
+            console.log('Unknown complainant save outcome')
+            break
+        }
+  
+      })
+    } else {
+      await axios.post(API_URL + '/api/submissions/update_complainant', complainant)
+      .then((response) => {
+  
+        switch(response.data.outcome) {
+          case 'success':
+            console.log('Complainant successfully saved')
+            setEditingSubmissionComplainant(false)
+            break
+          case 'error':
+            console.log('Error saving complainant')
+            break
+          default:
+            console.log('Unknown complainant save outcome')
+            break
+        }
+  
+      })
+    }
 
-      switch(response.data.outcome) {
-        case 'success':
-          console.log('Complainant successfully saved')
-          setSubmissionStatus('complainant_saved')
-          break
-        case 'error':
-          console.log('Error saving complainant')
-          break
-        default:
-          console.log('Unknown complainant save outcome')
-          break
-      }
 
-    })
 
     console.log('Complainant saved ?')
 
@@ -178,6 +201,10 @@ export const Submission = ({}: SubmissionProps) => {
 
   const editTitle = () => {
     setEditingSubmissionTitle(true)
+  }
+
+  const editComplainant = () => {
+    setEditingSubmissionComplainant(true)
   }
 
   const [schema, setSchema] = useState({})
@@ -260,7 +287,7 @@ export const Submission = ({}: SubmissionProps) => {
                 { submissionTitleSaved ?
                     <>
 
-                      {!submissionComplainantSaved ?
+                      {!submissionComplainantSaved || editingSubmissionComplainant ?
                         <>
                           <div className="card fade show">
 
@@ -292,16 +319,17 @@ export const Submission = ({}: SubmissionProps) => {
 
                             </form>
 
-                          </div> 
+                          </div>
+                          <br/><br/> 
                         </>
                         : <></>
                       }
 
-                      { submissionComplainantSaved ?
+                      { submissionComplainantSaved && !editingSubmissionComplainant ?
                         <>
                           <div className="card fade show">
                             <div className="fade show">
-                              <a href="#" className="float-end" onClick={editTitle}>Edit</a>
+                              <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
                             </div> 
                             <div className="card-body">
                               <h5 className="card-title">Complainant</h5><br/> <br/>
@@ -314,6 +342,7 @@ export const Submission = ({}: SubmissionProps) => {
                               
                             </div>
                           </div>
+                          <br /> <br />
                         </>
                         : <></>
                       }
@@ -328,7 +357,7 @@ export const Submission = ({}: SubmissionProps) => {
 
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
-                {/* { !submissionTitleSaved ? <></> : <Charges />} */}
+                { !submissionComplainantSaved ? <></> : <Charges />}
                 
 
                   {/* <Complainant /> */}
