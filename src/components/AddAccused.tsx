@@ -7,11 +7,14 @@ import validator from '@rjsf/validator-ajv8'
 import { API_URL} from "../config/api"
 import axios from "axios"
 
+type AddAccusedProps = {
+  submission_id: number
+}
+
 const log = (type: any) => console.log.bind(console, type)
 
 
-
-const AddAccused = () => {
+const AddAccused = ({submission_id}: AddAccusedProps) => {
   const name = useRef<string>("")
   const dispatch = useAppDispatch();
 

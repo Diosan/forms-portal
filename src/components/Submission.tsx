@@ -158,7 +158,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
       submissionId: submissionId
     }
 
-    console.log('Saving complainant: ', complainant)
+    
 
     if(!submissionComplainantSaved) {
       await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
@@ -184,14 +184,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
   
         switch(response.data.outcome) {
           case 'success':
-            console.log('Complainant successfully saved')
+            console.log('Complainant successfully updated')
             setEditingSubmissionComplainant(false)
             break
           case 'error':
-            console.log('Error saving complainant')
+            console.log('Error updating complainant')
             break
           default:
-            console.log('Unknown complainant save outcome')
+            console.log('Unknown complainant update outcome')
             break
         }
   
@@ -200,7 +200,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
 
 
-    console.log('Complainant saved ?')
+    // console.log('Complainant saved ?')
 
   }
 

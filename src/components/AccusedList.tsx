@@ -3,8 +3,11 @@ import { useAppSelector  } from "../store/store";
 import AddCharge from "./AddCharge";
 import ChargeList from "./ChargeList";
 
+type AccusedListProps = {
+    submission_id: number
+  }
 
-const AccusedList = () => {
+const AccusedList = ({submission_id}: AccusedListProps) => {
     // const persons = useAppSelector((state) => state.person.persons)
     const accuseds = useAppSelector((state) => state.accused.accuseds)
     return <>

@@ -63,8 +63,8 @@ export const Charges = ({submission_id}: ChargesProps) => {
             </Form> */}
 
             
-            <AddAccused />
-            <AccusedList />
+            <AddAccused submission_id={submission_id} />
+            <AccusedList submission_id={submission_id} />
 
 
 
