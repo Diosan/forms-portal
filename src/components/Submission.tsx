@@ -15,7 +15,6 @@ import { Navigate, useNavigate } from "react-router-dom"
 
 type SubmissionProps = {
   new: boolean,
-  id: number
 }
 
 type submissionStep = {
@@ -32,7 +31,7 @@ const processForm = (form: any) => {
 }
 
 
-export const Submission = ({new: boolean, id: number}: SubmissionProps) => {
+export const Submission = ({new: boolean}: SubmissionProps) => {
 
   const navigate = useNavigate()
 
