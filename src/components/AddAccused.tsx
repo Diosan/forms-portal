@@ -18,7 +18,7 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
   const name = useRef<string>("")
   const dispatch = useAppDispatch();
 
-  const processForm = (form: any) => {
+  const processForm = async (form: any) => {
     console.log('Submitted form data: ', form.formData)
     dispatch(addAccused({ 
         name: form.formData.firstName + ' ' + form.formData.lastName,
@@ -26,6 +26,29 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
     }))
     // alert('Hurrah!');
     setFormData({})
+
+    let accused = {
+      firstName: form.formData.firstName,
+      lastName: form.formData.lastName,
+      address: form.formData.address
+    }
+
+    await axios.post(API_URL + '/api/submissions/saveAccused', accused)
+    .then((response) => {
+
+      switch(response.data.outcome) {
+        case 'success':
+          console.log('Accused successfully saved')          
+          break
+        case 'error':
+          console.log('Error saving accused')
+          break
+        default:
+          console.log('Unknown accused save outcome')
+          break
+      }
+
+    })
     
   }
 
@@ -43,13 +66,13 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
         })
     }, []);
 
-    useEffect(() => {
-        axios.get(API_URL + '/schema/charge')
-        .then((response) => {
-            setChargeSchema(response.data.schema)
-            setChargeUI(response.data.UI)
-        })
-    }, []);  
+    // useEffect(() => {
+    //     axios.get(API_URL + '/schema/charge')
+    //     .then((response) => {
+    //         setChargeSchema(response.data.schema)
+    //         setChargeUI(response.data.UI)
+    //     })
+    // }, []);  
 
   return (
     // <div className="border rounded-md p-2 shadow-md m-2">
