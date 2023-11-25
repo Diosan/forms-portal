@@ -33,12 +33,12 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
       address: form.formData.address
     }
 
-    await axios.post(API_URL + '/api/submissions/saveAccused', accused)
+    await axios.post(API_URL + '/api/submissions/save_accused', accused)
     .then((response) => {
 
       switch(response.data.outcome) {
         case 'success':
-          console.log('Accused successfully saved')          
+          console.log('Accused successfully saved', response.data.accused)          
           break
         case 'error':
           console.log('Error saving accused')
