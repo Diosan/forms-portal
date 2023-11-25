@@ -1,15 +1,25 @@
-import React from "react";
-import { useAppSelector  } from "../store/store";
-import AddCharge from "./AddCharge";
-import ChargeList from "./ChargeList";
+// import React from "react";
+import React, {useEffect, useState} from "react"
+import { useAppSelector  } from "../store/store"
+import AddCharge from "./AddCharge"
+import ChargeList from "./ChargeList"
+import { API_URL} from "../config/api"
+import axios from "axios"
 
 type AccusedListProps = {
     submission_id: number
-  }
+}
 
 const AccusedList = ({submission_id}: AccusedListProps) => {
     // const persons = useAppSelector((state) => state.person.persons)
     const accuseds = useAppSelector((state) => state.accused.accuseds)
+
+    useEffect( () => {
+        (async () => {
+            let accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
+        })
+    })
+
     return <>
        
 
