@@ -10,6 +10,7 @@ import "../assets/Submission.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
+import { Oath } from "./Oath"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
@@ -58,6 +59,8 @@ export const Submission = ({new_submission}: SubmissionProps) => {
   const [complainantEmail, setComplainantEmail] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
+
+  const [chargeSaved, setChargeSaved] = useState(false)
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -256,16 +259,41 @@ export const Submission = ({new_submission}: SubmissionProps) => {
         // console.log('Returned submission: ', returned_submission.data)
         setSubmissionTitle(returned_submission.data.submission.description)
         setSubmissionTitleSaved(true)
-        if(returned_submission.data.submission.status == 'complainant_saved') {
-          setSubmissionComplainantSaved(true)
-          setComplainantFirstName(returned_submission.data.complainant.firstName)
-          setComplainantLastName(returned_submission.data.complainant.lastName)
-          setComplainantAgency(returned_submission.data.complainant.agency)
-          setComplainantRegNum(returned_submission.data.complainant.regNum)
-          setComplainantEmail(returned_submission.data.complainant.email)
-        } else {
-          console.log('Submission: ', returned_submission.data.submission)
+
+        switch(returned_submission.data.submission.status) {
+          case 'complainant_saved': 
+            setSubmissionComplainantSaved(true)
+            setComplainantFirstName(returned_submission.data.complainant.firstName)
+            setComplainantLastName(returned_submission.data.complainant.lastName)
+            setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantEmail(returned_submission.data.complainant.email)            
+            break
+          case 'charge_saved': 
+            setSubmissionComplainantSaved(true)
+            setComplainantFirstName(returned_submission.data.complainant.firstName)
+            setComplainantLastName(returned_submission.data.complainant.lastName)
+            setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantEmail(returned_submission.data.complainant.email)
+            setChargeSaved(true)            
+            break
+          default: 
+            console.log('Submission: ', returned_submission.data.submission)
+            break 
         }
+
+        // if(returned_submission.data.submission.status == 'complainant_saved') {
+        //   setSubmissionComplainantSaved(true)
+        //   setComplainantFirstName(returned_submission.data.complainant.firstName)
+        //   setComplainantLastName(returned_submission.data.complainant.lastName)
+        //   setComplainantAgency(returned_submission.data.complainant.agency)
+        //   setComplainantRegNum(returned_submission.data.complainant.regNum)
+        //   setComplainantEmail(returned_submission.data.complainant.email)
+        // } else {
+        //   console.log('Submission: ', returned_submission.data.submission)
+        // }
+
       }
     })();
   }, []);
@@ -381,12 +409,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                 }
 
 
-
-
-
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
                 { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} />}
+                
+                { chargeSaved ?
+                    <Oath />
+                  : <></>
+                }
                 
 
                   {/* <Complainant /> */}

@@ -10,6 +10,7 @@ import "../assets/Submission.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
+import { Oath } from "./Oath"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 import {
@@ -70,17 +71,22 @@ export const Sign = ({}: SignProps) => {
 
                 <div className="card fade show">
                     <div className="card-body">
-                    <h5 className="card-title">Complainant</h5><br/> <br/>
-                    <div className="text-left complainant-details">
-                        <label>Name:</label> {complainantName}
-                        <br/><label>Agency:</label>  {complainantAgency} 
-                        <br/><label>Regimental Number:</label> {complainantRegNum} 
-                        <br/><label>Email:</label> {complainantEmail}
-                        <br/><br/><br/><a className="btn btn-secondary float-end" >Sign</a>
-                    </div>
+                        <h5 className="card-title">Complainant</h5><br/> <br/>
+                        <div className="text-left complainant-details">
+                            <label>Name:</label> {complainantName}
+                            <br/><label>Agency:</label>  {complainantAgency} 
+                            <br/><label>Regimental Number:</label> {complainantRegNum} 
+                            <br/><label>Email:</label> {complainantEmail}
+                            <br/><br/><br/><a className="btn btn-secondary float-end" >Sign</a>
+                        </div>
                     
                     </div>
+
+
+
                 </div>
+
+
 
             </div>
         
