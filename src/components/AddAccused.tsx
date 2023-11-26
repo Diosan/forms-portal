@@ -30,7 +30,8 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
     let accused = {
       firstName: form.formData.firstName,
       lastName: form.formData.lastName,
-      address: form.formData.address
+      address: form.formData.address,
+      submissionId: submission_id
     }
 
     await axios.post(API_URL + '/api/submissions/save_accused', accused)

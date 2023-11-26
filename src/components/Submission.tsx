@@ -253,11 +253,10 @@ export const Submission = ({new_submission}: SubmissionProps) => {
       if(!new_submission) { 
         setSubmissionId(parseInt('' + id))   
         let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
-        console.log('Returned submission: ', returned_submission.data)
+        // console.log('Returned submission: ', returned_submission.data)
         setSubmissionTitle(returned_submission.data.submission.description)
         setSubmissionTitleSaved(true)
         if(returned_submission.data.submission.status == 'complainant_saved') {
-          console.log('Complainant has been saved')
           setSubmissionComplainantSaved(true)
           setComplainantFirstName(returned_submission.data.complainant.firstName)
           setComplainantLastName(returned_submission.data.complainant.lastName)

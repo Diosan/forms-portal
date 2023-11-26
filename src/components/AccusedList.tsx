@@ -11,37 +11,56 @@ type AccusedListProps = {
 }
 
 const AccusedList = ({submission_id}: AccusedListProps) => {
+
+
     // const persons = useAppSelector((state) => state.person.persons)
     const accuseds = useAppSelector((state) => state.accused.accuseds)
+    const [submissionAccuseds, setSubmissionAccuseds] = useState([])
 
     useEffect( () => {
-        (async () => {
-            let accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
+        // async () => {
+        //     console.log('Loading accuseds list')
+        //     // let returned_accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
+        //     // console.log('Returned accuseds: ', accuseds)
+        // }
+
+        const fetchData = async () => {
+            // console.log('Loading accuseds list ' + API_URL + '/api/submissions/accuseds/' + submission_id)
+            let returned_accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
+            // console.log('Returned accuseds: ', returned_accuseds.data.accuseds)
+            return returned_accuseds.data.accuseds
+        }
+
+        fetchData()
+        .then( returned_accuseds => { 
+            setSubmissionAccuseds(returned_accuseds)
+            // console.log('returned_accuseds: ', returned_accuseds) 
         })
+        
+
     })
+
+    // console.log('Loading accuseds list')
 
     return <>
        
 
-            {accuseds.slice().reverse().map((accused) => (
+            {submissionAccuseds.slice().reverse().map((accused: any) => (
                 // <tr key={person.id}>
                 //     <td>{person.id}</td>
                 //     <td>{person.name}</td>
                 // </tr>
             
-                <div className="card accused-card" key={accused.id}>
+                <div className="card accused-card" key={accused}>
                     <div className="card-body">
-                        <h5 className="card-title">{accused.name}</h5>
-                        {/* <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6> */}
+                        <h5 className="card-title">{accused.firstName} {accused.lastName}</h5>
                         <p className="card-text">{accused.address}</p>
-                        {/* <a href="#" className="card-link">Card link</a>
-                        <a href="#" className="card-link">Another link</a> */}
                         
                         <div className="add-charge">
                             <AddCharge accused_id={accused.id} />
                         </div>
-                        <ChargeList />
 
+                        <ChargeList accused_id={accused.id} />
 
                     </div>
                 </div>

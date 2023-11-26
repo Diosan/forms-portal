@@ -17,7 +17,7 @@ const AddCharge = ({accused_id}: ChargeProps) => {
   const name = useRef<string>("")
   const dispatch = useAppDispatch();
 
-  const processForm = (form: any) => {
+  const processForm = async (form: any) => {
     console.log('Submitted form data: ', form.formData)
     dispatch(addCharge({
         accused_id: accused_id,
@@ -28,6 +28,31 @@ const AddCharge = ({accused_id}: ChargeProps) => {
     }))
     // alert('Hurrah!');
     setFormData({})
+
+    let charge = {
+      name: form.formData.name,
+      ICCS: 'ABC123', 
+      UNODC: 'XYZ890',
+      counts: form.formData.count,
+      accusedId: accused_id
+    }
+
+    await axios.post(API_URL + '/api/accuseds/charges', charge)
+    .then((response) => {
+
+      switch(response.data.outcome) {
+        case 'success':
+          console.log('Charge successfully saved', response.data.charge)          
+          break
+        case 'error':
+          console.log('Error saving charge')
+          break
+        default:
+          console.log('Unknown accused save outcome')
+          break
+      }
+
+    })
     
   }
 
