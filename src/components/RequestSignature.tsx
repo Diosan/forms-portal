@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react"
 import { API_URL} from "../config/api"
 import axios from "axios"
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 type RequestSignatureProps = {
     submission_id: number,
@@ -9,8 +10,20 @@ type RequestSignatureProps = {
 
 export const RequestSignature = ({submission_id, complainant_email}:RequestSignatureProps) => {
 
+    const navigate = useNavigate()
+
     const requestSignature = async () => {
-        alert('Do it now!')
+        let requestResult = await axios.post(
+            API_URL + '/api/submissions/request_signature', 
+            {
+                submission_id: submission_id,
+                complainant_email: complainant_email
+            }
+        )
+        if(requestResult.data.outcome == 'success') {
+            navigate('/sign/' + submission_id)
+        }
+
     }
 
     useEffect(() => {}, [])

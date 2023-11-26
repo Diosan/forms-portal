@@ -414,7 +414,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                 { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} />}
                 
                 { chargeSaved ?
-                    <RequestSignature submission_id={submissionId} complainant_email="off_harry@live868.com"/>
+                    <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
                   : <></>
                 }
                 
