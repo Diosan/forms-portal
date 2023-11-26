@@ -34,7 +34,8 @@ const AddCharge = ({accused_id}: ChargeProps) => {
       ICCS: 'ABC123', 
       UNODC: 'XYZ890',
       counts: form.formData.count,
-      accusedId: accused_id
+      accusedId: accused_id,
+      particulars: form.formData.particulars
     }
 
     await axios.post(API_URL + '/api/accuseds/charges', charge)

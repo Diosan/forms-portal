@@ -37,8 +37,9 @@ const ChargeList = ({accused_id}: ChargeListProps) => {
                     <tr>
                         <th>Charge Name</th>
                         <th>ICCS</th>
-                        <th>UNODC</th>
+                        {/* <th>UNODC</th> */}
                         <th>Counts</th>
+                        <th>Particulars Of Offence</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,8 +47,9 @@ const ChargeList = ({accused_id}: ChargeListProps) => {
                         <tr key={charge.id}>
                             <td>{ charge.name }</td>
                             <td>{ charge.ICCS }</td>
-                            <td>{ charge.UNODC }</td>
+                            {/* <td>{ charge.UNODC }</td> */}
                             <td>{ charge.counts }</td>
+                            <td>{ charge.particulars }</td>
                         </tr>
                     ))}
                 </tbody>
