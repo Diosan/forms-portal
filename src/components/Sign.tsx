@@ -10,7 +10,6 @@ import "../assets/Submission.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
-import { Oath } from "./Oath"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 import {

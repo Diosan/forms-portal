@@ -10,7 +10,7 @@ import "../assets/Submission.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
-import { Oath } from "./Oath"
+import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
@@ -220,18 +220,18 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
   const [currentStep, setCurrentStep] = useState(1)
 
-  const submissionSteps: submissionStep[] = [
-    {id: 1, title: 'Step 1'},
-    {id: 2, title: 'Step 2'},
-    {id: 3, title: 'Step 3'},
-    {id: 4, title: 'Step 4'}
-  ]
+  // const submissionSteps: submissionStep[] = [
+  //   {id: 1, title: 'Step 1'},
+  //   {id: 2, title: 'Step 2'},
+  //   {id: 3, title: 'Step 3'},
+  //   {id: 4, title: 'Step 4'}
+  // ]
 
   // const submissionSteps = [1,2,3,4,5]
 
-  const nextStep = () => {
-    if (currentStep < submissionSteps.length) setCurrentStep(currentStep + 1)
-  }
+  // const nextStep = () => {
+  //   if (currentStep < submissionSteps.length) setCurrentStep(currentStep + 1)
+  // }
 
   const previousStep = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
@@ -414,7 +414,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                 { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} />}
                 
                 { chargeSaved ?
-                    <Oath />
+                    <RequestSignature submission_id={submissionId} complainant_email="off_harry@live868.com"/>
                   : <></>
                 }
                 
