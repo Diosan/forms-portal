@@ -43,9 +43,22 @@ export const Sign = ({}: SignProps) => {
     const [complainantEmail, setComplainantEmail] = useState('')
     const [title, setTitle] = useState('')
     const [accuseds, setAccuseds] = useState([])
+    const [offences, setOffences] = useState<{
+        id: any 
+        firstName: any 
+        lastName: any
+        ICCS: any
+        dateOfOffence: any
+        particulars: any
+    }[]>([])
 
     const signSubmission = () => {
         console.log('Signing form ')
+    }
+
+    const currentDate = () => {
+        let today = new Date()
+        return today.toISOString().split('T')[0]
     }
 
     useEffect(() => {
@@ -60,6 +73,27 @@ export const Sign = ({}: SignProps) => {
                 setComplainantRegNum(response.data.complainant.regNum)
                 setComplainantEmail(response.data.complainant.email)
                 setAccuseds(response.data.accuseds)
+                response.data.accuseds.map((accused: any) => {
+                    console.log('getting offences for accused')
+                    let firstName = accused.firstName
+                    let lastName = accused.lastName
+                    axios.get(API_URL + '/api/accuseds/charges/' + accused.id)
+                    .then((charges_response) => {
+                        charges_response.data.charges.map((charge: any) => {
+                            console.log('Adding offence to array')
+                            let offence = {
+                                id: charge.id,
+                                firstName: firstName,
+                                lastName: lastName,
+                                ICCS: charge.ICCS,
+                                dateOfOffence: charge.dateOfOffence,
+                                particulars: charge.particulars
+                            }
+                            setOffences([...offences, offence])
+                        })
+
+                    })
+                })
             })
         } else {
             navigate("/")
@@ -80,12 +114,12 @@ export const Sign = ({}: SignProps) => {
                         <h5 className="card-title">Complainant: The State</h5><br/> <br/>
 
                         <div className="text-left complainant-details">
-                            { accuseds.map((accused: any) => (
+                            { accuseds.map((accused: any, i: number) => (
                                 <table className="accused-table" key={accused.id}>
                                     <tbody>
                                         <tr>
                                             <td><label>Name of Accused: </label></td>
-                                            <td>{accused.firstName} {accused.lastName} <strong>-{accused.adulthood}</strong></td>
+                                            <td>{i+1} {accused.firstName} {accused.lastName} <strong>-{accused.adulthood}</strong></td>
                                         </tr>
                                         <tr>
                                             <td><label>ID: </label></td>
@@ -126,12 +160,41 @@ export const Sign = ({}: SignProps) => {
                             ))}
 
                         </div>
-                        <br/><br/><br/>
+                        <br/><br/>
+                        
+                        <h5 className="card-title">Offences</h5><br/>
                         <div className="text-left complainant-details">
-                            <label>Name:</label> {complainantName}
-                            <br/><label>Agency:</label>  {complainantAgency} 
-                            <br/><label>Regimental Number:</label> {complainantRegNum} 
-                            <br/><label>Email:</label> {complainantEmail}
+                            <table className="offence-table" >
+                                <thead>
+                                    <tr>
+                                        <th>Accused First Name</th>
+                                        <th>Accused Last Name</th>
+                                        <th>ICCS Code</th>
+                                        <th>Date Of Offence</th>
+                                        <th>Particulars Of Offence</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    { offences.map((offence) => (
+                                        
+                                            <tr key={offence.id}>
+                                                <td>{offence.firstName}</td>
+                                                <td>{offence.lastName}</td>
+                                                <td>{offence.ICCS}</td>
+                                                <td>{offence.dateOfOffence}</td>
+                                                <td>{offence.particulars}</td>
+                                            </tr>                                        
+                                       
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <br/><br/>
+                        <div className="text-left complainant-details">
+                            <p>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
+                            </p>
+                            <p><strong>{' ' + currentDate() }</strong></p>
                             <br/><br/><br/><a className="btn btn-secondary float-end" onClick={signSubmission} >Sign</a>
                         </div>
                     
