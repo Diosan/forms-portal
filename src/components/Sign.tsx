@@ -43,6 +43,14 @@ export const Sign = ({}: SignProps) => {
     const [complainantEmail, setComplainantEmail] = useState('')
     const [title, setTitle] = useState('')
     const [accuseds, setAccuseds] = useState([])
+    const [offences, setOffences] = useState<{
+        id: any 
+        firstName: any 
+        lastName: any
+        ICCS: any
+        dateOfOffence: any
+        particulars: any
+    }[]>([])
 
     const signSubmission = () => {
         console.log('Signing form ')
@@ -65,6 +73,27 @@ export const Sign = ({}: SignProps) => {
                 setComplainantRegNum(response.data.complainant.regNum)
                 setComplainantEmail(response.data.complainant.email)
                 setAccuseds(response.data.accuseds)
+                response.data.accuseds.map((accused: any) => {
+                    console.log('getting offences for accused')
+                    let firstName = accused.firstName
+                    let lastName = accused.lastName
+                    axios.get(API_URL + '/api/accuseds/charges/' + accused.id)
+                    .then((charges_response) => {
+                        charges_response.data.charges.map((charge: any) => {
+                            console.log('Adding offence to array')
+                            let offence = {
+                                id: charge.id,
+                                firstName: firstName,
+                                lastName: lastName,
+                                ICCS: charge.ICCS,
+                                dateOfOffence: charge.dateOfOffence,
+                                particulars: charge.particulars
+                            }
+                            setOffences([...offences, offence])
+                        })
+
+                    })
+                })
             })
         } else {
             navigate("/")
@@ -146,13 +175,17 @@ export const Sign = ({}: SignProps) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Dion</td>
-                                        <td>Santana</td>
-                                        <td>020111</td>
-                                        <td>2023-03-30</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</td>
-                                    </tr>
+                                    { offences.map((offence) => (
+                                        
+                                            <tr key={offence.id}>
+                                                <td>{offence.firstName}</td>
+                                                <td>{offence.lastName}</td>
+                                                <td>{offence.ICCS}</td>
+                                                <td>{offence.dateOfOffence}</td>
+                                                <td>{offence.particulars}</td>
+                                            </tr>                                        
+                                       
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
