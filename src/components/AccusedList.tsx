@@ -5,6 +5,8 @@ import AddCharge from "./AddCharge"
 import ChargeList from "./ChargeList"
 import { API_URL} from "../config/api"
 import axios from "axios"
+import '../assets/Accused.css'
+
 
 type AccusedListProps = {
     submission_id: number
@@ -51,10 +53,15 @@ const AccusedList = ({submission_id}: AccusedListProps) => {
                 //     <td>{person.name}</td>
                 // </tr>
             
-                <div className="card accused-card" key={accused}>
+                <div className="card accused-card" key={accused.id}>
                     <div className="card-body">
                         <h5 className="card-title">{accused.firstName} {accused.lastName}</h5>
-                        <p className="card-text">{accused.address}</p>
+                        <p className="card-text text-left">
+                            <br/><label>Address:</label> {accused.address}
+                            <br/><label>Date Of Birth:</label> {accused.dateOfBirth}
+                            <br/><label>Gender:</label> {accused.gender}
+                            <br/><label>Adulthood:</label> {accused.adulthood}
+                        </p>
                         
                         <div className="add-charge">
                             <AddCharge accused_id={accused.id} />

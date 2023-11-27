@@ -64,6 +64,7 @@ const AddCharge = ({accused_id}: ChargeProps) => {
 
 
     useEffect(() => {
+        console.log('Is component reloading constantly');
         axios.get(API_URL + '/schema/charge')
         .then((response) => {
             setChargeSchema(response.data.schema)
