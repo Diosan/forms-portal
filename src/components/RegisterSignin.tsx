@@ -97,7 +97,9 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
         // console.log('Registration URL: ' + API_URL + '/api/users')
 
-        axios.post(API_URL + '/api/users', user)
+        axios.post(API_URL + '/api/users', {user},
+        { withCredentials: true }
+        )
         .then((response) => {
             
             switch(response.data.outcome) {
@@ -128,7 +130,10 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
         event.preventDefault()
 
-        axios.post(API_URL + '/api/authenticate/login', {email: signinEmail, password: signinPassword})
+        axios.post(API_URL + '/api/authenticate/login', 
+            {email: signinEmail, password: signinPassword},
+            { withCredentials: true }
+        )
         .then((response) => {
             switch(response.data.outcome) {
                 case 'success':
@@ -155,7 +160,9 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
         event.preventDefault()
 
-        axios.post(API_URL + '/api/authenticate/verify-otp', {email: signinEmail, otp: signinOTP})
+        axios.post(API_URL + '/api/authenticate/verify-otp', {email: signinEmail, otp: signinOTP},
+        { withCredentials: true }
+        )
         .then((response) => {
             switch(response.data.outcome) {
                 case 'success':
