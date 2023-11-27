@@ -6,6 +6,7 @@ import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
+import "../assets/Sign.css"
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
@@ -41,6 +42,11 @@ export const Sign = ({}: SignProps) => {
     const [complainantRegNum, setComplainantRegNum] = useState('')
     const [complainantEmail, setComplainantEmail] = useState('')
     const [title, setTitle] = useState('')
+    const [accuseds, setAccuseds] = useState([])
+
+    const signSubmission = () => {
+        console.log('Signing form ')
+    }
 
     useEffect(() => {
       
@@ -53,6 +59,7 @@ export const Sign = ({}: SignProps) => {
                 setComplainantAgency(response.data.complainant.agency)
                 setComplainantRegNum(response.data.complainant.regNum)
                 setComplainantEmail(response.data.complainant.email)
+                setAccuseds(response.data.accuseds)
             })
         } else {
             navigate("/")
@@ -70,13 +77,62 @@ export const Sign = ({}: SignProps) => {
 
                 <div className="card fade show">
                     <div className="card-body">
-                        <h5 className="card-title">Complainant</h5><br/> <br/>
+                        <h5 className="card-title">Complainant: The State</h5><br/> <br/>
+
+                        <div className="text-left complainant-details">
+                            { accuseds.map((accused: any) => (
+                                <table className="accused-table" key={accused.id}>
+                                    <tbody>
+                                        <tr>
+                                            <td><label>Name of Accused: </label></td>
+                                            <td>{accused.firstName} {accused.lastName} <strong>-{accused.adulthood}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>ID: </label></td>
+                                            <td>{accused.identification}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Gender Identity: </label></td>
+                                            <td>{accused.gender}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Date Of Birth: </label></td>
+                                            <td>{accused.dateOfBirth}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Address: </label></td>
+                                            <td>{accused.address}</td>
+                                        </tr>
+                                        <tr><td><br/></td></tr>
+                                        <tr><td></td></tr>
+                                        <tr>
+                                            <td><label>National of Trinidad and Tobago: </label></td>
+                                            <td>{accused.tntNational ? 'Yes' : 'No'}</td>
+                                            <td><label>Resident of Trinidad and Tobago: </label></td>
+                                            <td>{accused.tntResident ? 'Yes' : 'No'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>National of another Country: </label></td>
+                                            <td>{accused.otherNational ? 'Yes' : 'No'}</td>
+                                            <td><label>Resident of another Country: </label></td>
+                                            <td>{accused.otherResident ? 'Yes' : 'No'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Previous Criminal Record: </label></td>
+                                            <td>{accused.previousCriminalRecord}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>                                
+                            ))}
+
+                        </div>
+                        <br/><br/><br/>
                         <div className="text-left complainant-details">
                             <label>Name:</label> {complainantName}
                             <br/><label>Agency:</label>  {complainantAgency} 
                             <br/><label>Regimental Number:</label> {complainantRegNum} 
                             <br/><label>Email:</label> {complainantEmail}
-                            <br/><br/><br/><a className="btn btn-secondary float-end" >Sign</a>
+                            <br/><br/><br/><a className="btn btn-secondary float-end" onClick={signSubmission} >Sign</a>
                         </div>
                     
                     </div>
