@@ -23,10 +23,10 @@ const ChargeList = ({accused_id}: ChargeListProps) => {
         fetchData()
         .then( returned_accuseds => { 
             setAccusedCharges(returned_accuseds)
-            // console.log('returned_accuseds: ', returned_accuseds) 
+            console.log('returned_accuseds: ', returned_accuseds) 
         })
 
-    })
+    }, [])
 
     return (
     

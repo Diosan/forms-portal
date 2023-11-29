@@ -4,14 +4,20 @@ body {
   padding-top: 0;
 }
 
+header{margin-bottom:1rem; border-bottom:1px solid #eee;}
+
 #root {
   /* max-width: 1280px; */
   width: 100%;
   margin: 0;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
   background-color: white;
   color: #000;
+}
+
+.swf-logo{
+  margin-left:20px;
 }
 
 .logo {
@@ -32,13 +38,12 @@ body {
   margin-right: 20px;
 }
 
-.nav-link {
-  margin-right: 20px;
-  margin-left: 20px;
-}
+header .nav-link:hover{color:#336699}
 
-.nav-item.jud-header-item {
-  border-left: #888 solid 1px;
+
+
+.swf-container{
+  border-radius: 5px;
 }
 
 
@@ -76,6 +81,10 @@ body {
 
 .page-title {
   color: #555;
+  font-size:1.8rem;
+  font-weight:bold;
+  padding-bottom:10px;
+  border-bottom:5px solid #fff;
 }
 
 .tab-content {
@@ -114,4 +123,14 @@ body {
 
 #welcome_signin, #welcome_register {
   text-align: left;
+}
+
+
+#regForm {
+  background-color: #f1f1f1;
+  margin: 50px auto;
+  padding: 20px 40px 40px 40px!important;
+  width: 100%;
+  min-width: 300px;
+  border-radius: 10px!important;
 }

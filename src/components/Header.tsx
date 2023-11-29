@@ -11,10 +11,10 @@ export const Header = (({}: HeaderProps) => {
     return (
 
         <>
-            
+            <header>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <a className="navbar-brand" href="#">
-                    <img src="/jsswf-01.svg" width="150" className="d-inline-block align-top" alt="" />
+                <a className="navbar-brand pl-2 swf-logo" href="#">
+                    <img src="/jsswf-01.svg" width="60"  className="d-inline-block align-top ml-3" alt="" />
                     {/* <div className="site-name">Forms Portal</div> */}
                 </a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,9 @@ export const Header = (({}: HeaderProps) => {
                     </ul>
                 </div>
             </nav>
+            </header>
+            
+        
 
         </>
 

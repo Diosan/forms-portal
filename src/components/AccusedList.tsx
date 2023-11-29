@@ -40,7 +40,7 @@ const AccusedList = ({submission_id}: AccusedListProps) => {
         })
         
 
-    })
+    }, [])
 
     // console.log('Loading accuseds list')
 

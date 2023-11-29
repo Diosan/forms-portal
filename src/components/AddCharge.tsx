@@ -37,8 +37,10 @@ const AddCharge = ({accused_id}: ChargeProps) => {
       accusedId: accused_id,
       particulars: form.formData.particulars
     }
+    console.log('Charge: ', charge)
 
-    await axios.post(API_URL + '/api/accuseds/charges', charge)
+    await axios.post(API_URL + '/api/accuseds/charges', charge, 
+    { withCredentials: true })
     .then((response) => {
 
       switch(response.data.outcome) {
@@ -65,7 +67,7 @@ const AddCharge = ({accused_id}: ChargeProps) => {
 
     useEffect(() => {
         console.log('Is component reloading constantly');
-        axios.get(API_URL + '/schema/charge')
+        axios.get(API_URL + '/schema/charge', { withCredentials: true })
         .then((response) => {
             setChargeSchema(response.data.schema)
             setChargeUI(response.data.UI)

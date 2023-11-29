@@ -296,7 +296,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
       }
     })();
-  }, []);
+  }, [id, new_submission, submissionTitle, editingSubmissionTitle]);
 
   return (
     // Typescript schema assignment error does not prevent porper operation of RJSF form
@@ -306,7 +306,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
         { auth.loggedIn() ? 
           <>
-            <div className="container">
+            <div className="swf-container container">
 
 
               <div id="regForm" className="fade show">
@@ -327,12 +327,12 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                       <form onSubmit={saveTitle} >
                         <fieldset>
                           <div className="form-group field field-string">
-                            <label className="control-label">
+                            <label className="control-label fs-5">
                               Submission Title
                             </label>
-                            <input className="form-control" type="text" value={submissionTitle} onChange={submissionTitleChange} />
+                            <input className="form-control fs-5 mt-2" type="text" value={submissionTitle} onChange={submissionTitleChange} />
                           </div>
-                          <button type="submit" className="btn btn-secondary float-end">Save</button>
+                          <button type="submit" className="btn btn-lg btn-primary float-end">Save</button>
                         </fieldset>
                       </form><br/><br/>
                     </>
@@ -351,26 +351,26 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                             <form onSubmit={saveComplainant}>
 
                               <div className="mb-3">
-                                  <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency">
+                                  <select className='form-select fs-5' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency">
                                       <option>Select complainant agency</option>
                                       <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                                   </select>
                               </div>
                               <div className="mb-3">
-                                  <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
+                                  <input type="text" className="fs-5 form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
                               </div>                    
                               <div className="mb-3">
-                                  <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
+                                  <input type="text" className="fs-5 form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
                               </div>
                               <div className="mb-3">
-                                  <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
+                                  <input type="text" className="fs-5 form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
                               </div>
                               <div className="mb-3">
-                                  <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
+                                  <input type="email" className="fs-5 form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
                               </div>
 
                               {/* <div className="d-grid gap-2"> */}
-                                  <button type="submit" className="btn btn-secondary float-end" >Save</button>
+                                  <button type="submit" className="btn btn-lg btn-primary float-end" >Save</button>
                               {/* </div> */}
 
 
