@@ -8,3 +8,7 @@
     border: 1px solid #888888;
     padding: 10px;
 }
+
+.charge-table td {
+    text-align: left;
+}

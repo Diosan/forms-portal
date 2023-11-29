@@ -5,3 +5,19 @@ label {
 .text-left {
     text-align: left !important;
 }
+
+.checkbox {
+    margin: 15px;
+}
+
+.checkbox input {
+    margin-right: 25px;
+    color: #888;
+    background: azure;
+}
+
+.checkbox label {
+    color: #444;
+}
+
+

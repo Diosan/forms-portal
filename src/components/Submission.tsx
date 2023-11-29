@@ -273,11 +273,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
         setSubmissionTitleSaved(true)
 
         switch(returned_submission.data.submission.status) {
-          case 'complainant_saved': 
+          case 'complainant_saved':
+            console.log('Returned Complainant: ', returned_submission.data.complainant) 
             setSubmissionComplainantSaved(true)
             setComplainantFirstName(returned_submission.data.complainant.firstName)
             setComplainantLastName(returned_submission.data.complainant.lastName)
             setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantCourt(returned_submission.data.complainant.court)
+            setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantEmail(returned_submission.data.complainant.email)            
             break
@@ -286,6 +289,8 @@ export const Submission = ({new_submission}: SubmissionProps) => {
             setComplainantFirstName(returned_submission.data.complainant.firstName)
             setComplainantLastName(returned_submission.data.complainant.lastName)
             setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantCourt(returned_submission.data.complainant.court)
+            setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)            
@@ -365,8 +370,8 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                               <div className="mb-3">
                                   <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
                                       <option>Select court</option>
-                                      <option value="North Trinidad">High Court</option>
-                                      <option value="South Trinidad">District Court</option>
+                                      <option value="High Court">High Court</option>
+                                      <option value="District Court">District Court</option>
                                   </select>
                               </div>
 

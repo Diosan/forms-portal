@@ -6,6 +6,7 @@ import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import { API_URL} from "../config/api"
 import axios from "axios"
+import '../assets/Accused.css'
 
 type AddAccusedProps = {
   submission_id: number
@@ -35,10 +36,10 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
       dateOfBirth: form.formData.dateOfBirth,
       gender: form.formData.gender,
       adulthood: form.formData.adulthood,
-      tntNational: true,
-      tntResident: true,
-      otherNational: false,
-      otherResident: false,
+      tntNational: form.formData.tntNational,
+      tntResident: form.formData.tntResident,
+      otherNational: form.formData.otherNational,
+      otherResident: form.formData.otherResident,
       otherNationalCountry: '',
       otherResidentCountry: '',
       identification: '',
