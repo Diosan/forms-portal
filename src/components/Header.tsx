@@ -34,7 +34,11 @@ export const Header = (({}: HeaderProps) => {
 
                                 <li className="nav-item jud-header-item">
                                     <a className="nav-link" href="/submission"> New Complaint With Oath</a>
-                                </li>                           
+                                </li>
+
+                                <li className="nav-item jud-header-item">
+                                    <a className="nav-link" href="/indictable"> New Indictable</a>
+                                </li>                            
                             </>
                             : <></>
                         }

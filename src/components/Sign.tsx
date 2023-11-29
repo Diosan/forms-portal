@@ -66,7 +66,7 @@ export const Sign = ({}: SignProps) => {
         if(auth.loggedIn()) {
             axios.get(API_URL + '/api/submissions/' + id)
             .then((response) => {
-                console.log('Fetched submission: ', response.data)
+                // console.log('Fetched submission: ', response.data)
                 setTitle(response.data.submission.description)
                 setComplainantName(response.data.complainant.firstName + ' ' + response.data.complainant.lastName)
                 setComplainantAgency(response.data.complainant.agency)
@@ -74,13 +74,13 @@ export const Sign = ({}: SignProps) => {
                 setComplainantEmail(response.data.complainant.email)
                 setAccuseds(response.data.accuseds)
                 response.data.accuseds.map((accused: any) => {
-                    console.log('getting offences for accused')
+                    // console.log('getting offences for accused')
                     let firstName = accused.firstName
                     let lastName = accused.lastName
                     axios.get(API_URL + '/api/accuseds/charges/' + accused.id)
                     .then((charges_response) => {
                         charges_response.data.charges.map((charge: any) => {
-                            console.log('Adding offence to array')
+                            // console.log('Adding offence to array')
                             let offence = {
                                 id: charge.id,
                                 firstName: firstName,
