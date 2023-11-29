@@ -26,7 +26,7 @@ const ChargeList = ({accused_id}: ChargeListProps) => {
             // console.log('returned_accuseds: ', returned_accuseds) 
         })
 
-    })
+    },[])
 
     return (
     

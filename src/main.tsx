@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './components/App'
 import { Header } from './components/Header'
 import { Submission } from './components/Submission'
+import { Indictable } from './components/Indictable'
 import Transcend from "./components/Transcend"
 import SimpleRef from './components/SimpleRef'
 import {
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
   {
     path: "/sign/:id",
     element: <Sign />
+  },
+  {
+    path: "/indictable",
+    element: <Indictable new_submission={true} />
+  },
+  {
+    path: "/indictable/:id",
+    element: <Indictable new_submission={false} />
   }
 ])
 
