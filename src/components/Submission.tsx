@@ -274,7 +274,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
         switch(returned_submission.data.submission.status) {
           case 'complainant_saved':
-            console.log('Returned Complainant: ', returned_submission.data.complainant) 
+            // console.log('Returned Complainant: ', returned_submission.data.complainant) 
             setSubmissionComplainantSaved(true)
             setComplainantFirstName(returned_submission.data.complainant.firstName)
             setComplainantLastName(returned_submission.data.complainant.lastName)
