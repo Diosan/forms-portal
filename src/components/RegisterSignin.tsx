@@ -1,9 +1,19 @@
-import { useState } from "react"
+import React, { useState, useEffect  } from "react";
+
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../store/store"
+// import { useAppDispatch } from '../useAppDispatch'; 
 import { Navigate, useNavigate } from "react-router-dom"
 import { API_URL} from "../config/api"
 import axios from "axios"
 import '../assets/Auth.css'
-import AuthService from "../services/AuthService"
+// import AuthService from "../services/AuthService"
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+import { login, logout, verifyOtp } from "../slices/auth";
+import { clearMessage } from "../slices/message"
+import { RootState } from '../store';
 
 type RegisterSigninProps = {}
 
@@ -13,9 +23,36 @@ type Error = {
 
 export const RegisterSignin = ({}: RegisterSigninProps) => {
 
-    const auth = new AuthService
+    
 
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false);
+    const state = useSelector((state: RootState) => state.auth);
+    const {isLoggedIn, otpRequired, token, isVerified} = state
+    const message = useSelector((state: RootState) => state);
+
+ 
+
+    useEffect(() => {
+        if (isLoggedIn && isVerified) {
+          navigate('/submissions');
+        }
+      }, [isLoggedIn, isVerified, navigate]);
+
+      console.log(">>> STATE <<<")
+      console.log(state)
+
+    const dispatch = useAppDispatch();
+    
+
+    useEffect(() => {
+        dispatch(clearMessage());
+      }, [dispatch]);
+
+    const initialValues = {
+        username: "",
+        password: "",
+      };
 
     let regErrs: Error[] = []
 
@@ -67,6 +104,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
     const signinEmailChange = (event: any) => {
         setSigninEmail(event.target.value)
+        console.log(event.target.value)
     }
 
     const signinPasswordChange = (event: any) => {
@@ -97,9 +135,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
         // console.log('Registration URL: ' + API_URL + '/api/users')
 
-        axios.post(API_URL + '/api/users', {user},
-        { withCredentials: true }
-        )
+        axios.post(API_URL + '/api/users', user)
         .then((response) => {
             
             switch(response.data.outcome) {
@@ -127,63 +163,65 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     }
 
     const signIn = (event: any) => {
-
         event.preventDefault()
+        console.log(`>>> signin with ${email} and password: ${password}`)
+        dispatch(login({ username:email, password: password }) as any)
+        // .unwrap()
+        // .then(() => {
+        //     navigate("/submissions");
+        //     window.location.reload();
+        // })
+        // .catch(() => {
+        //     setLoading(false);
+        // });
 
-        axios.post(API_URL + '/api/authenticate/login', 
-            {email: signinEmail, password: signinPassword},
-            { withCredentials: true }
-        )
-        .then((response) => {
-            switch(response.data.outcome) {
-                case 'success':
-                    console.log(response.data.message)
-                    setSigninError(false)
-                    setSigninSuccess({success: true, message: response.data.message})
-                    break
-                case 'error':
-                    console.log('Registration error: ' + response.data.error)
-                    setSigninSuccess({success: false, message: ''})
-                    setSigninError(true)
-                    setSigninErrorMessage(response.data.error)
-                    break
-                default:
-                    console.log('Unknown registration outcome')
-                    break
-            }
+        // axios.post(API_URL + '/api/authenticate/login', {email: signinEmail, password: signinPassword})
+        // .then((response) => {
+        //     switch(response.data.outcome) {
+        //         case 'success':
+        //             console.log(response.data.message)
+        //             setSigninError(false)
+        //             setSigninSuccess({success: true, message: response.data.message})
+        //             break
+        //         case 'error':
+        //             console.log('Registration error: ' + response.data.error)
+        //             setSigninSuccess({success: false, message: ''})
+        //             setSigninError(true)
+        //             setSigninErrorMessage(response.data.error)
+        //             break
+        //         default:
+        //             console.log('Unknown registration outcome')
+        //             break
+        //     }
             
-        })
+        // })
             
     }
 
     const signinVerify = (event: any) => {
-
         event.preventDefault()
-
-        axios.post(API_URL + '/api/authenticate/verify-otp', {email: signinEmail, otp: signinOTP},
-        { withCredentials: true }
-        )
-        .then((response) => {
-            switch(response.data.outcome) {
-                case 'success':
-                    // alert('OTP succesfully verified')
-                    // localStorage.setItem("id_token", response.data.token)
-                    auth.setToken(response.data.token)
-                    navigate("/submissions")
-                    // setSigninError(false)
-                    // setSigninSuccess({success: true, message: response.data.message})
-                    break
-                case 'error':
-                    // alert('OTP verification failed')
-                    // setSigninSuccess({success: false, message: ''})
-                    setSigninVerifyError(true)
-                    break
-                default:
-                    console.log('Unknown verification outcome')
-                    break
+        // const dispatch = useAppDispatch();
+        console.log(">>> signin")
+        dispatch(verifyOtp({otp: signinOTP}) as any)
+        // .then(() => {
+        // // Handle successful verification
+        // // e.g., navigate to a different page
+        // })
+        // // .catch((error) => {
+        // // // Handle errors, such as displaying an error message
+        // // });
+        // .unwrap()
+        .then(() => {
+            if (isVerified) {
+            navigate('/submissions');
             }
-            
         })
+        .catch((error: any) => {
+            // Handle the error
+            console.log(error)
+        });
+
+
 
     }
 
@@ -191,40 +229,25 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
         event.preventDefault()
 
-        axios.post(API_URL + '/api/authenticate/verify-otp', {email: regEmail, otp: regOTP})
-        .then((response) => {
-            switch(response.data.outcome) {
-                case 'success':
-                    // alert('OTP succesfully verified')
-                    auth.setToken(response.data.token)
-                    navigate("/submissions");
-                    // setSigninError(false)
-                    // setSigninSuccess({success: true, message: response.data.message})
-                    break
-                case 'error':
-                    // alert('OTP verification failed')
-                    // setSigninSuccess({success: false, message: ''})
-                    setRegistrationVerifyError(true)
-                    break
-                default:
-                    console.log('Unknown verification outcome')
-                    break
-            }
-            
-        })
-
     }
 
-    const verifyOTP = (email: string, otp: string) => {
-
+    const handleLogout = (event: any) => {
+        event.preventDefault();
+        dispatch(logout() as any)
     }
 
     return (
 
         <>
 
-            { auth.loggedIn() ?
-                 <Navigate to="/submissions" replace={true} /> 
+        <div>
+            <form onSubmit={handleLogout} >
+                <button type="submit" className="btn btn-secondary">Logout</button>
+            </form>
+        </div>
+
+            { isLoggedIn ?
+                 <Navigate to="/" replace={true} /> 
                  :  <>
             
                  <div className='row'>
@@ -251,7 +274,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                              }    
                          
                              
-                             { signinSuccess.success ?
+                             { otpRequired ? 
                                  <>
                                      
                                      <form onSubmit={signinVerify} >

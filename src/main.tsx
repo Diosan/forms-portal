@@ -15,50 +15,29 @@ import './assets/App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Submissions } from './components/Submissions'
 import { Sign } from './components/Sign'
+import { Provider } from 'react-redux'
+import store from "./store";
+import { RootState } from './store';
+
+
+
 
 const router = createBrowserRouter([
+  
   {
-    path: "/",
+    path: "/*", // Use wildcard to handle all routes in App
     element: <App />
-  },
-  {
-    path: "/submission",
-    element: <Submission new_submission={true} />
-  },
-  {
-    path: "/submission/:id",
-    element: <Submission new_submission={false} />
-  },
-  {
-    path: "/submissions",
-    element: <Submissions />
-  },
-  {
-    path: "/transcend",
-    element: <Transcend />
-  },
-  {
-    path: "/simple_ref",
-    element: <SimpleRef />
-  },
-  {
-    path: "/sign/:id",
-    element: <Sign />
-  },
-  {
-    path: "/indictable",
-    element: <Indictable new_submission={true} />
-  },
-  {
-    path: "/indictable/:id",
-    element: <Indictable new_submission={false} />
   }
+  
+  
 ])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Header />
-    {/* <App /> */}
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <Header />
+      {/* <App /> */}
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 )

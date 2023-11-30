@@ -10,9 +10,16 @@ import "../assets/Submission.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
-import AuthService from "../services/AuthService"
+// import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 import { Submission } from "./Submission"
+import { RootState } from '../store';
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../store"
+import { clearMessage } from "../slices/message"
+
+
+
 
 type SubmissionsProps = {}
 
@@ -27,17 +34,18 @@ interface Submission {
 export const Submissions = ({}: SubmissionsProps) => {
 
     const [submissions, setSubmissions] = useState<Submission[]>([]);
+    const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+    const message = useSelector((state: RootState) => state.message);
 
     const navigate = useNavigate()
 
-    const auth = new AuthService
 
 
     useEffect(() => {
         axios.get(API_URL + '/api/submissions')
         .then((response) => {
-            // console.log('Submissions fetched from server: ', response.data);
-            setSubmissions(response.data.submissions.rows)
+            console.log('Submissions fetched from server: ', response.data);
+            setSubmissions(response?.data?.submissions?.rows || [])
             // setSubmissions([])
             // let dSubmissions: Submission[] = [{description: "Testing description rendering", userId: 4}]
             // setSubmissions(dSubmissions)
@@ -46,7 +54,7 @@ export const Submissions = ({}: SubmissionsProps) => {
 
     return (
         <>
-            { auth.loggedIn() ? 
+            { isLoggedIn ? 
             <>
                 <div className="container submissions-container">
 
@@ -71,25 +79,30 @@ export const Submissions = ({}: SubmissionsProps) => {
                         <div className="row">
                             <a href="/submission" className="btn btn-secondary new-submission-btn float-end">New Submission +</a><br/><br/>
                         </div>
-                        
-                        <div className="row">
-                            {submissions.map((submission: Submission) => 
-                                
-                                <a href={'/submission/' + submission.id}>
-                                    <div className="card submission-card" key={submission.id}>
-                                        <div className="card-body">
-                                            <h5 className="card-title">{submission.description}</h5>                                   
+                        { submissions.length > 0 ? 
+                            <div className="row">
+                                {submissions.map((submission: Submission) => 
+                                    
+                                    <a href={'/submission/' + submission.id}>
+                                        <div className="card submission-card" key={submission.id}>
+                                            <div className="card-body">
+                                                <h5 className="card-title">{submission.description}</h5>                                   
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
-                            )}
+                                    </a>
+                                )}
 
-                                {/* <>
-                                    <div className="card submission-card"></div>
-                                </> */}
-                            
-                            {/* <div className="card submission-card"></div> */}
-                        </div>
+                                    {/* <>
+                                        <div className="card submission-card"></div>
+                                    </> */}
+                                
+                                {/* <div className="card submission-card"></div> */}
+                            </div>
+                        
+                            :
+                            <div>No submissions available.</div>
+                        }
+
                     </div>
 
                 </div>
