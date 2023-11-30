@@ -1,15 +1,38 @@
 
 import Button from 'react-bootstrap/Button';
-import AuthService from "../services/AuthService"
+import React, { useState, useEffect  } from "react";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../store/store"
+import { Navigate, useNavigate } from "react-router-dom"
+import { login, logout, verifyOtp } from "../slices/auth";
+import { clearMessage } from "../slices/message"
+import { RootState } from '../store';
 
 type HeaderProps = {}
 
 export const Header = (({}: HeaderProps) => {
 
-    const auth = new AuthService
+    const [loading, setLoading] = useState(false);
+    const state = useSelector((state: RootState) => state.auth);
+    const {isLoggedIn, otpRequired, token, isVerified} = state
+
+    const dispatch = useAppDispatch();
+
+    const handleLogout = (event: any) => {
+        event.preventDefault()
+        console.log(">>> signin")
+        dispatch(logout() as any)
+        .unwrap()
+        .then(() => {
+            console.log("Logging out...")
+        })
+        .catch((error: any) => {
+            // Handle the error
+            console.log(error)
+        });
+    }
 
     return (
-
         <>
             <header>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -26,7 +49,7 @@ export const Header = (({}: HeaderProps) => {
                             <a className="nav-link" href="/">Home {/* <span className="sr-only">(current)</span> */} </a> 
                         </li>
 
-                        { auth.loggedIn() ? 
+                        { isLoggedIn && token ? 
                             <>
                                 <li className="nav-item jud-header-item">
                                     <a className="nav-link" href="/submissions"> My Submissions</a>
@@ -38,7 +61,13 @@ export const Header = (({}: HeaderProps) => {
 
                                 <li className="nav-item jud-header-item">
                                     <a className="nav-link" href="/indictable"> New Indictable</a>
-                                </li>                            
+                                </li>
+
+                                <li className="nav-item jud-header-item">
+                                    <button className="nav-link" onClick={handleLogout}>
+                                        Logout
+                                    </button>
+                                </li>                     
                             </>
                             : <></>
                         }

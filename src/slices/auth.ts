@@ -210,6 +210,7 @@ const authSlice = createSlice({
           state.isLoggedIn = true;
           state.token = action.payload.token;
           state.otpRequired = false;
+          // state.user = action.payload.user; 
         } else {
           state.isVerified = false;
           state.isLoggedIn = false;

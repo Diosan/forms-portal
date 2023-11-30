@@ -1,9 +1,12 @@
 import React, { useState, useEffect  } from "react";
-
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../store/store"
-// import { useAppDispatch } from '../useAppDispatch'; 
 import { Navigate, useNavigate } from "react-router-dom"
+import { login, logout, verifyOtp } from "../slices/auth";
+import { clearMessage } from "../slices/message"
+import { RootState } from '../store';
+
+// import { useAppDispatch } from '../useAppDispatch'; 
 import { API_URL} from "../config/api"
 import axios from "axios"
 import '../assets/Auth.css'
@@ -11,9 +14,6 @@ import '../assets/Auth.css'
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import { login, logout, verifyOtp } from "../slices/auth";
-import { clearMessage } from "../slices/message"
-import { RootState } from '../store';
 
 type RegisterSigninProps = {}
 
@@ -29,15 +29,17 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
     const [loading, setLoading] = useState(false);
     const state = useSelector((state: RootState) => state.auth);
     const {isLoggedIn, otpRequired, token, isVerified} = state
-    const message = useSelector((state: RootState) => state);
 
  
 
     useEffect(() => {
-        if (isLoggedIn && isVerified) {
+        if (isLoggedIn && isVerified && token && !otpRequired) {
           navigate('/submissions');
+        } 
+        else{
+            console.log("Cannot navigate to submissions page")
         }
-      }, [isLoggedIn, isVerified, navigate]);
+      }, []);
 
       console.log(">>> STATE <<<")
       console.log(state)
@@ -203,15 +205,9 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
         // const dispatch = useAppDispatch();
         console.log(">>> signin")
         dispatch(verifyOtp({otp: signinOTP}) as any)
-        // .then(() => {
-        // // Handle successful verification
-        // // e.g., navigate to a different page
-        // })
-        // // .catch((error) => {
-        // // // Handle errors, such as displaying an error message
-        // // });
-        // .unwrap()
+        .unwrap()
         .then(() => {
+            console.log("Reidrecting")
             if (isVerified) {
             navigate('/submissions');
             }
@@ -247,7 +243,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
         </div>
 
             { isLoggedIn ?
-                 <Navigate to="/" replace={true} /> 
+                 <Navigate to="/submissions" replace={true} /> 
                  :  <>
             
                  <div className='row'>

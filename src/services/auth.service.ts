@@ -109,7 +109,7 @@ const registrationVerify = (regEmail: string, regOTP: string): Promise<void> => 
 
 const logout = (): void => {
   localStorage.removeItem("user");
-//   localStorage.setItem("user", "user")
+  localStorage.removeItem('userToken');
 };
 
 const authService = {
