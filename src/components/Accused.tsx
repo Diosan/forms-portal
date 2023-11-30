@@ -38,6 +38,7 @@ const Accused = ({accused_id}: AccusedProps) => {
           UNODC: 'XYZ890',
           counts: form.formData.count,
           accusedId: accused_id,
+          dateOfOffence: form.formData.dateOfOffence,
           particulars: form.formData.particulars
         }
     
