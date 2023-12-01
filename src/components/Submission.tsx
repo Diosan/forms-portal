@@ -58,9 +58,19 @@ export const Submission = ({new_submission}: SubmissionProps) => {
   const [complainantLastName, setComplainantLastName] = useState('')
   const [complainantEmail, setComplainantEmail] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
+  const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
+  const [complainantCourt, setComplainantCourt] = useState('')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
 
   const [chargeSaved, setChargeSaved] = useState(false)
+
+  const complainantCourtDistrictChange = (event: any) => {
+    setComplainantCourtDistrict(event.target.value)
+  }
+
+  const complainantCourtChange = (event: any) => {
+    setComplainantCourt(event.target.value)
+  }
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -154,6 +164,8 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
     let complainant = {
       agency: "TTPS",
+      court: complainantCourt,
+      courtDistrict: complainantCourtDistrict,
       firstName: complainantFirstName,
       lastName: complainantLastName,
       email: complainantEmail,
@@ -261,11 +273,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
         setSubmissionTitleSaved(true)
 
         switch(returned_submission.data.submission.status) {
-          case 'complainant_saved': 
+          case 'complainant_saved':
+            // console.log('Returned Complainant: ', returned_submission.data.complainant) 
             setSubmissionComplainantSaved(true)
             setComplainantFirstName(returned_submission.data.complainant.firstName)
             setComplainantLastName(returned_submission.data.complainant.lastName)
             setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantCourt(returned_submission.data.complainant.court)
+            setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantEmail(returned_submission.data.complainant.email)            
             break
@@ -274,6 +289,8 @@ export const Submission = ({new_submission}: SubmissionProps) => {
             setComplainantFirstName(returned_submission.data.complainant.firstName)
             setComplainantLastName(returned_submission.data.complainant.lastName)
             setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantCourt(returned_submission.data.complainant.court)
+            setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)            
@@ -351,7 +368,24 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                             <form onSubmit={saveComplainant}>
 
                               <div className="mb-3">
-                                  <select className='form-select fs-5' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency">
+                                  <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
+                                      <option>Select court</option>
+                                      <option value="High Court">High Court</option>
+                                      <option value="District Court">District Court</option>
+                                  </select>
+                              </div>
+
+                              <div className="mb-3">
+                                  <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                      <option>Select court district</option>
+                                      <option value="North Trinidad">North Trinidad</option>
+                                      <option value="South Trinidad">South Trinidad</option>
+                                      <option value="Tobago">Tobago</option>
+                                  </select>
+                              </div>
+
+                              <div className="mb-3">
+                                  <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
                                       <option>Select complainant agency</option>
                                       <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                                   </select>
@@ -393,6 +427,8 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                               <div className="text-left complainant-details">
                                 <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
                                 <br/><label>Agency:</label> {complainantAgency}
+                                <br/><label>Court:</label> {complainantCourt}
+                                <br/><label>Court District:</label> {complainantCourtDistrict}
                                 <br/><label>Regimental Number:</label> {complainantRegNum}
                                 <br/><label>Email:</label> {complainantEmail}
                               </div>

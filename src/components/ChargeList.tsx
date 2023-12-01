@@ -5,26 +5,27 @@ import { API_URL} from "../config/api"
 import axios from "axios"
 
 type ChargeListProps = {
-    accused_id: number
+    accused_id: number,
+    accused_charges: any[]
 }
 
-const ChargeList = ({accused_id}: ChargeListProps) => {
+const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
     const charges = useAppSelector((state) => state.charge.charges)
 
     const [accusedCharges, setAccusedCharges] = useState([])
 
     useEffect( () => {
 
-        const fetchData = async () => {
-            let returned_charges = await axios.get(API_URL + '/api/accuseds/charges/' + accused_id)
-            return returned_charges.data.charges
-        }
+        // const fetchData = async () => {
+        //     let returned_charges = await axios.get(API_URL + '/api/accuseds/charges/' + accused_id)
+        //     return returned_charges.data.charges
+        // }
 
-        fetchData()
-        .then( returned_accuseds => { 
-            setAccusedCharges(returned_accuseds)
-            console.log('returned_accuseds: ', returned_accuseds) 
-        })
+        // fetchData()
+        // .then( returned_accuseds => { 
+        //     setAccusedCharges(returned_accuseds)
+        //     // console.log('returned_accuseds: ', returned_accuseds) 
+        // })
 
     },[])
 
@@ -39,16 +40,18 @@ const ChargeList = ({accused_id}: ChargeListProps) => {
                         <th>ICCS</th>
                         {/* <th>UNODC</th> */}
                         <th>Counts</th>
+                        <th>Date Of Offence</th>
                         <th>Particulars Of Offence</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {accusedCharges.map((charge: any) => (
+                    {accused_charges.map((charge: any) => (
                         <tr key={charge.id}>
                             <td>{ charge.name }</td>
                             <td>{ charge.ICCS }</td>
                             {/* <td>{ charge.UNODC }</td> */}
                             <td>{ charge.counts }</td>
+                            <td>{charge.dateOfOffence}</td>
                             <td>{ charge.particulars }</td>
                         </tr>
                     ))}

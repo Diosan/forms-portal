@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react"
 import { useAppSelector  } from "../store/store"
 import AddCharge from "./AddCharge"
 import ChargeList from "./ChargeList"
+import Accused from "./Accused"
 import { API_URL} from "../config/api"
 import axios from "axios"
 import '../assets/Accused.css'
@@ -63,11 +64,13 @@ const AccusedList = ({submission_id}: AccusedListProps) => {
                             <br/><label>Adulthood:</label> {accused.adulthood}
                         </p>
                         
-                        <div className="add-charge">
+                        {/* <div className="add-charge">
                             <AddCharge accused_id={accused.id} />
                         </div>
 
-                        <ChargeList accused_id={accused.id} />
+                        <ChargeList accused_id={accused.id} /> */}
+
+                        <Accused accused_id={accused.id} />
 
                     </div>
                 </div>
