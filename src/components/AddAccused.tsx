@@ -43,7 +43,8 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
       otherNationalCountry: '',
       otherResidentCountry: '',
       identification: '',
-      previousCriminalRecord: 'Unknown'
+      previousCriminalRecord: form.formData.previousCriminalRecord,
+      relatedMatters: form.formData.relatedMatters
     }
 
     await axios.post(API_URL + '/api/submissions/save_accused', accused)

@@ -3,6 +3,8 @@ import { API_URL} from "../config/api"
 import axios from "axios"
 import AddCharge from "./AddCharge"
 import ChargeList from "./ChargeList"
+import PendingList from "./PendingList"
+
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 
@@ -14,22 +16,34 @@ const log = (type: any) => console.log.bind(console, type)
 
 const Accused = ({accused_id}: AccusedProps) => {
 
+    const [accused, setAccused] = useState({})
+
+    const [previousRecord, setPreviousRecord] = useState(false)
+
     const [accusedCharges, setAccusedCharges] = useState<{}[]>([])
+
+    const [accusedPendings, setAccusedPendings] = useState<{}[]>([])
+
+    const [accusedConvictions, setAccusedConvictions] = useState<{}[]>([])
 
     const [chargeSchema, setChargeSchema] = useState({})
     const [chargeUI, setChargeUI] = useState({})
+
+    const [pendingSchema, setPendingSchema] = useState({})
+    const [pendingUI, setPendingUI] = useState({})
+
+    const [convictionSchema, setConvictionSchema] = useState({})
+    const [convictionUI, setConvictionUI] = useState({})
+
     const [formData, setFormData] = useState({})
+
+    const [pendingFormData, setPendingFormData] = useState({})
+
+    const [convictionFormData, setConvictionFormData] = useState({})
 
     const processForm = async (form: any) => {
         console.log('Submitted form data: ', form.formData)
-        // dispatch(addCharge({
-        //     accused_id: accused_id,
-        //     ICCS: 'ABC123', // form.formData.ICCS,
-        //     UNODC: 'XYZ890', // form.formData.UNODC, 
-        //     name: form.formData.name,
-        //     count: form.formData.count // form.formData.count 
-        // }))
-        // alert('Hurrah!');
+
         setFormData({})
     
         let charge = {
@@ -60,7 +74,11 @@ const Accused = ({accused_id}: AccusedProps) => {
     
         })
         
-      }
+    }
+
+    const addPending = async (form: any) => {}
+
+    const addConviction = async (form: any) => {}
 
     useEffect(() => {
         // console.log('Is component reloading constantly');
@@ -71,18 +89,59 @@ const Accused = ({accused_id}: AccusedProps) => {
         })
     }, []);
 
+    // useEffect(() => {
+    //     // console.log('Is component reloading constantly');
+    //     axios.get(API_URL + '/schema/record')
+    //     .then((response) => {
+    //         setRecordSchema(response.data.schema)
+    //         setRecordUI(response.data.UI)
+    //     })
+    // }, []);
+
     useEffect( () => {
 
         const fetchData = async () => {
-            let returned_charges = await axios.get(API_URL + '/api/accuseds/charges/' + accused_id)
-            return returned_charges.data.charges
+            let charges = await axios.get(API_URL + '/api/accuseds/charges/' + accused_id)            
+            let accused = await axios.get(API_URL + '/api/accuseds/' + accused_id)
+            let pendings = await axios.get(API_URL + '/api/accuseds/pendings/' + accused_id)
+            let convictions = await axios.get(API_URL + '/api/accuseds/convictions/' + accused_id)
+            if(accused.data.accused.previousCriminalRecord == 'Yes') {
+                setPreviousRecord(true)
+            }
+            
+            return { 
+                accused: accused.data.accused.previousCriminalRecord,
+                charges: charges.data.charges,
+                pendings: pendings.data.pendings,
+                convictions: convictions.data.convictions
+            }
         }
 
         fetchData()
-        .then( returned_accuseds => { 
-            setAccusedCharges(returned_accuseds)
-            // console.log('returned_accuseds: ', returned_accuseds) 
+        .then( data => { 
+            setAccusedCharges(data.charges)
+            setAccusedPendings(data.pendings)
+            setAccusedConvictions(data.convictions)
+            setAccused(data.accused)
+            
+            if(previousRecord) {
+                setPreviousRecord(true)
+                // console.log('Has a previous criminal record')
+                axios.get(API_URL + '/schema/pending')
+                .then(pending_form => {
+                    setPendingSchema(pending_form.data.schema)
+                    setPendingUI(pending_form.data.UI)
+                })
+                axios.get(API_URL + '/schema/conviction')
+                .then(conviction_form => {
+                    setConvictionSchema(conviction_form.data.schema)
+                    setConvictionUI(conviction_form.data.UI)
+                })
+            } 
         })
+
+
+
 
     },[])
 
@@ -106,6 +165,63 @@ const Accused = ({accused_id}: AccusedProps) => {
             </div>
 
             <ChargeList accused_id={accused_id} accused_charges={accusedCharges} />
+
+            { previousRecord ?
+                    <>
+                        <div className="add-charge">
+                            <Form 
+                                schema={pendingSchema}
+                                uiSchema={pendingUI}
+                                // @ts-ignore
+                                validator={validator}
+                                formData={pendingFormData}
+                                onSubmit={addPending}
+                                onError={log('errors')}
+                            >
+                                <div className="d-grid gap-2">
+                                    <button className="btn btn-secondary" type="submit">Add Pending</button>
+                                </div>
+                            </Form>                        
+                        </div>
+
+                        <table className="charge-table">
+                            <thead>
+                                <tr>
+                                    <th>Pending Offence</th>
+                                    <th>Date Of Offence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {accusedPendings.map((pending: any) => (
+                                    <tr key={pending.id}>
+                                        <td>{pending.offence}</td>
+                                        <td>{pending.dateOfOffence}</td>
+                                    </tr>
+                                ))} 
+                            </tbody>
+                        </table>
+
+                        <div className="add-charge">
+                        <Form 
+                            schema={convictionSchema}
+                            uiSchema={convictionUI}
+                            // @ts-ignore
+                            validator={validator}
+                            formData={convictionFormData}
+                            onSubmit={addConviction}
+                            onError={log('errors')}
+                        >
+                            <div className="d-grid gap-2">
+                                <button className="btn btn-secondary" type="submit">Add Conviction</button>
+                            </div>
+                        </Form>                        
+                        </div>
+                    </>
+                : 
+                    <></>
+            }
+
+            
         </>
     )
 }
