@@ -7,6 +7,7 @@ import validator from '@rjsf/validator-ajv8'
 import { API_URL} from "../config/api"
 import axios from "axios"
 import '../assets/Accused.css'
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 type AddAccusedProps = {
   submission_id: number
@@ -16,6 +17,9 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 const AddAccused = ({submission_id}: AddAccusedProps) => {
+
+  const navigate = useNavigate()
+   
   const name = useRef<string>("")
   const dispatch = useAppDispatch();
 
@@ -52,7 +56,10 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
 
       switch(response.data.outcome) {
         case 'success':
-          console.log('Accused successfully saved', response.data.accused)          
+          console.log('Accused successfully saved', response.data.accused)
+          console.log('Redirection to submissions view with id ' + submission_id)
+          navigate('/submission/' + submission_id)
+          window.location.reload()      
           break
         case 'error':
           console.log('Error saving accused')

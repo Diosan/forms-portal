@@ -46,6 +46,10 @@ export const Charges = ({submission_id}: ChargesProps) => {
         })
     }, []);
 
+    useEffect(() => {
+
+    }, []);
+
     return (
         <Provider store={store}>
 
@@ -64,6 +68,7 @@ export const Charges = ({submission_id}: ChargesProps) => {
 
             
             <AddAccused submission_id={submission_id} />
+            
             <AccusedList submission_id={submission_id} />
 
 

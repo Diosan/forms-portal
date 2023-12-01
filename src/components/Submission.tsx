@@ -173,7 +173,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
       submissionId: submissionId
     }
 
-    
+    console.log('Complainant being sent to server: ', complainant);    
 
     if(!submissionComplainantSaved) {
       await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
