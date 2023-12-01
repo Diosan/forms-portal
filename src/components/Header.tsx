@@ -17,14 +17,15 @@ export const Header = (({}: HeaderProps) => {
     const {isLoggedIn, otpRequired, token, isVerified} = state
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const handleLogout = (event: any) => {
         event.preventDefault()
-        console.log(">>> signin")
         dispatch(logout() as any)
         .unwrap()
         .then(() => {
             console.log("Logging out...")
+            navigate("/"); // This will redirect to the home page
         })
         .catch((error: any) => {
             // Handle the error
@@ -49,7 +50,7 @@ export const Header = (({}: HeaderProps) => {
                             <a className="nav-link" href="/">Home {/* <span className="sr-only">(current)</span> */} </a> 
                         </li>
 
-                        { isLoggedIn && token ? 
+                        { isVerified ? 
                             <>
                                 <li className="nav-item jud-header-item">
                                     <a className="nav-link" href="/submissions"> My Submissions</a>

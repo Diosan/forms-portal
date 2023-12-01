@@ -39,13 +39,12 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
         else{
             console.log("Cannot navigate to submissions page")
         }
-      }, []);
+      }, [isLoggedIn, isVerified, token, otpRequired]);
 
       console.log(">>> STATE <<<")
       console.log(state)
 
     const dispatch = useAppDispatch();
-    
 
     useEffect(() => {
         dispatch(clearMessage());
@@ -176,28 +175,6 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
         // .catch(() => {
         //     setLoading(false);
         // });
-
-        // axios.post(API_URL + '/api/authenticate/login', {email: signinEmail, password: signinPassword})
-        // .then((response) => {
-        //     switch(response.data.outcome) {
-        //         case 'success':
-        //             console.log(response.data.message)
-        //             setSigninError(false)
-        //             setSigninSuccess({success: true, message: response.data.message})
-        //             break
-        //         case 'error':
-        //             console.log('Registration error: ' + response.data.error)
-        //             setSigninSuccess({success: false, message: ''})
-        //             setSigninError(true)
-        //             setSigninErrorMessage(response.data.error)
-        //             break
-        //         default:
-        //             console.log('Unknown registration outcome')
-        //             break
-        //     }
-            
-        // })
-            
     }
 
     const signinVerify = (event: any) => {
@@ -236,11 +213,6 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
 
         <>
 
-        <div>
-            <form onSubmit={handleLogout} >
-                <button type="submit" className="btn btn-secondary">Logout</button>
-            </form>
-        </div>
 
             { isLoggedIn ?
                  <Navigate to="/submissions" replace={true} /> 

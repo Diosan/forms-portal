@@ -23,6 +23,7 @@ function App() {
   // console.log(store.getState())
   return (
     <>
+    <Header />
     <Routes>
       <Route path="/" element={<Welcome />} />
       <Route path="/submission" element={<Submission new_submission={true} />} />

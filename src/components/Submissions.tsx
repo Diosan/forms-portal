@@ -34,10 +34,13 @@ interface Submission {
 export const Submissions = ({}: SubmissionsProps) => {
 
     const [submissions, setSubmissions] = useState<Submission[]>([]);
-    const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-    const message = useSelector((state: RootState) => state.message);
+    const state = useSelector((state: RootState) => state.auth);
+    const {isLoggedIn, otpRequired, token, isVerified} = state
 
-    const navigate = useNavigate()
+ 
+
+    console.log(">>> STATE <<<")
+      console.log(state)
 
 
 
@@ -45,7 +48,7 @@ export const Submissions = ({}: SubmissionsProps) => {
         axios.get(API_URL + '/api/submissions')
         .then((response) => {
             console.log('Submissions fetched from server: ', response.data);
-            setSubmissions(response?.data?.submissions?.rows || [])
+            // setSubmissions(response?.data?.submissions?.rows || [])
             // setSubmissions([])
             // let dSubmissions: Submission[] = [{description: "Testing description rendering", userId: 4}]
             // setSubmissions(dSubmissions)
@@ -54,7 +57,7 @@ export const Submissions = ({}: SubmissionsProps) => {
 
     return (
         <>
-            { isLoggedIn ? 
+            { token ? 
             <>
                 <div className="container submissions-container">
 
