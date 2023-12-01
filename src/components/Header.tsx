@@ -35,6 +35,7 @@ export const Header = (({}: HeaderProps) => {
 
     return (
         <>
+            { isVerified &&  
             <header>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <a className="navbar-brand pl-2 swf-logo" href="#">
@@ -85,6 +86,7 @@ export const Header = (({}: HeaderProps) => {
                 </div>
             </nav>
             </header>
+            }
             
         
 

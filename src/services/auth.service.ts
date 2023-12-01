@@ -84,7 +84,8 @@ const verifyOtp = (otp: string): Promise<VerifyOtpResponse> => {
     return axios.post(API_URL + '/api/authenticate/verify-otp', { otp })
     .then(response => response.data)
     .catch(error => {
-    throw error;
+      // throw error;
+      return { outcome: 'error', message: error.response.data.message || 'OTP verification failed' };
     });
 };
 
@@ -112,12 +113,34 @@ const logout = (): void => {
   localStorage.removeItem('userToken');
 };
 
+const resendOTP = (email:string): any => {
+  return axios.post(API_URL + '/api/authenticate/resend-otp', { email}, {withCredentials:true})
+    .then((response) => {
+      if (response.data.outcome === 'success') {
+        // console.log(response.data)
+        localStorage.removeItem("user");
+        localStorage.removeItem('userToken');
+
+        localStorage.setItem("userToken", response.data.token);
+
+        return response.data;
+
+      } else {
+        throw new Error(response.data.error || 'OTP Sending failed');
+      }
+  }, (error) => {
+      console.log('OTP error: ', error.response);
+      throw error; 
+  });
+};
+
 const authService = {
   register,
   login,
   logout,
   verifyOtp,
-  registrationVerify
+  registrationVerify,
+  resendOTP
 };
 
 export default authService;

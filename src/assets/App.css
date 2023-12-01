@@ -4,6 +4,9 @@ body {
   padding-top: 0;
 }
 
+.swf-form label{font-size:.8rem; margin-top:10px;}
+.swf-form input{font-size:.9rem; border:1px solid #ccc; width:100%; margin:3px 0 5px 0; border-radius:0}
+
 header{margin-bottom:1rem; border-bottom:1px solid #eee;}
 
 #root {

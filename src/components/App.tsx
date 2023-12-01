@@ -12,6 +12,7 @@ import { Indictable } from './Indictable'
 import { Sign } from './Sign'
 
 import { Header } from './Header'
+import { Footer } from './Footer'
 import Container from 'react-bootstrap/Container'
 import 'bootstrap/dist/css/bootstrap.min.css'
 // import { store } from '../store/store'
@@ -24,18 +25,19 @@ function App() {
   return (
     <>
     <Header />
-    <Routes>
-      <Route path="/" element={<Welcome />} />
-      <Route path="/submission" element={<Submission new_submission={true} />} />
-      <Route path= "/submission" element={ <Submission new_submission={ true }/>} />
-      <Route path= "/submission/:id" element={ <Submission new_submission={false }/>} />
-      <Route  path= "/submissions" element={ <Submissions />} />
-      <Route path= "/transcend" element={ <Transcend /> } />
-      <Route path= "/simple_ref" element={ <SimpleRef /> } />
-      <Route path= "/sign/:id" element={ <Sign /> } />
-      <Route path= "/indictable" element={ <Indictable new_submission={ true } />} />
-      <Route path= "/indictable/:id" element={ <Indictable new_submission={ false } />} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/submission" element={<Submission new_submission={true} />} />
+        <Route path= "/submission" element={ <Submission new_submission={ true }/>} />
+        <Route path= "/submission/:id" element={ <Submission new_submission={false }/>} />
+        <Route  path= "/submissions" element={ <Submissions />} />
+        <Route path= "/transcend" element={ <Transcend /> } />
+        <Route path= "/simple_ref" element={ <SimpleRef /> } />
+        <Route path= "/sign/:id" element={ <Sign /> } />
+        <Route path= "/indictable" element={ <Indictable new_submission={ true } />} />
+        <Route path= "/indictable/:id" element={ <Indictable new_submission={ false } />} />
+      </Routes>
+    <Footer />
     </>
    
   )

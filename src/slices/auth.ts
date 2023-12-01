@@ -18,6 +18,7 @@ interface AuthState {
   otpRequired: boolean;
   isVerified:boolean;
   token: string;
+  otpErrorMessage:any;
 }
 
 interface VerifyOtpPayload {
@@ -33,6 +34,10 @@ interface RegisterPayload {
 interface LoginPayload {
   username: string;
   password: string;
+}
+
+interface ResendOtpPayload {
+  email: string;
 }
 
 
@@ -148,11 +153,51 @@ export const verifyOtp = createAsyncThunk(
       } else {
         return thunkAPI.rejectWithValue(response.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       // Error handling as before
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+
+export const resendOTP = createAsyncThunk(
+  "auth/resendOtp",
+  async ({ email }: ResendOtpPayload, thunkAPI) => {
+    try {
+      const response =  await AuthService.resendOTP(email);
+      thunkAPI.dispatch(setMessage(response.message));
+      console.log(response)
+
+      if (typeof response.token === 'string') {
+        // Store the JWT token in localStorage
+        localStorage.setItem("userToken", response.token);
+
+        // Set the token as the default authorization header
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
+      } else {
+        // Handle the case where the token is not a string
+        console.error("Invalid token received from login response");
+        return thunkAPI.rejectWithValue("Invalid token received");
+      }
+
+      return { user: null, otpRequired: true, token: response.token };
+
+
+
+      // if (response) {
+      //   console.log(response)
+      //   return response;
+      // } else {
+      //   return thunkAPI.rejectWithValue(response);
+      // }
+
+    } catch (error: any) {
+      // Error handling as before
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 
 // Slice with initialState and reducers
 // const initialState: AuthState = user
@@ -165,6 +210,7 @@ const initialState: AuthState = {
   user: null,
   otpRequired: false,
   isVerified: false,
+  otpErrorMessage:"",
   token: localStorage.getItem("userToken") || ""
 };
 
@@ -203,6 +249,12 @@ const authSlice = createSlice({
         state.isVerified = false;
         state.user = null;
       })
+      .addCase(resendOTP.fulfilled, (state) => {
+        state.isLoggedIn = false;
+        state.isVerified = false;
+        state.user = null;
+        state.otpRequired = true;
+      })
       //VERIFY OTP
       .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ verified: boolean; token: string } | undefined>) => {
         if (action.payload) {
@@ -218,10 +270,12 @@ const authSlice = createSlice({
           state.otpRequired = true;
         }
       })
-      .addCase(verifyOtp.rejected, (state) => {
+      .addCase(verifyOtp.rejected, (state, action) => {
         state.isVerified = false;
         state.isLoggedIn = false;
+        state.otpErrorMessage = action.payload;
       });
+
         
   },
 });
