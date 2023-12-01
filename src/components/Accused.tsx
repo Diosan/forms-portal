@@ -76,9 +76,79 @@ const Accused = ({accused_id}: AccusedProps) => {
         
     }
 
-    const addPending = async (form: any) => {}
 
-    const addConviction = async (form: any) => {}
+    // const addPending = async (form: any) => {
+    //     // console.log('Submitted form data: ', form.formData)
+
+    //     // let pending= {
+    //     //     offence: form.formData.offence,
+    //     //     dateOfOffence: form.formData.dateOfOffence,
+    //     //     accusedId: accused_id
+    //     // }
+
+    // }
+
+    const addPending = async (form: any) => {
+        console.log('Submitted form data: ', form.formData)
+
+        let pending= {
+            offence: form.formData.offence,
+            dateOfOffence: form.formData.dateOfOffence,
+            accusedId: accused_id
+        }
+
+        await axios.post(API_URL + '/api/accuseds/pendings', pending)
+        .then((response) => {
+    
+            switch(response.data.outcome) {
+              case 'success':
+                console.log('Pending successfully saved', response.data.pending)
+                setAccusedPendings([response.data.pending, ...accusedPendings]) //response.data.charge          
+                break
+              case 'error':
+                console.log('Error saving pending')
+                break
+              default:
+                console.log('Unknown pending save outcome')
+                break
+            }
+      
+        })
+
+
+    }
+
+
+    // const addConviction = async (form: any) => {}
+
+    const addConviction = async (form: any) => {
+        console.log('Submitted form data: ', form.formData)
+
+        let conviction= {
+            offence: form.formData.offence,
+            dateOfOffence: form.formData.dateOfOffence,
+            sentence: form.formData.sentence,
+            accusedId: accused_id
+        }
+
+        await axios.post(API_URL + '/api/accuseds/convictions', conviction)
+        .then((response) => {
+    
+            switch(response.data.outcome) {
+              case 'success':
+                console.log('Pending successfully saved', response.data.conviction)
+                setAccusedConvictions([response.data.conviction, ...accusedConvictions]) //response.data.charge          
+                break
+              case 'error':
+                console.log('Error saving conviction')
+                break
+              default:
+                console.log('Unknown conviction save outcome')
+                break
+            }
+      
+        })        
+    }
 
     useEffect(() => {
         // console.log('Is component reloading constantly');
@@ -86,17 +156,25 @@ const Accused = ({accused_id}: AccusedProps) => {
         .then((response) => {
             setChargeSchema(response.data.schema)
             setChargeUI(response.data.UI)
+        });
+
+        axios.get(API_URL + '/schema/pending')
+        .then(pending_form => {
+            console.log('')
+            setPendingSchema(pending_form.data.schema)
+            setPendingUI(pending_form.data.UI)
         })
+        axios.get(API_URL + '/schema/conviction')
+        .then(conviction_form => {
+            setConvictionSchema(conviction_form.data.schema)
+            setConvictionUI(conviction_form.data.UI)
+        })
+
+
+
     }, []);
 
-    // useEffect(() => {
-    //     // console.log('Is component reloading constantly');
-    //     axios.get(API_URL + '/schema/record')
-    //     .then((response) => {
-    //         setRecordSchema(response.data.schema)
-    //         setRecordUI(response.data.UI)
-    //     })
-    // }, []);
+
 
     useEffect( () => {
 
@@ -126,17 +204,6 @@ const Accused = ({accused_id}: AccusedProps) => {
             
             if(previousRecord) {
                 setPreviousRecord(true)
-                // console.log('Has a previous criminal record')
-                axios.get(API_URL + '/schema/pending')
-                .then(pending_form => {
-                    setPendingSchema(pending_form.data.schema)
-                    setPendingUI(pending_form.data.UI)
-                })
-                axios.get(API_URL + '/schema/conviction')
-                .then(conviction_form => {
-                    setConvictionSchema(conviction_form.data.schema)
-                    setConvictionUI(conviction_form.data.UI)
-                })
             } 
         })
 
@@ -216,6 +283,25 @@ const Accused = ({accused_id}: AccusedProps) => {
                             </div>
                         </Form>                        
                         </div>
+
+                        <table className="charge-table">
+                            <thead>
+                                <tr>
+                                    <th>Conviction Offence</th>
+                                    <th>Date Of Offence</th>
+                                    <th>Sentence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {accusedConvictions.map((conviction: any) => (
+                                <tr key={conviction.id}>
+                                    <td>{conviction.offence}</td>
+                                    <td>{conviction.dateOfOffence}</td>
+                                    <td>{conviction.sentence}</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
                     </>
                 : 
                     <></>
