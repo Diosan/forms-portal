@@ -34,7 +34,10 @@ const processForm = (form: any) => {
 
 export const Submission = ({new_submission}: SubmissionProps) => {
 
-
+  const requestSignature = () => {
+    // alert('Performing requestSignature in Submission component')
+    setChargeSaved(true)
+  }
 
   const navigate = useNavigate()
 
@@ -447,7 +450,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
-                { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} />}
+                { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} request_signature={requestSignature} />}
                 
                 { chargeSaved ?
                     <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />

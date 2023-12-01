@@ -12,7 +12,8 @@ import { store } from "../store/store"
 import AddAccused from "./AddAccused";
 
 type ChargesProps = {
-    submission_id: number
+    submission_id: number,
+    request_signature: any
 }
 
 const log = (type: any) => console.log.bind(console, type)
@@ -22,8 +23,12 @@ const processForm = (form: any) => {
     alert('Hurrah!');
 }
 
-export const Charges = ({submission_id}: ChargesProps) => {
-    
+export const Charges = ({submission_id, request_signature}: ChargesProps) => {
+
+    const requestSignature = () => {
+        // alert('Performing requestSignature in Charge component')
+        request_signature()
+    }
 
     const [accusedSchema, setAccusedSchema] = useState({})
     const [accusedUI, setAccusedUI] = useState({})
@@ -68,8 +73,8 @@ export const Charges = ({submission_id}: ChargesProps) => {
 
             
             <AddAccused submission_id={submission_id} />
-            
-            <AccusedList submission_id={submission_id} />
+
+            <AccusedList submission_id={submission_id} request_signature={requestSignature} />
 
 
 

@@ -10,10 +10,11 @@ import '../assets/Accused.css'
 
 
 type AccusedListProps = {
-    submission_id: number
+    submission_id: number,
+    request_signature: any
 }
 
-const AccusedList = ({submission_id}: AccusedListProps) => {
+const AccusedList = ({submission_id, request_signature}: AccusedListProps) => {
 
 
     // const persons = useAppSelector((state) => state.person.persons)
@@ -45,6 +46,10 @@ const AccusedList = ({submission_id}: AccusedListProps) => {
 
     // console.log('Loading accuseds list')
 
+    const requestSignature = () => {
+        request_signature()
+    }
+
     return <>
        
 
@@ -70,7 +75,7 @@ const AccusedList = ({submission_id}: AccusedListProps) => {
 
                         <ChargeList accused_id={accused.id} /> */}
 
-                        <Accused accused_id={accused.id} />
+                        <Accused request_signature={requestSignature} accused_id={accused.id} />
 
                     </div>
                 </div>

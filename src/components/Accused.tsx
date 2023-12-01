@@ -7,14 +7,20 @@ import PendingList from "./PendingList"
 
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 type AccusedProps = {
-    accused_id: number
+    accused_id: number,
+    request_signature: any 
 }
 
 const log = (type: any) => console.log.bind(console, type)
 
-const Accused = ({accused_id}: AccusedProps) => {
+const Accused = ({accused_id, request_signature}: AccusedProps) => {
+
+    const { submission_id } = useParams()
+
+    const navigate = useNavigate()
 
     const [accused, setAccused] = useState({})
 
@@ -41,7 +47,12 @@ const Accused = ({accused_id}: AccusedProps) => {
 
     const [convictionFormData, setConvictionFormData] = useState({})
 
+
+
     const processForm = async (form: any) => {
+
+        
+
         console.log('Submitted form data: ', form.formData)
 
         setFormData({})
@@ -62,7 +73,10 @@ const Accused = ({accused_id}: AccusedProps) => {
           switch(response.data.outcome) {
             case 'success':
               console.log('Charge successfully saved', response.data.charge)
-              setAccusedCharges([response.data.charge, ...accusedCharges]) //response.data.charge          
+              setAccusedCharges([response.data.charge, ...accusedCharges]) //response.data.charge
+            //   navigate('/submission/' + submission_id)
+            //   window.location.reload()   
+              request_signature()        
               break
             case 'error':
               console.log('Error saving charge')
@@ -229,6 +243,9 @@ const Accused = ({accused_id}: AccusedProps) => {
                         <button className="btn btn-secondary" type="submit">Add Charge</button>
                     </div>
                 </Form>
+
+                
+
             </div>
 
             <ChargeList accused_id={accused_id} accused_charges={accusedCharges} />
@@ -248,7 +265,9 @@ const Accused = ({accused_id}: AccusedProps) => {
                                 <div className="d-grid gap-2">
                                     <button className="btn btn-secondary" type="submit">Add Pending</button>
                                 </div>
-                            </Form>                        
+                            </Form> 
+
+                                                 
                         </div>
 
                         <table className="charge-table">
