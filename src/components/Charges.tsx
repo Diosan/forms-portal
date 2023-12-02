@@ -25,15 +25,22 @@ const processForm = (form: any) => {
 
 export const Charges = ({submission_id, request_signature}: ChargesProps) => {
 
+    const [accusedSchema, setAccusedSchema] = useState({})
+    const [accusedUI, setAccusedUI] = useState({})
+    const [chargeSchema, setChargeSchema] = useState({})
+    const [chargeUI, setChargeUI] = useState({})
+    const [accuseds, setAccuseds] = useState<{}[]>([])
+
     const requestSignature = () => {
         // alert('Performing requestSignature in Charge component')
         request_signature()
     }
 
-    const [accusedSchema, setAccusedSchema] = useState({})
-    const [accusedUI, setAccusedUI] = useState({})
-    const [chargeSchema, setChargeSchema] = useState({})
-    const [chargeUI, setChargeUI] = useState({})
+    const accusedAdded = (accused: any) => {
+        setAccuseds([accused, ...accuseds])
+    }
+
+
 
     useEffect(() => {
         axios.get(API_URL + '/schema/accused')
@@ -52,7 +59,7 @@ export const Charges = ({submission_id, request_signature}: ChargesProps) => {
     }, []);
 
     useEffect(() => {
-
+        console.log('submission_in in Charges component: ', submission_id)
     }, []);
 
     return (
@@ -72,9 +79,16 @@ export const Charges = ({submission_id, request_signature}: ChargesProps) => {
             </Form> */}
 
             
-            <AddAccused submission_id={submission_id} />
+            <AddAccused 
+                submission_id={submission_id}
+                accused_added={accusedAdded}                  
+            />
 
-            <AccusedList submission_id={submission_id} request_signature={requestSignature} />
+            <AccusedList 
+                submission_id={submission_id} 
+                request_signature={requestSignature}
+                submission_accuseds={accuseds} 
+            />
 
 
 

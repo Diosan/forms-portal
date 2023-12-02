@@ -10,13 +10,15 @@ import '../assets/Accused.css'
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 type AddAccusedProps = {
-  submission_id: number
+  submission_id: number,
+  accused_added: any
 }
 
 const log = (type: any) => console.log.bind(console, type)
 
 
-const AddAccused = ({submission_id}: AddAccusedProps) => {
+
+const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
 
   const navigate = useNavigate()
    
@@ -58,8 +60,9 @@ const AddAccused = ({submission_id}: AddAccusedProps) => {
         case 'success':
           console.log('Accused successfully saved', response.data.accused)
           console.log('Redirection to submissions view with id ' + submission_id)
-          navigate('/submission/' + submission_id)
-          window.location.reload()      
+          // navigate('/submission/' + submission_id)
+          // window.location.reload()
+          accused_added(response.data.accused)      
           break
         case 'error':
           console.log('Error saving accused')

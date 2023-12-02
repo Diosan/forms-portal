@@ -11,10 +11,11 @@ import '../assets/Accused.css'
 
 type AccusedListProps = {
     submission_id: number,
-    request_signature: any
+    request_signature: any,
+    submission_accuseds: any
 }
 
-const AccusedList = ({submission_id, request_signature}: AccusedListProps) => {
+const AccusedList = ({submission_id, request_signature, submission_accuseds}: AccusedListProps) => {
 
 
     // const persons = useAppSelector((state) => state.person.persons)
@@ -52,12 +53,10 @@ const AccusedList = ({submission_id, request_signature}: AccusedListProps) => {
 
     return <>
        
+        {}
 
-            {submissionAccuseds.slice().reverse().map((accused: any) => (
-                // <tr key={person.id}>
-                //     <td>{person.id}</td>
-                //     <td>{person.name}</td>
-                // </tr>
+            {submission_accuseds.slice().reverse().map((accused: any) => (
+ 
             
                 <div className="card accused-card" key={accused.id}>
                     <div className="card-body">
@@ -69,11 +68,7 @@ const AccusedList = ({submission_id, request_signature}: AccusedListProps) => {
                             <br/><label>Adulthood:</label> {accused.adulthood}
                         </p>
                         
-                        {/* <div className="add-charge">
-                            <AddCharge accused_id={accused.id} />
-                        </div>
 
-                        <ChargeList accused_id={accused.id} /> */}
 
                         <Accused request_signature={requestSignature} accused_id={accused.id} />
 

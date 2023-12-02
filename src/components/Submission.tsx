@@ -26,10 +26,7 @@ type submissionStep = {
 
 const log = (type: any) => console.log.bind(console, type)
 
-const processForm = (form: any) => {
-  console.log('Submitted form data: ', form.formData)
-  alert('Hurrah!');
-}
+
 
 
 export const Submission = ({new_submission}: SubmissionProps) => {
