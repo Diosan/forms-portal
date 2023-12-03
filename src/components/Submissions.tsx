@@ -85,11 +85,6 @@ export const Submissions = ({}: SubmissionsProps) => {
                                 </a>
                             )}
 
-                                {/* <>
-                                    <div className="card submission-card"></div>
-                                </> */}
-                            
-                            {/* <div className="card submission-card"></div> */}
                         </div>
                     </div>
 
