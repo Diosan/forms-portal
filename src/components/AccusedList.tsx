@@ -3,16 +3,20 @@ import React, {useEffect, useState} from "react"
 import { useAppSelector  } from "../store/store"
 import AddCharge from "./AddCharge"
 import ChargeList from "./ChargeList"
+import Accused from "./Accused"
 import { API_URL} from "../config/api"
 import axios from "axios"
 import '../assets/Accused.css'
 
 
 type AccusedListProps = {
-    submission_id: number
+    submission_id: number,
+    request_signature: any,
+    submission_accuseds: any,
+    editable: boolean
 }
 
-const AccusedList = ({submission_id}: AccusedListProps) => {
+const AccusedList = ({submission_id, request_signature, submission_accuseds, editable}: AccusedListProps) => {
 
 
     // const persons = useAppSelector((state) => state.person.persons)
@@ -44,14 +48,16 @@ const AccusedList = ({submission_id}: AccusedListProps) => {
 
     // console.log('Loading accuseds list')
 
+    const requestSignature = () => {
+        request_signature()
+    }
+
     return <>
        
+        {}
 
-            {submissionAccuseds.slice().reverse().map((accused: any) => (
-                // <tr key={person.id}>
-                //     <td>{person.id}</td>
-                //     <td>{person.name}</td>
-                // </tr>
+            {submission_accuseds.slice().reverse().map((accused: any) => (
+ 
             
                 <div className="card accused-card" key={accused.id}>
                     <div className="card-body">
@@ -63,11 +69,13 @@ const AccusedList = ({submission_id}: AccusedListProps) => {
                             <br/><label>Adulthood:</label> {accused.adulthood}
                         </p>
                         
-                        <div className="add-charge">
-                            <AddCharge accused_id={accused.id} />
-                        </div>
 
-                        <ChargeList accused_id={accused.id} />
+
+                        <Accused 
+                            request_signature={requestSignature} 
+                            accused_id={accused.id}
+                            editable={editable} 
+                        />
 
                     </div>
                 </div>

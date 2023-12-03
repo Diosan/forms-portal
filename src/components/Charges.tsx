@@ -12,7 +12,9 @@ import { store } from "../store/store"
 import AddAccused from "./AddAccused";
 
 type ChargesProps = {
-    submission_id: number
+    submission_id: number,
+    request_signature: any,
+    editable: boolean
 }
 
 const log = (type: any) => console.log.bind(console, type)
@@ -22,13 +24,24 @@ const processForm = (form: any) => {
     alert('Hurrah!');
 }
 
-export const Charges = ({submission_id}: ChargesProps) => {
-    
+export const Charges = ({submission_id, request_signature, editable}: ChargesProps) => {
 
     const [accusedSchema, setAccusedSchema] = useState({})
     const [accusedUI, setAccusedUI] = useState({})
     const [chargeSchema, setChargeSchema] = useState({})
     const [chargeUI, setChargeUI] = useState({})
+    const [accuseds, setAccuseds] = useState<{}[]>([])
+
+    const requestSignature = () => {
+        // alert('Performing requestSignature in Charge component')
+        request_signature()
+    }
+
+    const accusedAdded = (accused: any) => {
+        setAccuseds([accused, ...accuseds])
+    }
+
+
 
     useEffect(() => {
         axios.get(API_URL + '/schema/accused')
@@ -44,6 +57,16 @@ export const Charges = ({submission_id}: ChargesProps) => {
           setChargeSchema(response.data.schema)
           setChargeUI(response.data.UI)
         })
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            // console.log('submission_id in Charges component: ', submission_id)
+            let submissions_accuseds = await axios.get(API_URL + '/api/submissions/' + submission_id)
+            // console.log('submissions_accuseds: ', submissions_accuseds.data.accuseds)
+            setAccuseds(submissions_accuseds.data.accuseds)
+            // console.log('accuseds: ', accuseds)
+        })();
     }, []);
 
     return (
@@ -62,9 +85,20 @@ export const Charges = ({submission_id}: ChargesProps) => {
                 </div>
             </Form> */}
 
-            
-            <AddAccused submission_id={submission_id} />
-            <AccusedList submission_id={submission_id} />
+            {editable?
+                <AddAccused 
+                    submission_id={submission_id}
+                    accused_added={accusedAdded}                  
+                />
+              : <></>
+            }
+
+            <AccusedList 
+                submission_id={submission_id} 
+                request_signature={requestSignature}
+                submission_accuseds={accuseds}
+                editable={editable} 
+            />
 
 
 

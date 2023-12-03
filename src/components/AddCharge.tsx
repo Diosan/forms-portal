@@ -8,12 +8,13 @@ import { API_URL} from "../config/api"
 import axios from "axios"
 
 type ChargeProps = {
-    accused_id: number
+    accused_id: number,
+    accused_charges: any[]
 }
 
 const log = (type: any) => console.log.bind(console, type)
 
-const AddCharge = ({accused_id}: ChargeProps) => {
+const AddCharge = ({accused_id, accused_charges}: ChargeProps) => {
   const name = useRef<string>("")
   const dispatch = useAppDispatch();
 
@@ -45,7 +46,8 @@ const AddCharge = ({accused_id}: ChargeProps) => {
 
       switch(response.data.outcome) {
         case 'success':
-          console.log('Charge successfully saved', response.data.charge)          
+          console.log('Charge successfully saved', response.data.charge)
+          accused_charges.push(response.data.charge)          
           break
         case 'error':
           console.log('Error saving charge')

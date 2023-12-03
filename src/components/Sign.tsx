@@ -11,6 +11,7 @@ import "../assets/Sign.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
+import { Offences } from "./Offences"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 import {
@@ -22,6 +23,8 @@ import {
   } from "react-router-dom"
 
 type SignProps = {}
+
+
 
 
 const log = (type: any) => console.log.bind(console, type)
@@ -62,43 +65,50 @@ export const Sign = ({}: SignProps) => {
     }
 
     useEffect(() => {
+
+        const fetchSubmission = async () => {
+            let submission = await axios.get(API_URL + '/api/submissions/' + id)
+            setTitle(submission.data.submission.description)
+            setComplainantName(submission.data.complainant.firstName + ' ' + submission.data.complainant.lastName)
+            setComplainantAgency(submission.data.complainant.agency)
+            setComplainantRegNum(submission.data.complainant.regNum)
+            setComplainantEmail(submission.data.complainant.email)
+            setAccuseds(submission.data.accuseds)
+        }
+
+
+        const fetchCharges = async (accused: any) => {
+
+            let firstName = accused.firstName
+            let lastName = accused.lastName
+
+            let charges = await axios.get(API_URL + '/api/accuseds/charges/' + accused.id)
+
+            charges.data.charges.map((charge: any, i: number) => {
+                
+                let offence = {
+                    id: charge.id,
+                    firstName: firstName,
+                    lastName: lastName,
+                    ICCS: charge.ICCS,
+                    dateOfOffence: charge.dateOfOffence,
+                    particulars: charge.particulars
+                }
+                console.log('Adding charge ' + i + ' to offences ', offence)
+                setOffences([...offences, offence])
+            })
+
+        }
       
         if(auth.loggedIn()) {
-            axios.get(API_URL + '/api/submissions/' + id)
-            .then((response) => {
-                // console.log('Fetched submission: ', response.data)
-                setTitle(response.data.submission.description)
-                setComplainantName(response.data.complainant.firstName + ' ' + response.data.complainant.lastName)
-                setComplainantAgency(response.data.complainant.agency)
-                setComplainantRegNum(response.data.complainant.regNum)
-                setComplainantEmail(response.data.complainant.email)
-                setAccuseds(response.data.accuseds)
-                response.data.accuseds.map((accused: any) => {
-                    // console.log('getting offences for accused')
-                    let firstName = accused.firstName
-                    let lastName = accused.lastName
-                    axios.get(API_URL + '/api/accuseds/charges/' + accused.id)
-                    .then((charges_response) => {
-                        charges_response.data.charges.map((charge: any) => {
-                            // console.log('Adding offence to array')
-                            let offence = {
-                                id: charge.id,
-                                firstName: firstName,
-                                lastName: lastName,
-                                ICCS: charge.ICCS,
-                                dateOfOffence: charge.dateOfOffence,
-                                particulars: charge.particulars
-                            }
-                            setOffences([...offences, offence])
-                        })
 
-                    })
-                })
-            })
+            fetchSubmission()
+
         } else {
             navigate("/")
         }
-    }, []);
+
+    },[])
 
     return (
         <>
@@ -175,7 +185,7 @@ export const Sign = ({}: SignProps) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    { offences.map((offence) => (
+                                    {/* { offences.map((offence) => (
                                         
                                             <tr key={offence.id}>
                                                 <td>{offence.firstName}</td>
@@ -185,6 +195,13 @@ export const Sign = ({}: SignProps) => {
                                                 <td>{offence.particulars}</td>
                                             </tr>                                        
                                        
+                                    ))} */}
+                                    { accuseds.map((accused: any) => (
+                                        <Offences 
+                                            first_name={accused.firstName}
+                                            last_name={accused.lastName}
+                                            accused_id={accused.id}
+                                        />
                                     ))}
                                 </tbody>
                             </table>

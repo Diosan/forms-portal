@@ -26,20 +26,21 @@ type submissionStep = {
 
 const log = (type: any) => console.log.bind(console, type)
 
-const processForm = (form: any) => {
-  console.log('Submitted form data: ', form.formData)
-  alert('Hurrah!');
-}
+
 
 
 export const Submission = ({new_submission}: SubmissionProps) => {
 
-
+  const requestSignature = () => {
+    // alert('Performing requestSignature in Submission component')
+    setChargeSaved(true)
+  }
 
   const navigate = useNavigate()
 
   const auth = new AuthService
 
+  const [editable, setEditable] = useState(true)
 
   const [submissionTitle, setSubmissionTitle] = useState('')
   const [submissionTitleSaved, setSubmissionTitleSaved] = useState(false)
@@ -58,9 +59,19 @@ export const Submission = ({new_submission}: SubmissionProps) => {
   const [complainantLastName, setComplainantLastName] = useState('')
   const [complainantEmail, setComplainantEmail] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
+  const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
+  const [complainantCourt, setComplainantCourt] = useState('')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
 
   const [chargeSaved, setChargeSaved] = useState(false)
+
+  const complainantCourtDistrictChange = (event: any) => {
+    setComplainantCourtDistrict(event.target.value)
+  }
+
+  const complainantCourtChange = (event: any) => {
+    setComplainantCourt(event.target.value)
+  }
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -154,6 +165,8 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
     let complainant = {
       agency: "TTPS",
+      court: complainantCourt,
+      courtDistrict: complainantCourtDistrict,
       firstName: complainantFirstName,
       lastName: complainantLastName,
       email: complainantEmail,
@@ -161,7 +174,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
       submissionId: submissionId
     }
 
-    
+    console.log('Complainant being sent to server: ', complainant);    
 
     if(!submissionComplainantSaved) {
       await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
@@ -261,11 +274,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
         setSubmissionTitleSaved(true)
 
         switch(returned_submission.data.submission.status) {
-          case 'complainant_saved': 
+          case 'complainant_saved':
+            // console.log('Returned Complainant: ', returned_submission.data.complainant) 
             setSubmissionComplainantSaved(true)
             setComplainantFirstName(returned_submission.data.complainant.firstName)
             setComplainantLastName(returned_submission.data.complainant.lastName)
             setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantCourt(returned_submission.data.complainant.court)
+            setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantEmail(returned_submission.data.complainant.email)            
             break
@@ -274,10 +290,24 @@ export const Submission = ({new_submission}: SubmissionProps) => {
             setComplainantFirstName(returned_submission.data.complainant.firstName)
             setComplainantLastName(returned_submission.data.complainant.lastName)
             setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantCourt(returned_submission.data.complainant.court)
+            setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)            
             break
+          case 'signature_requested':
+              setEditable(false)
+              setSubmissionComplainantSaved(true)
+              setComplainantFirstName(returned_submission.data.complainant.firstName)
+              setComplainantLastName(returned_submission.data.complainant.lastName)
+              setComplainantAgency(returned_submission.data.complainant.agency)
+              setComplainantCourt(returned_submission.data.complainant.court)
+              setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
+              setComplainantRegNum(returned_submission.data.complainant.regNum)
+              setComplainantEmail(returned_submission.data.complainant.email)
+              setChargeSaved(true)
+              break
           default: 
             console.log('Submission: ', returned_submission.data.submission)
             break 
@@ -344,14 +374,31 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                 { submissionTitleSaved ?
                     <>
 
-                      {!submissionComplainantSaved || editingSubmissionComplainant ?
+                      {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
                         <>
                           <div className="card fade show">
 
                             <form onSubmit={saveComplainant}>
 
                               <div className="mb-3">
-                                  <select className='form-select fs-5' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency">
+                                  <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
+                                      <option>Select court</option>
+                                      <option value="High Court">High Court</option>
+                                      <option value="District Court">District Court</option>
+                                  </select>
+                              </div>
+
+                              <div className="mb-3">
+                                  <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                      <option>Select court district</option>
+                                      <option value="North Trinidad">North Trinidad</option>
+                                      <option value="South Trinidad">South Trinidad</option>
+                                      <option value="Tobago">Tobago</option>
+                                  </select>
+                              </div>
+
+                              <div className="mb-3">
+                                  <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
                                       <option>Select complainant agency</option>
                                       <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                                   </select>
@@ -393,6 +440,8 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                               <div className="text-left complainant-details">
                                 <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
                                 <br/><label>Agency:</label> {complainantAgency}
+                                <br/><label>Court:</label> {complainantCourt}
+                                <br/><label>Court District:</label> {complainantCourtDistrict}
                                 <br/><label>Regimental Number:</label> {complainantRegNum}
                                 <br/><label>Email:</label> {complainantEmail}
                               </div>
@@ -411,7 +460,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
-                { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} />}
+                { !submissionComplainantSaved ? 
+                  <></> 
+                  : 
+                  <Charges 
+                    submission_id={submissionId} 
+                    request_signature={requestSignature}
+                    editable={editable} 
+                  />}
                 
                 { chargeSaved ?
                     <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
