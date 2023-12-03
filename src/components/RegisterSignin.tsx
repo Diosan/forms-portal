@@ -257,7 +257,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
         <>
             <section className="admin-main-section d-flex align-items-center justify-content-center vh-100">
-                <section className="form-container container text-left" style={{ maxWidth: '600px' }}>
+                <section className="form-container  text-left" style={{ maxWidth: '600px' }}>
 
                     {isLoggedIn ?
                         <Navigate to="/submissions" replace={true} />
