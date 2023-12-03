@@ -72,11 +72,12 @@ const login = (email: string, password: string): Promise<LoginResponse> => {
       .then((response: { data: LoginResponse }) => {
         if (response.data.outcome === 'success') {
           // Ensure that user data is always defined
-          console.log(response.data)
+          // console.log(response.data)
 
           return response.data;
 
         } else {
+          // return response.data;
           throw new Error(response.data.error || 'Login failed');
         }
     }, (error) => {
@@ -145,7 +146,7 @@ const resendOTP = (email:string): any => {
 const resetPassword = (password:string, token:string): any => {
   console.log("Resetting password")
 
-  return axios.put(API_URL + '/api/password/new', { password, token}, {withCredentials:true})
+  return axios.put(API_URL + '/password/new', { password, token}, {withCredentials:true})
     .then((response) => {
       if (response.data.outcome === 'success') {
         console.log(response.data)

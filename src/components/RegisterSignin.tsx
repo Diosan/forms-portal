@@ -75,15 +75,24 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const [signinError, setSigninError] = useState(false)
     const [signinSuccess, setSigninSuccess] = useState({ success: false, message: '' })
-    const [signinErrorMessage, setSigninErrorMessage] = useState('')
+    const [signinErrorMessage, setSigninErrorMessage] = useState('Incorrect Username of Password')
     const [signinEmail, setSigninEmail] = useState('')
     const [signinPassword, setSigninPassword] = useState('')
     const [signinOTP, setSigninOTP] = useState('')
     const [signinVerifyError, setSigninVerifyError] = useState(false)
 
+    const [confirmMessage, setConfirmMessage] = useState("Instructions for resetting your password have been sent to your email address.")
+
+    const [emailSent, setEmailSent] = useState(false) 
+
     const agencyChange = (event: any) => {
         setAgency(event.target.value)
     }
+
+   
+
+
+
 
     const regNumberChange = (event: any) => {
         setRegNumber(event.target.value)
@@ -176,16 +185,20 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const signIn = (event: any) => {
         event.preventDefault()
+        setSigninError(false)
         console.log(`>>> signin with ${email} and password: ${password}`)
         dispatch(login({ username: email, password: password }) as any)
-        // .unwrap()
-        // .then(() => {
-        //     navigate("/submissions");
-        //     window.location.reload();
-        // })
-        // .catch(() => {
-        //     setLoading(false);
-        // });
+        .unwrap()
+        .then((response:any) => {
+            setSigninError(false)
+            // window.location.reload();
+            console.log(response)
+        })
+        .catch((error:any) => {
+            setLoading(false);
+            setSigninError(true)
+            // console.log(error)
+        });
     }
 
     const signinVerify = (event: any) => {
@@ -218,9 +231,10 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                 const response = await axios.post(`${API_URL}/api/users/password/forgotPasswordRequest`, 
                                 {username: email});
                 // Check response to determine if the token is valid
-                console.log(".......response from server >", response)
+                console.log(".......response is coming from server >", response)
                 if (response.data.outcome === "success") {
-                    setChangePassword(true);
+                    setChangePassword(false);
+                    setEmailSent(true)
                 } else {
                     setChangePassword(false);
                 }
@@ -310,7 +324,10 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                             {changePassword ? (
                                                 <>
                                                     <form onSubmit={requestNewPassword} className="swf-form">
-                                                        <h4 className="mb-3">Password Reset Request</h4>
+                                                        <h4 className="mb-3">Forgot your password?</h4>
+                                                        
+                                                        
+                                                        
                                                         <div>
                                                             <label className="mb-1">Username</label>
 
@@ -324,9 +341,11 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                         </div>
 
 
+
                                                         <div className="mt-3">
                                                             <button className="mt-0 btn btn-primary">Submit</button>
                                                         </div>
+
 
                                                         <div className="mt-3 small mb-4">
                                                             <a href="/" className="">
@@ -339,6 +358,13 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                 : (
                                                     <>
                                                         <form onSubmit={signIn} className="swf-form">
+                                                        <h4 className="mb-3">Login</h4>
+
+                                                            {emailSent && (
+                                                                <div className="mt-1 mb-1" style={{color:"#00f", fontSize:"13px"}} role="alert">
+                                                                    {confirmMessage}
+                                                                </div>
+                                                            )}
                                                             <div>
                                                                 <label className="mb-1">Username</label>
 
@@ -366,22 +392,20 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                                 <button className="mt-1 btn btn-primary">Log In</button>
                                                             </div>
 
+                                                            {signinError && (
+                                                                <div className="mt-1 mb-1" style={{color:"red", fontSize:"12px"}} role="alert">
+                                                                    {signinErrorMessage}
+                                                                </div>
+                                                            )}
+
                                                             <div className="mt-3 mb-4 small">
                                                                 <a href="#" className="" onClick={passwordResetLink}>
                                                                     Reset Password
                                                                 </a>
                                                             </div>
                                                         </form>
-                                                        {signinError && (
-                                                            <div className="alert alert-danger fade show text-center text-danger fw-bold" role="alert">
-                                                                {signinErrorMessage}
-                                                            </div>
-                                                        )}
-                                                        {signinSuccess.success && (
-                                                            <div className="alert alert-success fade show text-success fw-bold text-center" role="alert">
-                                                                {signinSuccess.message}
-                                                            </div>
-                                                        )}
+                                                        
+                                                        
                                                     </>
                                                 )
                                             }

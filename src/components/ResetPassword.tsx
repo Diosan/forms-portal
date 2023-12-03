@@ -9,6 +9,7 @@ import { FaCheck, FaTimes } from 'react-icons/fa'; // Import icons
 import { clearMessage } from "../slices/message"
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom"
 import dotenv from "dotenv"
 
 
@@ -26,10 +27,14 @@ export const PasswordReset = () => {
         confirmPassword: ''
     };
 
+    const navigate = useNavigate()
+
+
     const [resetToken, setResetToken] = useState('');
     const [isValidToken, setIsValidToken] = useState(false);
     const [changePassword, setChangePassword] = useState(false);
     const location = useLocation();
+    const PASSWORD_URL = "http://localhost:3000"
 
     useEffect(() => {
         const tokenFromUrl = location.pathname.split('/').pop();
@@ -38,7 +43,7 @@ export const PasswordReset = () => {
         const checkTokenValidity = async () => {
             try {
                 console.log("...checking token")
-                const response = await axios.post(`${API_URL}/api/password/new/${tokenFromUrl}`);
+                const response = await axios.post(`${PASSWORD_URL}/password/new/${tokenFromUrl}`);
                 // Check response to determine if the token is valid
                 console.log(".......response from server >", response)
                 if (response.data.outcome === "valid") {
@@ -88,13 +93,15 @@ export const PasswordReset = () => {
                 console.log("Resetting Password")
                 console.log(message)
                 if (message.outcome == "success") {
-                    // navigate('/');
+                    navigate('/');
                     console.log("success")
                 }
+                navigate('/');
             })
             .catch((error: any) => {
                 // Handle the error
                 console.log(error)
+                navigate('/');
                 // setSigninVerifyError(true)
             });
 
@@ -188,7 +195,7 @@ export const PasswordReset = () => {
                                             </div>
                                             <div className="col-md-8" style={{ padding: "30px" }}>
                                                 <form onSubmit={handleSubmit} className="swf-form">
-                                                    <h4 className="mb-3">Reset Password</h4>
+                                                    <h4 className="mb-3">Enter New Password</h4>
 
                                                     <div className="form-group">
                                                         <label>Password</label>
