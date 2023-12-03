@@ -24,7 +24,7 @@ const processForm = (form: any) => {
     alert('Hurrah!');
 }
 
-export const Charges = ({submission_id, request_signature}: ChargesProps) => {
+export const Charges = ({submission_id, request_signature, editable}: ChargesProps) => {
 
     const [accusedSchema, setAccusedSchema] = useState({})
     const [accusedUI, setAccusedUI] = useState({})
@@ -60,7 +60,13 @@ export const Charges = ({submission_id, request_signature}: ChargesProps) => {
     }, []);
 
     useEffect(() => {
-        console.log('submission_in in Charges component: ', submission_id)
+        (async () => {
+            // console.log('submission_id in Charges component: ', submission_id)
+            let submissions_accuseds = await axios.get(API_URL + '/api/submissions/' + submission_id)
+            // console.log('submissions_accuseds: ', submissions_accuseds.data.accuseds)
+            setAccuseds(submissions_accuseds.data.accuseds)
+            // console.log('accuseds: ', accuseds)
+        })();
     }, []);
 
     return (
@@ -79,16 +85,19 @@ export const Charges = ({submission_id, request_signature}: ChargesProps) => {
                 </div>
             </Form> */}
 
-            
-            <AddAccused 
-                submission_id={submission_id}
-                accused_added={accusedAdded}                  
-            />
+            {editable?
+                <AddAccused 
+                    submission_id={submission_id}
+                    accused_added={accusedAdded}                  
+                />
+              : <></>
+            }
 
             <AccusedList 
                 submission_id={submission_id} 
                 request_signature={requestSignature}
-                submission_accuseds={accuseds} 
+                submission_accuseds={accuseds}
+                editable={editable} 
             />
 
 

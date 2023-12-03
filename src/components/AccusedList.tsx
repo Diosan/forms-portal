@@ -12,10 +12,11 @@ import '../assets/Accused.css'
 type AccusedListProps = {
     submission_id: number,
     request_signature: any,
-    submission_accuseds: any
+    submission_accuseds: any,
+    editable: boolean
 }
 
-const AccusedList = ({submission_id, request_signature, submission_accuseds}: AccusedListProps) => {
+const AccusedList = ({submission_id, request_signature, submission_accuseds, editable}: AccusedListProps) => {
 
 
     // const persons = useAppSelector((state) => state.person.persons)
@@ -70,7 +71,11 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds}: Ac
                         
 
 
-                        <Accused request_signature={requestSignature} accused_id={accused.id} />
+                        <Accused 
+                            request_signature={requestSignature} 
+                            accused_id={accused.id}
+                            editable={editable} 
+                        />
 
                     </div>
                 </div>

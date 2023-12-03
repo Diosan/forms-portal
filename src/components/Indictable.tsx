@@ -63,7 +63,8 @@ export const Indictable = ({new_submission}: IndictableProps) => {
         setSubmissionTitleSaved(true)
         switch(returned_submission.data.submission.status) {
           case 'signature_requested':
-            
+            setEditable(false)
+            setCourtDistrict(returned_submission.data.complainant.courtDistrict)
             break
           default: 
             console.log('Submission: ', returned_submission.data.submission)
@@ -71,9 +72,9 @@ export const Indictable = ({new_submission}: IndictableProps) => {
         }
       }
 
-    })();
+    })()
 
-  }, []);
+  }, [])
 
   const requestSignature = () => {
     setChargeSaved(true)

@@ -298,6 +298,15 @@ export const Submission = ({new_submission}: SubmissionProps) => {
             break
           case 'signature_requested':
               setEditable(false)
+              setSubmissionComplainantSaved(true)
+              setComplainantFirstName(returned_submission.data.complainant.firstName)
+              setComplainantLastName(returned_submission.data.complainant.lastName)
+              setComplainantAgency(returned_submission.data.complainant.agency)
+              setComplainantCourt(returned_submission.data.complainant.court)
+              setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
+              setComplainantRegNum(returned_submission.data.complainant.regNum)
+              setComplainantEmail(returned_submission.data.complainant.email)
+              setChargeSaved(true)
               break
           default: 
             console.log('Submission: ', returned_submission.data.submission)
@@ -365,7 +374,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                 { submissionTitleSaved ?
                     <>
 
-                      {!submissionComplainantSaved || editingSubmissionComplainant ?
+                      {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
                         <>
                           <div className="card fade show">
 

@@ -11,12 +11,13 @@ import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 type AccusedProps = {
     accused_id: number,
-    request_signature: any 
+    request_signature: any,
+    editable: boolean 
 }
 
 const log = (type: any) => console.log.bind(console, type)
 
-const Accused = ({accused_id, request_signature}: AccusedProps) => {
+const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const { submission_id } = useParams()
 
@@ -174,7 +175,6 @@ const Accused = ({accused_id, request_signature}: AccusedProps) => {
 
         axios.get(API_URL + '/schema/pending')
         .then(pending_form => {
-            console.log('')
             setPendingSchema(pending_form.data.schema)
             setPendingUI(pending_form.data.UI)
         })
@@ -228,47 +228,51 @@ const Accused = ({accused_id, request_signature}: AccusedProps) => {
 
     return (
         <>
-            <div className="add-charge">
-                {/* <AddCharge accused_id={accused_id} accused_charges={accusedCharges} /> */}
-                <Form 
-                    schema={chargeSchema}
-                    uiSchema={chargeUI}
-                    // @ts-ignore
-                    validator={validator}
-                    formData={formData}
-                    onSubmit={processForm}
-                    onError={log('errors')}
-                >
-                    <div className="d-grid gap-2">
-                        <button className="btn btn-secondary" type="submit">Add Charge</button>
-                    </div>
-                </Form>
+            { editable ?
+                <div className="add-charge">
+                    {/* <AddCharge accused_id={accused_id} accused_charges={accusedCharges} /> */}
+                    <Form 
+                        schema={chargeSchema}
+                        uiSchema={chargeUI}
+                        // @ts-ignore
+                        validator={validator}
+                        formData={formData}
+                        onSubmit={processForm}
+                        onError={log('errors')}
+                    >
+                        <div className="d-grid gap-2">
+                            <button className="btn btn-secondary" type="submit">Add Charge</button>
+                        </div>
+                    </Form>            
+                </div>
+                : <></>
+            }
 
-                
-
-            </div>
 
             <ChargeList accused_id={accused_id} accused_charges={accusedCharges} />
 
             { previousRecord ?
                     <>
-                        <div className="add-charge">
-                            <Form 
-                                schema={pendingSchema}
-                                uiSchema={pendingUI}
-                                // @ts-ignore
-                                validator={validator}
-                                formData={pendingFormData}
-                                onSubmit={addPending}
-                                onError={log('errors')}
-                            >
-                                <div className="d-grid gap-2">
-                                    <button className="btn btn-secondary" type="submit">Add Pending</button>
-                                </div>
-                            </Form> 
+                        { editable ?
+                            <div className="add-charge">
+                                <Form 
+                                    schema={pendingSchema}
+                                    uiSchema={pendingUI}
+                                    // @ts-ignore
+                                    validator={validator}
+                                    formData={pendingFormData}
+                                    onSubmit={addPending}
+                                    onError={log('errors')}
+                                >
+                                    <div className="d-grid gap-2">
+                                        <button className="btn btn-secondary" type="submit">Add Pending</button>
+                                    </div>
+                                </Form> 
 
-                                                 
-                        </div>
+                                                    
+                            </div>
+                            : <></>
+                        }
 
                         <table className="charge-table">
                             <thead>
@@ -287,21 +291,24 @@ const Accused = ({accused_id, request_signature}: AccusedProps) => {
                             </tbody>
                         </table>
 
-                        <div className="add-charge">
-                        <Form 
-                            schema={convictionSchema}
-                            uiSchema={convictionUI}
-                            // @ts-ignore
-                            validator={validator}
-                            formData={convictionFormData}
-                            onSubmit={addConviction}
-                            onError={log('errors')}
-                        >
-                            <div className="d-grid gap-2">
-                                <button className="btn btn-secondary" type="submit">Add Conviction</button>
+                        { editable ?
+                            <div className="add-charge">
+                            <Form 
+                                schema={convictionSchema}
+                                uiSchema={convictionUI}
+                                // @ts-ignore
+                                validator={validator}
+                                formData={convictionFormData}
+                                onSubmit={addConviction}
+                                onError={log('errors')}
+                            >
+                                <div className="d-grid gap-2">
+                                    <button className="btn btn-secondary" type="submit">Add Conviction</button>
+                                </div>
+                            </Form>                        
                             </div>
-                        </Form>                        
-                        </div>
+                            : <></>
+                        }
 
                         <table className="charge-table">
                             <thead>
