@@ -75,8 +75,8 @@ export const Submissions = ({}: SubmissionsProps) => {
                         <div className="row">
                             {submissions.map((submission: Submission) => 
                                 
-                                <a href={'/submission/' + submission.id}>
-                                    <div className="card submission-card" key={submission.id}>
+                                <a href={'/submission/' + submission.id} key={submission.id} >
+                                    <div className="card submission-card" >
                                         <div className="card-body">
                                             <h5 className="card-title">{submission.description}</h5>                                   
                                         </div>
