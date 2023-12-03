@@ -26,11 +26,17 @@ interface VerifyResponse {
   token?: string;
 }
 
+interface ResetPasswordResponse {
+  outcome: string;
+  message?: string;
+}
+
 export interface VerifyOtpResponse {
     outcome: string;
     token: string;  
     message?: string; 
 }
+
 
 interface AuthResponse {
     user: User;
@@ -134,13 +140,38 @@ const resendOTP = (email:string): any => {
   });
 };
 
+
+
+const resetPassword = (password:string, token:string): any => {
+  console.log("Resetting password")
+
+  return axios.put(API_URL + '/api/password/new', { password, token}, {withCredentials:true})
+    .then((response) => {
+      if (response.data.outcome === 'success') {
+        console.log(response.data)
+
+
+        return response.data;
+
+      } else {
+        throw new Error(response.data.error || 'Password Reset Failed');
+      }
+  }, (error) => {
+      console.log('Password reset failed: ', error.response);
+      throw error; 
+  });
+};
+
+
+
 const authService = {
   register,
   login,
   logout,
   verifyOtp,
   registrationVerify,
-  resendOTP
+  resendOTP,
+  resetPassword
 };
 
 export default authService;

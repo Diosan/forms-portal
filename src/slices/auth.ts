@@ -19,6 +19,7 @@ interface AuthState {
   isVerified:boolean;
   token: string;
   otpErrorMessage:any;
+  passwordChanged: boolean,
 }
 
 interface VerifyOtpPayload {
@@ -39,6 +40,12 @@ interface LoginPayload {
 interface ResendOtpPayload {
   email: string;
 }
+
+interface ResetPasswordPayload {
+  password: string;
+  token: string;
+}
+
 
 
 // const initialState: AuthState = {
@@ -182,21 +189,35 @@ export const resendOTP = createAsyncThunk(
 
       return { user: null, otpRequired: true, token: response.token };
 
-
-
-      // if (response) {
-      //   console.log(response)
-      //   return response;
-      // } else {
-      //   return thunkAPI.rejectWithValue(response);
-      // }
-
     } catch (error: any) {
       // Error handling as before
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ password, token }: ResetPasswordPayload, thunkAPI) => {
+    try {
+      const response = await AuthService.resetPassword(password, token);
+      // Handle the response here, e.g., dispatch a success message
+      thunkAPI.dispatch(setMessage(response.message));
+      // You might want to update the state based on the response
+      return response.data;
+    } catch (error: any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 
 
 // Slice with initialState and reducers
@@ -210,6 +231,7 @@ const initialState: AuthState = {
   user: null,
   otpRequired: false,
   isVerified: false,
+  passwordChanged: false,
   otpErrorMessage:"",
   token: localStorage.getItem("userToken") || ""
 };
@@ -274,7 +296,17 @@ const authSlice = createSlice({
         state.isVerified = false;
         state.isLoggedIn = false;
         state.otpErrorMessage = action.payload;
+      })
+      //Password Management
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        // e.g., set a flag indicating success or redirect the user
+        state.passwordChanged = true;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        // e.g., store the error message in the state
+        state.passwordChanged = true;
       });
+      ;
 
         
   },

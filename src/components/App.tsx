@@ -5,6 +5,7 @@ import '../assets/App.css'
 // import { JudiciaryForm } from './JudiciaryForm'
 import { Welcome } from './Welcome'
 import { Submission } from './Submission'
+import { PasswordReset } from './ResetPassword'
 import Transcend  from './Transcend'
 import { Submissions } from './Submissions'
 import  SimpleRef  from './SimpleRef'
@@ -29,6 +30,8 @@ function App() {
         <Route path="/" element={<Welcome />} />
         <Route path="/submission" element={<Submission new_submission={true} />} />
         <Route path= "/submission" element={ <Submission new_submission={ true }/>} />
+        <Route path= "/password/new" element={ <PasswordReset/>} />
+        <Route path= "/password/reset/:token" element={ <PasswordReset/>} />
         <Route path= "/submission/:id" element={ <Submission new_submission={false }/>} />
         <Route  path= "/submissions" element={ <Submissions />} />
         <Route path= "/transcend" element={ <Transcend /> } />
