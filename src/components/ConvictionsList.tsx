@@ -4,12 +4,12 @@ import "../assets/Charge.css"
 import { API_URL} from "../config/api"
 import axios from "axios"
 
-type ChargeListProps = {
+type ConvictionsListProps = {
     accused_id: number,
-    accused_charges: any[]
+    accused_convictions: any[]
 }
 
-const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
+const ConvictionList = ({accused_id, accused_convictions}: ConvictionsListProps) => {
     // const charges = useAppSelector((state) => state.charge.charges)
 
     // const [accusedCharges, setAccusedCharges] = useState([])
@@ -36,23 +36,17 @@ const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
             <table className="charge-table">
                 <thead>
                     <tr>
-                        <th>Charge Name</th>
-                        <th>ICCS</th>
-                        {/* <th>UNODC</th> */}
-                        <th>Counts</th>
+                        <th>Offence</th>
                         <th>Date Of Offence</th>
-                        <th>Particulars Of Offence</th>
+                        <th>Sentence</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {accused_charges.map((charge: any) => (
-                        <tr key={charge.id}>
-                            <td>{ charge.name }</td>
-                            <td>{ charge.ICCS }</td>
-                            {/* <td>{ charge.UNODC }</td> */}
-                            <td>{ charge.counts }</td>
-                            <td>{charge.dateOfOffence}</td>
-                            <td>{ charge.particulars }</td>
+                    {accused_convictions.map((conviction: any) => (
+                        <tr key={conviction.id}>
+                            <td>{ conviction.offence }</td>
+                            <td>{ conviction.dateOfOffence}</td>
+                            <td>{ conviction.sentence }</td>
                         </tr>
                     ))}
                 </tbody>
@@ -62,4 +56,4 @@ const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
     )
 }
 
-export default ChargeList
+export default ConvictionList

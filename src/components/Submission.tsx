@@ -26,20 +26,21 @@ type submissionStep = {
 
 const log = (type: any) => console.log.bind(console, type)
 
-const processForm = (form: any) => {
-  console.log('Submitted form data: ', form.formData)
-  alert('Hurrah!');
-}
+
 
 
 export const Submission = ({new_submission}: SubmissionProps) => {
 
-
+  const requestSignature = () => {
+    // alert('Performing requestSignature in Submission component')
+    setChargeSaved(true)
+  }
 
   const navigate = useNavigate()
 
   const auth = new AuthService
 
+  const [editable, setEditable] = useState(true)
 
   const [submissionTitle, setSubmissionTitle] = useState('')
   const [submissionTitleSaved, setSubmissionTitleSaved] = useState(false)
@@ -173,7 +174,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
       submissionId: submissionId
     }
 
-    
+    console.log('Complainant being sent to server: ', complainant);    
 
     if(!submissionComplainantSaved) {
       await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
@@ -295,6 +296,18 @@ export const Submission = ({new_submission}: SubmissionProps) => {
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)            
             break
+          case 'signature_requested':
+              setEditable(false)
+              setSubmissionComplainantSaved(true)
+              setComplainantFirstName(returned_submission.data.complainant.firstName)
+              setComplainantLastName(returned_submission.data.complainant.lastName)
+              setComplainantAgency(returned_submission.data.complainant.agency)
+              setComplainantCourt(returned_submission.data.complainant.court)
+              setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
+              setComplainantRegNum(returned_submission.data.complainant.regNum)
+              setComplainantEmail(returned_submission.data.complainant.email)
+              setChargeSaved(true)
+              break
           default: 
             console.log('Submission: ', returned_submission.data.submission)
             break 
@@ -361,7 +374,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                 { submissionTitleSaved ?
                     <>
 
-                      {!submissionComplainantSaved || editingSubmissionComplainant ?
+                      {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
                         <>
                           <div className="card fade show">
 
@@ -447,7 +460,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
-                { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} />}
+                { !submissionComplainantSaved ? 
+                  <></> 
+                  : 
+                  <Charges 
+                    submission_id={submissionId} 
+                    request_signature={requestSignature}
+                    editable={editable} 
+                  />}
                 
                 { chargeSaved ?
                     <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
