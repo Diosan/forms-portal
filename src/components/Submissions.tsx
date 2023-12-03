@@ -22,7 +22,8 @@ interface Submission {
     userId: number,
     createdAt: string,
     updatedAt: string,
-    type: string
+    type: string,
+    status: string
 }
 
 export const Submissions = ({}: SubmissionsProps) => {
@@ -75,14 +76,29 @@ export const Submissions = ({}: SubmissionsProps) => {
                         
                         <div className="row">
                             {submissions.map((submission: Submission) => 
+
+                                <div key={submission.id}>  
+                                    {submission.status == 'signed' ?
+                                            <a href={ '/sign/' + submission.id} key={submission.id} >
+                                                <div className="card submission-card" >
+                                                    <div className="card-body">
+                                                        <h5 className="card-title">{submission.description}</h5>                                   
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        : 
+                                            <a href={ submission.type == 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id} key={submission.id} >
+                                                <div className="card submission-card" >
+                                                    <div className="card-body">
+                                                        <h5 className="card-title">{submission.description}</h5>                                   
+                                                    </div>
+                                                </div>
+                                            </a>
+                                    }
+                                        
+                                </div>
                                 
-                                <a href={ submission.type == 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id} key={submission.id} >
-                                    <div className="card submission-card" >
-                                        <div className="card-body">
-                                            <h5 className="card-title">{submission.description}</h5>                                   
-                                        </div>
-                                    </div>
-                                </a>
+
                             )}
 
                         </div>
