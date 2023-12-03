@@ -66,6 +66,11 @@ export const Indictable = ({new_submission}: IndictableProps) => {
             setEditable(false)
             setCourtDistrict(returned_submission.data.complainant.courtDistrict)
             break
+          case 'charge_saved':
+            setCourtDistrict(returned_submission.data.complainant.courtDistrict)
+            setChargeSaved(true)
+            setComplainantEmail('dpp@link868.com')
+            break
           default: 
             console.log('Submission: ', returned_submission.data.submission)
             break 
@@ -105,7 +110,7 @@ export const Indictable = ({new_submission}: IndictableProps) => {
       courtDistrict: form.formData.courtDistrict,
       firstName: 'DPP',
       lastName: 'Office',
-      email: 'email@dpp.org',
+      email: 'dpp@link868.org',
       agency: 'DPP',
       regNum: '',
       submissionId: created_submission.data.submission.id
@@ -175,10 +180,10 @@ export const Indictable = ({new_submission}: IndictableProps) => {
                 : <></>
               }
 
-                { chargeSaved ?
-                    <SignIndictment submission_id={submissionId} complainant_email={complainantEmail} />
-                  : <></>
-                }
+              { chargeSaved ?
+                  <SignIndictment submission_id={submissionId} complainant_email={complainantEmail} />
+                : <></>
+              }
 
             </div>           
           </>

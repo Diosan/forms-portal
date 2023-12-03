@@ -22,6 +22,9 @@ import {
     useParams,
   } from "react-router-dom"
 
+import { SignIndictment } from "./SignIndictment"
+
+
 type SignProps = {}
 
 
@@ -212,7 +215,9 @@ export const Sign = ({}: SignProps) => {
                             <p>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
                             </p>
                             <p><strong>{' ' + currentDate() }</strong></p>
-                            <br/><br/><br/><a className="btn btn-secondary float-end" onClick={signSubmission} >Sign</a>
+                            <br/><br/><br/>
+                            <SignIndictment submission_id={parseInt('' + id)} complainant_email={complainantEmail} />
+                            {/* <a className="btn btn-secondary float-end" onClick={signSubmission} >Sign</a> */}
                         </div>
                     
                     </div>
