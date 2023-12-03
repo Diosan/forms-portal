@@ -40,6 +40,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
   const auth = new AuthService
 
+  const [editable, setEditable] = useState(true)
 
   const [submissionTitle, setSubmissionTitle] = useState('')
   const [submissionTitleSaved, setSubmissionTitleSaved] = useState(false)
@@ -295,6 +296,9 @@ export const Submission = ({new_submission}: SubmissionProps) => {
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)            
             break
+          case 'signature_requested':
+              setEditable(false)
+              break
           default: 
             console.log('Submission: ', returned_submission.data.submission)
             break 
@@ -447,7 +451,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
-                { !submissionComplainantSaved ? <></> : <Charges submission_id={submissionId} request_signature={requestSignature} />}
+                { !submissionComplainantSaved ? 
+                  <></> 
+                  : 
+                  <Charges 
+                    submission_id={submissionId} 
+                    request_signature={requestSignature}
+                    editable={editable} 
+                  />}
                 
                 { chargeSaved ?
                     <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />

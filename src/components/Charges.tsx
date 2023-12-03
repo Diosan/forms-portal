@@ -13,7 +13,8 @@ import AddAccused from "./AddAccused";
 
 type ChargesProps = {
     submission_id: number,
-    request_signature: any
+    request_signature: any,
+    editable: boolean
 }
 
 const log = (type: any) => console.log.bind(console, type)

@@ -43,6 +43,10 @@ export const Indictable = ({new_submission}: IndictableProps) => {
 
   const [chargeSaved, setChargeSaved] = useState(false)
   const [complainantEmail, setComplainantEmail] = useState('')
+  
+  const [editable, setEditable] = useState(true)
+
+  const { id } = useParams()
 
   useEffect( () => {
 
@@ -51,6 +55,21 @@ export const Indictable = ({new_submission}: IndictableProps) => {
       let complainant_form = await axios.get(API_URL + '/schema/indictable_accused')
       setComplainantSchema(complainant_form.data.schema)
       setComplainantUI(complainant_form.data.UI)
+
+      if(!new_submission) { 
+        setSubmissionId(parseInt('' + id))   
+        let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
+        setSubmissionTitle(returned_submission.data.submission.description)
+        setSubmissionTitleSaved(true)
+        switch(returned_submission.data.submission.status) {
+          case 'signature_requested':
+            
+            break
+          default: 
+            console.log('Submission: ', returned_submission.data.submission)
+            break 
+        }
+      }
 
     })();
 
@@ -145,7 +164,11 @@ export const Indictable = ({new_submission}: IndictableProps) => {
               { submissionTitleSaved ?
                 <>
                   <div className="card">
-                    <Charges request_signature={requestSignature} submission_id={submissionId}/>
+                    <Charges 
+                      request_signature={requestSignature} 
+                      submission_id={submissionId}
+                      editable={editable}
+                    />
                   </div>
                 </>
                 : <></>
