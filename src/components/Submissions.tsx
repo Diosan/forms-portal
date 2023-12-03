@@ -1,6 +1,6 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
-import {useEffect, useState} from "react"
-import { API_URL} from "../config/api"
+import { useEffect, useState } from "react"
+import { API_URL } from "../config/api"
 import axios from "axios"
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
@@ -32,42 +32,42 @@ interface Submission {
     type: string
 }
 
-export const Submissions = ({}: SubmissionsProps) => {
+export const Submissions = ({ }: SubmissionsProps) => {
 
     const [submissions, setSubmissions] = useState<Submission[]>([]);
     const state = useSelector((state: RootState) => state.auth);
-    const {isLoggedIn, otpRequired, token, isVerified} = state
+    const { isLoggedIn, otpRequired, token, isVerified } = state
 
- 
+
 
     console.log(">>> STATE <<<")
-      console.log(state)
+    console.log(state)
 
 
 
     useEffect(() => {
         axios.get(API_URL + '/api/submissions')
-        .then((response) => {
-            console.log('Submissions fetched from server: ', response.data);
-            // setSubmissions(response?.data?.submissions?.rows || [])
-            // setSubmissions([])
-            // let dSubmissions: Submission[] = [{description: "Testing description rendering", userId: 4}]
-            // setSubmissions(dSubmissions)
-        })
-    }, []); 
+            .then((response) => {
+                console.log('Submissions fetched from server: ', response.data);
+                // setSubmissions(response?.data?.submissions?.rows || [])
+                // setSubmissions([])
+                // let dSubmissions: Submission[] = [{description: "Testing description rendering", userId: 4}]
+                // setSubmissions(dSubmissions)
+            })
+    }, []);
 
     return (
         <>
-            { token ? 
-            <>
-                <div className="container submissions-container">
+            {token ?
+                <>
+                    <div className="container submissions-container">
 
-                    <div>
-                        <div className="row">
-                            <h3 className='page-title submissions-title'> My Submissions </h3>
-                        </div>
-                        
-                        {/* <table>
+                        <div>
+                            <div className="row">
+                                <h3 className='page-title submissions-title'> My Submissions </h3>
+                            </div>
+
+                            {/* <table>
                             <thead>
                                 <tr>
                                     <td></td>
@@ -80,40 +80,43 @@ export const Submissions = ({}: SubmissionsProps) => {
                             </tbody>
                         </table> */}
 
-                        <div className="row">
-                            <a href="/submission" className="btn btn-secondary new-submission-btn float-end">New Submission +</a><br/><br/>
-                        </div>
-                        
-                        <div className="row">
-                            {submissions.map((submission: Submission) => 
-                                
-                                <a href={ submission.type == 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id} key={submission.id} >
-                                    <div className="card submission-card" >
-                                        <div className="card-body">
-                                            <h5 className="card-title">{submission.description}</h5>                                   
-                                        </div>
-                                    </div>
-                                </a>
-                            )}
+                            <div className="row">
+                                <a href="/submission" className="btn btn-secondary new-submission-btn float-end">New Submission +</a><br /><br />
+                            </div>
 
-                                    {/* <>
+                            <div className="row">
+                                {submissions.map((submission: Submission) =>
+
+                                    <a href={submission.type == 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id} key={submission.id} >
+                                        <div className="card submission-card" >
+                                            <div className="card-body">
+                                                <h5 className="card-title">{submission.description}</h5>
+                                            </div>
+                                        </div>
+                                    </a>
+                                )}
+
+                                {/* <>
                                         <div className="card submission-card"></div>
                                     </> */}
-                                
+
                                 {/* <div className="card submission-card"></div> */}
                             </div>
-                        
-                            :
+
+                            
                             <div>No submissions available.</div>
-                        }
+                        
+
+                        </div>
 
                     </div>
 
-                </div>
-                         
-            </>
-            : <Navigate to="/" replace={true} />
-            }        
+                </>
+                : 
+                <>
+                <Navigate to="/" replace={true} />
+                </>
+            }
         </>
     )
 }
