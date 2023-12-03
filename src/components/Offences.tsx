@@ -25,7 +25,7 @@ export const Offences = ({first_name, last_name, accused_id}: OffencesProps) => 
     return (
         <>
         { offences.map((accused: any, i: number) => (
-                <tr>
+                <tr key={accused.id} >
                     <td>{first_name}</td>
                     <td>{last_name}</td>
                     <td>{accused.ICCS}</td>

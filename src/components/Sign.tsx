@@ -42,7 +42,7 @@ export const Sign = ({}: SignProps) => {
 
     
 
-    const [submission, setSubmission] = useState({})
+    const [status, setStatus] = useState('')
     const [complainantName, setComplainantName] = useState('')
     const [complainantAgency, setComplainantAgency] = useState('')
     const [complainantRegNum, setComplainantRegNum] = useState('')
@@ -71,6 +71,7 @@ export const Sign = ({}: SignProps) => {
 
         const fetchSubmission = async () => {
             let submission = await axios.get(API_URL + '/api/submissions/' + id)
+            setStatus(submission.data.submission.status)
             setTitle(submission.data.submission.description)
             setComplainantName(submission.data.complainant.firstName + ' ' + submission.data.complainant.lastName)
             setComplainantAgency(submission.data.complainant.agency)
@@ -204,6 +205,7 @@ export const Sign = ({}: SignProps) => {
                                             first_name={accused.firstName}
                                             last_name={accused.lastName}
                                             accused_id={accused.id}
+                                            key={accused.id}
                                         />
                                     ))}
                                 </tbody>
@@ -216,7 +218,14 @@ export const Sign = ({}: SignProps) => {
                             </p>
                             <p><strong>{' ' + currentDate() }</strong></p>
                             <br/><br/><br/>
-                            <SignIndictment submission_id={parseInt('' + id)} complainant_email={complainantEmail} />
+                            {status == 'signed' ?
+                                    <div className="signature-frame">
+                                        <strong>Signed by: {complainantEmail}</strong>
+                                    </div>
+                                :
+                                    <SignIndictment submission_id={parseInt('' + id)} complainant_email={complainantEmail} />
+                            }
+                            
                             {/* <a className="btn btn-secondary float-end" onClick={signSubmission} >Sign</a> */}
                         </div>
                     

@@ -39,6 +39,13 @@ export const SignIndictment = ({submission_id, complainant_email}:SignIndictment
     const sign = async (event: any) => {
         // alert('Signing')
         event.preventDefault()
+        let signed_submission = await axios.post(
+            API_URL + '/api/submissions/update', 
+            {
+                id: submission_id,
+                status: 'signed'
+            }
+        )
         setSigned(true)
     }
 
