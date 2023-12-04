@@ -113,15 +113,15 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
     // console.log('Before decoding token')
     let decoded = await auth.decodedToken()
-
-
+    console.log(decoded)
 
     if(submissionTitleSaved) {
       console.log('submissionId is ' + submissionId)
       let submission = {
         id: submissionId,
         title: submissionTitle,
-        email: decoded.email
+        email: decoded.email,
+        uid: decoded.id
       }
       console.log('Submission is : ', submission)
       await axios.post(API_URL + '/api/submissions/update_title', submission)
@@ -150,21 +150,22 @@ export const Submission = ({new_submission}: SubmissionProps) => {
     } else {
       let submission = {
         title: submissionTitle,
-        email: decoded.email
+        email: decoded.email,
+        uid:decoded.id
       }
       axios.post(API_URL + '/api/submissions', submission)
       .then((response) => {
   
-        // switch(response.data.outcome) {
-        //   case 'success':
-        //     console.log('Successfully saved Title. Response Data : ', response.data);
-        //     setSubmissionId(response.data.submission_id)
-        //     break
-        //   case 'error':
-        //     break
-        //   default:
-        //     break
-        // }
+        switch(response.data.outcome) {
+          case 'success':
+            console.log('Successfully saved Title. Response Data : ', response.data);
+            setSubmissionId(response.data.submission_id)
+            break
+          case 'error':
+            break
+          default:
+            break
+        }
   
       })
     }

@@ -60,7 +60,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
         axios.get(API_URL + '/api/submissions')
             .then((response) => {
                 console.log('Submissions fetched from server: ', response.data);
-                // setSubmissions(response?.data?.submissions?.rows || [])
+                setSubmissions(response?.data?.submissions?.rows || [])
                 // setSubmissions([])
                 // let dSubmissions: Submission[] = [{description: "Testing description rendering", userId: 4}]
                 // setSubmissions(dSubmissions)
