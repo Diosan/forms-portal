@@ -1,7 +1,6 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
 import {useEffect, useState} from "react"
 import { API_URL} from "../config/api"
-import axios from "axios"
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
@@ -13,6 +12,17 @@ import { Charges } from "./Charges"
 import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
+
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../store/store";
+import { resetPassword } from "../slices/auth";
+import { RootState } from "../store";
+import * as Yup from 'yup';
+import { FaCheck, FaTimes } from 'react-icons/fa'; // Import icons
+import { clearMessage } from "../slices/message"
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import dotenv from "dotenv"
 
 type SubmissionProps = {
   new_submission: boolean
@@ -36,9 +46,14 @@ export const Submission = ({new_submission}: SubmissionProps) => {
     setChargeSaved(true)
   }
 
-  const navigate = useNavigate()
 
   const auth = new AuthService
+
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const state = useSelector((state: RootState) => state.auth);
+  const { isLoggedIn, otpRequired, token, isVerified } = state
+  const [changePassword, setChangePassword] = useState(false);
 
   const [editable, setEditable] = useState(true)
 

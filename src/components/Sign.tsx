@@ -109,7 +109,7 @@ export const Sign = ({}: SignProps) => {
             fetchSubmission()
 
         } else {
-            navigate("/")
+            // navigate("/")
         }
 
     },[])

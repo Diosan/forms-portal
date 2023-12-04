@@ -125,7 +125,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                 </>
                 : 
                 <>
-                <Navigate to="/" replace={true} />
+                {/* <Navigate to="/" replace={true} /> */}
                 </>
             }
         </>

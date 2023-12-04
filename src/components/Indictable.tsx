@@ -187,7 +187,11 @@ export const Indictable = ({new_submission}: IndictableProps) => {
 
             </div>           
           </>
-          : <Navigate to="/" replace={true} />
+          : 
+          <>
+          {/* <Navigate to="/" replace={true} /> */}
+          </>
+
         }
 
  

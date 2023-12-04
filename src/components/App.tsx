@@ -22,7 +22,7 @@ import { Provider } from 'react-redux'
 
 
 function App() {
-  // console.log(store.getState())
+  console.log("APP")
   return (
     <>
     <Header />

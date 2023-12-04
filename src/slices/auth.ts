@@ -280,12 +280,14 @@ const authSlice = createSlice({
       //VERIFY OTP
       .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ verified: boolean; token: string } | undefined>) => {
         if (action.payload) {
+          console.log("payload received")
           state.isVerified = true;
           state.isLoggedIn = true;
           state.token = action.payload.token;
           state.otpRequired = false;
           // state.user = action.payload.user; 
         } else {
+          console.log("payload not received")
           state.isVerified = false;
           state.isLoggedIn = false;
           state.token = "";
