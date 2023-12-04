@@ -35,10 +35,20 @@ interface Submission {
 
 export const Submissions = ({ }: SubmissionsProps) => {
 
+    const navigate = useNavigate()
+
     const [submissions, setSubmissions] = useState<Submission[]>([]);
     const state = useSelector((state: RootState) => state.auth);
     const { isLoggedIn, otpRequired, token, isVerified } = state
 
+    useEffect(() => {
+        if (isLoggedIn && isVerified && token && !otpRequired) {
+            navigate('/submissions');
+        }
+        else {
+            console.log("Cannot navigate to submissions page")
+        }
+    }, [isLoggedIn, isVerified, token, otpRequired]);
 
 
     console.log(">>> STATE <<<")

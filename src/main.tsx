@@ -16,7 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Submissions } from './components/Submissions'
 import { Sign } from './components/Sign'
 import { Provider } from 'react-redux'
-import store from "./store";
+import { store } from "./store";
 import { RootState } from './store';
 
 

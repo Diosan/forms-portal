@@ -5,10 +5,11 @@ export default class AuthService {
 
     setToken = (token: any) => {
       localStorage.setItem('id_token', token)
+      localStorage.setItem('userToken', token)
     }
 
     getToken = () => {
-        return localStorage.getItem("id_token")
+        return localStorage.getItem("id_token") || localStorage.getItem('userToken')
     }
 
     isTokenExpired = (token: any) => {

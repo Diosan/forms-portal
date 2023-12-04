@@ -111,7 +111,7 @@ export const login = createAsyncThunk(
       if (typeof response.token === 'string') {
         // Store the JWT token in localStorage
         localStorage.setItem("userToken", response.token);
-
+        localStorage.setItem("id_token", response.token);
         // Set the token as the default authorization header
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
       } else {
@@ -142,6 +142,7 @@ export const logout = createAsyncThunk(
   async (_, thunkAPI) => {
     // Perform any logout logic here. For example:
     localStorage.removeItem("userToken"); // Clear the JWT token
+    localStorage.removeItem("id_token"); // Clear the token (DION own)
     // Clear local storage or any other side effects
     await AuthService.logout();
     // Return any data if needed, or just resolve the promise
@@ -155,7 +156,8 @@ export const verifyOtp = createAsyncThunk(
       const response: VerifyOtpResponse = await AuthService.verifyOtp(otp);
       if (response.outcome === 'success') {
         console.log(response)
-        // localStorage.setItem("id_token", response.token);
+        localStorage.setItem("id_token", response.token);
+        localStorage.setItem("userToken", response.token);
         return { verified: true, token: response.token };
       } else {
         return thunkAPI.rejectWithValue(response.message);
@@ -178,6 +180,7 @@ export const resendOTP = createAsyncThunk(
       if (typeof response.token === 'string') {
         // Store the JWT token in localStorage
         localStorage.setItem("userToken", response.token);
+        localStorage.setItem("id_token", response.token);
 
         // Set the token as the default authorization header
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
@@ -233,7 +236,7 @@ const initialState: AuthState = {
   isVerified: false,
   passwordChanged: false,
   otpErrorMessage:"",
-  token: localStorage.getItem("userToken") || ""
+  token: localStorage.getItem("userToken") || localStorage.getItem("id_token") || ""
 };
 
 
