@@ -25,7 +25,7 @@ function App() {
   console.log("APP")
   return (
     <>
-    <Header />
+    {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/submission" element={<Submission new_submission={true} />} />

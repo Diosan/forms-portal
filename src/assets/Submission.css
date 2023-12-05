@@ -1,7 +1,6 @@
 #regForm {
     background-color: #f1f1f1;
     margin: 50px auto;
-    padding: 20px;
     width: 100%;
     min-width: 300px;
 }
@@ -19,6 +18,10 @@
 
 .progress-buttons {
   text-align: right;
+}
+
+.rjsf{
+  padding:10px 20px;
 }
 
 .next-button {

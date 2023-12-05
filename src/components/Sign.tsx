@@ -103,6 +103,7 @@ export const Sign = ({}: SignProps) => {
             })
 
         }
+        
       
         if(auth.loggedIn()) {
 
@@ -115,12 +116,35 @@ export const Sign = ({}: SignProps) => {
     },[])
 
     return (
-        <>
+        <div className="d-flex">
 
-            <div className="container">
+<div className="pt-3 px-3 mx-3" 
+                    style={{maxWidth:"250px", 
+                    flexShrink:0, position:"fixed", top:0, left:0, height:"100%"}}
+            >
+                    <div   className="mb-3">
+                        <a  className="mb-4" href="#">
+                            <img src="/jsswf-01.svg" width="90"  className="d-inline-block align-top " alt=""/>
+                        </a>
+                    </div>
+                   
+                    <div  className="text-center " style={{}}>
+                        <ul className=" m-0 navbar-nav ms-auto">
+                            
+                            <li  className="nav-item active jud-header-item"><a  className="nav-link" href="/">Home  </a></li>
+                            <li  className="nav-item jud-header-item"><a  className="nav-link" href="/submissions"> My Submissions</a></li>
+                            <li  className="nav-item jud-header-item"><a  className="nav-link" href="/submission"> New Complaint With Oath</a></li>
+                            <li  className="nav-item jud-header-item"><a  className="nav-link" href="/indictable"> New Indictable</a></li>
+                            <li  className="nav-item jud-header-item"><button  style={{width:"100%"}}  className="nav-link m-0 text-center">Logout</button></li>
+                        </ul>
+                    </div>
+            </div>
 
-                <div id="regForm" className="fade show">
-                    <h3 className='page-title'> Complaint With Oath ({title})</h3>
+            <div className="container submissions-container" style={{ borderRadius:"5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow:1 }}>
+                
+
+                <div className="fade show">
+                    <h4 className='mb-3'> Complaint With Oath ({title})</h4>
                 </div>
 
                 <div className="card fade show">
@@ -239,7 +263,7 @@ export const Sign = ({}: SignProps) => {
 
             </div>
         
-        </>
+        </div>
     )
 
 }

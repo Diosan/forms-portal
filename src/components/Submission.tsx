@@ -1,6 +1,6 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
-import {useEffect, useState} from "react"
-import { API_URL} from "../config/api"
+import { useEffect, useState } from "react"
+import { API_URL } from "../config/api"
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
@@ -23,6 +23,8 @@ import { clearMessage } from "../slices/message"
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import dotenv from "dotenv"
+import { login, logout, verifyOtp } from "../slices/auth";
+
 
 type SubmissionProps = {
   new_submission: boolean
@@ -39,7 +41,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const Submission = ({new_submission}: SubmissionProps) => {
+export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
     // alert('Performing requestSignature in Submission component')
@@ -48,6 +50,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
 
   const auth = new AuthService
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
@@ -93,19 +96,19 @@ export const Submission = ({new_submission}: SubmissionProps) => {
   }
 
   const complainantRegNumberChange = (event: any) => {
-      setComplainantRegNum(event.target.value)
+    setComplainantRegNum(event.target.value)
   }
 
   const complainantFirstNameChange = (event: any) => {
-      setComplainantFirstName(event.target.value)
+    setComplainantFirstName(event.target.value)
   }
 
   const complainantLastNameChange = (event: any) => {
-      setComplainantLastName(event.target.value)
+    setComplainantLastName(event.target.value)
   }
 
   const complainantEmailChange = (event: any) => {
-      setComplainantEmail(event.target.value)
+    setComplainantEmail(event.target.value)
   }
 
   const saveTitle = async (event: any) => {
@@ -115,7 +118,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
     let decoded = await auth.decodedToken()
     console.log(decoded)
 
-    if(submissionTitleSaved) {
+    if (submissionTitleSaved) {
       console.log('submissionId is ' + submissionId)
       let submission = {
         id: submissionId,
@@ -125,49 +128,49 @@ export const Submission = ({new_submission}: SubmissionProps) => {
       }
       console.log('Submission is : ', submission)
       await axios.post(API_URL + '/api/submissions/update_title', submission)
-      .then((response) => {
+        .then((response) => {
 
-        console.log('Posted update to submission title')
-  
-        switch(response.data.outcome) {
-          case 'success':
-            console.log('Successfully updated submission title. Response Data : ', response.data);
-            setEditingSubmissionTitle(false)
-            break
-          case 'error':
-            console.log('Error updating submission title')
-            break
-          default:
-            console.log('Unknown outcome updating submission title')
-            break
-        }
-  
-      })
+          console.log('Posted update to submission title')
+
+          switch (response.data.outcome) {
+            case 'success':
+              console.log('Successfully updated submission title. Response Data : ', response.data);
+              setEditingSubmissionTitle(false)
+              break
+            case 'error':
+              console.log('Error updating submission title')
+              break
+            default:
+              console.log('Unknown outcome updating submission title')
+              break
+          }
+
+        })
       // .catch((error) => {
       //   console.log('Error posting update to submission title', error)
       // })
-      
+
     } else {
       let submission = {
         title: submissionTitle,
         email: decoded.email,
-        uid:decoded.id
+        uid: decoded.id
       }
       axios.post(API_URL + '/api/submissions', submission)
-      .then((response) => {
-  
-        switch(response.data.outcome) {
-          case 'success':
-            console.log('Successfully saved Title. Response Data : ', response.data);
-            setSubmissionId(response.data.submission_id)
-            break
-          case 'error':
-            break
-          default:
-            break
-        }
-  
-      })
+        .then((response) => {
+
+          switch (response.data.outcome) {
+            case 'success':
+              console.log('Successfully saved Title. Response Data : ', response.data);
+              setSubmissionId(response.data.submission_id)
+              break
+            case 'error':
+              break
+            default:
+              break
+          }
+
+        })
     }
 
 
@@ -177,7 +180,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
   const saveComplainant = async (event: any) => {
     event.preventDefault()
 
-    
+
 
     let complainant = {
       agency: "TTPS",
@@ -190,44 +193,44 @@ export const Submission = ({new_submission}: SubmissionProps) => {
       submissionId: submissionId
     }
 
-    console.log('Complainant being sent to server: ', complainant);    
+    console.log('Complainant being sent to server: ', complainant);
 
-    if(!submissionComplainantSaved) {
+    if (!submissionComplainantSaved) {
       await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
-      .then((response) => {
-  
-        switch(response.data.outcome) {
-          case 'success':
-            console.log('Complainant successfully saved')
-            setSubmissionComplainantSaved(true)
-            break
-          case 'error':
-            console.log('Error saving complainant')
-            break
-          default:
-            console.log('Unknown complainant save outcome')
-            break
-        }
-  
-      })
+        .then((response) => {
+
+          switch (response.data.outcome) {
+            case 'success':
+              console.log('Complainant successfully saved')
+              setSubmissionComplainantSaved(true)
+              break
+            case 'error':
+              console.log('Error saving complainant')
+              break
+            default:
+              console.log('Unknown complainant save outcome')
+              break
+          }
+
+        })
     } else {
       await axios.post(API_URL + '/api/submissions/update_complainant', complainant)
-      .then((response) => {
-  
-        switch(response.data.outcome) {
-          case 'success':
-            console.log('Complainant successfully updated')
-            setEditingSubmissionComplainant(false)
-            break
-          case 'error':
-            console.log('Error updating complainant')
-            break
-          default:
-            console.log('Unknown complainant update outcome')
-            break
-        }
-  
-      })
+        .then((response) => {
+
+          switch (response.data.outcome) {
+            case 'success':
+              console.log('Complainant successfully updated')
+              setEditingSubmissionComplainant(false)
+              break
+            case 'error':
+              console.log('Error updating complainant')
+              break
+            default:
+              console.log('Unknown complainant update outcome')
+              break
+          }
+
+        })
     }
 
 
@@ -269,7 +272,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
   const finishSubmission = () => {
 
   }
-  
+
   // useEffect(() => {
   //   axios.get(API_URL + '/schema/main')
   //   .then((response) => {
@@ -280,16 +283,16 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
   const { id } = useParams()
 
-  useEffect( () => {
+  useEffect(() => {
     (async () => {
-      if(!new_submission) { 
-        setSubmissionId(parseInt('' + id))   
+      if (!new_submission) {
+        setSubmissionId(parseInt('' + id))
         let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
         // console.log('Returned submission: ', returned_submission.data)
         setSubmissionTitle(returned_submission.data.submission.description)
         setSubmissionTitleSaved(true)
 
-        switch(returned_submission.data.submission.status) {
+        switch (returned_submission.data.submission.status) {
           case 'complainant_saved':
             // console.log('Returned Complainant: ', returned_submission.data.complainant) 
             setSubmissionComplainantSaved(true)
@@ -299,9 +302,9 @@ export const Submission = ({new_submission}: SubmissionProps) => {
             setComplainantCourt(returned_submission.data.complainant.court)
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
-            setComplainantEmail(returned_submission.data.complainant.email)            
+            setComplainantEmail(returned_submission.data.complainant.email)
             break
-          case 'charge_saved': 
+          case 'charge_saved':
             setSubmissionComplainantSaved(true)
             setComplainantFirstName(returned_submission.data.complainant.firstName)
             setComplainantLastName(returned_submission.data.complainant.lastName)
@@ -310,23 +313,23 @@ export const Submission = ({new_submission}: SubmissionProps) => {
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantEmail(returned_submission.data.complainant.email)
-            setChargeSaved(true)            
+            setChargeSaved(true)
             break
           case 'signature_requested':
-              setEditable(false)
-              setSubmissionComplainantSaved(true)
-              setComplainantFirstName(returned_submission.data.complainant.firstName)
-              setComplainantLastName(returned_submission.data.complainant.lastName)
-              setComplainantAgency(returned_submission.data.complainant.agency)
-              setComplainantCourt(returned_submission.data.complainant.court)
-              setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
-              setComplainantRegNum(returned_submission.data.complainant.regNum)
-              setComplainantEmail(returned_submission.data.complainant.email)
-              setChargeSaved(true)
-              break
-          default: 
+            setEditable(false)
+            setSubmissionComplainantSaved(true)
+            setComplainantFirstName(returned_submission.data.complainant.firstName)
+            setComplainantLastName(returned_submission.data.complainant.lastName)
+            setComplainantAgency(returned_submission.data.complainant.agency)
+            setComplainantCourt(returned_submission.data.complainant.court)
+            setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
+            setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantEmail(returned_submission.data.complainant.email)
+            setChargeSaved(true)
+            break
+          default:
             console.log('Submission: ', returned_submission.data.submission)
-            break 
+            break
         }
 
         // if(returned_submission.data.submission.status == 'complainant_saved') {
@@ -344,156 +347,208 @@ export const Submission = ({new_submission}: SubmissionProps) => {
     })();
   }, [id, new_submission, submissionTitle, editingSubmissionTitle]);
 
+  const handleLogout = (event: any) => {
+    event.preventDefault()
+    dispatch(logout() as any)
+      .unwrap()
+      .then(() => {
+        console.log("Logging out...")
+        navigate("/"); // This will redirect to the home page
+      })
+      .catch((error: any) => {
+        // Handle the error
+        console.log(error)
+      });
+  }
+
   return (
     // Typescript schema assignment error does not prevent porper operation of RJSF form
 
-    
-      <>
 
-        { auth.loggedIn() ? 
-          <>
-            <div className="swf-container container">
+    <div className="d-flex">
+
+      <div className="pt-3 px-3 mx-3"
+        style={{
+          maxWidth: "250px",
+          flexShrink: 0, position: "fixed", top: 0, left: 0, height: "100%"
+        }}
+      >
+        <div className="mb-3">
+          <a className="mb-4" href="#">
+            <img src="/jsswf-01.svg" width="90" className="d-inline-block align-top " alt="" />
+          </a>
+        </div>
+
+        <div className="text-center " style={{}}>
+          <ul className=" m-0 navbar-nav ms-auto">
+
+            <li className="nav-item active jud-header-item"><a className="nav-link" href="/">Home  </a></li>
+            <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
+            <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> New Complaint With Oath</a></li>
+            <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> New Indictable</a></li>
+            <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-center">Logout</button></li>
+          </ul>
+        </div>
+      </div>
 
 
-              <div id="regForm" className="fade show">
+      {auth.loggedIn() ?
+        <>
+          <div className="swf-container container"
+            style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}
+          >
 
-                <br />
-                <h3 className='page-title'> Complaint With Oath { submissionTitleSaved ? '(' + submissionTitle + ')' : '' } </h3>
-                { !submissionTitleSaved || editingSubmissionTitle ?
+
+            <div id="regForm" className="fade show m-0 py-0">
+             <div>
+             <div className="px-2 py-2" style={{ backgroundColor: "#333", color: "#fff" }}>
+                <h4 className='fw-b m-0'> Complaint With Oath {submissionTitleSaved ? '(' + submissionTitle + ')' : ''} </h4>
+              </div>
+              <div className="mb-2 mt-1" style={{ }}>
+                {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
-                      <a href="#" className="float-end" onClick={editTitle}>Edit</a>
+                      <a href="#" className="small" onClick={editTitle}>Edit Title</a>
                     </>
+                  }
+              </div>
+             </div>
+              
+
+
+              <div className="px-4 py-3" style={{ backgroundColor: "#eee", color: "#222" }}>
+
+               
+
+                {!submissionTitleSaved || editingSubmissionTitle ?
+                  <>
+                    <form onSubmit={saveTitle} >
+                      <fieldset>
+                        <div className="form-group field field-string">
+                          <label className="control-label fs-5">
+                            Submission Title
+                          </label>
+                          <input className="form-control fs-5 mt-2" type="text" value={submissionTitle} onChange={submissionTitleChange} />
+                        </div>
+                        <button type="submit" className="btn btn-md btn-primary float-end">Save</button>
+                      </fieldset>
+                    </form><br />
+                  </>
+                  : <></>
                 }
-                             
-                <br /> <br />
-
-                { !submissionTitleSaved  || editingSubmissionTitle ? 
-                    <>
-                      <form onSubmit={saveTitle} >
-                        <fieldset>
-                          <div className="form-group field field-string">
-                            <label className="control-label fs-5">
-                              Submission Title
-                            </label>
-                            <input className="form-control fs-5 mt-2" type="text" value={submissionTitle} onChange={submissionTitleChange} />
-                          </div>
-                          <button type="submit" className="btn btn-lg btn-primary float-end">Save</button>
-                        </fieldset>
-                      </form><br/><br/>
-                    </>
-                    : <></>
-                }
-
-                
-
-                { submissionTitleSaved ?
-                    <>
-
-                      {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
-                        <>
-                          <div className="card fade show">
-
-                            <form onSubmit={saveComplainant}>
-
-                              <div className="mb-3">
-                                  <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
-                                      <option>Select court</option>
-                                      <option value="High Court">High Court</option>
-                                      <option value="District Court">District Court</option>
-                                  </select>
-                              </div>
-
-                              <div className="mb-3">
-                                  <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
-                                      <option>Select court district</option>
-                                      <option value="North Trinidad">North Trinidad</option>
-                                      <option value="South Trinidad">South Trinidad</option>
-                                      <option value="Tobago">Tobago</option>
-                                  </select>
-                              </div>
-
-                              <div className="mb-3">
-                                  <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
-                                      <option>Select complainant agency</option>
-                                      <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
-                                  </select>
-                              </div>
-                              <div className="mb-3">
-                                  <input type="text" className="fs-5 form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
-                              </div>                    
-                              <div className="mb-3">
-                                  <input type="text" className="fs-5 form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
-                              </div>
-                              <div className="mb-3">
-                                  <input type="text" className="fs-5 form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
-                              </div>
-                              <div className="mb-3">
-                                  <input type="email" className="fs-5 form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
-                              </div>
-
-                              {/* <div className="d-grid gap-2"> */}
-                                  <button type="submit" className="btn btn-lg btn-primary float-end" >Save</button>
-                              {/* </div> */}
 
 
-                            </form>
 
-                          </div>
-                          <br/><br/> 
-                        </>
-                        : <></>
-                      }
+                {submissionTitleSaved ?
+                  <>
 
-                      { submissionComplainantSaved && !editingSubmissionComplainant ?
-                        <>
-                          <div className="card fade show">
-                            <div className="fade show">
-                              <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
-                            </div> 
-                            <div className="card-body">
-                              <h5 className="card-title">Complainant</h5><br/>
-                              <div className="text-left complainant-details">
-                                <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
-                                <br/><label>Agency:</label> {complainantAgency}
-                                <br/><label>Court:</label> {complainantCourt}
-                                <br/><label>Court District:</label> {complainantCourtDistrict}
-                                <br/><label>Regimental Number:</label> {complainantRegNum}
-                                <br/><label>Email:</label> {complainantEmail}
-                              </div>
-                              
+                    {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
+                      <>
+                        <div className="card fade show">
+
+                          <form onSubmit={saveComplainant}>
+
+                            <div className="mb-3">
+                              <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
+                                <option>Select court</option>
+                                <option value="High Court">High Court</option>
+                                <option value="District Court">District Court</option>
+                              </select>
                             </div>
+
+                            <div className="mb-3">
+                              <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                <option>Select court district</option>
+                                <option value="North Trinidad">North Trinidad</option>
+                                <option value="South Trinidad">South Trinidad</option>
+                                <option value="Tobago">Tobago</option>
+                              </select>
+                            </div>
+
+                            <div className="mb-3">
+                              <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
+                                <option>Select complainant agency</option>
+                                <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                              </select>
+                            </div>
+                            <div className="mb-3">
+                              <input type="text" className="fs-5 form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
+                            </div>
+                            <div className="mb-3">
+                              <input type="text" className="fs-5 form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
+                            </div>
+                            <div className="mb-3">
+                              <input type="text" className="fs-5 form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
+                            </div>
+                            <div className="mb-3">
+                              <input type="email" className="fs-5 form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
+                            </div>
+
+                            {/* <div className="d-grid gap-2"> */}
+                            <button type="submit" className="btn btn-lg btn-primary float-end" >Save</button>
+                            {/* </div> */}
+
+
+                          </form>
+
+                        </div>
+                        <br />
+                      </>
+                      : <></>
+                    }
+
+                    {submissionComplainantSaved && !editingSubmissionComplainant ?
+                      <>
+                        <div className="card fade show">
+                          <div className="fade show">
+                            <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
                           </div>
-                          <br /> <br />
-                        </>
-                        : <></>
-                      }
-                  
-                    </>
-                    : <></>            
+                          <div className="card-body">
+                            <h5 className="card-title">Complainant</h5><br />
+                            <div className="text-left complainant-details">
+                              <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
+                              <br /><label>Agency:</label> {complainantAgency}
+                              <br /><label>Court:</label> {complainantCourt}
+                              <br /><label>Court District:</label> {complainantCourtDistrict}
+                              <br /><label>Regimental Number:</label> {complainantRegNum}
+                              <br /><label>Email:</label> {complainantEmail}
+                            </div>
+
+                          </div>
+                        </div>
+                        <br /> <br />
+                      </>
+                      : <></>
+                    }
+
+                  </>
+                  : <></>
                 }
 
 
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
-                { !submissionComplainantSaved ? 
-                  <></> 
-                  : 
-                  <Charges 
-                    submission_id={submissionId} 
-                    request_signature={requestSignature}
-                    editable={editable} 
-                  />}
-                
-                { chargeSaved ?
-                    <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                {!submissionComplainantSaved ?
+                  <></>
+                  :
+                  <div className="p-2" style={{backgroundColor:"#fff"}}>
+                      <Charges
+                      submission_id={submissionId}
+                      request_signature={requestSignature}
+                      editable={editable}
+                    />
+                  </div>
+                  }
+
+                {chargeSaved ?
+                  <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
                   : <></>
                 }
-                
 
-                  {/* <Complainant /> */}
 
-                  {/* <Form 
+                {/* <Complainant /> */}
+
+                {/* <Form 
                       schema={schema}
                       uiSchema={UI}
                       // @ts-ignore
@@ -510,7 +565,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
                 {/* {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} key={step.id} /> )} */}
 
-                
+
 
                 {/* <div style={{overflow:'auto'}}>
                     <div style={{float:'right'}}>
@@ -522,7 +577,7 @@ export const Submission = ({new_submission}: SubmissionProps) => {
                     </div>
                 </div> */}
 
-                    
+
                 {/* <div style={{textAlign:'center', marginTop:'20px'}}>
 
                     {submissionSteps.map(step => {
@@ -534,17 +589,22 @@ export const Submission = ({new_submission}: SubmissionProps) => {
 
                 </div> */}
 
+
               </div>
 
-            </div>           
-          </>
-          : <Navigate to="/" replace={true} />
-        }
-
- 
 
 
-      </>
-    
+            </div>
+
+          </div>
+        </>
+        : <Navigate to="/" replace={true} />
+      }
+
+
+
+
+    </div>
+
   )
 } 

@@ -83,13 +83,13 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const [confirmMessage, setConfirmMessage] = useState("Instructions for resetting your password have been sent to your email address.")
 
-    const [emailSent, setEmailSent] = useState(false) 
+    const [emailSent, setEmailSent] = useState(false)
 
     const agencyChange = (event: any) => {
         setAgency(event.target.value)
     }
 
-   
+
 
 
 
@@ -188,17 +188,17 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
         setSigninError(false)
         console.log(`>>> signin with ${email} and password: ${password}`)
         dispatch(login({ username: email, password: password }) as any)
-        .unwrap()
-        .then((response:any) => {
-            setSigninError(false)
-            // window.location.reload();
-            console.log(response)
-        })
-        .catch((error:any) => {
-            setLoading(false);
-            setSigninError(true)
-            // console.log(error)
-        });
+            .unwrap()
+            .then((response: any) => {
+                setSigninError(false)
+                // window.location.reload();
+                console.log(response)
+            })
+            .catch((error: any) => {
+                setLoading(false);
+                setSigninError(true)
+                // console.log(error)
+            });
     }
 
     const signinVerify = (event: any) => {
@@ -227,9 +227,9 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
         console.log(password);
         const checkTokenValidity = async () => {
             try {
-                console.log("...requesting token"+ email)
-                const response = await axios.post(`${API_URL}/api/users/password/forgotPasswordRequest`, 
-                                {username: email});
+                console.log("...requesting token" + email)
+                const response = await axios.post(`${API_URL}/api/users/password/forgotPasswordRequest`,
+                    { username: email });
                 // Check response to determine if the token is valid
                 console.log(".......response is coming from server >", response)
                 if (response.data.outcome === "success") {
@@ -257,24 +257,27 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
         <>
             <section className="admin-main-section d-flex align-items-center justify-content-center vh-100">
-                <section className="form-container  text-left" style={{ maxWidth: '600px' }}>
+                <section className="form-container  text-left" style={{ width: "100%", maxWidth: '500px' }}>
 
                     {isLoggedIn ?
                         <Navigate to="/submissions" replace={true} />
                         : <>
                             <div className="row" style={{ border: '1px solid #eee' }}>
-                                <div className="col-md-4 text-center" style={{ padding: '30px', backgroundColor: '#b2292e', color: 'white' }}>
-                                    <div style={{ display: 'block', margin: '0 auto 10px auto', backgroundColor: '#fff', width: '140px', height: '140px', padding: '10px', borderRadius: '50%' }}>
-                                        <img src="/jsswf-01.svg" width="120" className="d-inline-block" alt="" />
+                                <div className="col-md-4 text-center" style={{ padding: "50px 20px", backgroundColor: '#b2292e', color: 'white' }}>
+                                    <div style={{
+                                        display: 'block', margin: '0 auto 10px auto', width: "130px", backgroundColor: '#fff', maxWidth: '130px',
+                                        minWidth: "130px", minHeight: "130px", height: "130px", maxHeight: '130px', padding: '10px', borderRadius: '50%'
+                                    }}>
+                                        <img style={{ maxWidth: "120px", height: "auto", padding: "15px 0 0 0" }} src="/jsswf-01.svg" width="100" className="d-inline-block" alt="" />
                                     </div>
                                     <h3 style={{ fontWeight: 400 }}>
-                                        <span><strong>SWF</strong></span>
+                                        <span><strong>SWiF</strong></span>
                                     </h3>
                                     <h4 style={{ fontWeight: 400 }}>
 
                                     </h4>
-                                    <div>
-                                        Simple and Secure Web Forms
+                                    <div className="" style={{ fontSize: "80%", lineHeight: "1rem" }}>
+                                        Simple and Secure<br />Web Forms
                                     </div>
 
                                 </div>
@@ -325,9 +328,9 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                 <>
                                                     <form onSubmit={requestNewPassword} className="swf-form">
                                                         <h4 className="mb-3">Forgot your password?</h4>
-                                                        
-                                                        
-                                                        
+
+
+
                                                         <div>
                                                             <label className="mb-1">Username</label>
 
@@ -342,14 +345,14 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
 
 
-                                                        <div className="mt-3">
+                                                        <div className="mt-2">
                                                             <button className="mt-0 btn btn-primary">Submit</button>
                                                         </div>
 
 
                                                         <div className="mt-3 small mb-4">
                                                             <a href="/" className="">
-                                                                Log in
+                                                                Click here to Log in.
                                                             </a>
                                                         </div>
                                                     </form>
@@ -358,16 +361,16 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                 : (
                                                     <>
                                                         <form onSubmit={signIn} className="swf-form">
-                                                        <h4 className="mb-3">Login</h4>
+                                                            <h4 className="mb-3">Login</h4>
 
                                                             {emailSent && (
-                                                                <div className="mt-1 mb-1" style={{color:"#00f", fontSize:"13px"}} role="alert">
+                                                                <div className="mt-1 mb-1 text-center" style={{ borderRadius:"5px", backgroundColor:"#eee", 
+                                                                    padding:"7px 10px", lineHeight:"1rem", color: "#004085", fontSize: "13px" }} role="alert">
                                                                     {confirmMessage}
                                                                 </div>
                                                             )}
                                                             <div>
                                                                 <label className="mb-1">Username</label>
-
 
                                                                 <input type="email"
                                                                     className="form-control px-2 py-2"
@@ -393,19 +396,17 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                             </div>
 
                                                             {signinError && (
-                                                                <div className="mt-1 mb-1" style={{color:"red", fontSize:"12px"}} role="alert">
+                                                                <div className="mt-1 mb-1" style={{ color: "red", fontSize: "12px" }} role="alert">
                                                                     {signinErrorMessage}
                                                                 </div>
                                                             )}
 
                                                             <div className="mt-3 mb-4 small">
-                                                                <a href="#" className="" onClick={passwordResetLink}>
-                                                                    Reset Password
-                                                                </a>
+                                                                Forgot your password? <span><a href="#" className="" onClick={passwordResetLink}>Click to reset.</a></span>
                                                             </div>
                                                         </form>
-                                                        
-                                                        
+
+
                                                     </>
                                                 )
                                             }

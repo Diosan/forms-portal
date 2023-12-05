@@ -1,6 +1,6 @@
 
 body {
-  background-color: azure;
+  background-color: #f1f1f1;
   padding-top: 0;
 }
 
@@ -119,6 +119,10 @@ header .nav-link:hover{color:#336699}
   
 }
 
+.rjsf{
+  padding:10px 20px;
+}
+
 .nav-link.jud-tab.active {
   border-color: #888 !important;
   border-bottom: none;
@@ -132,7 +136,6 @@ header .nav-link:hover{color:#336699}
 #regForm {
   background-color: #f1f1f1;
   margin: 50px auto;
-  padding: 20px 40px 40px 40px!important;
   width: 100%;
   min-width: 300px;
   border-radius: 10px!important;
