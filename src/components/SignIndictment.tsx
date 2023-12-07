@@ -54,13 +54,13 @@ export const SignIndictment = ({submission_id, complainant_email}:SignIndictment
         console.log('\n\n\n Signature hash: ', signature_hash.data.submission_hash)
         console.log('\n\n\n')
 
-        // let signed_submission = await axios.post(
-        //     API_URL + '/api/submissions/update', 
-        //     {
-        //         id: submission_id,
-        //         status: 'signed'
-        //     }
-        // )
+        let signed_submission = await axios.post(
+            API_URL + '/api/submissions/update', 
+            {
+                id: submission_id,
+                status: 'signed'
+            }
+        )
         setSigned(true)
         
     }
