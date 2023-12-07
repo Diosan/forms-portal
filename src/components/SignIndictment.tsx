@@ -21,32 +21,48 @@ export const SignIndictment = ({submission_id, complainant_email}:SignIndictment
     const [otpSent, setOtpSent] = useState(false)
     const [signOTP, setSignOTP] = useState('')
     const [signed, setSigned] = useState(false)
+    const [signature, setSignature] = useState('')
 
     const signOTPChange = (event: any) => {
         setSignOTP(event.target.value)
     }
 
     const sendOTP = async () => {
-        console.log('\n\n\n complainant_email: ', complainant_email)
-        let otp_send = await axios.post(API_URL + '/api/submissions/send_otp', {email: complainant_email})
-        console.log('otp_send: ', otp_send.data)
-        if(otp_send.data.outcome == 'success') {
+        // console.log('\n\n\n complainant_email: ', complainant_email)
+        // let otp_send = await axios.post(API_URL + '/api/submissions/send_otp', {email: complainant_email})
+        // console.log('otp_send: ', otp_send.data)
+        // if(otp_send.data.outcome == 'success') {
           setOtpSent(true)  
-        }
+        // }
     }
 
         
     const sign = async (event: any) => {
-        // alert('Signing')
+        
         event.preventDefault()
-        let signed_submission = await axios.post(
-            API_URL + '/api/submissions/update', 
+
+        let signature_hash = await axios.post(
+            API_URL + '/api/submissions/complainant_sign', 
             {
-                id: submission_id,
-                status: 'signed'
+                submission_id: submission_id,
+                email: complainant_email
             }
         )
+
+        setSignature(signature_hash.data.submission_hash)
+
+        console.log('\n\n\n Signature hash: ', signature_hash.data.submission_hash)
+        console.log('\n\n\n')
+
+        // let signed_submission = await axios.post(
+        //     API_URL + '/api/submissions/update', 
+        //     {
+        //         id: submission_id,
+        //         status: 'signed'
+        //     }
+        // )
         setSigned(true)
+        
     }
 
     return (<>
@@ -75,6 +91,7 @@ export const SignIndictment = ({submission_id, complainant_email}:SignIndictment
         { signed ?
             <div className="signature-frame">
                 <strong>Signed by: {complainant_email}</strong>
+                <br/><br /><p>{signature}</p>
             </div>
             : <></>
         }
