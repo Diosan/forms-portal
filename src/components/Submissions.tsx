@@ -172,9 +172,28 @@ export const Submissions = ({ }: SubmissionsProps) => {
                             <div className="row">
                                 <div>
                                     {/* Render "pending" submissions with a different background color */}
-                                    {groupedSubmissions['pending'] && (
+                                    {groupedSubmissions['started'] && (
                                         <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '##dfdfdf' }}>
                                             <h4 className="my-2 mb-4">Pending Submissions</h4>
+                                            {groupedSubmissions['pending'].map((submission:any) => (
+                                                <a
+                                                    href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
+                                                    key={submission.id}
+                                                >
+                                                    <div className="card submission-card" style={{ padding: '1px' }}>
+                                                        <div className="card-body" style={{ padding: '10px 25px' }}>
+                                                            <h5 className="card-title">{submission.description}</h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Render "pending" submissions with a different background color */}
+                                    {groupedSubmissions['complainant_saved'] && (
+                                        <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '##dfdfdf' }}>
+                                            <h4 className="my-2 mb-4">Complainant Saved Submissions</h4>
                                             {groupedSubmissions['pending'].map((submission:any) => (
                                                 <a
                                                     href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
@@ -210,9 +229,9 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                     )}
 
                                     {/* Render "complete" submissions with a different background color */}
-                                    {groupedSubmissions['complete'] && (
+                                    {groupedSubmissions['signed'] && (
                                         <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
-                                            <h4 className="my-2 mb-4">Complete Submissions</h4>
+                                            <h4 className="my-2 mb-4">Signed Submissions</h4>
                                             {groupedSubmissions['complete'].map((submission:any) => (
                                                 <a
                                                     href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
