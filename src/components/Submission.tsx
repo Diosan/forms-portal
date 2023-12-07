@@ -5,6 +5,8 @@ import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
+import "../assets/Style.css"
+
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
@@ -24,6 +26,9 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import dotenv from "dotenv"
 import { login, logout, verifyOtp } from "../slices/auth";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+
 
 
 type SubmissionProps = {
@@ -65,13 +70,12 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const [editingSubmissionTitle, setEditingSubmissionTitle] = useState(false)
   const [submissionComplainantSaved, setSubmissionComplainantSaved] = useState(false)
   const submissionTitleChange = (event: any) => {
+    // console.log(event.target.value)
     setSubmissionTitle(event.target.value)
   }
 
   const [submissionId, setSubmissionId] = useState(0)
-
   const [submissionStatus, setSubmissionStatus] = useState('started')
-
   const [complainantAgency, setComplainantAgency] = useState('')
   const [complainantFirstName, setComplainantFirstName] = useState('')
   const [complainantLastName, setComplainantLastName] = useState('')
@@ -345,21 +349,9 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
       }
     })();
-  }, [id, new_submission, submissionTitle, editingSubmissionTitle]);
+  }, [id, new_submission, editingSubmissionTitle]);
 
-  const handleLogout = (event: any) => {
-    event.preventDefault()
-    dispatch(logout() as any)
-      .unwrap()
-      .then(() => {
-        console.log("Logging out...")
-        navigate("/"); // This will redirect to the home page
-      })
-      .catch((error: any) => {
-        // Handle the error
-        console.log(error)
-      });
-  }
+
 
   return (
     // Typescript schema assignment error does not prevent porper operation of RJSF form
@@ -367,181 +359,218 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
     <div className="d-flex">
 
-      <div className="pt-3 px-3 mx-3"
-        style={{
-          maxWidth: "250px",
-          flexShrink: 0, position: "fixed", top: 0, left: 0, height: "100%"
-        }}
-      >
-        <div className="mb-3">
-          <a className="mb-4" href="#">
-            <img src="/jsswf-01.svg" width="90" className="d-inline-block align-top " alt="" />
-          </a>
-        </div>
 
-        <div className="text-center " style={{}}>
-          <ul className=" m-0 navbar-nav ms-auto">
-
-            <li className="nav-item active jud-header-item"><a className="nav-link" href="/">Home  </a></li>
-            <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
-            <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> New Complaint With Oath</a></li>
-            <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> New Indictable</a></li>
-            <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-center">Logout</button></li>
-          </ul>
-        </div>
-      </div>
 
 
       {auth.loggedIn() ?
         <>
           <div className="swf-container container"
-            style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}
+            style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
           >
 
 
             <div id="regForm" className="fade show m-0 py-0">
-             <div>
-             <div className="px-2 py-2" style={{ backgroundColor: "#333", color: "#fff" }}>
-                <h4 className='fw-b m-0'> Complaint With Oath {submissionTitleSaved ? '(' + submissionTitle + ')' : ''} </h4>
-              </div>
-              <div className="mb-2 mt-1" style={{ }}>
-                {!submissionTitleSaved || editingSubmissionTitle ?
+              <div>
+                <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#333", color: "#fff" }}>
+                  <div className="row" style={{ maxWidth: "200px", margin: "0 auto", color: "#fff", textDecoration: "none" }} >
+                    <a style={{ color: "#fff", textDecoration: "none" }} href="/submissions" className="m-0 btn-link new-submission-btn float-start">
+                      <FontAwesomeIcon icon={faArrowLeftLong} />
+                    </a>
+                  </div>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint With Oath {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
-                      <a href="#" className="small" onClick={editTitle}>Edit Title</a>
+                      {/* <a href="#" className="small" onClick={editTitle}>Edit Title</a> */}
+                      <button style={{ color: "#fff", textDecoration: "none" }} onClick={editTitle} type="button" className="btn btn-link btn-xs">
+                        <FontAwesomeIcon icon={faPencilAlt} />
+                      </button>
+
                     </>
                   }
-              </div>
-             </div>
-              
-
-
-              <div className="px-4 py-3" style={{ backgroundColor: "#eee", color: "#222" }}>
-
-               
-
+                </div>
                 {!submissionTitleSaved || editingSubmissionTitle ?
-                  <>
+                  <div className="mb-3 px-3 pt-2" style={{ backgroundColor: "#ddd", color: "#222" }}>
                     <form onSubmit={saveTitle} >
                       <fieldset>
                         <div className="form-group field field-string">
-                          <label className="control-label fs-5">
-                            Submission Title
+                          <label className="control-label fs-6">
+                            Edit Submission Title
                           </label>
-                          <input className="form-control fs-5 mt-2" type="text" value={submissionTitle} onChange={submissionTitleChange} />
+
+                          <div className="d-flex mt-2">
+                            <input
+                              className="form-control fs-5 mt-0 mb-0 flex-grow-1"
+                              type="text"
+                              value={submissionTitle}
+                              onChange={submissionTitleChange}
+                            />
+                            <button
+                              type="submit"
+                              className="btn btn-md btn-light ms-1" // Use btn-light for a button with no background
+                            >
+                              <i className="text-gray">
+                                <FontAwesomeIcon icon={faCheck} />
+                              </i>
+                            </button>
+                          </div>
+
+
+                          {/* <input className="form-control fs-5 mt-2" type="text" value={submissionTitle} onChange={submissionTitleChange} /> */}
                         </div>
-                        <button type="submit" className="btn btn-md btn-primary float-end">Save</button>
+                        {/* <button type="submit" className="btn btn-sm btn-primary float-end">Save</button> */}
                       </fieldset>
                     </form><br />
-                  </>
+                  </div>
                   : <></>
                 }
+
+              </div>
+
+
+
+              <div className="px-4 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
+
+
+
+
 
 
 
                 {submissionTitleSaved ?
-                  <>
+                  <div>
+                            
 
-                    {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
-                      <>
-                        <div className="card fade show">
+                          
+                          {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
+                            <div>
+                           
+                              <div className="card fade show" style={{ border: "none", backgroundColor:"#ddd"}} >
+                              <h4 className="text-center mb-4">Complainant</h4>
+                                <form onSubmit={saveComplainant}>
 
-                          <form onSubmit={saveComplainant}>
+                                  <div className="mb-3">
+                                    <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
+                                      <option>Select court</option>
+                                      <option value="High Court">High Court</option>
+                                      <option value="District Court">District Court</option>
+                                    </select>
+                                  </div>
 
-                            <div className="mb-3">
-                              <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
-                                <option>Select court</option>
-                                <option value="High Court">High Court</option>
-                                <option value="District Court">District Court</option>
-                              </select>
+                                  <div className="mb-3">
+                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                      <option>Select court district</option>
+                                      <option value="North Trinidad">North Trinidad</option>
+                                      <option value="South Trinidad">South Trinidad</option>
+                                      <option value="Tobago">Tobago</option>
+                                    </select>
+                                  </div>
+
+                                  <div className="mb-3">
+                                    <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
+                                      <option>Select complainant agency</option>
+                                      <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                                    </select>
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
+                                  </div>
+
+                                  {/* <div className="d-grid gap-2"> */}
+                                  {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
+                                  <button
+                                    type="submit"
+                                    className="btn btn-md btn-light ms-1 float-end" // Use btn-light for a button with no background
+                                    >
+                                      <i className="text-gray">
+                                        <FontAwesomeIcon icon={faCheck} /> Update
+                                      </i>
+                                  </button>
+                                  {/* </div> */}
+
+
+                                </form>
+
+                              </div>
+                              <br />
                             </div>
+                            : <></>
+                          }
 
-                            <div className="mb-3">
-                              <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
-                                <option>Select court district</option>
-                                <option value="North Trinidad">North Trinidad</option>
-                                <option value="South Trinidad">South Trinidad</option>
-                                <option value="Tobago">Tobago</option>
-                              </select>
-                            </div>
+                          {submissionComplainantSaved && !editingSubmissionComplainant ?
+                            <>
+                              
+                              <div className="card fade show p-2" style={{ border: "none" }}>
+                                {/* <div className="fade show">
+                                  <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
+                                </div> */}
+                                
 
-                            <div className="mb-3">
-                              <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
-                                <option>Select complainant agency</option>
-                                <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
-                              </select>
-                            </div>
-                            <div className="mb-3">
-                              <input type="text" className="fs-5 form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
-                            </div>
-                            <div className="mb-3">
-                              <input type="text" className="fs-5 form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
-                            </div>
-                            <div className="mb-3">
-                              <input type="text" className="fs-5 form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
-                            </div>
-                            <div className="mb-3">
-                              <input type="email" className="fs-5 form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
-                            </div>
+                                <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor:"#444", color:"#fff", borderBottom: "1px solid #ddd" }}>
+                                  <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Complainant</h5>
+                                  {!submissionTitleSaved || editingSubmissionTitle ?
+                                    <></>
+                                    : <>
+                                      {/* <a href="#" className="small" onClick={editTitle}>Edit Title</a> */}
+                                      {/* <button type="button" className="btn btn-primary btn-xs"> */}
+                                      <button style={{ color: "#fff", textDecoration: "none" }} onClick={editComplainant} type="button" className="btn btn-link btn-xs">
+                                        <FontAwesomeIcon icon={faPencilAlt} />
+                                      </button>
 
-                            {/* <div className="d-grid gap-2"> */}
-                            <button type="submit" className="btn btn-lg btn-primary float-end" >Save</button>
-                            {/* </div> */}
+                                    </>
+                                  }
+                                </div>
 
 
-                          </form>
+                                <div className="card-body" style={{ border: "1px solid #ddd", backgroundColor: "#eee" }}>
+                                  <div className="text-left complainant-details mt-2">
+                                    <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
+                                    <br /><label>Agency:</label> {complainantAgency}
+                                    <br /><label>Court:</label> {complainantCourt}
+                                    <br /><label>Court District:</label> {complainantCourtDistrict}
+                                    <br /><label>Regimental Number:</label> {complainantRegNum}
+                                    <br /><label>Email:</label> {complainantEmail}
+                                  </div>
 
-                        </div>
-                        <br />
-                      </>
-                      : <></>
-                    }
+                                </div>
 
-                    {submissionComplainantSaved && !editingSubmissionComplainant ?
-                      <>
-                        <div className="card fade show">
-                          <div className="fade show">
-                            <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
-                          </div>
-                          <div className="card-body">
-                            <h5 className="card-title">Complainant</h5><br />
-                            <div className="text-left complainant-details">
-                              <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
-                              <br /><label>Agency:</label> {complainantAgency}
-                              <br /><label>Court:</label> {complainantCourt}
-                              <br /><label>Court District:</label> {complainantCourtDistrict}
-                              <br /><label>Regimental Number:</label> {complainantRegNum}
-                              <br /><label>Email:</label> {complainantEmail}
-                            </div>
 
-                          </div>
-                        </div>
-                        <br /> <br />
-                      </>
-                      : <></>
-                    }
+                              </div>
+                            </>
+                            : <></>
+                          }
 
-                  </>
+                  </div>
                   : <></>
                 }
-
 
                 {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
 
                 {!submissionComplainantSaved ?
                   <></>
                   :
-                  <div className="p-2" style={{backgroundColor:"#fff"}}>
-                      <Charges
+                  <div className="p-2" style={{ backgroundColor: "#fff" }}>
+                    <Charges
                       submission_id={submissionId}
                       request_signature={requestSignature}
                       editable={editable}
                     />
                   </div>
-                  }
+                }
 
                 {chargeSaved ?
+                  <>
                   <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                  </>
                   : <></>
                 }
 

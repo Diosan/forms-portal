@@ -56,19 +56,20 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
        
         {}
 
-            {submission_accuseds.slice().reverse().map((accused: any) => (
+            {submission_accuseds.slice().reverse().map((accused: any, index:any) => (
  
             
-                <div className="card accused-card" key={accused.id}>
+                <div className="card accused-card mt-4" key={accused.id}>
+                    <div className="accused-index">Acused {index+1}</div>
                     <div className="card-body">
-                        <h5 className="card-title">{accused.firstName} {accused.lastName}</h5>
+                        <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName} {accused.lastName}</h5>
                         <p className="card-text text-left">
-                            <br/><label>Address:</label> {accused.address}
+                            <label>Address:</label> {accused.address}
                             <br/><label>Date Of Birth:</label> {accused.dateOfBirth}
                             <br/><label>Gender:</label> {accused.gender}
                             <br/><label>Adulthood:</label> {accused.adulthood}
                         </p>
-                        
+
 
 
                         <Accused 

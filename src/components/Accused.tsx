@@ -8,12 +8,17 @@ import PendingList from "./PendingList"
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import { Navigate, useNavigate, useParams } from "react-router-dom"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faPencilAlt, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 type AccusedProps = {
     accused_id: number,
     request_signature: any,
     editable: boolean 
 }
+
+
 
 const log = (type: any) => console.log.bind(console, type)
 
@@ -48,11 +53,17 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [convictionFormData, setConvictionFormData] = useState({})
 
+    const [showAddNewCharge, setShowAddNewCharge] = useState(false)
+
+    const addNewCharge = async () => {
+        setShowAddNewCharge(true)
+    }
+
 
 
     const processForm = async (form: any) => {
 
-        
+        setShowAddNewCharge(false)
 
         console.log('Submitted form data: ', form.formData)
 
@@ -228,25 +239,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     return (
         <>
-            { editable ?
-                <div className="add-charge">
-                    {/* <AddCharge accused_id={accused_id} accused_charges={accusedCharges} /> */}
-                    <Form 
-                        schema={chargeSchema}
-                        uiSchema={chargeUI}
-                        // @ts-ignore
-                        validator={validator}
-                        formData={formData}
-                        onSubmit={processForm}
-                        onError={log('errors')}
-                    >
-                        <div className="d-grid gap-2">
-                            <button className="btn btn-secondary" type="submit">Add Charge</button>
-                        </div>
-                    </Form>            
-                </div>
-                : <></>
-            }
+            
 
 
             <ChargeList accused_id={accused_id} accused_charges={accusedCharges} />
@@ -334,6 +327,37 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             }
 
             
+            { editable ?
+                <div className="add-charge px-4 pt-2 pb-2" style={{backgroundColor:"#eee"}}>
+                    {/* <div>Add New Charge</div> */}
+                    { !showAddNewCharge && 
+                        <button className="btn btn-link btn-xs" 
+                        style={{  textDecoration: "none" }} onClick={addNewCharge} 
+                        type="button">
+                            <FontAwesomeIcon icon={faPlus} /> New Charge
+                        </button>
+                    }
+
+                    {/* <AddCharge accused_id={accused_id} accused_charges={accusedCharges} /> */}
+                    { showAddNewCharge && 
+                        <Form 
+                            schema={chargeSchema}
+                            uiSchema={chargeUI}
+                            // @ts-ignore
+                            validator={validator}
+                            formData={formData}
+                            onSubmit={processForm}
+                            onError={log('errors')}
+                        >
+                            <div className="">
+                                <button className="btn btn-secondary" type="submit">Save Charge</button>
+                            </div>
+                        </Form> 
+                    }           
+                </div>
+                : <></>
+            }
+
         </>
     )
 }

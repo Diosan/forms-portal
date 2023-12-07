@@ -11,6 +11,7 @@ import { Submissions } from './Submissions'
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
+import { LeftColumn } from "./LeftColumn"
 
 import { Header } from './Header'
 import { Footer } from './Footer'
@@ -26,6 +27,8 @@ function App() {
   return (
     <>
     {/* <Header /> */}
+    <LeftColumn />
+
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/submission" element={<Submission new_submission={true} />} />

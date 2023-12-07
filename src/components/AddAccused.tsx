@@ -14,6 +14,8 @@ type AddAccusedProps = {
   accused_added: any
 }
 
+
+
 const log = (type: any) => console.log.bind(console, type)
 
 
@@ -75,7 +77,6 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
     })
     
   }
-
   const [accusedSchema, setAccusedSchema] = useState({})
   const [accusedUI, setAccusedUI] = useState({})
   const [chargeSchema, setChargeSchema] = useState({})
@@ -85,6 +86,7 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
     useEffect(() => {
         axios.get(API_URL + '/schema/accused')
         .then((response) => {
+          console.log(response.data)
         setAccusedSchema(response.data.schema)
         setAccusedUI(response.data.UI)
         })
@@ -126,8 +128,6 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
             <button className="btn btn-secondary" type="submit">Add Accused</button>
         </div>
     </Form>
-
-
   );
 };
 

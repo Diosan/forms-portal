@@ -5,6 +5,7 @@ import { Navigate, useNavigate } from "react-router-dom"
 import { login, logout, resendOTP, verifyOtp } from "../slices/auth";
 import { clearMessage } from "../slices/message"
 import { RootState } from '../store';
+import AuthService from "../services/AuthService"
 
 // import { useAppDispatch } from '../useAppDispatch'; 
 import { API_URL } from "../config/api"
@@ -30,7 +31,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
     const state = useSelector((state: RootState) => state.auth);
     const { isLoggedIn, otpRequired, token, isVerified } = state
     const [changePassword, setChangePassword] = useState(false);
-
+    const auth = new AuthService
 
 
 
@@ -201,15 +202,17 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
             });
     }
 
-    const signinVerify = (event: any) => {
+    const signinVerify = async (event: any) => {
         event.preventDefault()
         // const dispatch = useAppDispatch();
         console.log(">>> signin")
         dispatch(verifyOtp({ otp: signinOTP }) as any)
             .unwrap()
-            .then((message: any) => {
-                console.log("Reidrecting")
+            .then(async (message: any) => {
+                console.log("Reidrecting...")
                 console.log(message)
+                let decoded = await auth.decodedToken()
+                console.log(decoded)
                 if (isVerified) {
                     navigate('/submissions');
                 }
@@ -262,7 +265,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                     {isLoggedIn ?
                         <Navigate to="/submissions" replace={true} />
                         : <>
-                            <div className="row" style={{ border: '1px solid #eee' }}>
+                            <div className="row" style={{ border: '1px solid #eee', backgroundColor:"#fff"}}>
                                 <div className="col-md-4 text-center" style={{ padding: "50px 20px", backgroundColor: '#b2292e', color: 'white' }}>
                                     <div style={{
                                         display: 'block', margin: '0 auto 10px auto', width: "130px", backgroundColor: '#fff', maxWidth: '130px',

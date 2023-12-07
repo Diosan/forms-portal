@@ -10,6 +10,8 @@ import Add from "./Add"
 import { Provider } from "react-redux"
 import { store } from "../store/store"
 import AddAccused from "./AddAccused";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 type ChargesProps = {
     submission_id: number,
@@ -84,6 +86,26 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
                     <button type="submit">Add Accused</button>
                 </div>
             </Form> */}
+            <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor:"#444", color:"#fff", borderBottom: "1px solid #ddd" }}>
+                <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Accuseds and Charges</h5>
+                
+                <>
+                    {/* <a href="#" className="small" onClick={editTitle}>Edit Title</a> */}
+                    {/* <button type="button" className="btn btn-primary btn-xs"> */}
+                    {/* <button style={{ color: "#fff", textDecoration: "none" }} type="button" className="btn btn-link btn-xs">
+                    <FontAwesomeIcon icon={faPencilAlt} />
+                    </button> */}
+
+                </>
+
+            </div>
+
+            <AccusedList 
+                submission_id={submission_id} 
+                request_signature={requestSignature}
+                submission_accuseds={accuseds}
+                editable={editable} 
+            />
 
             {editable?
                 <AddAccused 
@@ -93,12 +115,7 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
               : <></>
             }
 
-            <AccusedList 
-                submission_id={submission_id} 
-                request_signature={requestSignature}
-                submission_accuseds={accuseds}
-                editable={editable} 
-            />
+            
 
 
 

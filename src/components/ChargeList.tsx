@@ -31,9 +31,10 @@ const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
 
     return (
     
-        <div>
+        <div className="mt-3">
+            <h6 className="fw-bold">Charges</h6>
 
-            <table className="charge-table">
+            <table className="charge-table mt-2 mb-0">
                 <thead>
                     <tr>
                         <th>Charge Name</th>
