@@ -93,9 +93,9 @@ export const Indictable = ({new_submission}: IndictableProps) => {
       submission: {
         description: form.formData.title,
         status: 'started',
-        type: 'indictable'
-      },
-      email: decoded.email
+        type: 'indictable',
+        userId: decoded.id
+      },    
 
     }
 
