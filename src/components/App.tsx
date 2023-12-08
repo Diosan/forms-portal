@@ -8,6 +8,7 @@ import { Submission } from './Submission'
 import { PasswordReset } from './ResetPassword'
 import Transcend  from './Transcend'
 import { Submissions } from './Submissions'
+import { Summons } from './Summons';
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
@@ -38,7 +39,7 @@ function App() {
         <Route path= "/password/new" element={ <PasswordReset/>} />
         <Route path= "/password/reset/:token" element={ <PasswordReset/>} />
         <Route path= "/submission/:id" element={ <Submission new_submission={false }/>} />
-        <Route  path= "/submissions" element={ <Submissions />} />
+        <Route path= "/submissions" element={ <Submissions />} />
         <Route path= "/transcend" element={ <Transcend /> } />
         <Route path= "/simple_ref" element={ <SimpleRef /> } />
         <Route path= "/sign/:id" element={ <Sign /> } />
@@ -47,6 +48,9 @@ function App() {
 
         <Route path= "/not_police" element={ <NotPolice new_submission={ true }/>} />
         <Route path= "/not_police/:id" element={ <NotPolice new_submission={false }/>} />
+
+        <Route path= "/summons" element={ <Summons new_submission={ true }/>} />
+        <Route path= "/summons/:id" element={ <Summons new_submission={false }/>} />
         
       </Routes>
     <Footer />

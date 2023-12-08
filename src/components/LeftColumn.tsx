@@ -58,8 +58,8 @@ export const LeftColumn = (({ }: HeaderProps) => {
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> New Complaint With Oath</a></li>
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> New Complaint Without Oath</a></li>
-                        <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> New Complaint Summons</a></li>
-                        <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> New Complaint Warrant Or Summons</a></li>                        
+                        <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> New Complaint Summons</a></li>
+                        <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> New Complaint Warrant Or Summons</a></li>                        
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/not_police"> New Complaint By Person Other Than Police</a></li> 
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> New Indictable</a></li>
                         <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-center">Logout</button></li>
