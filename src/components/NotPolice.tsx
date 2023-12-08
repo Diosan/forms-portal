@@ -12,7 +12,8 @@ import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
 import { NotPoliceCharges } from "./NotPoliceCharges"
-import { RequestSignature } from "./RequestSignature"
+// import { RequestSignature } from "./RequestSignature"
+import { NotPoliceRequestSignature } from "./NotPoliceRequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
@@ -570,7 +571,7 @@ export const NotPolice = ({ new_submission }: SubmissionProps) => {
 
                 {chargeSaved ?
                   <>
-                  <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                  <NotPoliceRequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
                   </>
                   : <></>
                 }

@@ -46,6 +46,7 @@ function App() {
         <Route path= "/indictable/:id" element={ <Indictable new_submission={ false } />} />
 
         <Route path= "/not_police" element={ <NotPolice new_submission={ true }/>} />
+        <Route path= "/not_police/:id" element={ <NotPolice new_submission={false }/>} />
         
       </Routes>
     <Footer />
