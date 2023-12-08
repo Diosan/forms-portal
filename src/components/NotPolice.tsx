@@ -130,7 +130,7 @@ export const NotPolice = ({ new_submission }: SubmissionProps) => {
         id: submissionId,
         title: submissionTitle,
         email: decoded.email,
-        uid: decoded.id
+        userId: decoded.id
       }
       console.log('Submission is : ', submission)
       await axios.post(API_URL + '/api/submissions/update_title', submission)
@@ -160,7 +160,8 @@ export const NotPolice = ({ new_submission }: SubmissionProps) => {
       let submission = {
         title: submissionTitle,
         email: decoded.email,
-        uid: decoded.id
+        userId: decoded.id,
+        type: 'not_police'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
