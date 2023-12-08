@@ -87,6 +87,12 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const [chargeSaved, setChargeSaved] = useState(false)
 
+  const [matterType, setMatterType] = useState('')
+
+  const matterTypeChange = (event: any) => {
+    setMatterType(event.target.value)
+  }
+
   const complainantCourtDistrictChange = (event: any) => {
     setComplainantCourtDistrict(event.target.value)
   }
@@ -158,7 +164,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
       let submission = {
         title: submissionTitle,
         email: decoded.email,
-        uid: decoded.id
+        userId: decoded.id,
+        matterType: matterType
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
@@ -405,6 +412,16 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                               value={submissionTitle}
                               onChange={submissionTitleChange}
                             />
+                            {!submissionTitleSaved ?
+                              <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
+                                <option>Select matter type</option>
+                                <option value="Indictable">Indictable</option>
+                                <option value="Summary">Summary</option>
+                                <option value="Either-way">Either-way</option>
+                                <option value="Indictable with Summary">Indictable with Summary</option>
+                              </select>
+                              : <></>
+                            }
                             <button
                               type="submit"
                               className="btn btn-md btn-light ms-1" // Use btn-light for a button with no background
