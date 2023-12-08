@@ -11,9 +11,7 @@ import "../assets/Style.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
-import { NotPoliceCharges } from "./NotPoliceCharges"
-// import { RequestSignature } from "./RequestSignature"
-import { NotPoliceRequestSignature } from "./NotPoliceRequestSignature"
+import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
@@ -48,7 +46,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const Summons = ({ new_submission }: SubmissionProps) => {
+export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
     // alert('Performing requestSignature in Submission component')
@@ -167,7 +165,6 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
         title: submissionTitle,
         email: decoded.email,
         userId: decoded.id,
-        type: 'not_police',
         matterType: matterType
       }
       axios.post(API_URL + '/api/submissions', submission)
@@ -387,7 +384,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint Warrant Or Summons {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint With Oath {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
@@ -579,7 +576,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                   <></>
                   :
                   <div className="p-2" style={{ backgroundColor: "#fff" }}>
-                    <NotPoliceCharges
+                    <Charges
                       submission_id={submissionId}
                       request_signature={requestSignature}
                       editable={editable}
@@ -589,7 +586,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
 
                 {chargeSaved ?
                   <>
-                  <NotPoliceRequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                  <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
                   </>
                   : <></>
                 }
