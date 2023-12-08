@@ -32,9 +32,13 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [previousRecord, setPreviousRecord] = useState(false)
 
+    const [relatedMatters, setRelatedMatters] = useState(false)
+
     const [accusedCharges, setAccusedCharges] = useState<{}[]>([])
 
     const [accusedPendings, setAccusedPendings] = useState<{}[]>([])
+
+    const [accusedRelateds, setAccusedRelateds] = useState<{}[]>([])
 
     const [accusedConvictions, setAccusedConvictions] = useState<{}[]>([])
 
@@ -47,11 +51,16 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
     const [convictionSchema, setConvictionSchema] = useState({})
     const [convictionUI, setConvictionUI] = useState({})
 
+    const [relatedSchema, setRelatedSchema] = useState({})
+    const [relatedUI, setRelatedUI] = useState({})
+
     const [formData, setFormData] = useState({})
 
     const [pendingFormData, setPendingFormData] = useState({})
 
     const [convictionFormData, setConvictionFormData] = useState({})
+
+    const [relatedFormData, setRelatedFormData] = useState({})
 
     const [showAddNewCharge, setShowAddNewCharge] = useState(false)
 
@@ -145,6 +154,37 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
     }
 
 
+    const addRelated = async (form: any) => {
+        console.log('Submitted form data: ', form.formData)
+
+        let related= {
+            offence: form.formData.offence,
+            dateOfOffence: form.formData.dateOfOffence,
+            accusedId: accused_id
+        }
+
+        await axios.post(API_URL + '/api/accuseds/relateds', related)
+        .then((response) => {
+    
+            switch(response.data.outcome) {
+              case 'success':
+                console.log('Pending successfully saved', response.data.related)
+                setAccusedRelateds([response.data.related, ...accusedRelateds]) //response.data.charge          
+                break
+              case 'error':
+                console.log('Error saving pending')
+                break
+              default:
+                console.log('Unknown pending save outcome')
+                break
+            }
+      
+        })
+
+
+    }
+
+
     // const addConviction = async (form: any) => {}
 
     const addConviction = async (form: any) => {
@@ -194,6 +234,11 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             setConvictionSchema(conviction_form.data.schema)
             setConvictionUI(conviction_form.data.UI)
         })
+        axios.get(API_URL + '/schema/related_matter')
+        .then(conviction_form => {
+            setRelatedSchema(conviction_form.data.schema)
+            setRelatedUI(conviction_form.data.UI)
+        })
 
 
 
@@ -208,6 +253,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             let accused = await axios.get(API_URL + '/api/accuseds/' + accused_id)
             let pendings = await axios.get(API_URL + '/api/accuseds/pendings/' + accused_id)
             let convictions = await axios.get(API_URL + '/api/accuseds/convictions/' + accused_id)
+            let relateds = await axios.get(API_URL + '/api/accuseds/relateds/' + accused_id)
             if(accused.data.accused.previousCriminalRecord == 'Yes') {
                 setPreviousRecord(true)
             }
@@ -216,7 +262,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                 accused: accused.data.accused.previousCriminalRecord,
                 charges: charges.data.charges,
                 pendings: pendings.data.pendings,
-                convictions: convictions.data.convictions
+                convictions: convictions.data.convictions,
+                relateds: relateds.data.relateds
             }
         }
 
@@ -225,6 +272,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             setAccusedCharges(data.charges)
             setAccusedPendings(data.pendings)
             setAccusedConvictions(data.convictions)
+            setAccusedRelateds(data.relateds)
             setAccused(data.accused)
             
             if(previousRecord) {
@@ -244,7 +292,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
             <ChargeList accused_id={accused_id} accused_charges={accusedCharges} />
 
-            { previousRecord ?
+            {   previousRecord ?
                     <>
                         { editable ?
                             <div className="add-charge">
@@ -323,6 +371,50 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                         </table>
                     </>
                 : 
+                    <></>
+            }
+
+            {   relatedMatters ?
+                    <>
+                        { editable ?
+                            <div className="add-charge">
+                                <Form 
+                                    schema={relatedSchema}
+                                    uiSchema={relatedUI}
+                                    // @ts-ignore
+                                    validator={validator}
+                                    formData={pendingFormData}
+                                    onSubmit={addRelated}
+                                    onError={log('errors')}
+                                >
+                                    <div className="d-grid gap-2">
+                                        <button className="btn btn-secondary" type="submit">Add Pending</button>
+                                    </div>
+                                </Form> 
+
+                                                    
+                            </div>
+                            : <></>
+                        }
+
+                        <table className="charge-table">
+                            <thead>
+                                <tr>
+                                    <th>Related Offence</th>
+                                    <th>Date Of Offence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {accusedRelateds.map((related: any) => (
+                                    <tr key={related.id}>
+                                        <td>{related.offence}</td>
+                                        <td>{related.dateOfOffence}</td>
+                                    </tr>
+                                ))} 
+                            </tbody>
+                        </table>                        
+                    </>
+                :
                     <></>
             }
 
