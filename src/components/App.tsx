@@ -20,6 +20,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 // import { store } from '../store/store'
 import { Provider } from 'react-redux'
 
+import { NotPolice } from './NotPolice';
+
 
 
 function App() {
@@ -42,6 +44,9 @@ function App() {
         <Route path= "/sign/:id" element={ <Sign /> } />
         <Route path= "/indictable" element={ <Indictable new_submission={ true } />} />
         <Route path= "/indictable/:id" element={ <Indictable new_submission={ false } />} />
+
+        <Route path= "/not_police" element={ <NotPolice new_submission={ true }/>} />
+        
       </Routes>
     <Footer />
     </>
