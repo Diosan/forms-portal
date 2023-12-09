@@ -37,11 +37,11 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
     const sendOTP = async () => {
         // console.log('\n\n\n complainant_email: ', complainant_email)
-        // let otp_send = await axios.post(API_URL + '/api/submissions/send_otp', {email: complainant_email})
-        // console.log('otp_send: ', otp_send.data)
-        // if(otp_send.data.outcome == 'success') {
+        let otp_send = await axios.post(API_URL + '/api/submissions/send_otp', {email: complainant_email})
+        console.log('otp_send: ', otp_send.data)
+        if(otp_send.data.outcome == 'success') {
           setOtpSent(true)  
-        // }
+        }
     }
 
         
@@ -49,32 +49,51 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         
         event.preventDefault()
 
-        let returned_signature = await axios.post(
-            API_URL + '/api/submissions/complainant_sign', 
+        console.log('\n\n\n signOTP: ', signOTP)
+        console.log('\n\n\n')
+
+        let verified = await axios.post(
+            API_URL + '/api/submissions/verify_otp',
             {
-                submission_id: submission_id,
-                email: complainant_email
-            }
+                email: complainant_email,
+                otp: signOTP 
+            } 
         )
 
-        console.log('\n\n\n returned_signature: ', returned_signature.data);
+        console.log('\n\n\n verification response: ', verified.data)
 
-        setSignatureHash(returned_signature.data.signature.hash)
-        setSignatureName(returned_signature.data.user.firstName + ' ' + returned_signature.data.user.lastName)
-        setSignatureDate(returned_signature.data.signature.createdAt)
-        
+        if(verified.data.outcome == 'success') {
 
-        // console.log('\n\n\n Signature hash: ', returned_signature.data.submission.hash)
-        // console.log('\n\n\n')
+            let returned_signature = await axios.post(
+                API_URL + '/api/submissions/complainant_sign', 
+                {
+                    submission_id: submission_id,
+                    email: complainant_email
+                }
+            )
 
-        let signed_submission = await axios.post(
-            API_URL + '/api/submissions/update', 
-            {
-                id: submission_id,
-                status: 'signed'
-            }
-        )
-        setSigned(true)
+            console.log('\n\n\n returned_signature: ', returned_signature.data);
+
+            setSignatureHash(returned_signature.data.signature.hash)
+            setSignatureName(returned_signature.data.user.firstName + ' ' + returned_signature.data.user.lastName)
+            setSignatureDate(returned_signature.data.signature.createdAt)
+            
+
+            // console.log('\n\n\n Signature hash: ', returned_signature.data.submission.hash)
+            // console.log('\n\n\n')
+
+            let signed_submission = await axios.post(
+                API_URL + '/api/submissions/update', 
+                {
+                    id: submission_id,
+                    status: 'signed'
+                }
+            )
+            setSigned(true)
+
+        } else {
+            alert('Verification failed. Try again');
+        }
         
     }
 
