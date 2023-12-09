@@ -232,9 +232,9 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                     {groupedSubmissions['signed'] && (
                                         <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
                                             <h4 className="my-2 mb-4">Signed Submissions</h4>
-                                            {groupedSubmissions['complete'].map((submission:any) => (
+                                            {groupedSubmissions['signed'].map((submission:any) => (
                                                 <a
-                                                    href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
+                                                    href={'/sign/' + submission.id}
                                                     key={submission.id}
                                                 >
                                                     <div className="card submission-card" style={{ padding: '1px' }}>
@@ -246,6 +246,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                             ))}
                                         </div>
                                     )}
+
                                 </div>
                                 
 

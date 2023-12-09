@@ -5,23 +5,31 @@ import { Navigate, useNavigate, useParams } from "react-router-dom"
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import '../assets/Submission.css'
+import '../assets/Signature.css'
 
 type SignIndictmentProps = {
     submission_id: number,
-    complainant_email: string
+    complainant_email: string,
+    complainant_name: string,
+    already_signed: boolean
 }
 
 const log = (type: any) => console.log.bind(console, type)
 
 
-export const SignIndictment = ({submission_id, complainant_email}:SignIndictmentProps) => {
+export const SignIndictment = ({submission_id, complainant_email, complainant_name, already_signed}:SignIndictmentProps) => {
+
+    
 
     const navigate = useNavigate()
 
     const [otpSent, setOtpSent] = useState(false)
     const [signOTP, setSignOTP] = useState('')
     const [signed, setSigned] = useState(false)
-    const [signature, setSignature] = useState('')
+    const [signatureHash, setSignatureHash] = useState('')
+    const [signatureName, setSignatureName] = useState('')
+    const [signatureDate, setSignatureDate] = useState('')
+
 
     const signOTPChange = (event: any) => {
         setSignOTP(event.target.value)
@@ -41,7 +49,7 @@ export const SignIndictment = ({submission_id, complainant_email}:SignIndictment
         
         event.preventDefault()
 
-        let signature_hash = await axios.post(
+        let returned_signature = await axios.post(
             API_URL + '/api/submissions/complainant_sign', 
             {
                 submission_id: submission_id,
@@ -49,10 +57,15 @@ export const SignIndictment = ({submission_id, complainant_email}:SignIndictment
             }
         )
 
-        setSignature(signature_hash.data.submission_hash)
+        console.log('\n\n\n returned_signature: ', returned_signature.data);
 
-        console.log('\n\n\n Signature hash: ', signature_hash.data.submission_hash)
-        console.log('\n\n\n')
+        setSignatureHash(returned_signature.data.signature.hash)
+        setSignatureName(returned_signature.data.user.firstName + ' ' + returned_signature.data.user.lastName)
+        setSignatureDate(returned_signature.data.signature.createdAt)
+        
+
+        // console.log('\n\n\n Signature hash: ', returned_signature.data.submission.hash)
+        // console.log('\n\n\n')
 
         let signed_submission = await axios.post(
             API_URL + '/api/submissions/update', 
@@ -65,14 +78,47 @@ export const SignIndictment = ({submission_id, complainant_email}:SignIndictment
         
     }
 
+    useEffect(() => {
+        (async () => {
+            
+            // let signature = await axios.get(API_URL + '/api/submissions/signature/' + submission_id)
+            let submission = await axios.get(API_URL + '/api/submissions/' + submission_id)
+            // console.log('\n\n\n complainant_email: ', complainant_email)
+            let the_email = await complainant_email
+            // console.log('\n\n\n the_email: ', the_email)
+            if(submission.data.submission.status == 'signed') {
+                // console.log('retreived submission is signed')
+
+                let retrieved_signature = await axios.post(
+                    API_URL + '/api/submissions/signature/', 
+                    {                                                                        
+                        submission_id: submission.data.submission.id,
+                        userId: submission.data.submission.userId
+                    }
+                )
+
+               
+                console.log('\n\n\n Signature for signed submission: ', retrieved_signature.data)
+                setSignatureHash(retrieved_signature.data.signature.hash)
+                setSignatureName(retrieved_signature.data.user.firstName + ' ' + retrieved_signature.data.user.lastName)                
+                setSignatureDate(retrieved_signature.data.signature.createdAt)
+            } else {
+                console.log('retreived submission is NOT signed')
+            }
+
+            // console.log('\n\n\n retreived signature: ', signature.data)
+
+        })();        
+    }, [])
+
     return (<>
-        {!otpSent && !signed ? 
+        {!otpSent && !signed && !already_signed ? 
                 <div className="d-grid gap-2">
                     <button className="btn btn-dark" type="submit" onClick={sendOTP}>Sign Submission</button>
                 </div>
             : <></>
         }       
-        {otpSent && !signed ?
+        {otpSent && !signed  && !already_signed ?
             <form onSubmit={sign}>
                 <div className="card py-5 px-3 otp-card fade show">
                     <h5 className="m-0">Sign Submission</h5>
@@ -88,11 +134,41 @@ export const SignIndictment = ({submission_id, complainant_email}:SignIndictment
             : <></>
         }
 
-        { signed ?
-            <div className="signature-frame">
-                <strong>Signed by: {complainant_email}</strong>
-                <br/><br /><p>{signature}</p>
+        { signed || already_signed?
+
+            // <div className="signature-frame">
+            //     <strong>Signed by: {complainant_email}</strong>
+            //     <br/><br /><p>{signature}</p>
+            // </div>
+
+            <div className="signature-container">
+                <div className="row signature-format">
+                    {/* <!-- Row 1 --> */}
+                    <div className="col-6 col">
+                        <div className="logo-placeholder d-flex swf-sign">
+                            <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
+                        </div>
+                    </div>
+                    <div className="col-6 col">
+                        <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
+                        <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
+                        {/* <div className="text-placeholder text-right">[ip address]</div> */}
+                    </div>
+
+                    {/* <!-- Row 2 --> */}
+                    <div className="col-12 col">
+                        <div className="name-placeholder fw-bold  text-left">{signatureName}</div>
+                    </div>
+
+                    {/* <!-- Row 3 --> */}
+                    <div className="col-12 col">
+                        <p className="hash-placeholder text-left">
+                        {signatureHash}</p>
+                    </div>
+                </div>
             </div>
+            
+
             : <></>
         }
 
