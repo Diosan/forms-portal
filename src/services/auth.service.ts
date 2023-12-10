@@ -120,6 +120,11 @@ const logout = (): void => {
   localStorage.removeItem('userToken');
 };
 
+const getHome = (): void => {
+  
+
+};
+
 const resendOTP = (email:string): any => {
   return axios.post(API_URL + '/api/authenticate/resend-otp', { email}, {withCredentials:true})
     .then((response) => {
@@ -169,6 +174,7 @@ const authService = {
   register,
   login,
   logout,
+  getHome,
   verifyOtp,
   registrationVerify,
   resendOTP,

@@ -41,6 +41,15 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
         }
         else {
             console.log("Cannot navigate to submissions page")
+            // dispatch(logout() as any)
+            // .unwrap()
+            // .then((response:any) => {
+            //     console.log(response)
+            //     navigate("/"); 
+            // })
+            // .catch((error: any) => {
+            //     console.log(error)
+            // });
         }
     }, [isLoggedIn, isVerified, token, otpRequired]);
 
@@ -255,6 +264,24 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
     const handleResendOTP = () => {
         dispatch(resendOTP({ email }) as any)
     }
+
+
+
+    const handleLogout = (event: any) => {
+        event.preventDefault()
+        dispatch(logout() as any)
+            .unwrap()
+            .then(() => {
+                console.log("Logging out...")
+                navigate("/"); // This will redirect to the home page
+            })
+            .catch((error: any) => {
+                // Handle the error
+                console.log(error)
+            });
+    }
+
+
 
     return (
 

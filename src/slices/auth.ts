@@ -145,7 +145,18 @@ export const logout = createAsyncThunk(
     localStorage.removeItem("id_token"); // Clear the token (DION own)
     // Clear local storage or any other side effects
     await AuthService.logout();
+    return { user: null, otpRequired: false, token: null };
     // Return any data if needed, or just resolve the promise
+  }
+);
+
+
+export const getHome = createAsyncThunk(
+  "auth/getHome",
+  async (_, thunkAPI) => {
+    //check if OtpRequired is true and set it to false
+
+    await AuthService.getHome();
   }
 );
 
@@ -273,15 +284,28 @@ const authSlice = createSlice({
         state.isLoggedIn = false;
         state.isVerified = false;
         state.user = null;
+        state.otpRequired = false;
       })
+      .addCase(logout.rejected, (state) => {
+        state.isLoggedIn = false;
+        state.isVerified = false;
+        state.user = null;
+        state.otpRequired = false;
+      })
+      .addCase(getHome.fulfilled, (state) => {
+        state.otpRequired = false;
+      })
+      .addCase(getHome.rejected, (state) => {
+        state.otpRequired = false;
+      })
+      //OTP
       .addCase(resendOTP.fulfilled, (state) => {
         state.isLoggedIn = false;
         state.isVerified = false;
         state.user = null;
         state.otpRequired = true;
-      })
-      //VERIFY OTP
-      .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ verified: boolean; token: string } | undefined>) => {
+        })
+        .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<{ verified: boolean; token: string } | undefined>) => {
         if (action.payload) {
           console.log("payload received")
           state.isVerified = true;

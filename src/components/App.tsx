@@ -3,7 +3,8 @@ import reactLogo from './assets/react.svg'
 import { Routes, Route } from 'react-router-dom';
 import '../assets/App.css'
 // import { JudiciaryForm } from './JudiciaryForm'
-import { Welcome } from './Welcome'
+import { RegisterSignin } from './RegisterSignin'
+import { Welcome } from './Home'
 import { Submission } from './Submission'
 import { PasswordReset } from './ResetPassword'
 import Transcend  from './Transcend'
@@ -12,7 +13,7 @@ import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
 import { LeftColumn } from "./LeftColumn"
-
+import PrivateRoute from './PrivateRoute'; // Import the PrivateRoute component
 import { Header } from './Header'
 import { Footer } from './Footer'
 import Container from 'react-bootstrap/Container'
@@ -31,17 +32,18 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Welcome />} />
-        <Route path="/submission" element={<Submission new_submission={true} />} />
-        <Route path= "/submission" element={ <Submission new_submission={ true }/>} />
-        <Route path= "/password/new" element={ <PasswordReset/>} />
-        <Route path= "/password/reset/:token" element={ <PasswordReset/>} />
-        <Route path= "/submission/:id" element={ <Submission new_submission={false }/>} />
-        <Route  path= "/submissions" element={ <Submissions />} />
-        <Route path= "/transcend" element={ <Transcend /> } />
-        <Route path= "/simple_ref" element={ <SimpleRef /> } />
-        <Route path= "/sign/:id" element={ <Sign /> } />
-        <Route path= "/indictable" element={ <Indictable new_submission={ true } />} />
-        <Route path= "/indictable/:id" element={ <Indictable new_submission={ false } />} />
+        <Route path="/login" element={<RegisterSignin />} />
+        <Route path="/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
+        <Route path= "/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
+        <Route path= "/password/new" element={ <PrivateRoute><PasswordReset/></PrivateRoute>} />
+        <Route path= "/password/reset/:token" element={ <PrivateRoute><PasswordReset/></PrivateRoute>} />
+        <Route path= "/submission/:id" element={ <PrivateRoute><Submission new_submission={false }/></PrivateRoute>} />
+        <Route  path= "/submissions" element={ <PrivateRoute><Submissions /></PrivateRoute>} />
+        <Route path= "/transcend" element={ <PrivateRoute><Transcend /></PrivateRoute> } />
+        <Route path= "/simple_ref" element={ <PrivateRoute><SimpleRef /></PrivateRoute> } />
+        <Route path= "/sign/:id" element={ <PrivateRoute><Sign /></PrivateRoute> } />
+        <Route path= "/indictable" element={ <PrivateRoute><Indictable new_submission={ true } /></PrivateRoute>} />
+        <Route path= "/indictable/:id" element={ <PrivateRoute><Indictable new_submission={ false } /></PrivateRoute>} />
       </Routes>
     <Footer />
     </>
