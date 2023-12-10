@@ -37,7 +37,14 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
     const sendOTP = async () => {
         // console.log('\n\n\n complainant_email: ', complainant_email)
-        let otp_send = await axios.post(API_URL + '/api/submissions/send_otp', {email: complainant_email})
+        let otp_send = await axios.post(
+            API_URL + '/api/submissions/send_otp', 
+            {
+                submission_id: submission_id,
+                email: complainant_email,
+                name: complainant_name
+            }
+        )
         console.log('otp_send: ', otp_send.data)
         if(otp_send.data.outcome == 'success') {
           setOtpSent(true)  
@@ -55,6 +62,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         let verified = await axios.post(
             API_URL + '/api/submissions/verify_otp',
             {
+                submission_id: submission_id,
                 email: complainant_email,
                 otp: signOTP 
             } 
