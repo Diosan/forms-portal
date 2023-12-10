@@ -25,12 +25,17 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
     const navigate = useNavigate()
 
     const [otpSent, setOtpSent] = useState(false)
+    const [verifyOtpSent, setVerifyOtpSent] = useState(false)
     const [signOTP, setSignOTP] = useState('')
     const [signed, setSigned] = useState(false)
     const [verified, setVerified] = useState(false)
+    const [verifierEmail, setVerifierEmail] = useState('')
     const [signatureHash, setSignatureHash] = useState('')
     const [signatureName, setSignatureName] = useState('')
     const [signatureDate, setSignatureDate] = useState('')
+    const [verificationHash, setVerificationHash] = useState('')
+    const [verificationName, setVerificationName] = useState('')
+    const [verificationDate, setVerificationDate] = useState('')
 
 
     const signOTPChange = (event: any) => {
@@ -65,7 +70,8 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         )
         console.log('otp_send: ', otp_send.data)
         if(otp_send.data.outcome == 'success') {
-          setOtpSent(true)  
+          setVerifyOtpSent(true)
+          setVerifierEmail(otp_send.data.email)  
         }
     }
 
@@ -122,6 +128,65 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             )
 
             setSigned(true)
+
+        } else {
+            alert('Verification failed. Try again');
+        }
+        
+    }
+
+    const verify = async (event: any) => {
+        
+        event.preventDefault()
+
+        console.log('\n\n\n signOTP: ', signOTP)
+        console.log('\n\n\n')
+
+        let verified = await axios.post(
+            API_URL + '/api/submissions/verify_otp',
+            {
+                submission_id: submission_id,
+                email: verifierEmail,
+                otp: signOTP 
+            } 
+        )
+
+        console.log('\n\n\n verification response: ', verified.data)
+
+        if(verified.data.outcome == 'success') {
+
+            let returned_signature = await axios.post(
+                API_URL + '/api/submissions/verifier_sign', 
+                {
+                    submission_id: submission_id,
+                    email: complainant_email
+                }
+            )
+
+            console.log('\n\n\n returned_signature: ', returned_signature.data);
+
+            setVerificationHash(returned_signature.data.signature.hash)
+            setVerificationName(returned_signature.data.user.firstName + ' ' + returned_signature.data.user.lastName)
+            setVerificationDate(returned_signature.data.signature.createdAt)
+            
+
+            // console.log('\n\n\n Signature hash: ', returned_signature.data.submission.hash)
+            // console.log('\n\n\n')
+
+            let signed_submission = await axios.post(
+                API_URL + '/api/submissions/update', 
+                {
+                    id: submission_id,
+                    status: 'verified'
+                }
+            )
+
+            // let signRequest = await axios.post(
+            //     API_URL + '/api/submissions/sign_request',
+            //     {submission_id: submission_id}
+            // )
+
+            setVerified(true)
 
         } else {
             alert('Verification failed. Try again');
@@ -225,30 +290,45 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                             </div>
                         </div>
                         <div className="col-12 col">
-                            <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
-                            <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
+                            <div className="text-placeholder text-right">{verificationDate.substring(11, 20)}</div>
+                            <div className="text-placeholder text-right">{verificationDate.substring(0, 10)}</div>
                             {/* <div className="text-placeholder text-right">[ip address]</div> */}
                         </div>
 
                         {/* <!-- Row 2 --> */}
                         <div className="col-12 col">
-                            <div className="name-placeholder fw-bold  text-left">{signatureName}</div>
+                            <div className="name-placeholder fw-bold  text-left">{verificationName}</div>
                         </div>
 
                         {/* <!-- Row 3 --> */}
                         <div className="col-12 col">
                             <p className="hash-placeholder text-left">
-                            {signatureHash}</p>
+                            {verificationHash}</p>
                         </div>
                     </div>
                                 
                     : 
                     <>
-                        
-                        <div className="d-grid gap-2 verify">
-                        <br></br>
-                            <button className="btn btn-dark" type="submit" onClick={sendVerifyOTP}>Verify Submission</button>
-                        </div>
+                        {verifyOtpSent ?
+                            <form onSubmit={verify} className="verify">
+                                <br/><br/>
+                                <div className="card py-5 px-3 otp-card fade show">
+                                    <h5 className="m-0">Sign Submission</h5>
+                                    <br/>
+                                    <span className="mobile-text">Enter the code sent to email </span>
+                                    <div className="d-flex flex-row mt-5 otp-row">
+                                        <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
+                                        <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
+                                    </div>
+                                    <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
+                                </div>
+                            </form>
+                            :
+                            <div className="d-grid gap-2 verify">
+                            <br></br>
+                                <button className="btn btn-dark" type="submit" onClick={sendVerifyOTP}>Verify Submission</button>
+                            </div>
+                        }
                     </>
                 }
 
@@ -262,38 +342,6 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             : <></>
         }
 
-
-        { verified || already_verified?
-
-            <div className="signature-container">
-                <div className="row signature-format">
-                    {/* <!-- Row 1 --> */}
-                    <div className="col-6 col">
-                        <div className="logo-placeholder d-flex swf-sign">
-                            <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
-                        </div>
-                    </div>
-                    <div className="col-6 col">
-                        <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
-                        <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
-                        {/* <div className="text-placeholder text-right">[ip address]</div> */}
-                    </div>
-
-                    {/* <!-- Row 2 --> */}
-                    <div className="col-12 col">
-                        <div className="name-placeholder fw-bold  text-left">{signatureName}</div>
-                    </div>
-
-                    {/* <!-- Row 3 --> */}
-                    <div className="col-12 col">
-                        <p className="hash-placeholder text-left">
-                        {signatureHash}</p>
-                    </div>
-                </div>
-            </div>            
-
-        : <></>
-        }
 
     </>)
 
