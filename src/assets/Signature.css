@@ -63,3 +63,7 @@
     width: 90%;
     word-wrap: break-word;
   }
+
+  .verify {
+    clear: both;
+  }
