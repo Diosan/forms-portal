@@ -255,7 +255,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                             <h4 className="my-2 mb-4">Signed Submissions</h4>
                                             {groupedSubmissions['signed'].map((submission:any) => (
                                                 <a
-                                                    href={'/sign/' + submission.id}
+                                                    href={'/verify/' + submission.id}
                                                     key={submission.id}
                                                 >
                                                     <div className="card submission-card" style={{ padding: '1px' }}>

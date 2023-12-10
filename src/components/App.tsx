@@ -12,6 +12,7 @@ import { Summons } from './Summons';
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
+import { Verify } from './Verify';
 import { LeftColumn } from "./LeftColumn"
 
 import { Header } from './Header'
@@ -43,6 +44,7 @@ function App() {
         <Route path= "/transcend" element={ <Transcend /> } />
         <Route path= "/simple_ref" element={ <SimpleRef /> } />
         <Route path= "/sign/:id" element={ <Sign /> } />
+        <Route path= "/verify/:id" element={ <Verify /> } />
         <Route path= "/indictable" element={ <Indictable new_submission={ true } />} />
         <Route path= "/indictable/:id" element={ <Indictable new_submission={ false } />} />
 
