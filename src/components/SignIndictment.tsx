@@ -53,6 +53,22 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         }
     }
 
+    const sendVerifyOTP = async () => {
+        // console.log('\n\n\n complainant_email: ', complainant_email)
+        let otp_send = await axios.post(
+            API_URL + '/api/submissions/send_verify_otp', 
+            {
+                submission_id: submission_id,
+                email: complainant_email,
+                name: complainant_name
+            }
+        )
+        console.log('otp_send: ', otp_send.data)
+        if(otp_send.data.outcome == 'success') {
+          setOtpSent(true)  
+        }
+    }
+
         
     const sign = async (event: any) => {
         
@@ -170,16 +186,17 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         }
 
         { signed || already_signed?
-
-            <div className="signature-container">
-                <div className="row signature-format">
+            <div>
+                
+               
+                <div className="signature-format-complainant">
                     {/* <!-- Row 1 --> */}
-                    <div className="col-6 col">
+                    <div className="col-12 col">
                         <div className="logo-placeholder d-flex swf-sign">
                             <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
                         </div>
                     </div>
-                    <div className="col-6 col">
+                    <div className="col-12 col">
                         <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
                         <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
                         {/* <div className="text-placeholder text-right">[ip address]</div> */}
@@ -196,7 +213,50 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                         {signatureHash}</p>
                     </div>
                 </div>
-            </div>            
+                
+
+                { !verified && !already_verified?
+                                
+                    <div className="signature-format-verifier">
+                        {/* <!-- Row 1 --> */}
+                        <div className="col-12 col">
+                            <div className="logo-placeholder d-flex swf-sign">
+                                <span className="swf-e-signed">Verified on </span> <span className="swf-swif">SWiF</span>
+                            </div>
+                        </div>
+                        <div className="col-12 col">
+                            <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
+                            <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
+                            {/* <div className="text-placeholder text-right">[ip address]</div> */}
+                        </div>
+
+                        {/* <!-- Row 2 --> */}
+                        <div className="col-12 col">
+                            <div className="name-placeholder fw-bold  text-left">{signatureName}</div>
+                        </div>
+
+                        {/* <!-- Row 3 --> */}
+                        <div className="col-12 col">
+                            <p className="hash-placeholder text-left">
+                            {signatureHash}</p>
+                        </div>
+                    </div>
+                                
+                    : 
+                    <>
+                        <br/><br/>
+                        <div className="d-grid gap-2">
+                            <button className="btn btn-dark" type="submit" onClick={sendVerifyOTP}>Verify Submission</button>
+                        </div>
+                    </>
+                }
+
+
+
+
+            </div>   
+            
+            
 
             : <></>
         }
