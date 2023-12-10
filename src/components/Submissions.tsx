@@ -97,6 +97,26 @@ export const Submissions = ({ }: SubmissionsProps) => {
     }, []);
 
 
+    // const submissionComponent = (submission: any) => {
+
+    //     let path = ''
+
+    //     switch(submission.type) { 
+    //         case 'indictable': { 
+    //            //statements; 
+    //            break; 
+    //         } 
+    //         case '': { 
+    //            //statements; 
+    //            break; 
+    //         } 
+    //         default: { 
+    //            //statements; 
+    //            break; 
+    //         } 
+    //      }       
+
+    // }
 
 
     const handleLogout = (event: any) => {
@@ -215,7 +235,8 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                             <h4 className="my-2 mb-4">Charge Saved Submissions</h4>
                                             {groupedSubmissions['charge_saved'].map((submission:any) => (
                                                 <a
-                                                    href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
+                                                    // href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
+                                                    href={'/sign/' + submission.id}
                                                     key={submission.id}
                                                 >
                                                     <div className="card submission-card" style={{ padding: '1px' }}>

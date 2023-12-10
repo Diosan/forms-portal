@@ -11,13 +11,14 @@ type SignIndictmentProps = {
     submission_id: number,
     complainant_email: string,
     complainant_name: string,
-    already_signed: boolean
+    already_signed: boolean,
+    already_verified: boolean
 }
 
 const log = (type: any) => console.log.bind(console, type)
 
 
-export const SignIndictment = ({submission_id, complainant_email, complainant_name, already_signed}:SignIndictmentProps) => {
+export const SignIndictment = ({submission_id, complainant_email, complainant_name, already_signed, already_verified}:SignIndictmentProps) => {
 
     
 
@@ -26,6 +27,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
     const [otpSent, setOtpSent] = useState(false)
     const [signOTP, setSignOTP] = useState('')
     const [signed, setSigned] = useState(false)
+    const [verified, setVerified] = useState(false)
     const [signatureHash, setSignatureHash] = useState('')
     const [signatureName, setSignatureName] = useState('')
     const [signatureDate, setSignatureDate] = useState('')
@@ -97,6 +99,12 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                     status: 'signed'
                 }
             )
+
+            let signRequest = await axios.post(
+                API_URL + '/api/submissions/sign_request',
+                {submission_id: submission_id}
+            )
+
             setSigned(true)
 
         } else {
@@ -163,10 +171,38 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
         { signed || already_signed?
 
-            // <div className="signature-frame">
-            //     <strong>Signed by: {complainant_email}</strong>
-            //     <br/><br /><p>{signature}</p>
-            // </div>
+            <div className="signature-container">
+                <div className="row signature-format">
+                    {/* <!-- Row 1 --> */}
+                    <div className="col-6 col">
+                        <div className="logo-placeholder d-flex swf-sign">
+                            <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
+                        </div>
+                    </div>
+                    <div className="col-6 col">
+                        <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
+                        <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
+                        {/* <div className="text-placeholder text-right">[ip address]</div> */}
+                    </div>
+
+                    {/* <!-- Row 2 --> */}
+                    <div className="col-12 col">
+                        <div className="name-placeholder fw-bold  text-left">{signatureName}</div>
+                    </div>
+
+                    {/* <!-- Row 3 --> */}
+                    <div className="col-12 col">
+                        <p className="hash-placeholder text-left">
+                        {signatureHash}</p>
+                    </div>
+                </div>
+            </div>            
+
+            : <></>
+        }
+
+
+        { verified || already_verified?
 
             <div className="signature-container">
                 <div className="row signature-format">
@@ -193,10 +229,9 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                         {signatureHash}</p>
                     </div>
                 </div>
-            </div>
-            
+            </div>            
 
-            : <></>
+        : <></>
         }
 
     </>)

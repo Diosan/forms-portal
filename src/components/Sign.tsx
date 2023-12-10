@@ -109,10 +109,14 @@ export const Sign = ({ }: SignProps) => {
 
         if (auth.loggedIn()) {
 
+            console.log('\n\n\n You are logged in \n\n\n')
             fetchSubmission()
+            
 
         } else {
-            // navigate("/")
+
+            console.log('\n\n\n You are NOT logged in \n\n\n')
+            navigate("/")
         }
 
     }, [])
@@ -222,14 +226,15 @@ export const Sign = ({ }: SignProps) => {
                         <div className="text-left complainant-details">
                             <p>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
                             </p>
-                            <p><strong>{' ' + currentDate()}</strong></p>
+                            {/* <p><strong>{' ' + currentDate()}</strong></p> */}
                             <br /><br /><br />
 
                             <SignIndictment 
                                 submission_id={parseInt('' + id)}
                                 complainant_email={complainantEmail} 
                                 complainant_name={complainantName} 
-                                already_signed={status == 'signed'} 
+                                already_signed={status == 'signed'}
+                                already_verified={status == 'verified'} 
                             />
 
                         </div>
