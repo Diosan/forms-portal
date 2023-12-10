@@ -215,7 +215,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                 </div>
                 
 
-                { !verified && !already_verified?
+                { verified || already_verified?
                                 
                     <div className="signature-format-verifier">
                         {/* <!-- Row 1 --> */}
