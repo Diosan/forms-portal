@@ -9,6 +9,7 @@ import { Submission } from './Submission'
 import { PasswordReset } from './ResetPassword'
 import Transcend  from './Transcend'
 import { Submissions } from './Submissions'
+import { Summons } from './Summons';
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
@@ -21,6 +22,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 // import { store } from '../store/store'
 import { Provider } from 'react-redux'
 
+import { NotPolice } from './NotPolice';
+
 
 
 function App() {
@@ -31,9 +34,8 @@ function App() {
     <LeftColumn />
 
       <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/login" element={<RegisterSignin />} />
-        <Route path="/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
+        <Route path= "/" element={<Welcome />} />
+        <Route path= "/login" element={<RegisterSignin />} />
         <Route path= "/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
         <Route path= "/password/new" element={ <PrivateRoute><PasswordReset/></PrivateRoute>} />
         <Route path= "/password/reset/:token" element={ <PrivateRoute><PasswordReset/></PrivateRoute>} />
@@ -44,6 +46,12 @@ function App() {
         <Route path= "/sign/:id" element={ <PrivateRoute><Sign /></PrivateRoute> } />
         <Route path= "/indictable" element={ <PrivateRoute><Indictable new_submission={ true } /></PrivateRoute>} />
         <Route path= "/indictable/:id" element={ <PrivateRoute><Indictable new_submission={ false } /></PrivateRoute>} />
+    
+        <Route path= "/not_police" element={ <PrivateRoute><NotPolice new_submission={ true }/></PrivateRoute>} />
+        <Route path= "/not_police/:id" element={ <PrivateRoute><NotPolice new_submission={false }/></PrivateRoute>} />
+        <Route path= "/summons" element={ <PrivateRoute><Summons new_submission={ true }/></PrivateRoute>} />
+        <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
+        
       </Routes>
     <Footer />
     </>

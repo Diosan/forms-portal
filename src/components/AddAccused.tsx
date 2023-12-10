@@ -50,7 +50,8 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
       otherResident: form.formData.otherResident,
       otherNationalCountry: '',
       otherResidentCountry: '',
-      identification: '',
+      identification: form.formData.identification,
+      identificationType: form.formData.identificationType,
       previousCriminalRecord: form.formData.previousCriminalRecord,
       relatedMatters: form.formData.relatedMatters
     }
