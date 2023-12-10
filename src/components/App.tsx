@@ -13,6 +13,7 @@ import { Summons } from './Summons';
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
+import { Verify } from './Verify';
 import { LeftColumn } from "./LeftColumn"
 import PrivateRoute from './PrivateRoute'; // Import the PrivateRoute component
 import { Header } from './Header'
@@ -46,7 +47,7 @@ function App() {
         <Route path= "/sign/:id" element={ <PrivateRoute><Sign /></PrivateRoute> } />
         <Route path= "/indictable" element={ <PrivateRoute><Indictable new_submission={ true } /></PrivateRoute>} />
         <Route path= "/indictable/:id" element={ <PrivateRoute><Indictable new_submission={ false } /></PrivateRoute>} />
-    
+        <Route path= "/verify/:id" element={ <PrivateRoute><Verify /></PrivateRoute> } />
         <Route path= "/not_police" element={ <PrivateRoute><NotPolice new_submission={ true }/></PrivateRoute>} />
         <Route path= "/not_police/:id" element={ <PrivateRoute><NotPolice new_submission={false }/></PrivateRoute>} />
         <Route path= "/summons" element={ <PrivateRoute><Summons new_submission={ true }/></PrivateRoute>} />
