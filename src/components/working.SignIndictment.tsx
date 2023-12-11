@@ -6,16 +6,11 @@ import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import '../assets/Submission.css'
 import '../assets/Signature.css'
-import { useAppDispatch } from "../store/store"
-import { resendSigningOTP } from "../slices/auth";
-
-
 
 type SignIndictmentProps = {
     submission_id: number,
     complainant_email: string,
     complainant_name: string,
-    complainant_regnum: string,
     already_signed: boolean,
     already_verified: boolean
 }
@@ -23,7 +18,7 @@ type SignIndictmentProps = {
 const log = (type: any) => console.log.bind(console, type)
 
 
-export const SignIndictment = ({submission_id, complainant_email, complainant_name, complainant_regnum, already_signed, already_verified}:SignIndictmentProps) => {
+export const SignIndictment = ({submission_id, complainant_email, complainant_name, already_signed, already_verified}:SignIndictmentProps) => {
 
     
 
@@ -37,7 +32,6 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
     const [signatureName, setSignatureName] = useState('')
     const [signatureDate, setSignatureDate] = useState('')
 
-    const dispatch = useAppDispatch();
 
     const signOTPChange = (event: any) => {
         setSignOTP(event.target.value)
@@ -152,16 +146,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         })();        
     }, [])
 
-
-
-    const handleResendSigningOTP = (event:any, email:string) => {
-        dispatch(resendSigningOTP({ email }) as any)
-    }
-
     return (<>
-
-
-
         {!otpSent && !signed && !already_signed ? 
                 <div className="d-grid gap-2">
                     <button className="btn btn-dark" type="submit" onClick={sendOTP}>Sign Submission</button>
@@ -169,51 +154,18 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             : <></>
         }       
         {otpSent && !signed  && !already_signed ?
-            <>
             <form onSubmit={sign}>
-                <div className="card py-5 px-5 otp-card fade show" style={{backgroundColor:"#f9f9f9"}}>
-                    <h4 className="m-0">Sign Submission</h4>
+                <div className="card py-5 px-3 otp-card fade show">
+                    <h5 className="m-0">Sign Submission</h5>
                     <br/>
-                    <p>I <strong>{complainant_name}</strong> Police Constable No. <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge.</p>
-
-                    <h6 className="mobile-text mt-3">Enter the Confirmation Code sent to your email. </h6>
-                    <div className="mt-1">
-
-                                    <div className="">
-                                        <input
-                                            type="text"
-                                            name="otpCode"
-                                            placeholder="******"
-                                            style={{ fontSize: "16px", letterSpacing: '7px', textAlign: 'center', maxWidth:"200px" }}
-                                            className="px-2 py-1 fs-3 mt-1 mb-2 stretched-text-input form-control otp-input"
-                                            maxLength={6}
-                                            value={signOTP}
-                                            onChange={signOTPChange}
-                                            minLength={6}
-                                            pattern="\d{6}"
-                                        />
-
-                                        <div className="text-center"><button type="submit" className="btn btn-md btn-primary float-start" >Sign Now</button></div>
-
-
-                                    </div>
-
-                        {/* <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
-                        <button type="submit" className="btn btn-secondary otp-button" >Verify</button> */}
-
-
+                    <span className="mobile-text">Enter the code sent to email </span>
+                    <div className="d-flex flex-row mt-5 otp-row">
+                        <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
+                        <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
                     </div>
-                    
+                    <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
                 </div>
             </form>
-            <div className="text-left mt-3">
-                <span className="d-block mobile-text">Didn't receive the confirmation code?</span>
-                {/* <div className="font-weight-bold text-danger cursor">Resend</div> */}
-                <div className="font-weight-bold p-0 mt-0 text-center cursor">
-                    <button onClick={(e) => handleResendSigningOTP(e, complainant_email)} className="btn btn-sm p-0 btn-link float-start">Resend</button>
-                </div>
-            </div>
-            </>
             : <></>
         }
 

@@ -24,15 +24,15 @@ export const Offences = ({first_name, last_name, accused_id}: OffencesProps) => 
 
     return (
         <>
-            { offences.map((accused: any, i: number) => (
-                <tr key={accused.id} >
-                    <td style={{width:"120px"}}>{first_name}</td>
-                    <td style={{width:"120px"}}>{last_name}</td>
-                    <td style={{width:"100px"}}>{accused.ICCS}</td>
-                    <td style={{width:"100px"}}>{accused.dateOfOffence}</td>
-                    <td style={{width:"260px"}}>{accused.particulars}</td>
-                </tr>
-            ))}
+        { offences.map((accused: any, i: number) => (
+                <div className="d-flex swf-tbl" key={accused.id} >
+                    <div className="flex-row first" style={{width:"132px"}}>{first_name}</div>
+                    <div className="flex-row" style={{width:"129px"}}>{last_name}</div>
+                    <div className="flex-row text-center" style={{width:"120px"}} >{accused.ICCS}</div>
+                    <div className="flex-row" style={{width:"120px"}} >{accused.dateOfOffence}</div>
+                    <div className="flex-row last" style={{width:"300px"}}>{accused.particulars}</div>
+                </div>
+        ))}
         </>
         
 

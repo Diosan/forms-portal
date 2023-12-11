@@ -131,7 +131,7 @@ export const Sign = ({ }: SignProps) => {
     const printPDF = async (event:any, submissionId:number) => {
         event.preventDefault();
         try {
-          const message = await exportPDF('container-pdf', `${import.meta.env.VITE_API_URL}/api/pdf/puppeteer`, submissionId);
+          const message = await exportPDF('container-pdf', `${import.meta.env.VITE_API_URL}/api/pdf/incoming`, submissionId);
           alert(`Submission successful! ${message}`);
         } catch (error) {
             console.log(error)
@@ -165,47 +165,23 @@ export const Sign = ({ }: SignProps) => {
 
                 <div className="card fade show container-pdf">
                     <div className="card-body"  id="container-pdf" style={{fontSize:"10pt"}}>
-                        <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"11pt", lineHeight:"12pt"}}>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt"}}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"13pt"}}>COMPLAINT ON OATH</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>IN THE HIGH COURT OF JUSTICE</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>CRIMINAL DIVISION (DISTRICT)</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt", marginTop:"20px", marginBottom:"20px"}}>Matter Type: </div>
-                        </div>
-
-                        <table width={"700px"} style={{width:"230px", marginBottom:"30px", }}>
-                            <tr>
-                                <td><h5 className="card-title"  
-                                    style={{fontSize:"10pt", width:"230px", marginBottom:"30px", textAlign:"left", fontWeight:"bold"}}>Complainant: The State</h5></td>
-                                <td colSpan={1} style={{fontSize:"10pt", marginBottom:"30px", textAlign:"left"}}>
-                                    <div><strong>V</strong></div>
-                                    <div>Accuseds</div>
-                                </td>
-                            </tr>
-                        </table>
-
+                        <h5 className="card-title text-center">Complainant: The State</h5><br /> <br />
 
                         <div className="text-left complainant-details">
                             {accuseds.map((accused: any, i: number) => (
-                                <table width={"700px"} className="accused-table" key={accused.id}  
-                                style={{borderBottom:"1px solid #999", marginBottom:"10px"}}>
+                                <table className="accused-table" key={accused.id}>
                                     <tbody>
-
                                         <tr>
-                                            <td  colSpan={4}><label  style={{borderBottom:"2px solid #000"}}>Accused {i + 1}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <td style={{width:"200px"}}><label>Name of Accused: </label></td>
-                                            <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>-{accused.adulthood}</strong></td>
+                                            <td style={{width:"230px"}}><label>Name of Accused: </label></td>
+                                            <td>{i + 1} {accused.firstName} {accused.lastName} <strong>-{accused.adulthood}</strong></td>
                                         </tr>
                                         <tr>
                                             <td><label>ID: </label></td>
                                             <td>{accused.identification}</td>
-                                            <td><label>Gender Identity: </label></td>
-                                            <td>{accused.gender}</td>
                                         </tr>
                                         <tr>
-                                           
+                                            <td><label>Gender Identity: </label></td>
+                                            <td>{accused.gender}</td>
                                         </tr>
                                         <tr>
                                             <td><label>Date Of Birth: </label></td>
@@ -213,9 +189,10 @@ export const Sign = ({ }: SignProps) => {
                                         </tr>
                                         <tr>
                                             <td><label>Address: </label></td>
-                                            <td colSpan={3}>{accused.address}</td>
+                                            <td>{accused.address}</td>
                                         </tr>
-                                
+                                        <tr><td><br /></td></tr>
+                                        <tr><td></td></tr>
                                         <tr>
                                             <td style={{width:"300px"}}><label>National of Trinidad and Tobago: </label></td>
                                             <td style={{width:"100px"}}>{accused.tntNational ? 'Yes' : 'No'}</td>
@@ -238,16 +215,16 @@ export const Sign = ({ }: SignProps) => {
 
                         </div>
 
-                        <h5 className="card-title"  style={{fontSize:"13pt", fontWeight:"bold", marginTop:"20px", textAlign:"center"}}>Offences</h5><br />
-                        <div className="text-left complainant-details" style={{}}>
-                            <table className="offence-table" width={"700px"}>
+                        <h5 className="card-title">Offences</h5><br />
+                        <div className="text-left complainant-details" style={{maxWidth:"750px"}}>
+                            <table className="offence-table" style={{width:"100%"}}>
                                 <thead>
                                     <tr>
-                                        <th style={{width:"120px"}}>Accused<br/>First Name</th>
-                                        <th style={{width:"120px"}}>Accused<br/>Last Name</th>
-                                        <th style={{width:"100px"}}>ICCS<br/>Code</th>
-                                        <th style={{width:"100px"}}>Date of<br/>Offence</th>
-                                        <th style={{width:"260px"}}>Particulars of Offence</th>
+                                        <th style={{width:"16%"}}>Accused<br/>First Name</th>
+                                        <th style={{width:"16%"}}>Accused<br/>Last Name</th>
+                                        <th style={{width:"15%"}}>ICCS<br/>Code</th>
+                                        <th style={{width:"15%"}}>Date of<br/>Offence</th>
+                                        <th style={{width:"35%"}}>Particulars of Offence</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -275,7 +252,7 @@ export const Sign = ({ }: SignProps) => {
                         </div>
 
                         <br /><br />
-                        <div className="text-left complainant-details" style={{maxWidth:"720px"}}>
+                        <div className="text-left complainant-details">
                             <p>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
                             </p>
                             {/* <p><strong>{' ' + currentDate()}</strong></p> */}

@@ -147,6 +147,23 @@ const resendOTP = (email:string): any => {
 };
 
 
+const resendSigningOtp = (email:string): any => {
+  return axios.post(API_URL + '/api/authenticate/resend-signing-otp', { email}, {withCredentials:true})
+    .then((response) => {
+      if (response.data.outcome === 'success') {
+
+        // return response.data;
+
+      } else {
+        throw new Error(response.data.error || 'OTP Sending failed');
+      }
+  }, (error) => {
+      console.log('OTP error: ', error.response);
+      throw error; 
+  });
+};
+
+
 
 const resetPassword = (password:string, token:string): any => {
   console.log("Resetting password")
@@ -178,6 +195,7 @@ const authService = {
   verifyOtp,
   registrationVerify,
   resendOTP,
+  resendSigningOtp,
   resetPassword
 };
 

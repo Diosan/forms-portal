@@ -16,6 +16,7 @@ interface AuthState {
   isLoggedIn: boolean;
   user: User | null;
   otpRequired: boolean;
+  signingOtpRequired:boolean;
   isVerified:boolean;
   token: string;
   otpErrorMessage:any;
@@ -210,6 +211,39 @@ export const resendOTP = createAsyncThunk(
   }
 );
 
+
+export const resendSigningOTP = createAsyncThunk(
+  "auth/resendSigningOtp",
+  async ({ email }: ResendOtpPayload, thunkAPI) => {
+    try {
+      const response =  await AuthService.resendSigningOtp(email);
+      thunkAPI.dispatch(setMessage(response.message));
+      console.log(response)
+
+      if (typeof response.token === 'string') {
+        // Store the JWT token in localStorage
+        localStorage.setItem("userToken", response.token);
+        localStorage.setItem("id_token", response.token);
+
+        // Set the token as the default authorization header
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
+      } else {
+        // Handle the case where the token is not a string
+        console.error("Invalid token received from login response");
+        return thunkAPI.rejectWithValue("Invalid token received");
+      }
+
+      return { user: null, otpRequired: true, token: response.token };
+
+    } catch (error: any) {
+      // Error handling as before
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+
+
 export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
   async ({ password, token }: ResetPasswordPayload, thunkAPI) => {
@@ -244,6 +278,7 @@ const initialState: AuthState = {
   isLoggedIn: false,
   user: null,
   otpRequired: false,
+  signingOtpRequired: false,
   isVerified: false,
   passwordChanged: false,
   otpErrorMessage:"",
@@ -299,6 +334,9 @@ const authSlice = createSlice({
         state.otpRequired = false;
       })
       //OTP
+      .addCase(resendSigningOTP.fulfilled, (state) => {
+        state.signingOtpRequired = true;
+        })
       .addCase(resendOTP.fulfilled, (state) => {
         state.isLoggedIn = false;
         state.isVerified = false;

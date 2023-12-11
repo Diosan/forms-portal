@@ -1,13 +1,47 @@
 .accused-table td {
-    padding-right: 50px;
+    padding-right: 0;
 }
 
 .offence-table th {
-    padding: 10px 25px;
-    border: 1px solid #444;
+    padding: 3px 5px;
 }
 
 .offence-table td {
-    padding: 10px 25px;
-    border: 1px solid #666;
+    padding: 3px 5px;
+    border: 1px solid #555;
+}
+
+.swf-tbl, #pdf-container .flex-header, .pdf-head{
+    gap:10px;
+}
+.swf-tbl{
+}
+.swf-tbl .flex-row, .pdf-head .header-cell{
+    border-right:1px solid #555;
+    margin-bottom:0; padding-bottom:4px;
+}
+
+.swf-tbl .flex-row.last, .pdf-head .header-cell.last{
+    border-right:transparent;
+}
+
+.swf-tbl .flex-row.first, .header-cell.first{
+    border-left:1px solid #555;
+    padding:5px 5px 5px 10px;
+}
+.swf-tbl {
+    border-bottom:1px solid #555;
+    border-right:1px solid #555;
+}
+
+.pdf-head {
+    border-top:1px solid #555;
+    border-bottom:1px solid #555;
+    align-items: center;
+    justify-content: center;
+    border-right:1px solid #555;
+}
+
+.header-cell{
+    border-bottom:transparent
 }

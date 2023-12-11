@@ -65,7 +65,7 @@ export const LeftColumn = (({ }: HeaderProps) => {
                     </a>
                 </div>
 
-                <div className="text-center " style={{}}>
+                <div className="text-left fw-bold " style={{fontSize:".8rem"}}>
                     <ul id="swf-mnu" className=" m-0 navbar-nav ms-auto">
                         {!isLoggedIn ?
                         <>
@@ -81,7 +81,7 @@ export const LeftColumn = (({ }: HeaderProps) => {
                             <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Warrant Or Summons</a></li>                        
                             <li className="nav-item jud-header-item"><a className="nav-link" href="/not_police"> Complaint By Person Other Than Police</a></li> 
                             <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictable</a></li>
-                            <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-center">Logout</button></li>
+                            <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-left">Logout</button></li>
                         </>
                         }
 
