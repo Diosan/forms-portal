@@ -23,6 +23,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Provider } from 'react-redux'
 
 import { NotPolice } from './NotPolice';
+import { Signatures } from './Signatures';
 
 
 
@@ -53,6 +54,8 @@ function App() {
 
         <Route path= "/summons" element={ <Summons new_submission={ true }/>} />
         <Route path= "/summons/:id" element={ <Summons new_submission={false }/>} />
+
+        <Route path= "/view/:id" element={ <View new_submission={ false }  /> } />
         
       </Routes>
     <Footer />

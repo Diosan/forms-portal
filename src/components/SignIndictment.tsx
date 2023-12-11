@@ -313,7 +313,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                             <form onSubmit={verify} className="verify">
                                 <br/><br/>
                                 <div className="card py-5 px-3 otp-card fade show">
-                                    <h5 className="m-0">Sign Submission</h5>
+                                    <h5 className="m-0">Verify Submission</h5>
                                     <br/>
                                     <span className="mobile-text">Enter the code sent to email </span>
                                     <div className="d-flex flex-row mt-5 otp-row">
@@ -325,7 +325,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                             </form>
                             :
                             <div className="d-grid gap-2 verify">
-                            <br></br>
+                                <br></br>
                                 <button className="btn btn-dark" type="submit" onClick={sendVerifyOTP}>Verify Submission</button>
                             </div>
                         }
