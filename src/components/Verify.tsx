@@ -232,6 +232,7 @@ export const Verify = ({ }: VerifyProps) => {
                             <SignIndictment 
                                 submission_id={parseInt('' + id)}
                                 complainant_email={complainantEmail} 
+                                complainant_regnum=""
                                 complainant_name={complainantName} 
                                 already_signed={status == 'signed'}
                                 already_verified={status == 'verified'} 

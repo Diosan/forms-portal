@@ -181,7 +181,8 @@ export const Indictable = ({new_submission}: IndictableProps) => {
               }
 
               { chargeSaved ?
-                  <SignIndictment submission_id={submissionId} complainant_email={complainantEmail} />
+                  <SignIndictment submission_id={submissionId} complainant_email={complainantEmail}  complainant_name="" complainant_regnum="" already_signed={false} already_verified={false}/>
+                  //submission_id, complainant_email, complainant_name="", complainant_regnum="", already_signed=false, already_verified'false
                 : <></>
               }
 
