@@ -34,7 +34,7 @@ type SignProps = {}
 
 const log = (type: any) => console.log.bind(console, type)
 
-export const Sign = ({ }: SignProps) => {
+export const View = ({ }: SignProps) => {
 
     const { id } = useParams()
 
