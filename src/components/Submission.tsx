@@ -402,7 +402,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                       <fieldset>
                         <div className="form-group field field-string">
                           <label className="control-label fs-6">
-                            Edit Submission Title
+                            Enter a Description
                           </label>
 
                           <div className="d-flex mt-2">

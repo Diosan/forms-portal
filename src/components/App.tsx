@@ -24,6 +24,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Provider } from 'react-redux'
 
 import { NotPolice } from './NotPolice';
+import { Signatures } from './Signatures';
+
+import { View } from './View';
 
 
 
@@ -52,6 +55,7 @@ function App() {
         <Route path= "/not_police/:id" element={ <PrivateRoute><NotPolice new_submission={false }/></PrivateRoute>} />
         <Route path= "/summons" element={ <PrivateRoute><Summons new_submission={ true }/></PrivateRoute>} />
         <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
+        <Route path= "/view/:id" element={ <PrivateRoute><View /></PrivateRoute> } />
         
       </Routes>
     <Footer />

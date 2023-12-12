@@ -64,6 +64,15 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [showAddNewCharge, setShowAddNewCharge] = useState(false)
 
+    const [codes, setCodes] = useState<{}[]>([])
+
+    const [UNODC, setUNODC] = useState('')
+
+    const UNODCChange = (event: any) => {
+        // console.log(event.target.value)
+        setUNODC(event.target.value)
+      }
+
     const addNewCharge = async () => {
         setShowAddNewCharge(true)
     }
@@ -80,8 +89,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
     
         let charge = {
           name: form.formData.name,
-          ICCS: 'ABC123', 
-          UNODC: 'XYZ890',
+          ICCS: '', 
+          UNODC: UNODC,
           counts: form.formData.count,
           accusedId: accused_id,
           dateOfOffence: form.formData.dateOfOffence,
@@ -285,6 +294,14 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     },[])
 
+
+    useEffect(() => {
+        (async () => {
+            let returned_codes = await axios.get(API_URL + '/api/submissions/codes/1')
+            setCodes(returned_codes.data.charge_codes)
+        })();
+    }, []);
+
     return (
         <>
             
@@ -431,20 +448,42 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                     }
 
                     {/* <AddCharge accused_id={accused_id} accused_charges={accusedCharges} /> */}
-                    { showAddNewCharge && 
-                        <Form 
-                            schema={chargeSchema}
-                            uiSchema={chargeUI}
-                            // @ts-ignore
-                            validator={validator}
-                            formData={formData}
-                            onSubmit={processForm}
-                            onError={log('errors')}
-                        >
-                            <div className="">
-                                <button className="btn btn-secondary" type="submit">Save Charge</button>
+                    { showAddNewCharge &&
+
+                        <>  
+                            <br/><br/>
+                            <div className="form-group field field-string">                  
+                                    <label className="control-label">Charge Code</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control" 
+                                        list="codelist" 
+                                        value={UNODC} 
+                                        onChange={UNODCChange}/>
+                                    <datalist id="codelist">
+                                        {codes.map((code:any) => (
+                                            <option value={code.UNODC} key={code.id}>
+                                                {code.name}
+                                            </option>
+                                        ))}
+                                    </datalist>
+                                
                             </div>
-                        </Form> 
+
+                            <Form 
+                                schema={chargeSchema}
+                                uiSchema={chargeUI}
+                                // @ts-ignore
+                                validator={validator}
+                                formData={formData}
+                                onSubmit={processForm}
+                                onError={log('errors')}
+                            >
+                                <div className="">
+                                    <button className="btn btn-secondary" type="submit">Save Charge</button>
+                                </div>
+                            </Form>
+                        </> 
                     }           
                 </div>
                 : <></>
