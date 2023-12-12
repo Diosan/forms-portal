@@ -191,8 +191,11 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
                             <div className="row">
                                 <div>
+
+
+
                                     {/* Render "pending" submissions with a different background color */}
-                                    {groupedSubmissions['started'] && (
+                                    {groupedSubmissions['pending'] && (
                                         <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '##dfdfdf' }}>
                                             <h4 className="my-2 mb-4">Pending Submissions</h4>
                                             {groupedSubmissions['pending'].map((submission:any) => (
