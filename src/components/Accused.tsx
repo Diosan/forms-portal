@@ -66,6 +66,13 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [codes, setCodes] = useState<{}[]>([])
 
+    const [UNODC, setUNODC] = useState('')
+
+    const UNODCChange = (event: any) => {
+        // console.log(event.target.value)
+        setUNODC(event.target.value)
+      }
+
     const addNewCharge = async () => {
         setShowAddNewCharge(true)
     }
@@ -82,8 +89,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
     
         let charge = {
           name: form.formData.name,
-          ICCS: 'ABC123', 
-          UNODC: 'XYZ890',
+          ICCS: '', 
+          UNODC: UNODC,
           counts: form.formData.count,
           accusedId: accused_id,
           dateOfOffence: form.formData.dateOfOffence,
@@ -450,8 +457,10 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                     <input 
                                         type="text" 
                                         className="form-control" 
-                                        list="fruitlist" />
-                                    <datalist id="fruitlist">
+                                        list="codelist" 
+                                        value={UNODC} 
+                                        onChange={UNODCChange}/>
+                                    <datalist id="codelist">
                                         {codes.map((code:any) => (
                                             <option value={code.UNODC} key={code.id}>
                                                 {code.name}
