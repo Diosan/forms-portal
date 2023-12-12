@@ -346,7 +346,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
 
                                                     </div>
-                                                    <div className="text-center mt-3"><span className="d-block mobile-text">Haven't received the code?</span></div>
+                                                    <div className="text-center mt-3"><span className="d-block mobile-text">Didn't received the code?</span></div>
                                                 </div>
                                             </form>
                                             <div className="font-weight-bold p-0 mt-0 text-center cursor"><button onClick={handleResendOTP} className="btn btn-sm btn-link" >Resend</button></div>
