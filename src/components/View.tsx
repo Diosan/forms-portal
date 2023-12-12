@@ -194,7 +194,7 @@ export const View = ({ }: SignProps) => {
                                     <tr>
                                         <th>Accused First Name</th>
                                         <th>Accused Last Name</th>
-                                        <th>ICCS Code</th>
+                                        <th>UNODC Code</th>
                                         <th>Date Of Offence</th>
                                         <th>Particulars Of Offence</th>
                                     </tr>

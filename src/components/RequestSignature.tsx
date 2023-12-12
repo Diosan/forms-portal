@@ -38,7 +38,7 @@ export const RequestSignature = ({submission_id, complainant_email}:RequestSigna
             )
 
             if(requestResult.data.outcome == 'success') {
-                navigate('/sign/' + submission_id)
+                navigate('/view/' + submission_id)
             }
 
         }

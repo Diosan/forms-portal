@@ -28,7 +28,7 @@ export const Offences = ({first_name, last_name, accused_id}: OffencesProps) => 
                 <tr key={accused.id} >
                     <td>{first_name}</td>
                     <td>{last_name}</td>
-                    <td>{accused.ICCS}</td>
+                    <td>{accused.UNODC}</td>
                     <td>{accused.dateOfOffence}</td>
                     <td>{accused.particulars}</td>
                 </tr>
