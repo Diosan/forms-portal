@@ -280,15 +280,15 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         }       
         {otpSent && !signed  && !already_signed ?
             <>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                 <label>Commissioned Officer</label><br/>
                 <select className='form-select' value={commissionedEmail} onChange={commisionedChange}>
-                    {/* <option value="" disabled selected>Select verifier</option> */}
+                    
                     {verifiers.map((verifier: any) => (
                         <option key={verifier.id} value={verifier.email}>{verifier.name}</option>
                     ))} 
                 </select>
-                </div>
+                </div> */}
 
                 <form onSubmit={sign}>
                     <div className="card py-5 px-3 otp-card fade show">
