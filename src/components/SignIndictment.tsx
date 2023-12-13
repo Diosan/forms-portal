@@ -297,7 +297,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                         <span className="mobile-text">Enter the code sent to email </span>
                         <div className="d-flex flex-row mt-5 otp-row">
                             <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
-                            <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
+                            <button type="submit" className="btn btn-secondary otp-button" >Sign And Submit</button>
                         </div>
                         <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
                     </div>
