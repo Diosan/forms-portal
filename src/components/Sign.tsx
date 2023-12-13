@@ -58,6 +58,9 @@ export const Sign = ({ }: SignProps) => {
         dateOfOffence: any
         particulars: any
     }[]>([])
+    const [court, setCourt] = useState('')
+    const [district, setDistrict] = useState('')
+    const [submissionType, setSubmissionType] = useState('')
 
     const signSubmission = () => {
         console.log('Signing form ')
@@ -79,7 +82,20 @@ export const Sign = ({ }: SignProps) => {
             setComplainantAgency(submission.data.complainant.agency)
             setComplainantRegNum(submission.data.complainant.regNum)
             setComplainantEmail(submission.data.complainant.email)
+            setCourt(submission.data.complainant.court)
+            setDistrict(submission.data.complainant.courtDistrict)
             setAccuseds(submission.data.accuseds)
+            switch(submission.data.submission.type) {
+                case 'complaint_with_oath':
+                  setSubmissionType('COMPLAINT ON OATH')
+                  break;
+                case 'complaint_without_oath':
+                  setSubmissionType('COMPLAINT WITHOUT OATH')
+                  break;
+                default:
+                    setSubmissionType('COMPLAINT ON OATH')
+            }
+            
         }
 
 
@@ -135,7 +151,14 @@ export const Sign = ({ }: SignProps) => {
 
                 <div className="card fade show">
                     <div className="card-body">
-                        <h5 className="card-title">Complainant: The State</h5><br /> <br />
+                        <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"11pt", lineHeight:"12pt"}}>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt"}}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"13pt"}}>{submissionType}</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>IN THE {court.toUpperCase()} OF JUSTICE</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>CRIMINAL DIVISION {district.toUpperCase()}</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt", marginTop:"20px", marginBottom:"20px"}}>Matter Type: </div>
+                        </div>
+                        {/* <h5 className="card-title">Complainant: The State</h5><br /> <br /> */}
 
                         <div className="text-left complainant-details">
                             {accuseds.map((accused: any, i: number) => (
