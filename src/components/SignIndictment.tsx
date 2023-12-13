@@ -36,9 +36,18 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
     const [verificationHash, setVerificationHash] = useState('')
     const [verificationName, setVerificationName] = useState('')
     const [verificationDate, setVerificationDate] = useState('')
+    const [verifiers, setVerifiers] = useState<{}[]>([])
+    const [commissionedEmail, setCommissionedEmail] = useState('')
+
+    const commisionedChange = (event: any) => {
+        setCommissionedEmail(event.target.value)
+        console.log('\n\n\n Commisioned changed', commissionedEmail)
+        console.log('\n\n\n')
+    }
 
 
     const signOTPChange = (event: any) => {
+        console
         setSignOTP(event.target.value)
     }
 
@@ -122,9 +131,14 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                 }
             )
 
+            console.log('\n\n\n commissionedEmail: ', commissionedEmail)
+
             let signRequest = await axios.post(
                 API_URL + '/api/submissions/sign_request',
-                {submission_id: submission_id}
+                {
+                    submission_id: submission_id,
+                    commisioned_email: commissionedEmail
+                }
             )
 
             setSigned(true)
@@ -222,6 +236,24 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                 console.log('retreived submission is NOT signed')
             }
 
+            let returned_verifiers = await axios.get(API_URL + '/api/submissions/verifiers/1')
+
+            let verifs = returned_verifiers.data.verifiers;
+            await setVerifiers([...verifs, ...verifiers])
+            // verifs.map(async (verif: any) => {
+            //     console.log('\n verif: ', verif)
+            //     setVerifiers([verif, ...verifiers])
+            //     // console.log('\n verifiers: ', verifiers)
+            // })
+
+            // console.log('\n\n\n verifs: ', verifs)
+            // console.log('\n\n\n')
+
+            // await setVerifiers([...verifiers, ...verifs])
+
+            // console.log('\n\n\n verifiers: ', verifiers)
+            // console.log('\n\n\n')
+
             // console.log('\n\n\n retreived signature: ', signature.data)
 
         })();        
@@ -235,18 +267,30 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             : <></>
         }       
         {otpSent && !signed  && !already_signed ?
-            <form onSubmit={sign}>
-                <div className="card py-5 px-3 otp-card fade show">
-                    <h5 className="m-0">Sign Submission</h5>
-                    <br/>
-                    <span className="mobile-text">Enter the code sent to email </span>
-                    <div className="d-flex flex-row mt-5 otp-row">
-                        <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
-                        <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
-                    </div>
-                    <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
+            <>
+                <div className="mb-3">
+                <label>Commissioned Officer</label><br/>
+                <select className='form-select' value={commissionedEmail} onChange={commisionedChange}>
+                    {/* <option value="" disabled selected>Select verifier</option> */}
+                    {verifiers.map((verifier: any) => (
+                        <option key={verifier.id} value={verifier.email}>{verifier.name}</option>
+                    ))} 
+                </select>
                 </div>
-            </form>
+
+                <form onSubmit={sign}>
+                    <div className="card py-5 px-3 otp-card fade show">
+                        <h5 className="m-0">Sign Submission</h5>
+                        <br/>
+                        <span className="mobile-text">Enter the code sent to email </span>
+                        <div className="d-flex flex-row mt-5 otp-row">
+                            <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
+                            <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
+                        </div>
+                        <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
+                    </div>
+                </form>
+            </>
             : <></>
         }
 
