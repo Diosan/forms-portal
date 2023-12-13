@@ -138,7 +138,7 @@ export const Sign = ({ }: SignProps) => {
     }, [])
 
     return (
-        <div className="d-flex">
+        <div className="d-flex container-pdf">
 
             
 

@@ -6,6 +6,7 @@ import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import '../assets/Submission.css'
 import '../assets/Signature.css'
+import { exportPDF } from '../utils/pdfUtils';
 
 type SignIndictmentProps = {
     submission_id: number,
@@ -20,7 +21,16 @@ const log = (type: any) => console.log.bind(console, type)
 
 export const SignIndictment = ({submission_id, complainant_email, complainant_name, already_signed, already_verified}:SignIndictmentProps) => {
 
-    
+    const printPDF = async (submissionId:number) => {
+        
+        try {
+          const message = await exportPDF('container-pdf', 'https://swif.ttlawcourts.org/api/pdf/puppeteer', submissionId);
+          alert('Submission successful!');
+        } catch (error) {
+            console.log(error)
+            alert('Failed to submit the form. Please check your email for confirmation.');
+        }
+    };
 
     const navigate = useNavigate()
 
@@ -133,13 +143,15 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
             console.log('\n\n\n commissionedEmail: ', commissionedEmail)
 
-            let signRequest = await axios.post(
-                API_URL + '/api/submissions/sign_request',
-                {
-                    submission_id: submission_id,
-                    commisioned_email: commissionedEmail
-                }
-            )
+            // let signRequest = await axios.post(
+            //     API_URL + '/api/submissions/sign_request',
+            //     {
+            //         submission_id: submission_id,
+            //         commisioned_email: commissionedEmail
+            //     }
+            // )
+
+            printPDF(submission_id)
 
             setSigned(true)
 
