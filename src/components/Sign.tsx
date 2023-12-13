@@ -145,9 +145,9 @@ export const Sign = ({ }: SignProps) => {
             <div className="container submissions-container" style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}>
 
 
-                <div className="fade show">
+                {/* <div className="fade show">
                     <h4 className='mb-3'> Complaint With Oath ({title})</h4>
-                </div>
+                </div> */}
 
                 <div className="card fade show">
                     <div className="card-body">
