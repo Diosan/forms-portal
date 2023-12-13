@@ -66,7 +66,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
                         <p className="card-text text-left">
                             <label>Address:</label> {accused.address}
                             <br/><label>Date Of Birth:</label> {accused.dateOfBirth}
-                            <br/><label>Gender:</label> {accused.gender}
+                            <br/><label>Gender Identity:</label> {accused.gender}
                             <br/><label>Adulthood:</label> {accused.adulthood}
                         </p>
 

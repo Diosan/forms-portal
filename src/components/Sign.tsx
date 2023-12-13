@@ -65,6 +65,9 @@ export const Sign = ({ }: SignProps) => {
         dateOfOffence: any
         particulars: any
     }[]>([])
+    const [court, setCourt] = useState('')
+    const [district, setDistrict] = useState('')
+    const [submissionType, setSubmissionType] = useState('')
 
     const signSubmission = () => {
         console.log('Signing form ')
@@ -86,7 +89,20 @@ export const Sign = ({ }: SignProps) => {
             setComplainantAgency(submission.data.complainant.agency)
             setComplainantRegNum(submission.data.complainant.regNum)
             setComplainantEmail(submission.data.complainant.email)
+            setCourt(submission.data.complainant.court)
+            setDistrict(submission.data.complainant.courtDistrict)
             setAccuseds(submission.data.accuseds)
+            switch(submission.data.submission.type) {
+                case 'complaint_with_oath':
+                  setSubmissionType('COMPLAINT ON OATH')
+                  break;
+                case 'complaint_without_oath':
+                  setSubmissionType('COMPLAINT WITHOUT OATH')
+                  break;
+                default:
+                    setSubmissionType('COMPLAINT ON OATH')
+            }
+            
         }
 
 
@@ -163,27 +179,16 @@ export const Sign = ({ }: SignProps) => {
                     <h4 className='mb-3'> Complaint With Oath ({title})</h4>
                 </div>
 
-                <div className="card fade show container-pdf">
-                    <div className="card-body"  id="container-pdf" style={{fontSize:"10pt"}}>
+                <div className="card fade show">
+                    <div className="card-body">
                         <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"11pt", lineHeight:"12pt"}}>
                             <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt"}}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"13pt"}}>COMPLAINT ON OATH</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>IN THE HIGH COURT OF JUSTICE</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>CRIMINAL DIVISION (DISTRICT)</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"13pt"}}>{submissionType}</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>IN THE {court.toUpperCase()} OF JUSTICE</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>CRIMINAL DIVISION {district.toUpperCase()}</div>
                             <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt", marginTop:"20px", marginBottom:"20px"}}>Matter Type: </div>
                         </div>
-
-                        <table width={"700px"} style={{width:"230px", marginBottom:"30px", }}>
-                            <tr>
-                                <td><h5 className="card-title"  
-                                    style={{fontSize:"10pt", width:"230px", marginBottom:"30px", textAlign:"left", fontWeight:"bold"}}>Complainant: The State</h5></td>
-                                <td colSpan={1} style={{fontSize:"10pt", marginBottom:"30px", textAlign:"left"}}>
-                                    <div><strong>V</strong></div>
-                                    <div>Accuseds</div>
-                                </td>
-                            </tr>
-                        </table>
-
+                        {/* <h5 className="card-title">Complainant: The State</h5><br /> <br /> */}
 
                         <div className="text-left complainant-details">
                             {accuseds.map((accused: any, i: number) => (
@@ -245,7 +250,7 @@ export const Sign = ({ }: SignProps) => {
                                     <tr>
                                         <th style={{width:"120px"}}>Accused<br/>First Name</th>
                                         <th style={{width:"120px"}}>Accused<br/>Last Name</th>
-                                        <th style={{width:"100px"}}>ICCS<br/>Code</th>
+                                        <th style={{width:"100px"}}>UNODC<br/>Code</th>
                                         <th style={{width:"100px"}}>Date of<br/>Offence</th>
                                         <th style={{width:"260px"}}>Particulars of Offence</th>
                                     </tr>

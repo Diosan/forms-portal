@@ -28,7 +28,7 @@ export const Offences = ({first_name, last_name, accused_id}: OffencesProps) => 
                 <tr key={accused.id} >
                     <td style={{width:"120px"}}>{first_name}</td>
                     <td style={{width:"120px"}}>{last_name}</td>
-                    <td style={{width:"100px"}}>{accused.ICCS}</td>
+                    <td style={{width:"100px"}}>{accused.UNODC}</td>
                     <td style={{width:"100px"}}>{accused.dateOfOffence}</td>
                     <td style={{width:"260px"}}>{accused.particulars}</td>
                 </tr>

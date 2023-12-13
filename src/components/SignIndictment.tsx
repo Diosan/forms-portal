@@ -41,10 +41,19 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
     const [verificationHash, setVerificationHash] = useState('')
     const [verificationName, setVerificationName] = useState('')
     const [verificationDate, setVerificationDate] = useState('')
+    const [verifiers, setVerifiers] = useState<{}[]>([])
+    const [commissionedEmail, setCommissionedEmail] = useState('')
+
+    const commisionedChange = (event: any) => {
+        setCommissionedEmail(event.target.value)
+        console.log('\n\n\n Commisioned changed', commissionedEmail)
+        console.log('\n\n\n')
+    }
 
     const dispatch = useAppDispatch();
 
     const signOTPChange = (event: any) => {
+        console
         setSignOTP(event.target.value)
     }
 
@@ -128,9 +137,14 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                 }
             )
 
+            console.log('\n\n\n commissionedEmail: ', commissionedEmail)
+
             let signRequest = await axios.post(
                 API_URL + '/api/submissions/sign_request',
-                {submission_id: submission_id}
+                {
+                    submission_id: submission_id,
+                    commisioned_email: commissionedEmail
+                }
             )
 
             setSigned(true)
@@ -228,6 +242,24 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                 console.log('retreived submission is NOT signed')
             }
 
+            let returned_verifiers = await axios.get(API_URL + '/api/submissions/verifiers/1')
+
+            let verifs = returned_verifiers.data.verifiers;
+            await setVerifiers([...verifs, ...verifiers])
+            // verifs.map(async (verif: any) => {
+            //     console.log('\n verif: ', verif)
+            //     setVerifiers([verif, ...verifiers])
+            //     // console.log('\n verifiers: ', verifiers)
+            // })
+
+            // console.log('\n\n\n verifs: ', verifs)
+            // console.log('\n\n\n')
+
+            // await setVerifiers([...verifiers, ...verifs])
+
+            // console.log('\n\n\n verifiers: ', verifiers)
+            // console.log('\n\n\n')
+
             // console.log('\n\n\n retreived signature: ', signature.data)
 
         })();        
@@ -251,71 +283,48 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         }       
         {otpSent && !signed  && !already_signed ?
             <>
-            <form onSubmit={sign}>
-                <div className="card py-5 px-5 otp-card fade show" style={{backgroundColor:"#f9f9f9"}}>
-                    <h4 className="m-0">Sign Submission</h4>
-                    <br/>
-                    <p>I <strong>{complainant_name}</strong> Police Constable No. <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge.</p>
+                <div className="mb-3">
+                <label>Commissioned Officer</label><br/>
+                <select className='form-select' value={commissionedEmail} onChange={commisionedChange}>
+                    {/* <option value="" disabled selected>Select verifier</option> */}
+                    {verifiers.map((verifier: any) => (
+                        <option key={verifier.id} value={verifier.email}>{verifier.name}</option>
+                    ))} 
+                </select>
+                </div>
 
-                    <h6 className="mobile-text mt-3">Enter the Confirmation Code sent to your email. </h6>
-                    <div className="mt-1">
-
-                                    <div className="">
-                                        <input
-                                            type="text"
-                                            name="otpCode"
-                                            placeholder="******"
-                                            style={{ fontSize: "16px", letterSpacing: '7px', textAlign: 'center', maxWidth:"200px" }}
-                                            className="px-2 py-1 fs-3 mt-1 mb-2 stretched-text-input form-control otp-input"
-                                            maxLength={6}
-                                            value={signOTP}
-                                            onChange={signOTPChange}
-                                            minLength={6}
-                                            pattern="\d{6}"
-                                        />
-
-                                        <div className="text-center"><button type="submit" className="btn btn-md btn-primary float-start" >Sign Now</button></div>
-
-
-                                    </div>
-
-                        {/* <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
-                        <button type="submit" className="btn btn-secondary otp-button" >Verify</button> */}
-
-
+                <form onSubmit={sign}>
+                    <div className="card py-5 px-3 otp-card fade show">
+                        <h5 className="m-0">Sign Submission</h5>
+                        <br/>
+                        <span className="mobile-text">Enter the code sent to email </span>
+                        <div className="d-flex flex-row mt-5 otp-row">
+                            <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
+                            <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
+                        </div>
+                        <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
                     </div>
-                    
-                </div>
-            </form>
-            <div className="text-left mt-3">
-                <span className="d-block mobile-text">Didn't receive the confirmation code?</span>
-                {/* <div className="font-weight-bold text-danger cursor">Resend</div> */}
-                <div className="font-weight-bold p-0 mt-0 text-center cursor">
-                    <button onClick={(e) => handleResendSigningOTP(e, complainant_email)} className="btn btn-sm p-0 btn-link float-start">Resend</button>
-                </div>
-            </div>
+                </form>
             </>
             : <></>
         }
 
-        { signed || already_signed?
-
-            <div className="signature-container">
-                <div className="signature-format">
+{ signed || already_signed?
+            <div>
+                
+               
+                <div className="signature-format-complainant">
                     {/* <!-- Row 1 --> */}
-                    <div className="row sig-top">
-                        <div className="col-6 col">
-                            <div className="logo-placeholder d-flex swf-sign">
-                                <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
-                            </div>
-                        </div>
-                        <div className="col-6 col">
-                            <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
-                            <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
-                            {/* <div className="text-placeholder text-right">[ip address]</div> */}
+                    <div className="col-12 col">
+                        <div className="logo-placeholder d-flex swf-sign">
+                            <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
                         </div>
                     </div>
-                    
+                    <div className="col-12 col">
+                        <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
+                        <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
+                        {/* <div className="text-placeholder text-right">[ip address]</div> */}
+                    </div>
 
                     {/* <!-- Row 2 --> */}
                     <div className="col-12 col">
@@ -330,14 +339,14 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                 </div>
                 
 
-        { verified || already_verified?
-
-            <div className="signature-container">
-                <div className=" signature-format">
-                    {/* <!-- Row 1 --> */}
-                    <div className="col-6 col">
-                        <div className="logo-placeholder d-flex swf-sign">
-                            <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
+                { verified || already_verified?
+                                
+                    <div className="signature-format-verifier">
+                        {/* <!-- Row 1 --> */}
+                        <div className="col-12 col">
+                            <div className="logo-placeholder d-flex swf-sign">
+                                <span className="swf-e-signed">Verified on </span> <span className="swf-swif">SWiF</span>
+                            </div>
                         </div>
                         <div className="col-12 col">
                             <div className="text-placeholder text-right">{verificationDate.substring(11, 20)}</div>
@@ -391,7 +400,6 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
             : <></>
         }
-
 
     </>)
 

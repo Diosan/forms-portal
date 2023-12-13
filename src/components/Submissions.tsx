@@ -274,7 +274,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
                                     {groupedSubmissions['verified'] && (
                                         <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
-                                            <h4 className="my-2 mb-4">Signed Submissions</h4>
+                                            <h4 className="my-2 mb-4">Verified Submissions</h4>
                                             {groupedSubmissions['verified'].map((submission:any) => (
                                                 <a
                                                     href={'/view/' + submission.id}

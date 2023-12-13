@@ -87,7 +87,7 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
                 </div>
             </Form> */}
             <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor:"#444", color:"#fff", borderBottom: "1px solid #ddd" }}>
-                <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Accuseds and Charges</h5>
+                <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Accused and Charges</h5>
                 
                 <>
                     {/* <a href="#" className="small" onClick={editTitle}>Edit Title</a> */}
