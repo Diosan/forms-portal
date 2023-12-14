@@ -81,8 +81,9 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const [complainantLastName, setComplainantLastName] = useState('')
   const [complainantEmail, setComplainantEmail] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
+  const [complainantRank, setComplainantRank] = useState('')
   const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
-  const [complainantCourt, setComplainantCourt] = useState('')
+  const [complainantCourt, setComplainantCourt] = useState('High Court')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
 
   const [chargeSaved, setChargeSaved] = useState(false)
@@ -97,9 +98,9 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
     setComplainantCourtDistrict(event.target.value)
   }
 
-  const complainantCourtChange = (event: any) => {
-    setComplainantCourt(event.target.value)
-  }
+  // const complainantCourtChange = (event: any) => {
+  //   setComplainantCourt(event.target.value)
+  // }
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -107,6 +108,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const complainantRegNumberChange = (event: any) => {
     setComplainantRegNum(event.target.value)
+  }
+
+  const complainantRankChange = (event: any) => {
+    setComplainantRank(event.target.value)
   }
 
   const complainantFirstNameChange = (event: any) => {
@@ -201,6 +206,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
       lastName: complainantLastName,
       email: complainantEmail,
       regNum: complainantRegNum,
+      rank: complainantRank,
       submissionId: submissionId
     }
 
@@ -313,6 +319,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             setComplainantCourt(returned_submission.data.complainant.court)
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantEmail(returned_submission.data.complainant.email)
             break
           case 'charge_saved':
@@ -323,6 +330,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             setComplainantCourt(returned_submission.data.complainant.court)
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)
             break
@@ -335,6 +343,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             setComplainantCourt(returned_submission.data.complainant.court)
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)
             break
@@ -467,13 +476,13 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                               <h4 className="text-center mb-4">Complainant Information</h4>
                                 <form onSubmit={saveComplainant}>
 
-                                  <div className="mb-3">
+                                  {/* <div className="mb-3">
                                     <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
                                       <option>Select court</option>
                                       <option value="High Court">High Court</option>
                                       <option value="District Court">District Court</option>
                                     </select>
-                                  </div>
+                                  </div> */}
 
                                   <div className="mb-3">
                                     <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
@@ -495,6 +504,9 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                   </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="text" className="form-control" id="regName" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
                                   </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
@@ -559,6 +571,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     <br /><label>Court:</label> {complainantCourt}
                                     <br /><label>Court District:</label> {complainantCourtDistrict}
                                     <br /><label>Regimental Number:</label> {complainantRegNum}
+                                    <br /><label>Rank:</label> {complainantRank}
                                     <br /><label>Email:</label> {complainantEmail}
                                   </div>
 
