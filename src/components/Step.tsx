@@ -27,7 +27,7 @@ export const Step = ({isActive, step, title}: StepProps) => {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:3000/schema/' + step)
+        axios.get('https://swif.ttlawcourts.org/schema/' + step)
         .then((response) => {
           setSchema(response.data.schema)
           setUI(response.data.UI)

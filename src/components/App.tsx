@@ -41,8 +41,10 @@ function App() {
         <Route path= "/" element={<Welcome />} />
         <Route path= "/login" element={<RegisterSignin />} />
         <Route path= "/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
-        <Route path= "/password/new" element={ <PrivateRoute><PasswordReset/></PrivateRoute>} />
-        <Route path= "/password/reset/:token" element={ <PrivateRoute><PasswordReset/></PrivateRoute>} />
+        <Route path= "/password/new" element={ <PasswordReset/>} />
+        {/* <Route path= "/password/reset/:token" element={ <PrivateRoute><PasswordReset/></PrivateRoute>} /> */}
+        <Route path= "/password/reset/:token" element={ <PasswordReset/>} />
+
         <Route path= "/submission/:id" element={ <PrivateRoute><Submission new_submission={false }/></PrivateRoute>} />
         <Route  path= "/submissions" element={ <PrivateRoute><Submissions /></PrivateRoute>} />
         <Route path= "/transcend" element={ <PrivateRoute><Transcend /></PrivateRoute> } />

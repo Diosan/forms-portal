@@ -34,7 +34,7 @@ export const PasswordReset = () => {
     const [isValidToken, setIsValidToken] = useState(false);
     const [changePassword, setChangePassword] = useState(false);
     const location = useLocation();
-    const PASSWORD_URL = "http://localhost:3000"
+    const PASSWORD_URL = "https://swif.ttlawcourts.org"
 
     useEffect(() => {
         const tokenFromUrl = location.pathname.split('/').pop();
@@ -96,12 +96,12 @@ export const PasswordReset = () => {
                     navigate('/');
                     console.log("success")
                 }
-                navigate('/');
+                // navigate('/');
             })
             .catch((error: any) => {
                 // Handle the error
                 console.log(error)
-                navigate('/');
+                // navigate('/');
                 // setSigninVerifyError(true)
             });
 
