@@ -397,7 +397,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                             :
                             <div className="d-grid gap-2 verify">
                                 <br></br>
-                                <button className="btn btn-dark" type="submit" onClick={sendVerifyOTP}>Verify Submission</button>
+                                {/* <button className="btn btn-dark" type="submit" onClick={sendVerifyOTP}>Verify Submission</button> */}
                             </div>
                         }
                     </>

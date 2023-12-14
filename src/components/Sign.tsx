@@ -165,7 +165,7 @@ export const Sign = ({ }: SignProps) => {
 
             <div className="container submissions-container" style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}>
 
-            <button onClick={(e) => {
+            {/* <button onClick={(e) => {
                 if (id !== undefined) {
                     // Assuming 'id' is a string that needs to be converted to a number
                     const numericId = parseInt(id, 10);
@@ -174,7 +174,7 @@ export const Sign = ({ }: SignProps) => {
                     }
                 }
             }}
-            >Submit and Convert to PDF</button>
+            >Submit and Convert to PDF</button> */}
 
             
 
