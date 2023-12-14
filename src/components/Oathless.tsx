@@ -46,7 +46,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const Submission = ({ new_submission }: SubmissionProps) => {
+export const Oathless = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
     // alert('Performing requestSignature in Submission component')
