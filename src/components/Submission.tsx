@@ -82,6 +82,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const [complainantEmail, setComplainantEmail] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
   const [complainantRank, setComplainantRank] = useState('')
+  const [complainantUnit, setComplainantUnit] = useState('')
   const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
   const [complainantCourt, setComplainantCourt] = useState('High Court')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
@@ -112,6 +113,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const complainantRankChange = (event: any) => {
     setComplainantRank(event.target.value)
+  }
+
+  const complainantUnitChange = (event: any) => {
+    setComplainantUnit(event.target.value)
   }
 
   const complainantFirstNameChange = (event: any) => {
@@ -207,6 +212,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
       email: complainantEmail,
       regNum: complainantRegNum,
       rank: complainantRank,
+      unit: complainantUnit,
       submissionId: submissionId
     }
 
@@ -320,6 +326,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantRank(returned_submission.data.complainant.rank)
+            setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
             break
           case 'charge_saved':
@@ -331,6 +338,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantRank(returned_submission.data.complainant.rank)
+            setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)
             break
@@ -344,6 +352,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
             setComplainantRank(returned_submission.data.complainant.rank)
+            setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)
             break
@@ -509,6 +518,9 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     <input type="text" className="form-control" id="regName" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
                                   </div>
                                   <div className="mb-3">
+                                    <input type="text" className="form-control" id="regName" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
+                                  </div>
+                                  <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
                                   </div>
                                   <div className="mb-3">
@@ -572,6 +584,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     <br /><label>Court District:</label> {complainantCourtDistrict}
                                     <br /><label>Regimental Number:</label> {complainantRegNum}
                                     <br /><label>Rank:</label> {complainantRank}
+                                    <br /><label>Station/Unit:</label> {complainantUnit}
                                     <br /><label>Email:</label> {complainantEmail}
                                   </div>
 
