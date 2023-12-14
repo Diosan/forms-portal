@@ -9,11 +9,11 @@ import { Submission } from './Submission'
 import { PasswordReset } from './ResetPassword'
 import Transcend  from './Transcend'
 import { Submissions } from './Submissions'
-import { Summons } from './Summons';
+import { Summons } from './Summons'
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
-import { Verify } from './Verify';
+import { Verify } from './Verify'
 import { LeftColumn } from "./LeftColumn"
 import PrivateRoute from './PrivateRoute'; // Import the PrivateRoute component
 import { Header } from './Header'
@@ -28,6 +28,8 @@ import { Signatures } from './Signatures';
 
 import { View } from './View';
 
+import { Oathless } from './Oathless';
+
 
 
 function App() {
@@ -40,11 +42,11 @@ function App() {
       <Routes>
         <Route path= "/" element={<Welcome />} />
         <Route path= "/login" element={<RegisterSignin />} />
-        <Route path= "/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
         <Route path= "/password/new" element={ <PasswordReset/>} />
-        {/* <Route path= "/password/reset/:token" element={ <PrivateRoute><PasswordReset/></PrivateRoute>} /> */}
         <Route path= "/password/reset/:token" element={ <PasswordReset/>} />
 
+        <Route path= "/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
+        <Route path="/oathless" element={<PrivateRoute><Oathless new_submission={true} /></PrivateRoute>} />
         <Route path= "/submission/:id" element={ <PrivateRoute><Submission new_submission={false }/></PrivateRoute>} />
         <Route  path= "/submissions" element={ <PrivateRoute><Submissions /></PrivateRoute>} />
         <Route path= "/transcend" element={ <PrivateRoute><Transcend /></PrivateRoute> } />

@@ -6,6 +6,7 @@ import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import '../assets/Submission.css'
 import '../assets/Signature.css'
+import { exportPDF } from '../utils/pdfUtils';
 import { useAppDispatch } from "../store/store"
 import { resendSigningOTP } from "../slices/auth";
 
@@ -25,7 +26,16 @@ const log = (type: any) => console.log.bind(console, type)
 
 export const SignIndictment = ({submission_id, complainant_email, complainant_name, complainant_regnum, already_signed, already_verified}:SignIndictmentProps) => {
 
-    
+    const printPDF = async (submissionId:number) => {
+        
+        try {
+          const message = await exportPDF('container-pdf', 'https://swif.ttlawcourts.org/api/pdf/puppeteer', submissionId);
+          alert('Submission successful!');
+        } catch (error) {
+            console.log(error)
+            alert('Failed to submit the form. Please check your email for confirmation.');
+        }
+    };
 
     const navigate = useNavigate()
 
@@ -139,13 +149,15 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
             console.log('\n\n\n commissionedEmail: ', commissionedEmail)
 
-            let signRequest = await axios.post(
-                API_URL + '/api/submissions/sign_request',
-                {
-                    submission_id: submission_id,
-                    commisioned_email: commissionedEmail
-                }
-            )
+            // let signRequest = await axios.post(
+            //     API_URL + '/api/submissions/sign_request',
+            //     {
+            //         submission_id: submission_id,
+            //         commisioned_email: commissionedEmail
+            //     }
+            // )
+
+            printPDF(submission_id)
 
             setSigned(true)
 
@@ -283,15 +295,15 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         }       
         {otpSent && !signed  && !already_signed ?
             <>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                 <label>Commissioned Officer</label><br/>
                 <select className='form-select' value={commissionedEmail} onChange={commisionedChange}>
-                    {/* <option value="" disabled selected>Select verifier</option> */}
+                    
                     {verifiers.map((verifier: any) => (
                         <option key={verifier.id} value={verifier.email}>{verifier.name}</option>
                     ))} 
                 </select>
-                </div>
+                </div> */}
 
                 <form onSubmit={sign}>
                     <div className="card py-5 px-3 otp-card fade show">
@@ -300,7 +312,7 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                         <span className="mobile-text">Enter the code sent to email </span>
                         <div className="d-flex flex-row mt-5 otp-row">
                             <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
-                            <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
+                            <button type="submit" className="btn btn-secondary otp-button" >Sign And Submit</button>
                         </div>
                         <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
                     </div>

@@ -26,6 +26,10 @@ import {
 import { SignIndictment } from "./SignIndictment"
 import { Signatures } from "./Signatures"
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+
+
 
 type SignProps = {}
 
@@ -59,6 +63,9 @@ export const View = ({ }: SignProps) => {
         dateOfOffence: any
         particulars: any
     }[]>([])
+    const [court, setCourt] = useState('')
+    const [district, setDistrict] = useState('')
+    const [submissionType, setSubmissionType] = useState('')
 
     const signSubmission = () => {
         console.log('Signing form ')
@@ -80,7 +87,20 @@ export const View = ({ }: SignProps) => {
             setComplainantAgency(submission.data.complainant.agency)
             setComplainantRegNum(submission.data.complainant.regNum)
             setComplainantEmail(submission.data.complainant.email)
+            setCourt(submission.data.complainant.court)
+            setDistrict(submission.data.complainant.courtDistrict)
             setAccuseds(submission.data.accuseds)
+            switch(submission.data.submission.type) {
+                case 'complaint_with_oath':
+                  setSubmissionType('COMPLAINT ON OATH')
+                  break;
+                case 'complaint_without_oath':
+                  setSubmissionType('COMPLAINT WITHOUT OATH')
+                  break;
+                default:
+                  setSubmissionType('COMPLAINT ON OATH')
+            }
+            
         }
 
 
@@ -123,20 +143,40 @@ export const View = ({ }: SignProps) => {
     }, [])
 
     return (
-        <div className="d-flex">
+        <div className="d-flex container-pdf">
 
             
 
             <div className="container submissions-container" style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}>
 
 
-                <div className="fade show">
+                {/* <div className="fade show">
                     <h4 className='mb-3'> Complaint With Oath ({title})</h4>
+                </div> */}
+
+                <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#333", color: "#fff" }}>
+                  <div className="row" style={{ maxWidth: "200px", margin: "0 auto", color: "#fff", textDecoration: "none" }} >
+                    <a style={{ color: "#fff", textDecoration: "none" }} href="/submissions" className="m-0 btn-link new-submission-btn float-start">
+                      <FontAwesomeIcon icon={faArrowLeftLong} />
+                    </a>
+                  </div>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1"> {submissionType} </h5>
+
                 </div>
+
+    
+
 
                 <div className="card fade show">
                     <div className="card-body">
-                        <h5 className="card-title">Complainant: The State</h5><br /> <br />
+                        <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"11pt", lineHeight:"12pt"}}>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt"}}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"13pt"}}>{submissionType}</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>IN THE {court.toUpperCase()} OF JUSTICE</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>CRIMINAL DIVISION {district.toUpperCase()}</div>
+                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt", marginTop:"20px", marginBottom:"20px"}}>Matter Type: </div>
+                        </div>
+                        {/* <h5 className="card-title">Complainant: The State</h5><br /> <br /> */}
 
                         <div className="text-left complainant-details">
                             {accuseds.map((accused: any, i: number) => (
@@ -225,8 +265,14 @@ export const View = ({ }: SignProps) => {
 
                         <br /><br />
                         <div className="text-left complainant-details">
-                            <p>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-                            </p>
+
+                            {submissionType == 'COMPLAINT WITHOUT OATH' ?
+                                <></>
+                                :
+                                <p>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
+                                </p>
+                            }
+
                             {/* <p><strong>{' ' + currentDate()}</strong></p> */}
                             <br /><br /><br />
 
