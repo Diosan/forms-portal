@@ -46,7 +46,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const Submission = ({ new_submission }: SubmissionProps) => {
+export const Oathless = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
     // alert('Performing requestSignature in Submission component')
@@ -134,7 +134,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         id: submissionId,
         title: submissionTitle,
         email: decoded.email,
-        userId: decoded.id
+        userId: decoded.id,
+
       }
       console.log('Submission is : ', submission)
       await axios.post(API_URL + '/api/submissions/update_title', submission)
@@ -165,7 +166,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         title: submissionTitle,
         email: decoded.email,
         userId: decoded.id,
-        matterType: matterType
+        matterType: matterType,
+        type: 'complaint_without_oath'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
@@ -384,7 +386,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint With Oath {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint Without Oath {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
@@ -402,7 +404,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                       <fieldset>
                         <div className="form-group field field-string">
                           <label className="control-label fs-6">
-                            In house reference
+                            Enter a Description
                           </label>
 
                           <div className="d-flex mt-2">
@@ -419,7 +421,6 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                 <option value="Summary">Summary</option>
                                 <option value="Either-way">Either-way</option>
                                 <option value="Indictable with Summary">Indictable with Summary</option>
-                                <option value="Indictable with Either-way">Indictable with Either-way</option>
                               </select>
                               : <></>
                             }
@@ -464,7 +465,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                             <div>
                            
                               <div className="card fade show" style={{ border: "none", backgroundColor:"#ddd"}} >
-                              <h4 className="text-center mb-4">Complainant Information</h4>
+                              <h4 className="text-center mb-4">Complainant</h4>
                                 <form onSubmit={saveComplainant}>
 
                                   <div className="mb-3">
@@ -477,13 +478,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
                                   <div className="mb-3">
                                     <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
-                                      <option>Select court location</option>
-                                      <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
-                                      <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
-                                      <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
-                                      <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
-                                      <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
-                                      <option value="Children Court – Tobago">Children Court – Tobago</option>
+                                      <option>Select court district</option>
+                                      <option value="North Trinidad">North Trinidad</option>
+                                      <option value="South Trinidad">South Trinidad</option>
+                                      <option value="Tobago">Tobago</option>
                                     </select>
                                   </div>
 
@@ -494,7 +492,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     </select>
                                   </div>
                                   <div className="mb-3">
-                                    <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
+                                    <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
                                   </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />

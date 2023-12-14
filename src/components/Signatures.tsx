@@ -100,7 +100,7 @@ export const Signatures = ({
 
     return (
         <>
-            <h5>Signatures</h5>
+            {/* <h5>Signatures</h5> */}
 
             { (already_signed || already_verified) ?
                 <div className="signature-format-complainant">

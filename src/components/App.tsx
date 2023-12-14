@@ -8,11 +8,11 @@ import { Submission } from './Submission'
 import { PasswordReset } from './ResetPassword'
 import Transcend  from './Transcend'
 import { Submissions } from './Submissions'
-import { Summons } from './Summons';
+import { Summons } from './Summons'
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
-import { Verify } from './Verify';
+import { Verify } from './Verify'
 import { LeftColumn } from "./LeftColumn"
 
 import { Header } from './Header'
@@ -27,6 +27,8 @@ import { Signatures } from './Signatures';
 
 import { View } from './View';
 
+import { Oathless } from './Oathless';
+
 
 
 function App() {
@@ -39,6 +41,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/submission" element={<Submission new_submission={true} />} />
+        <Route path="/oathless" element={<Oathless new_submission={true} />} />
         <Route path= "/submission" element={ <Submission new_submission={ true }/>} />
         <Route path= "/password/new" element={ <PasswordReset/>} />
         <Route path= "/password/reset/:token" element={ <PasswordReset/>} />

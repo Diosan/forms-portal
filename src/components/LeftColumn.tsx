@@ -57,7 +57,7 @@ export const LeftColumn = (({ }: HeaderProps) => {
                         <li className="nav-item active jud-header-item"><a className="nav-link" href="/">Home  </a></li>
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> New Complaint With Oath</a></li>
-                        <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> New Complaint Without Oath</a></li>
+                        <li className="nav-item jud-header-item"><a className="nav-link" href="/oathless"> New Complaint Without Oath</a></li>
                         {/* <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> New Complaint Summons</a></li>
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> New Complaint Warrant Or Summons</a></li>                        
                         <li className="nav-item jud-header-item"><a className="nav-link" href="/not_police"> New Complaint By Person Other Than Police</a></li> 
