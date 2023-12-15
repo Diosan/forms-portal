@@ -429,13 +429,13 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                             In house reference
                           </label>
 
-                          <div className="d-flex mt-2">
+                          <div className=" mt-2">
                             <input
                               className="form-control fs-5 mt-0 mb-0 flex-grow-1"
                               type="text"
                               value={submissionTitle}
                               onChange={submissionTitleChange}
-                            /><br></br>
+                            />
                             {!submissionTitleSaved ?
                               <>
                                 <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
@@ -443,7 +443,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                   <option value="adult">Adult only</option>
                                   <option value="child">Child only</option>
                                   <option value="both">Both</option>
-                                </select><br></br>
+                                </select>
                                 <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
                                   <option>Select matter type</option>
                                   <option value="Indictable">Indictable</option>
@@ -457,10 +457,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                             }
                             <button
                               type="submit"
-                              className="btn btn-md btn-light ms-1" // Use btn-light for a button with no background
+                              className="btn btn-md btn-light ms-1 float-right" // Use btn-light for a button with no background
                             >
                               <i className="text-gray">
-                                <FontAwesomeIcon icon={faCheck} />
+                                <FontAwesomeIcon icon={faCheck} /> Continue
                               </i>
                             </button>
                           </div>
