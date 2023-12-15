@@ -510,12 +510,21 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                   <div className="mb-3">
                                     <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
                                       <option>Select court location</option>
-                                      <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
-                                      <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
-                                      <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
-                                      <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
-                                      <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
-                                      <option value="Children Court – Tobago">Children Court – Tobago</option>
+                                      {adultOnly == 'adult' || adultOnly == 'both' ?
+                                          <>
+                                            <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
+                                            <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
+                                            <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
+                                          </>
+                                        :
+                                          <>
+                                            <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
+                                            <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
+                                            <option value="Children Court – Tobago">Children Court – Tobago</option>
+                                          </> 
+                                      }
+
+
                                     </select>
                                   </div>
 
