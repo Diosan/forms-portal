@@ -90,9 +90,14 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const [chargeSaved, setChargeSaved] = useState(false)
 
   const [matterType, setMatterType] = useState('')
+  const [adultOnly, setAdultOnly] = useState('')
 
   const matterTypeChange = (event: any) => {
     setMatterType(event.target.value)
+  }
+
+  const adultOnlyChange = (event: any) => {
+    setAdultOnly(event.target.value)
   }
 
   const complainantCourtDistrictChange = (event: any) => {
@@ -175,7 +180,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         title: submissionTitle,
         email: decoded.email,
         userId: decoded.id,
-        matterType: matterType
+        matterType: matterType,
+        adultOnly: adultOnly
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
@@ -429,16 +435,24 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                               type="text"
                               value={submissionTitle}
                               onChange={submissionTitleChange}
-                            />
+                            /><br></br>
                             {!submissionTitleSaved ?
-                              <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
-                                <option>Select matter type</option>
-                                <option value="Indictable">Indictable</option>
-                                <option value="Summary">Summary</option>
-                                <option value="Either-way">Either-way</option>
-                                <option value="Indictable with Summary">Indictable with Summary</option>
-                                <option value="Indictable with Either-way">Indictable with Either-way</option>
-                              </select>
+                              <>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
+                                  <option>Category Of Accused</option>
+                                  <option value="adult">Adult only</option>
+                                  <option value="child">Child only</option>
+                                  <option value="both">Both</option>
+                                </select><br></br>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
+                                  <option>Select matter type</option>
+                                  <option value="Indictable">Indictable</option>
+                                  <option value="Summary">Summary</option>
+                                  <option value="Either-way">Either-way</option>
+                                  <option value="Indictable with Summary">Indictable with Summary</option>
+                                  <option value="Indictable with Either-way">Indictable with Either-way</option>
+                                </select>
+                              </>
                               : <></>
                             }
                             <button
