@@ -89,8 +89,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const [chargeSaved, setChargeSaved] = useState(false)
 
-  const [matterType, setMatterType] = useState('')
-  const [adultOnly, setAdultOnly] = useState('')
+  const [matterType, setMatterType] = useState('Indictable')
+  const [adultOnly, setAdultOnly] = useState('adult')
 
   const matterTypeChange = (event: any) => {
     setMatterType(event.target.value)

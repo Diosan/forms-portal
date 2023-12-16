@@ -261,8 +261,7 @@ export const Sign = ({ }: SignProps) => {
                             <table className="offence-table" width={"700px"}>
                                 <thead>
                                     <tr>
-                                        <th style={{width:"120px"}}>Accused<br/>First Name</th>
-                                        <th style={{width:"120px"}}>Accused<br/>Last Name</th>
+                                        <th style={{width:"120px"}}>Accused</th>
                                         <th style={{width:"100px"}}>UNODC<br/>Code</th>
                                         <th style={{width:"100px"}}>Date of<br/>Offence</th>
                                         <th style={{width:"260px"}}>Particulars of Offence</th>
