@@ -262,7 +262,8 @@ export const Sign = ({ }: SignProps) => {
                                 <thead>
                                     <tr>
                                         <th style={{width:"120px"}}>Accused</th>
-                                        <th style={{width:"100px"}}>UNODC<br/>Code</th>
+                                        <th style={{width:"100px"}}>ICCS<br/>Code</th>
+                                        <th style={{width:"100px"}}>Name of<br/>Offence</th>
                                         <th style={{width:"100px"}}>Date of<br/>Offence</th>
                                         <th style={{width:"260px"}}>Particulars of Offence</th>
                                     </tr>

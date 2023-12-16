@@ -297,8 +297,10 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     useEffect(() => {
         (async () => {
-            let returned_codes = await axios.get(API_URL + '/api/submissions/codes/1')
-            setCodes(returned_codes.data.charge_codes)
+            // let returned_codes = await axios.get(API_URL + '/api/submissions/codes/1')
+            let returned_codes = await axios.get(API_URL + '/api/utils/charge-codes')
+            // setCodes(returned_codes.data.charge_codes)
+            setCodes(returned_codes.data.cat1)
         })();
     }, []);
 
@@ -462,7 +464,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                         onChange={UNODCChange}/>
                                     <datalist id="codelist">
                                         {codes.map((code:any) => (
-                                            <option value={code.UNODC} key={code.id}>
+                                            <option value={code.ICCS} key={code.id}>
                                                 {code.name}
                                             </option>
                                         ))}
