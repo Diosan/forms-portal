@@ -13,8 +13,10 @@ import { Navigate, useNavigate } from "react-router-dom"
 import dotenv from "dotenv"
 
 
-// const API_URL = process.env.VITE_API_URL
-import { API_URL } from "../config/api";
+
+
+const API_URL = import.meta.env.VITE_API_URL
+// import { API_URL } from "../config/api";
 
 
 
@@ -34,7 +36,7 @@ export const PasswordReset = () => {
     const [isValidToken, setIsValidToken] = useState(false);
     const [changePassword, setChangePassword] = useState(false);
     const location = useLocation();
-    const PASSWORD_URL = "https://swif.ttlawcourts.org"
+    const PASSWORD_URL =  import.meta.env.VITE_PAASSWORD_URL
 
     useEffect(() => {
         const tokenFromUrl = location.pathname.split('/').pop();
@@ -91,17 +93,17 @@ export const PasswordReset = () => {
             .unwrap()
             .then((message: any) => {
                 console.log("Resetting Password")
-                console.log(message)
+                console.log("response received:   ",message)
                 if (message.outcome == "success") {
                     navigate('/');
                     console.log("success")
                 }
-                // navigate('/');
+                navigate('/');
             })
             .catch((error: any) => {
                 // Handle the error
                 console.log(error)
-                // navigate('/');
+                navigate('/');
                 // setSigninVerifyError(true)
             });
 

@@ -3,8 +3,8 @@ import dotenv from "dotenv"
 // import { API_URL } from '../config/api';
 import { Navigate, useNavigate } from "react-router-dom"
 
-// const API_URL = import.meta.env.VITE_API_URL
-const API_URL = "https://swif.ttlawcourts.org"
+const API_URL = import.meta.env.VITE_API_URL
+// const API_URL = "https://swif.ttlawcourts.org"
 
 
 
@@ -173,8 +173,6 @@ const resetPassword = (password:string, token:string): any => {
     .then((response) => {
       if (response.data.outcome === 'success') {
         console.log(response.data)
-
-
         return response.data;
 
       } else {
