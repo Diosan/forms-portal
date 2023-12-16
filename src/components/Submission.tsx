@@ -538,10 +538,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
                                   </div>
                                   <div className="mb-3">
-                                    <input type="text" className="form-control" id="regName" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
+                                    <input type="text" className="form-control" id="rank" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
                                   </div>
                                   <div className="mb-3">
-                                    <input type="text" className="form-control" id="regName" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
+                                    <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
                                   </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
