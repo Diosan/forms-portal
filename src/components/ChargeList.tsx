@@ -37,7 +37,7 @@ const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
             <table className="charge-table mt-2 mb-0">
                 <thead>
                     <tr>
-                        <th>Charge Name</th>
+                        <th>Name Of Offence</th>
                         <th>ICCS</th>
                         {/* <th>UNODC</th> */}
                         <th>Counts</th>
