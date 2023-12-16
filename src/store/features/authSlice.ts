@@ -1,7 +1,7 @@
 // features/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { API_URL } from '../../config/api'
+const API_URL = import.meta.env.VITE_API_URL
 
 
 interface AuthState {
