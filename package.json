@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build && cp -rf dist ../forms-portal-backend/",
+    "build": "tsc && vite build && cp -rf dist ../swf_backend/",
     "preview": "vite preview"
   },
   "dependencies": {
