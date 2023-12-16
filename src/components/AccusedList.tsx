@@ -64,10 +64,12 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
                     <div className="card-body">
                         <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName} {accused.lastName}</h5>
                         <p className="card-text text-left">
-                            <label>Address:</label> {accused.address}
+                            <label>Address:</label> {accused.addressLine1}<br/>
+                                                    {accused.cityTown}<br/>
+                                                    {accused.countryCode}<br/>
                             <br/><label>Date Of Birth:</label> {accused.dateOfBirth}
                             <br/><label>Gender Identity:</label> {accused.gender}
-                            <br/><label>Adult Or Child</label> {accused.adulthood}
+                            <br/><label>Adult Or Child:</label> {accused.adulthood}
                         </p>
 
 

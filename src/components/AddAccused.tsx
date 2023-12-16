@@ -40,7 +40,7 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
       firstName: form.formData.firstName,
       lastName: form.formData.lastName,
       middleName: form.formData.middleName,
-      // address: form.formData.address,
+      address: '',
       addressLine1: form.formData.addressLine1,
       addressLine2: form.formData.addressLine2,
       addressLine3: form.formData.addressLine3,
