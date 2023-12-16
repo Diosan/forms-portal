@@ -4,7 +4,7 @@ import { useAppDispatch } from "../store/store"
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
-import { API_URL} from "../config/api"
+const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import '../assets/Accused.css'
 import { Navigate, useNavigate, useParams } from "react-router-dom"

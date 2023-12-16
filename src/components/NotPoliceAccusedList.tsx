@@ -4,7 +4,7 @@ import { useAppSelector  } from "../store/store"
 import AddCharge from "./AddCharge"
 import ChargeList from "./ChargeList"
 import Accused from "./Accused"
-import { API_URL} from "../config/api"
+const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import '../assets/Accused.css'
 

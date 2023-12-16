@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useAppSelector  } from "../store/store";
 import "../assets/Charge.css"
-import { API_URL} from "../config/api"
+const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 
 type ChargeListProps = {

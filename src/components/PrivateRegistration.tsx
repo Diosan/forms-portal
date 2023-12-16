@@ -8,7 +8,7 @@ import { RootState } from '../store';
 import Logo from "../assets/jwflogo.svg"
 
 // import { useAppDispatch } from '../useAppDispatch'; 
-import { API_URL} from "../config/api"
+const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import '../assets/Auth.css'
 // import AuthService from "../services/AuthService"

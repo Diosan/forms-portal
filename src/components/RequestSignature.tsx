@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react"
-import { API_URL} from "../config/api"
+const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import Form from 'react-jsonschema-form'

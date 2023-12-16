@@ -1,6 +1,6 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
 import { useEffect, useState } from "react"
-import { API_URL } from "../config/api"
+
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
@@ -53,6 +53,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
     setChargeSaved(true)
   }
 
+  const API_URL = import.meta.env.VITE_API_URL
 
   const auth = new AuthService
   const dispatch = useAppDispatch();

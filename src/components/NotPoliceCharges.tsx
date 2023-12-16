@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
 import { useAppSelector  } from "../store/store"
-import { API_URL} from "../config/api"
+const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios";
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
