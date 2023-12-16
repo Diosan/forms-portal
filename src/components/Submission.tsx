@@ -89,10 +89,15 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const [chargeSaved, setChargeSaved] = useState(false)
 
-  const [matterType, setMatterType] = useState('')
+  const [matterType, setMatterType] = useState('Indictable')
+  const [adultOnly, setAdultOnly] = useState('adult')
 
   const matterTypeChange = (event: any) => {
     setMatterType(event.target.value)
+  }
+
+  const adultOnlyChange = (event: any) => {
+    setAdultOnly(event.target.value)
   }
 
   const complainantCourtDistrictChange = (event: any) => {
@@ -175,7 +180,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         title: submissionTitle,
         email: decoded.email,
         userId: decoded.id,
-        matterType: matterType
+        matterType: matterType,
+        adultOnly: adultOnly
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
@@ -423,7 +429,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                             In house reference
                           </label>
 
-                          <div className="d-flex mt-2">
+                          <div className=" mt-2">
                             <input
                               className="form-control fs-5 mt-0 mb-0 flex-grow-1"
                               type="text"
@@ -431,22 +437,30 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                               onChange={submissionTitleChange}
                             />
                             {!submissionTitleSaved ?
-                              <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
-                                <option>Select matter type</option>
-                                <option value="Indictable">Indictable</option>
-                                <option value="Summary">Summary</option>
-                                <option value="Either-way">Either-way</option>
-                                <option value="Indictable with Summary">Indictable with Summary</option>
-                                <option value="Indictable with Either-way">Indictable with Either-way</option>
-                              </select>
+                              <>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
+                                  <option>Category Of Accused</option>
+                                  <option value="adult">Adult only</option>
+                                  <option value="child">Child only</option>
+                                  <option value="both">Both</option>
+                                </select>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
+                                  <option>Select matter type</option>
+                                  <option value="Indictable">Indictable</option>
+                                  <option value="Summary">Summary</option>
+                                  <option value="Either-way">Either-way</option>
+                                  <option value="Indictable with Summary">Indictable with Summary</option>
+                                  <option value="Indictable with Either-way">Indictable with Either-way</option>
+                                </select>
+                              </>
                               : <></>
                             }
                             <button
                               type="submit"
-                              className="btn btn-md btn-light ms-1" // Use btn-light for a button with no background
+                              className="btn btn-md btn-light ms-1 float-right" // Use btn-light for a button with no background
                             >
                               <i className="text-gray">
-                                <FontAwesomeIcon icon={faCheck} />
+                                <FontAwesomeIcon icon={faCheck} /> Continue
                               </i>
                             </button>
                           </div>
@@ -496,12 +510,21 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                   <div className="mb-3">
                                     <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
                                       <option>Select court location</option>
-                                      <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
-                                      <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
-                                      <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
-                                      <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
-                                      <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
-                                      <option value="Children Court – Tobago">Children Court – Tobago</option>
+                                      {adultOnly == 'adult' || adultOnly == 'both' ?
+                                          <>
+                                            <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
+                                            <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
+                                            <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
+                                          </>
+                                        :
+                                          <>
+                                            <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
+                                            <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
+                                            <option value="Children Court – Tobago">Children Court – Tobago</option>
+                                          </> 
+                                      }
+
+
                                     </select>
                                   </div>
 
@@ -515,10 +538,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
                                   </div>
                                   <div className="mb-3">
-                                    <input type="text" className="form-control" id="regName" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
+                                    <input type="text" className="form-control" id="rank" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
                                   </div>
                                   <div className="mb-3">
-                                    <input type="text" className="form-control" id="regName" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
+                                    <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
                                   </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
