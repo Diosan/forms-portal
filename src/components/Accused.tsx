@@ -96,71 +96,70 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
         
     }
 
-    const codeCategoryChange = async (event: any) => {        
+    const codeCategoryChange = async (event: any) => {
 
-        await setCodeCategory(event.target.value)
-
-        setUNODC('')
-        setChargeName('')
-
-        console.log('codeCategory: ', codeCategory)
+        console.log('\n\n\n Selected chargecode option: ', event.target.value)
+        let cat_id = await event.target.value
+        await setCodeCategory(cat_id)
+        
 
         let returned_codes = await axios.get(API_URL + '/api/utils/charge-codes')
         let all_codes = returned_codes.data
-
-        console.log('all_codes: ', all_codes)
-
-        switch(codeCategory) {
+        
+        
+        switch(cat_id) {
             case 'cat1':
                 console.log('Filtering by cat1')
                 await setCodes(all_codes.cat1)
-                break;
+                break
             case 'cat2':
                 console.log('Filtering by cat2')
                 await  setCodes(all_codes.cat2)
-                break;
+                break
             case 'cat3':
                 console.log('Filtering by cat3')
                 await setCodes(all_codes.cat3)
-                break;
+                break
             case 'cat4':
                 console.log('Filtering by cat4')
                 await setCodes(all_codes.cat4)
-                break;
+                break
             case 'cat5':
                 console.log('Filtering by cat5')
                 await setCodes(all_codes.cat5)
-                break;
+                break
             case 'cat6':
                 console.log('Filtering by cat6')
                 await setCodes(all_codes.cat6)
-                break;
+                break
             case 'cat7':
                 console.log('Filtering by cat7')
                 await setCodes(all_codes.cat7)
-                break;
+                break
             case 'cat8':
                 console.log('Filtering by cat8')
                 await setCodes(all_codes.cat8)
-                break;
+                break
             case 'cat9':
                 console.log('Filtering by cat9')
                 await setCodes(all_codes.cat9)
-                break;
+                break
             case 'cat10':
                 console.log('Filtering by cat10')
                 await setCodes(all_codes.cat10)
-                break;
+                break
             case 'cat11':
                 console.log('Filtering by cat11')
                 await setCodes(all_codes.cat11)
-                break;
+                break
             default:
-                console.log('Filtering deafult case')
+                console.log('Filtering default case')
                 await setCodes(all_codes.cat1)
+                break
         }
 
-        console.log('codes: ', codes)
+        setUNODC('')
+        setChargeName('')
 
     }
 
@@ -547,10 +546,10 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                     { showAddNewCharge &&
 
                         <>  
-                            {/* <br/>
+                            <br/>
                             <div className="form-group field field-string">                  
                                 <label className="control-label">Category</label><br/>
-                                <select name="offence-category" id="cars" className="form-control" value={codeCategory} onChange={codeCategoryChange}>
+                                <select name="offence-category" className="form-control" value={codeCategory} onChange={codeCategoryChange}>
                                     <option value="cat1">ACTS LEADING TO DEATH </option>
                                     <option value="cat2">ACTS LEADING TO HARM </option>
                                     <option value="cat3">INJURIOUS ACTS OF A SEXUAL NATURE</option>
@@ -564,7 +563,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                     <option value="cat11">OTHER CRIMINAL ACTS</option>
 
                                 </select>
-                            </div> */}
+                            </div>
 
                             <br/>
                             <div className="form-group field field-string">                  
