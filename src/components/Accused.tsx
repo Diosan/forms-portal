@@ -70,16 +70,30 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [chargeName, setChargeName] = useState('')
 
-    
-
     const [UNODC, setUNODC] = useState('')
 
+
     const UNODCChange = async (event: any) => {
-        // console.log('UNODCChange: ', event.target.value)
+
         setUNODC(event.target.value)
-        // optionsData.find((option) => option.label === inputValue);
-        let charge: any = codes.find((code: any) => code.ICCS == event.target.value);
-        await setChargeName(charge.name)
+        
+        const selectedOption = document.querySelector(`#codelist option[value="${event.target.value}"]`);
+
+        if (selectedOption) {
+
+            const id = selectedOption.getAttribute('data-id');
+            console.log('Code id:', id);
+        
+
+            let charge: any = codes.find((code: any) => code.id == id);
+            if(charge) {
+                await setChargeName(charge.name)
+                await setUNODC(charge.ICCS)
+            }
+
+        }
+
+        
     }
 
     const codeCategoryChange = async (event: any) => {        
@@ -156,7 +170,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
 
 
-    const processForm = async (form: any) => {
+    const addCharge = async (form: any) => {
 
         setShowAddNewCharge(false)
 
@@ -533,7 +547,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                     { showAddNewCharge &&
 
                         <>  
-                            <br/>
+                            {/* <br/>
                             <div className="form-group field field-string">                  
                                 <label className="control-label">Category</label><br/>
                                 <select name="offence-category" id="cars" className="form-control" value={codeCategory} onChange={codeCategoryChange}>
@@ -550,28 +564,31 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                     <option value="cat11">OTHER CRIMINAL ACTS</option>
 
                                 </select>
-                            </div>
+                            </div> */}
+
                             <br/>
                             <div className="form-group field field-string">                  
                                     <label className="control-label">ICCS Code</label>
                                     <input 
                                         type="text" 
-                                        className="form-control" 
-                                        list="codelist" 
-                                        value={UNODC} 
-                                        onChange={UNODCChange}/>
+                                        className="form-control"
+                                        list="codelist"
+                                        value={UNODC}
+                                        onChange={UNODCChange}
+                                    />
+    
 
                                     <label>Charge name:</label>
-                                    <input 
+                                    <input
                                         type="text" 
                                         className="form-control" 
                                         value={chargeName}
-                                        disabled />
+                                        disabled /> 
                                     
 
                                     <datalist id="codelist">
                                         {codes.map((code:any) => (
-                                            <option key={code.id} value={code.ICCS} > {code.name} </option>
+                                            <option key={code.id} value={code.ICCS} data-id={code.id} > {code.name} </option>
                                         ))}
                                     </datalist>
                                 
@@ -583,7 +600,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                 // @ts-ignore
                                 validator={validator}
                                 formData={formData}
-                                onSubmit={processForm}
+                                onSubmit={addCharge}
                                 onError={log('errors')}
                             >
                                 <div className="">
