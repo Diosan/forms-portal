@@ -71,6 +71,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const sendOTP = async () => {
         // console.log('\n\n\n complainant_email: ', complainant_email)
+        console.log('\n\n\n Sending OTP')
         goToAnchor();
         let otp_send = await axios.post(
             API_URL + '/api/submissions/send_otp',
@@ -320,7 +321,8 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                 }
             </>
             :<>
-                <h5 className="m-0 mb-3 text-center fw-bold">Signed</h5>
+                {/* <h5 className="m-0 mb-3 text-center fw-bold">Signed</h5> */}
+                <></>
             
             </>
         }

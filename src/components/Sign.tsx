@@ -399,7 +399,7 @@ export const Sign = ({ }: SignProps) => {
                                 complainant_rank={complainantRank}
                                 complainant_email={complainantEmail}
                                 complainant_name={complainantName}
-                                already_signed={status == status}
+                                already_signed={status == "signed"}
                                 submissionType={submissionType}
                                 already_verified={status == 'verified'}
                             />
