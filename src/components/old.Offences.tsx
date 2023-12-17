@@ -24,15 +24,15 @@ export const Offences = ({first_name, last_name, accused_id}: OffencesProps) => 
 
     return (
         <>
-        { offences.map((accused: any, i: number) => (
-                <tr key={accused.id} >
-                    <td>{first_name}</td>
-                    <td>{last_name}</td>
-                    <td>{accused.ICCS}</td>
-                    <td>{accused.dateOfOffence}</td>
-                    <td>{accused.particulars}</td>
+            { offences.map((offence: any, i: number) => (
+                <tr key={offence.id} >
+                    <td style={{width:"120px"}}>{first_name + ' ' + last_name} </td>
+                    <td style={{width:"100px"}}>{offence.ICCS}</td>
+                    <td style={{width:"100px"}}>{offence.name}</td> 
+                    <td style={{width:"100px"}}>{offence.dateOfOffence}</td>
+                    <td style={{width:"260px"}}>{offence.particulars}</td>
                 </tr>
-        ))}
+            ))}
         </>
         
 
