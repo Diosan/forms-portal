@@ -64,14 +64,91 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [showAddNewCharge, setShowAddNewCharge] = useState(false)
 
+    const [codeCategory, setCodeCategory] = useState('cat1')
+
     const [codes, setCodes] = useState<{}[]>([])
+
+    const [chargeName, setChargeName] = useState('')
+
+    
 
     const [UNODC, setUNODC] = useState('')
 
-    const UNODCChange = (event: any) => {
-        // console.log(event.target.value)
+    const UNODCChange = async (event: any) => {
+        // console.log('UNODCChange: ', event.target.value)
         setUNODC(event.target.value)
-      }
+        // optionsData.find((option) => option.label === inputValue);
+        let charge: any = codes.find((code: any) => code.ICCS == event.target.value);
+        await setChargeName(charge.name)
+    }
+
+    const codeCategoryChange = async (event: any) => {        
+
+        await setCodeCategory(event.target.value)
+
+        setUNODC('')
+        setChargeName('')
+
+        console.log('codeCategory: ', codeCategory)
+
+        let returned_codes = await axios.get(API_URL + '/api/utils/charge-codes')
+        let all_codes = returned_codes.data
+
+        console.log('all_codes: ', all_codes)
+
+        switch(codeCategory) {
+            case 'cat1':
+                console.log('Filtering by cat1')
+                await setCodes(all_codes.cat1)
+                break;
+            case 'cat2':
+                console.log('Filtering by cat2')
+                await  setCodes(all_codes.cat2)
+                break;
+            case 'cat3':
+                console.log('Filtering by cat3')
+                await setCodes(all_codes.cat3)
+                break;
+            case 'cat4':
+                console.log('Filtering by cat4')
+                await setCodes(all_codes.cat4)
+                break;
+            case 'cat5':
+                console.log('Filtering by cat5')
+                await setCodes(all_codes.cat5)
+                break;
+            case 'cat6':
+                console.log('Filtering by cat6')
+                await setCodes(all_codes.cat6)
+                break;
+            case 'cat7':
+                console.log('Filtering by cat7')
+                await setCodes(all_codes.cat7)
+                break;
+            case 'cat8':
+                console.log('Filtering by cat8')
+                await setCodes(all_codes.cat8)
+                break;
+            case 'cat9':
+                console.log('Filtering by cat9')
+                await setCodes(all_codes.cat9)
+                break;
+            case 'cat10':
+                console.log('Filtering by cat10')
+                await setCodes(all_codes.cat10)
+                break;
+            case 'cat11':
+                console.log('Filtering by cat11')
+                await setCodes(all_codes.cat11)
+                break;
+            default:
+                console.log('Filtering deafult case')
+                await setCodes(all_codes.cat1)
+        }
+
+        console.log('codes: ', codes)
+
+    }
 
     const addNewCharge = async () => {
         setShowAddNewCharge(true)
@@ -84,12 +161,14 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
         setShowAddNewCharge(false)
 
         console.log('Submitted form data: ', form.formData)
+        console.log('\n\n\n UNODC: ', UNODC)
 
         setFormData({})
     
         let charge = {
-          name: form.formData.name,
-          ICCS: '', 
+          //   name: form.formData.name,
+          name: chargeName,
+          ICCS: UNODC, 
           UNODC: UNODC,
           counts: form.formData.count,
           accusedId: accused_id,
@@ -300,7 +379,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             // let returned_codes = await axios.get(API_URL + '/api/submissions/codes/1')
             let returned_codes = await axios.get(API_URL + '/api/utils/charge-codes')
             // setCodes(returned_codes.data.charge_codes)
-            setCodes(returned_codes.data.cat1)
+            let all_codes = returned_codes.data
+            setCodes(all_codes.cat1)
         })();
     }, []);
 
@@ -453,20 +533,45 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                     { showAddNewCharge &&
 
                         <>  
-                            <br/><br/>
+                            <br/>
                             <div className="form-group field field-string">                  
-                                    <label className="control-label">Charge Code</label>
+                                <label className="control-label">Category</label><br/>
+                                <select name="offence-category" id="cars" className="form-control" value={codeCategory} onChange={codeCategoryChange}>
+                                    <option value="cat1">ACTS LEADING TO DEATH </option>
+                                    <option value="cat2">ACTS LEADING TO HARM </option>
+                                    <option value="cat3">INJURIOUS ACTS OF A SEXUAL NATURE</option>
+                                    <option value="cat4">ACTS AGAINST PROPERTY</option>
+                                    <option value="cat5">ACTS AGAINST PROPERTY ONLY</option>
+                                    <option value="cat6">ACTS INVOLVING CONTROLLED</option>
+                                    <option value="cat7">ACTS INVOLVING FRAUD, DECEPTION</option>
+                                    <option value="cat8">ACTS AGAINST PUBLIC ORDER</option>
+                                    <option value="cat9">ACTS AGAINST PUBLIC SAFETY</option>
+                                    <option value="cat10">ACTS AGAINST THE NATURAL</option>
+                                    <option value="cat11">OTHER CRIMINAL ACTS</option>
+
+                                </select>
+                            </div>
+                            <br/>
+                            <div className="form-group field field-string">                  
+                                    <label className="control-label">ICCS Code</label>
                                     <input 
                                         type="text" 
                                         className="form-control" 
                                         list="codelist" 
                                         value={UNODC} 
                                         onChange={UNODCChange}/>
+
+                                    <label>Charge name:</label>
+                                    <input 
+                                        type="text" 
+                                        className="form-control" 
+                                        value={chargeName}
+                                        disabled />
+                                    
+
                                     <datalist id="codelist">
                                         {codes.map((code:any) => (
-                                            <option value={code.ICCS} key={code.id}>
-                                                {code.name}
-                                            </option>
+                                            <option key={code.id} value={code.ICCS} > {code.name} </option>
                                         ))}
                                     </datalist>
                                 
