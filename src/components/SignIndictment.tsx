@@ -304,7 +304,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
 
 
-        {otpSent && !signed && !already_signed ?
+        {!otpSent && signed ?
             <>
             <h5 className="m-0 text-center fw-bold">Sign Submission</h5>
                 
@@ -325,22 +325,17 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             </>
         }
                 
-            
-
-
-
-
 
         {!otpSent && !signed && !already_signed ?
             <div className="">
-                <button className="btn btn-primary" type="submit" style={{ display:"block" ,margin:"0 auto", width:"200px"}} onClick={sendOTP}>Sign Submission</button>
+                <button className="btn btn-primary" type="submit" style={{ display:"block", margin:"0 auto", width:"200px"}} onClick={sendOTP}>Sign Submission</button>
             </div>
 
             : <></>
         }
 
 
-        {otpSent && !signed && !already_signed ?
+        {!otpSent && !signed && !already_signed ?
             <>
                 {/* <div className="mb-3">
                 <label>Commissioned Officer</label><br/>

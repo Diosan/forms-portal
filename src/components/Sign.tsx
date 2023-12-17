@@ -101,32 +101,46 @@ export const Sign = ({ }: SignProps) => {
             setDistrict(submission.data.complainant.courtDistrict)
             setAccuseds(submission.data.accuseds)
             console.log(submission.data.accuseds.length)
-            const refSign = useRef(null);
 
 
 
-            if (submission.data.accuseds.length === 0) {
-                return ''; // Return an empty string if the array is empty.
+            // if (submission.data.accuseds.length === 0) {
+            //     return ''; // Return an empty string if the array is empty.
+            // }
+
+            // if (submission.data.accuseds.length <= 2) {
+            //     // If there are 3 or fewer array members, concatenate their names with commas.
+            //     if (submission.data.accuseds.length == 2) {
+            //         const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
+            //         setAccusedNames(names.join('and '))
+            //     } else {
+            //         const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
+            //         setAccusedNames(names.join(' '))
+            //     }
+            //     // return names.join(', ');
+            // } else {
+            //     // If there are more than 3 array members, concatenate the names of the first 3 with commas,
+            //     // then add "and other" for the remaining members.
+            //     const namesOfFirstThree = submission.data.accuseds.slice(0, 3).map((item: any) => `${item.firstName} ${item.lastName}`);
+            //     const remainingCount = submission.data.accuseds.length - 3;
+            //     setAccusedNames(`${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`)
+            //     // return `${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`;
+            // }
+
+
+
+            // Your provided array of accused
+            const accusedArray = submission.data.accuseds;
+            // Extract the first and last names of up to 3 accused individuals
+            let accusedNames = accusedArray.slice(0, 3).map((accused: { firstName: any; lastName: any }) => `${accused.firstName} ${accused.lastName}`).join(', ');
+
+            // Add "and" before the last accused if there are more than one accused
+            if (accusedArray.length > 1) {
+                const lastIndex = accusedArray.length - 1;
+                accusedNames = `${accusedNames.slice(0, accusedNames.lastIndexOf(','))}, and ${accusedNames.slice(accusedNames.lastIndexOf(',') + 2)}`;
             }
+            setAccusedNames(accusedNames)
 
-            if (submission.data.accuseds.length <= 2) {
-                // If there are 3 or fewer array members, concatenate their names with commas.
-                if (submission.data.accuseds.length == 2){
-                    const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
-                    setAccusedNames(names.join('and '))
-                }else{
-                    const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
-                    setAccusedNames(names.join(' '))
-                }
-                // return names.join(', ');
-            } else {
-                // If there are more than 3 array members, concatenate the names of the first 3 with commas,
-                // then add "and other" for the remaining members.
-                const namesOfFirstThree = submission.data.accuseds.slice(0, 3).map((item: any) => `${item.firstName} ${item.lastName}`);
-                const remainingCount = submission.data.accuseds.length - 3;
-                setAccusedNames(`${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`)
-                // return `${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`;
-            }
 
 
 
@@ -235,7 +249,7 @@ export const Sign = ({ }: SignProps) => {
 
                 </div>
 
-                <div className="card fade show swf-content"  style={{borderRadius:"0"}}>
+                <div className="card fade show">
                     <div id="container-pdf" className="card-body">
                         <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt" }}>
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt" }}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
@@ -306,7 +320,7 @@ export const Sign = ({ }: SignProps) => {
                                         <tbody style={{ fontSize: "10pt", }}>
                                             <tr>
                                                 <td style={{ width: "160px" }}><label>Name of Accused: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>-{accused.adulthood}.</strong></td>
+                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -359,6 +373,10 @@ export const Sign = ({ }: SignProps) => {
                         <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Offences</div>
 
 
+
+
+
+
                         <div className="text-left complainant-details" style={{}}>
                             <table className="" width={"700px"}>
                                 {/* <thead>
@@ -388,7 +406,7 @@ export const Sign = ({ }: SignProps) => {
 
                         <div className="text-left complainant-details">
 
-                            
+
 
                             {/* <p><strong>{' ' + currentDate()}</strong></p> */}
 
@@ -399,7 +417,7 @@ export const Sign = ({ }: SignProps) => {
                                 complainant_rank={complainantRank}
                                 complainant_email={complainantEmail}
                                 complainant_name={complainantName}
-                                already_signed={status == status}
+                                already_signed={status == 'signed'}
                                 submissionType={submissionType}
                                 already_verified={status == 'verified'}
                             />

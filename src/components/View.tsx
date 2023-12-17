@@ -98,28 +98,17 @@ export const View = ({ }: SignProps) => {
             setMatterType(submission.data.submission.matterType)
 
 
-            if (submission.data.accuseds.length === 0) {
-                return ''; // Return an empty string if the array is empty.
-            }
+           // Your provided array of accused
+           const accusedArray = submission.data.accuseds;
+           // Extract the first and last names of up to 3 accused individuals
+           let accusedNames = accusedArray.slice(0, 3).map((accused: { firstName: any; lastName: any }) => `${accused.firstName} ${accused.lastName}`).join(', ');
 
-            if (submission.data.accuseds.length <= 2) {
-                // If there are 3 or fewer array members, concatenate their names with commas.
-                if (submission.data.accuseds.length == 2){
-                    const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
-                    setAccusedNames(names.join('and '))
-                }else{
-                    const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
-                    setAccusedNames(names.join(' '))
-                }
-                // return names.join(', ');
-            } else {
-                // If there are more than 3 array members, concatenate the names of the first 3 with commas,
-                // then add "and other" for the remaining members.
-                const namesOfFirstThree = submission.data.accuseds.slice(0, 3).map((item: any) => `${item.firstName} ${item.lastName}`);
-                const remainingCount = submission.data.accuseds.length - 3;
-                setAccusedNames(`${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`)
-                // return `${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`;
-            }
+           // Add "and" before the last accused if there are more than one accused
+           if (accusedArray.length > 1) {
+               const lastIndex = accusedArray.length - 1;
+               accusedNames = `${accusedNames.slice(0, accusedNames.lastIndexOf(','))}, and ${accusedNames.slice(accusedNames.lastIndexOf(',') + 2)}`;
+           }
+           setAccusedNames(accusedNames)
 
 
 
@@ -271,7 +260,7 @@ export const View = ({ }: SignProps) => {
                                         <tbody style={{ fontSize: "10pt", }}>
                                             <tr>
                                                 <td style={{ width: "160px" }}><label>Name of Accused: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>-{accused.adulthood}.</strong></td>
+                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
                                             </tr>
                                         </tbody>
                                     </table>
