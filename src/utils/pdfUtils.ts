@@ -372,7 +372,7 @@ body {
   }
   
   .complainant-details {
-    width: 100%;
+    width: 700px;
     text-align: left;
   }
   
@@ -394,35 +394,27 @@ export const exportPDF = (elementId:string, serverUrl:string, submissionId:numbe
       if (!element) {
         throw new Error('Element not found.');
       }
-
       // Get the HTML content
       const htmlContent = element.outerHTML;
-
       const htmlToPrint = `<html><head><style>${stylesForPrinting}</style></head>
       <body>${htmlContent}</body
       </html>`;
-
         // Prepare the data to be sent
         const data = {
           html: htmlToPrint,
           submissionId: submissionId
         };
-
-
-      console.log(data);
-
+      // console.log(data);
       // Send the request to the server
       axios.post(serverUrl, data, {
-        responseType: 'blob' // This ensures we get the PDF data back
+        // responseType: 'blob' // This ensures we get the PDF data back
       })
       .then(response => {
         // Create a URL for the PDF blob
-        const fileURL = URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
-
+        console.log(response || "")
         // Open the PDF in a new window or tab
-        window.open(fileURL, '_blank');
-
-        resolve(fileURL);
+        window.open(response?.data?.efilingResponse?.documentLink, '_blank');
+        resolve(response?.data?.efilingResponse?.documentlink);
       })
       .catch(error => {
         console.error('Error sending HTML to server:', error);

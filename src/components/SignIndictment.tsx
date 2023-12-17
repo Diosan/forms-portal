@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
@@ -14,9 +14,11 @@ import { resendSigningOTP } from "../slices/auth";
 
 type SignIndictmentProps = {
     submission_id: number,
+    submissionType: string,
     complainant_email: string,
     complainant_name: string,
     complainant_regnum: string,
+    complainant_rank: string,
     already_signed: boolean,
     already_verified: boolean
 }
@@ -24,13 +26,13 @@ type SignIndictmentProps = {
 const log = (type: any) => console.log.bind(console, type)
 
 
-export const SignIndictment = ({submission_id, complainant_email, complainant_name, complainant_regnum, already_signed, already_verified}:SignIndictmentProps) => {
+export const SignIndictment = ({ submission_id, complainant_email, submissionType, complainant_rank, complainant_name, complainant_regnum, already_signed, already_verified }: SignIndictmentProps) => {
 
-    const printPDF = async (submissionId:number) => {
-        
+    const printPDF = async (submissionId: number) => {
+
         try {
-          const message = await exportPDF('container-pdf', 'https://swif.ttlawcourts.org/api/pdf/puppeteer', submissionId);
-          alert('Submission successful!');
+            const message = await exportPDF('container-pdf', 'https://swif.ttlawcourts.org/api/pdf/puppeteer', submissionId);
+            alert('Submission successful!');
         } catch (error) {
             console.log(error)
             alert('Failed to submit the form. Please check your email for confirmation.');
@@ -69,8 +71,9 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
     const sendOTP = async () => {
         // console.log('\n\n\n complainant_email: ', complainant_email)
+        goToAnchor();
         let otp_send = await axios.post(
-            API_URL + '/api/submissions/send_otp', 
+            API_URL + '/api/submissions/send_otp',
             {
                 submission_id: submission_id,
                 email: complainant_email,
@@ -78,15 +81,15 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             }
         )
         console.log('otp_send: ', otp_send.data)
-        if(otp_send.data.outcome == 'success') {
-          setOtpSent(true)  
+        if (otp_send.data.outcome == 'success') {
+            setOtpSent(true)
         }
     }
 
     const sendVerifyOTP = async () => {
         // console.log('\n\n\n complainant_email: ', complainant_email)
         let otp_send = await axios.post(
-            API_URL + '/api/submissions/send_verify_otp', 
+            API_URL + '/api/submissions/send_verify_otp',
             {
                 submission_id: submission_id,
                 email: complainant_email,
@@ -94,17 +97,16 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             }
         )
         console.log('otp_send: ', otp_send.data)
-        if(otp_send.data.outcome == 'success') {
-          setVerifyOtpSent(true)
-          setVerifierEmail(otp_send.data.email)  
+        if (otp_send.data.outcome == 'success') {
+            setVerifyOtpSent(true)
+            setVerifierEmail(otp_send.data.email)
         }
     }
 
-        
-    const sign = async (event: any) => {
-        
-        event.preventDefault()
 
+    const sign = async (event: any) => {
+
+        event.preventDefault()
         console.log('\n\n\n signOTP: ', signOTP)
         console.log('\n\n\n')
 
@@ -113,16 +115,16 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             {
                 submission_id: submission_id,
                 email: complainant_email,
-                otp: signOTP 
-            } 
+                otp: signOTP
+            }
         )
 
         console.log('\n\n\n verification response: ', verified.data)
 
-        if(verified.data.outcome == 'success') {
+        if (verified.data.outcome == 'success') {
 
             let returned_signature = await axios.post(
-                API_URL + '/api/submissions/complainant_sign', 
+                API_URL + '/api/submissions/complainant_sign',
                 {
                     submission_id: submission_id,
                     email: complainant_email
@@ -134,13 +136,13 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             setSignatureHash(returned_signature.data.signature.hash)
             setSignatureName(returned_signature.data.user.firstName + ' ' + returned_signature.data.user.lastName)
             setSignatureDate(returned_signature.data.signature.createdAt)
-            
+
 
             // console.log('\n\n\n Signature hash: ', returned_signature.data.submission.hash)
             // console.log('\n\n\n')
 
             let signed_submission = await axios.post(
-                API_URL + '/api/submissions/update', 
+                API_URL + '/api/submissions/update',
                 {
                     id: submission_id,
                     status: 'signed'
@@ -164,11 +166,11 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         } else {
             alert('Verification failed. Try again');
         }
-        
+
     }
 
     const verify = async (event: any) => {
-        
+
         event.preventDefault()
 
         console.log('\n\n\n signOTP: ', signOTP)
@@ -179,16 +181,16 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             {
                 submission_id: submission_id,
                 email: verifierEmail,
-                otp: signOTP 
-            } 
+                otp: signOTP
+            }
         )
 
         console.log('\n\n\n verification response: ', verified.data)
 
-        if(verified.data.outcome == 'success') {
+        if (verified.data.outcome == 'success') {
 
             let returned_signature = await axios.post(
-                API_URL + '/api/submissions/verifier_sign', 
+                API_URL + '/api/submissions/verifier_sign',
                 {
                     submission_id: submission_id,
                     email: complainant_email
@@ -200,13 +202,13 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
             setVerificationHash(returned_signature.data.signature.hash)
             setVerificationName(returned_signature.data.user.firstName + ' ' + returned_signature.data.user.lastName)
             setVerificationDate(returned_signature.data.signature.createdAt)
-            
+
 
             // console.log('\n\n\n Signature hash: ', returned_signature.data.submission.hash)
             // console.log('\n\n\n')
 
             let signed_submission = await axios.post(
-                API_URL + '/api/submissions/update', 
+                API_URL + '/api/submissions/update',
                 {
                     id: submission_id,
                     status: 'verified'
@@ -223,32 +225,32 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
         } else {
             alert('Verification failed. Try again');
         }
-        
+
     }
 
     useEffect(() => {
         (async () => {
-            
+
             // let signature = await axios.get(API_URL + '/api/submissions/signature/' + submission_id)
             let submission = await axios.get(API_URL + '/api/submissions/' + submission_id)
             // console.log('\n\n\n complainant_email: ', complainant_email)
             let the_email = await complainant_email
             // console.log('\n\n\n the_email: ', the_email)
-            if(submission.data.submission.status == 'signed') {
+            if (submission.data.submission.status == 'signed') {
                 // console.log('retreived submission is signed')
 
                 let retrieved_signature = await axios.post(
-                    API_URL + '/api/submissions/signature/', 
-                    {                                                                        
+                    API_URL + '/api/submissions/signature/',
+                    {
                         submission_id: submission.data.submission.id,
                         userId: submission.data.submission.userId
                     }
                 )
 
-               
+
                 console.log('\n\n\n Signature for signed submission: ', retrieved_signature.data)
                 setSignatureHash(retrieved_signature.data.signature.hash)
-                setSignatureName(retrieved_signature.data.user.firstName + ' ' + retrieved_signature.data.user.lastName)                
+                setSignatureName(retrieved_signature.data.user.firstName + ' ' + retrieved_signature.data.user.lastName)
                 setSignatureDate(retrieved_signature.data.signature.createdAt)
             } else {
                 console.log('retreived submission is NOT signed')
@@ -274,26 +276,71 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
             // console.log('\n\n\n retreived signature: ', signature.data)
 
-        })();        
+        })();
     }, [])
 
 
 
-    const handleResendSigningOTP = (event:any, email:string) => {
+    const handleResendSigningOTP = (event: any, email: string) => {
         dispatch(resendSigningOTP({ email }) as any)
     }
 
-    return (<>
+    const goToAnchor = () => {
+        setTimeout(() => {
+            console.log('Anchor');
+            const anchorElement = document.getElementById('anchorSign');
+            if (anchorElement) {
+                anchorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 300); // 500 milliseconds delay
+    }
+    
 
 
 
-        {!otpSent && !signed && !already_signed ? 
-                <div className="d-grid gap-2">
-                    <button className="btn btn-dark" type="submit" onClick={sendOTP}>Sign Submission</button>
-                </div>
+    return (
+    
+        <div   id="acnhor-sign" style={{ border: "10px solid #eee", backgroundColor: "#f9f9f9", padding:"20px", margin:"25px 0 0 0"}} >
+
+
+
+        {otpSent && !signed && !already_signed ?
+            <>
+            <h5 className="m-0 text-center fw-bold">Sign Submission</h5>
+                
+                {submissionType == 'COMPLAINT WITHOUT OATH' ?
+                    <></>
+                    :
+                    // <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
+                    // </p>
+                    <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
+                        <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
+                        </p>
+                    </div>
+                }
+            </>
+            :<>
+                <h5 className="m-0 text-center fw-bold">Signed</h5>
+            
+            </>
+}
+                
+            
+
+
+
+
+
+        {!otpSent && !signed && !already_signed ?
+            <div className="">
+                <button className="btn btn-primary" type="submit" style={{ display:"block" ,margin:"0 auto", width:"200px"}} onClick={sendOTP}>Sign Submission</button>
+            </div>
+
             : <></>
-        }       
-        {otpSent && !signed  && !already_signed ?
+        }
+
+
+        {otpSent && !signed && !already_signed ?
             <>
                 {/* <div className="mb-3">
                 <label>Commissioned Officer</label><br/>
@@ -306,25 +353,62 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                 </div> */}
 
                 <form onSubmit={sign}>
-                    <div className="card py-5 px-3 otp-card fade show">
-                        <h5 className="m-0">Sign Submission</h5>
-                        <br/>
-                        <span className="mobile-text">Enter the code sent to email </span>
+                    <div className="" style={{}}>
+                        <br />
+
+                        <div className="text-center mb-2" style={{fontSize:"11pt", margin:"0 20px"}}>
+                        A verification code has been sent to your registered email address. Please enter this code below to authenticate and complete the signing process..
+                        </div>
+                        <div className="text-center">
+                            <div style={{display:"block", margin:"0 auto", width:"200px"}}><input
+                                type="text"
+                                name="otpCode"
+                                placeholder="******"
+                                style={{ fontSize: "16px", letterSpacing: '7px', textAlign: 'center', maxWidth: "200px" }}
+                                className="px-2 py-1 fs-3 mt-1 mb-2 stretched-text-input form-control otp-input"
+                                maxLength={6}
+                                value={signOTP}
+                                onChange={signOTPChange}
+                                minLength={6}
+                                pattern="\d{6}"
+                            />
+                            </div>
+
+                            <div className="text-center m-3"><button type="submit" className="btn btn-md btn-primary" >Sign and Submit</button></div>
+
+
+                        </div>
+
+
+
+
+
+
+
+                        {/* <span className="mobile-text">Enter the code sent to email </span>
                         <div className="d-flex flex-row mt-5 otp-row">
                             <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
                             <button type="submit" className="btn btn-secondary otp-button" >Sign And Submit</button>
-                        </div>
-                        <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
+                        </div> */}
+
+
+
+
+                        {/* <div className="text-center fs-6"><span className="mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor"> Click to resend.</span></div> */}
+                    
+                    
                     </div>
                 </form>
             </>
             : <></>
         }
 
-{ signed || already_signed?
+
+
+        {signed || already_signed ?
             <div>
-                
-               
+
+
                 <div className="signature-format-complainant">
                     {/* <!-- Row 1 --> */}
                     <div className="col-12 col">
@@ -346,13 +430,13 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                     {/* <!-- Row 3 --> */}
                     <div className="col-12 col">
                         <p className="hash-placeholder text-left">
-                        {signatureHash}</p>
+                            {signatureHash}</p>
                     </div>
                 </div>
-                
 
-                { verified || already_verified?
-                                
+
+                {verified || already_verified ?
+
                     <div className="signature-format-verifier">
                         {/* <!-- Row 1 --> */}
                         <div className="col-12 col">
@@ -374,29 +458,45 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
                         {/* <!-- Row 3 --> */}
                         <div className="col-12 col">
                             <p className="hash-placeholder text-left">
-                            {verificationHash}</p>
+                                {verificationHash}</p>
                         </div>
                     </div>
-                                
-                    : 
+
+                    :
                     <>
                         {verifyOtpSent ?
                             <form onSubmit={verify} className="verify">
-                                <br/><br/>
+                                <br /><br />
                                 <div className="card py-5 px-3 otp-card fade show">
                                     <h5 className="m-0">Verify Submission</h5>
-                                    <br/>
-                                    <span className="mobile-text">Enter the code sent to email </span>
-                                    <div className="d-flex flex-row mt-5 otp-row">
-                                        <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
-                                        <button type="submit" className="btn btn-secondary otp-button" >Verify</button>
+                                    <br />
+
+
+
+
+                                    <div className="">
+                                        <input
+                                            type="text"
+                                            name="otpCode"
+                                            placeholder="******"
+                                            style={{ fontSize: "16px", letterSpacing: '7px', textAlign: 'center', maxWidth: "200px" }}
+                                            className="px-2 py-1 fs-3 mt-1 mb-2 stretched-text-input form-control otp-input"
+                                            maxLength={6}
+                                            value={signOTP}
+                                            onChange={signOTPChange}
+                                            minLength={6}
+                                            pattern="\d{6}"
+                                        />
+
+                                        <div className="text-center"><button type="submit" className="btn btn-md btn-primary float-start" >Sign Now</button></div>
+
+
                                     </div>
-                                    <div className="text-center mt-5"><span className="d-block mobile-text">Don't receive the code?</span><span className="font-weight-bold text-danger cursor">Resend</span></div>
-                                </div>
+
+                                 </div>
                             </form>
                             :
                             <div className="d-grid gap-2 verify">
-                                <br></br>
                                 {/* <button className="btn btn-dark" type="submit" onClick={sendVerifyOTP}>Verify Submission</button> */}
                             </div>
                         }
@@ -406,13 +506,14 @@ export const SignIndictment = ({submission_id, complainant_email, complainant_na
 
 
 
-            </div>   
-            
-            
+            </div>
+
+
 
             : <></>
         }
+        <div id="anchorSign"></div>
 
-    </>)
+    </div>)
 
 }

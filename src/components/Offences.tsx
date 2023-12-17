@@ -38,14 +38,14 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
 
     return (
         <>
-            {Object.keys(offences).map((index, key) => (
+            {Object.keys(offences).map((index, accused_id) => (
                                             
 
-                <div key={index}  style={{margin:"0 0 20px 0", padding:"10px"}}>
+                <div key={index}  style={{margin:"0 0 20px 0", padding:"0"}}>
                     
-                    <div style={{fontSize:"11pt"}}><span style={{fontSize:"11pt", fontWeight:"bold"}}>Accused </span>- {first_name + " " + last_name}</div>
+                    <div style={{fontSize:"11pt"}}><span style={{fontSize:"10pt", fontWeight:"bold"}}>Accused </span>- {first_name + " " + last_name}</div>
                     <div style={{}}>
-                    <label style={{ fontSize: "10pt" }}>Offences</label>
+                    <label style={{ fontSize: "10pt", margin:"0 0 7px 0" }}>Offences</label>
 
 
                     {offences[parseInt(index)].map((offence: any, index) => (
@@ -53,12 +53,12 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
                         
                             <div style={{margin:"0 0 10px 0", borderBottom:"1px solid #666"}}>
                                 <table style={{ fontSize: "10pt" }}>
-                                    <tr key={offence.id}>
-                                        <td style={{ textAlign:"center", width: "100px", border: "1px solid #777" }}><div style={{fontWeight:"bold", textAlign:"center",fontSize:"9pt"}}>ICCS Code</div>
+                                    <tr key={offence.index}>
+                                        <td style={{ textAlign:"left", width: "100px"}}><div style={{fontWeight:"bold", textAlign:"left",fontSize:"9pt"}}>ICCS Code</div>
                                         <div>{offence.ICCS}</div>
                                         </td>
                                         <td style={{ width: "630px", border: "none" }}>
-                                            <table style={{ fontSize: "10pt" }}>
+                                            <table style={{ fontSize: "10pt", margin:"0 0 0 0" }}>
                                                 <tr key={offence.id}>
                                                     <td style={{ width: "120px", border: "none" }}><label>Name of Offence</label></td>
                                                     <td style={{ width: "400px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.name} </div></td>
@@ -74,22 +74,31 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
                                 </table>
 
 
-                                <table style={{ fontSize: "10pt" }}>
-                                    <tr key={offence.id}>
-                                        <td style={{ width: "670px", border: "none", textAlign:"center",  }}>
-                                            <label style={{ width: "670px"}}>Particulars of Offence</label>
-                                            <td style={{ width: "670px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.particulars} </div></td>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <div>
+                                    <div style={{ textAlign:"center", width: "700px", fontWeight: "bold", fontSize: "10pt", margin:"10px 0 5px 0" }}>Statement of Offence</div>
+                                </div>
+
+                                <div>
+                                    <div style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 0 10px"  }}>{offence.statement} </div>
+                                </div>
+
+                                <div>
+                                    <div style={{ textAlign:"center", width: "700px", fontWeight: "bold", fontSize: "10pt", margin:"10px 0 5px" }}>Particulars of Offence</div>
+                                </div>
+
+                                <div>
+                                    <div style={{ fontSize: "10pt", lineHeight:"13pt",   margin:"0 0 5px" }}>{offence.particulars} </div>
+                                </div>
+
+
                             </div>
                             
                         </>
                         
                     ))}
-                </div>
-
                     </div>
+
+                </div>
                     
             ))}
         </>
