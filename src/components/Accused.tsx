@@ -186,6 +186,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
           counts: form.formData.count,
           accusedId: accused_id,
           dateOfOffence: form.formData.dateOfOffence,
+          statementOfOffence: form.formData.statementOfOffence,
           particulars: form.formData.particulars
         }
     

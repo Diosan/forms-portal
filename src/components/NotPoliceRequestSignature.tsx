@@ -68,8 +68,8 @@ export const NotPoliceRequestSignature = ({submission_id, complainant_email}:Req
                 onSubmit={requestSignature}
                 onError={log('errors')}
             >
-            <div className="d-grid gap-2">
-                <button className="btn btn-dark" type="submit">Request Signature</button>
+            <div className="" style={{width:"200px", margin:"0 auto"}}>
+                <button className="btn btn-dark" type="submit">Ready to Sign</button>
             </div>
             </Form>
             

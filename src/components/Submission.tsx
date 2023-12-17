@@ -364,20 +364,21 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             setChargeSaved(true)
             break
           default:
-            console.log('Submission: ', returned_submission.data.submission)
+            console.log('Submission: ', returned_submission.data.complainant)
             break
         }
 
-        // if(returned_submission.data.submission.status == 'complainant_saved') {
-        //   setSubmissionComplainantSaved(true)
-        //   setComplainantFirstName(returned_submission.data.complainant.firstName)
-        //   setComplainantLastName(returned_submission.data.complainant.lastName)
-        //   setComplainantAgency(returned_submission.data.complainant.agency)
-        //   setComplainantRegNum(returned_submission.data.complainant.regNum)
-        //   setComplainantEmail(returned_submission.data.complainant.email)
-        // } else {
-        //   console.log('Submission: ', returned_submission.data.submission)
-        // }
+        
+          setSubmissionComplainantSaved(true)
+          setComplainantFirstName(returned_submission.data.complainant.firstName)
+          setComplainantLastName(returned_submission.data.complainant.lastName)
+          setComplainantAgency(returned_submission.data.complainant.agency)
+          setComplainantRank(returned_submission.data.complainant.rank)
+          setComplainantUnit(returned_submission.data.complainant.unit)
+          setComplainantRegNum(returned_submission.data.complainant.regNum)
+          setComplainantEmail(returned_submission.data.complainant.email)
+        
+          console.log('Complainant: ', returned_submission.data.complainant)
 
       }
     })();
@@ -439,12 +440,17 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                             />
                             {!submissionTitleSaved ?
                               <>
+                              <label className="control-label fs-6  my-2">
+                                Category Of Accused
+                              </label>
                                 <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
-                                  <option>Category Of Accused</option>
                                   <option value="adult">Adult only</option>
                                   <option value="child">Child only</option>
                                   <option value="both">Both</option>
                                 </select>
+                                <label className="control-label fs-6 my-2">
+                                Matter Type
+                              </label>
                                 <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
                                   <option>Select matter type</option>
                                   <option value="Indictable">Indictable</option>
@@ -458,11 +464,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                             }
                             <button
                               type="submit"
-                              className="btn btn-md btn-light ms-1 float-right" // Use btn-light for a button with no background
+                              className="btn btn-md btn-dark ms-1  my-2 mt-3" // Use btn-light for a button with no background
                             >
                               <i className="text-gray">
-                                <FontAwesomeIcon icon={faCheck} /> Continue
-                              </i>
+                                <FontAwesomeIcon icon={faCheck} /> 
+                              </i> Continue
                             </button>
                           </div>
 

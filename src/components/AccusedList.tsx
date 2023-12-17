@@ -60,7 +60,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
  
             
                 <div className="card accused-card mt-4" key={accused.id}>
-                    <div className="accused-index">Acused {index+1}</div>
+                    <div className="accused-index">Accused {index+1}</div>
                     <div className="card-body">
                         <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName} {accused.lastName}</h5>
                         <p className="card-text text-left">

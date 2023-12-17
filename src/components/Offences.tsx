@@ -24,6 +24,8 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
             groupedOffences[accused_id] = charges.data.charges;
             setOffences(groupedOffences);
 
+            console.log(groupedOffences);
+
             // Increment the accused count when new data is fetched
             setAccusedCount((count) => count + 1);
         };
@@ -79,7 +81,7 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
                                 </div>
 
                                 <div>
-                                    <div style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 0 10px"  }}>{offence.statement} </div>
+                                    <div style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 0 10px"  }}>{offence.statementOfOffence} </div>
                                 </div>
 
                                 <div>

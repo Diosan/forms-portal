@@ -235,7 +235,7 @@ export const Sign = ({ }: SignProps) => {
 
                 </div>
 
-                <div className="card fade show">
+                <div className="card fade show swf-content"  style={{borderRadius:"0"}}>
                     <div id="container-pdf" className="card-body">
                         <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt" }}>
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt" }}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
@@ -359,10 +359,6 @@ export const Sign = ({ }: SignProps) => {
                         <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Offences</div>
 
 
-
-
-
-
                         <div className="text-left complainant-details" style={{}}>
                             <table className="" width={"700px"}>
                                 {/* <thead>
@@ -403,7 +399,7 @@ export const Sign = ({ }: SignProps) => {
                                 complainant_rank={complainantRank}
                                 complainant_email={complainantEmail}
                                 complainant_name={complainantName}
-                                already_signed={status == 'signed'}
+                                already_signed={status == status}
                                 submissionType={submissionType}
                                 already_verified={status == 'verified'}
                             />

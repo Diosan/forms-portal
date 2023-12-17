@@ -8,6 +8,7 @@ import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
 import "../assets/Sign.css"
 import "../assets/Signature.css"
+import "../assets/Style.css"
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
@@ -52,7 +53,11 @@ export const View = ({ }: SignProps) => {
     const [complainantName, setComplainantName] = useState('')
     const [complainantAgency, setComplainantAgency] = useState('')
     const [complainantRegNum, setComplainantRegNum] = useState('')
+    const [complainantRank, setComplainantRank] = useState('')
     const [complainantEmail, setComplainantEmail] = useState('')
+    const [complainantStation, setComplainantStation] = useState('')
+    const [matterType, setMatterType] = useState('')
+    const [accusedNames, setAccusedNames] = useState('')
     const [title, setTitle] = useState('')
     const [accuseds, setAccuseds] = useState([])
     const [offences, setOffences] = useState<{
@@ -90,17 +95,46 @@ export const View = ({ }: SignProps) => {
             setCourt(submission.data.complainant.court)
             setDistrict(submission.data.complainant.courtDistrict)
             setAccuseds(submission.data.accuseds)
-            switch(submission.data.submission.type) {
-                case 'complaint_with_oath':
-                  setSubmissionType('COMPLAINT ON OATH')
-                  break;
-                case 'complaint_without_oath':
-                  setSubmissionType('COMPLAINT WITHOUT OATH')
-                  break;
-                default:
-                  setSubmissionType('COMPLAINT ON OATH')
+            setMatterType(submission.data.submission.matterType)
+
+
+            if (submission.data.accuseds.length === 0) {
+                return ''; // Return an empty string if the array is empty.
             }
-            
+
+            if (submission.data.accuseds.length <= 2) {
+                // If there are 3 or fewer array members, concatenate their names with commas.
+                if (submission.data.accuseds.length == 2){
+                    const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
+                    setAccusedNames(names.join('and '))
+                }else{
+                    const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
+                    setAccusedNames(names.join(' '))
+                }
+                // return names.join(', ');
+            } else {
+                // If there are more than 3 array members, concatenate the names of the first 3 with commas,
+                // then add "and other" for the remaining members.
+                const namesOfFirstThree = submission.data.accuseds.slice(0, 3).map((item: any) => `${item.firstName} ${item.lastName}`);
+                const remainingCount = submission.data.accuseds.length - 3;
+                setAccusedNames(`${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`)
+                // return `${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`;
+            }
+
+
+
+
+            switch (submission.data.submission.type) {
+                case 'complaint_with_oath':
+                    setSubmissionType('COMPLAINT ON OATH')
+                    break;
+                case 'complaint_without_oath':
+                    setSubmissionType('COMPLAINT WITHOUT OATH')
+                    break;
+                default:
+                    setSubmissionType('COMPLAINT ON OATH')
+            }
+
         }
 
 
@@ -132,7 +166,7 @@ export const View = ({ }: SignProps) => {
 
             console.log('\n\n\n You are logged in \n\n\n')
             fetchSubmission()
-            
+
 
         } else {
 
@@ -145,7 +179,7 @@ export const View = ({ }: SignProps) => {
     return (
         <div className="d-flex container-pdf">
 
-            
+
 
             <div className="container submissions-container" style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}>
 
@@ -154,31 +188,176 @@ export const View = ({ }: SignProps) => {
                     <h4 className='mb-3'> Complaint With Oath ({title})</h4>
                 </div> */}
 
-                <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#333", color: "#fff" }}>
-                  <div className="row" style={{ maxWidth: "200px", margin: "0 auto", color: "#fff", textDecoration: "none" }} >
-                    <a style={{ color: "#fff", textDecoration: "none" }} href="/submissions" className="m-0 btn-link new-submission-btn float-start">
-                      <FontAwesomeIcon icon={faArrowLeftLong} />
-                    </a>
-                  </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1"> {submissionType} </h5>
+                <div className="px-2 py-2 d-flex align-items-center swf-content" style={{ backgroundColor: "#333", color: "#fff" }}>
+                    <div className="row" style={{ maxWidth: "200px", margin: "0 auto", color: "#fff", textDecoration: "none" }} >
+                        <a style={{ color: "#fff", textDecoration: "none" }} href="/submissions" className="m-0 btn-link new-submission-btn float-start">
+                            <FontAwesomeIcon icon={faArrowLeftLong} />
+                        </a>
+                    </div>
+                    <h5 className="fw-bold mx-3 mb-0 flex-grow-1"> {submissionType} </h5>
 
                 </div>
 
-    
 
 
-                <div className="card fade show">
+
+                <div className="swf-content card fade show" style={{borderRadius:"0"}}>
                     <div className="card-body">
-                        <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"11pt", lineHeight:"12pt"}}>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt"}}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"13pt"}}>{submissionType}</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>IN THE {court.toUpperCase()} OF JUSTICE</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"10pt"}}>CRIMINAL DIVISION {district.toUpperCase()}</div>
-                            <div  style={{textAlign:"left", fontWeight:"bold", fontSize:"9pt", marginTop:"20px", marginBottom:"20px"}}>Matter Type: </div>
+                        <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt" }}>
+                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt" }}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
+                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "13pt" }}>{submissionType}</div>
+                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>IN THE {court.toUpperCase()} OF JUSTICE</div>
+                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>CRIMINAL DIVISION {"("} {district.toUpperCase()} {")"} </div>
+                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt", marginTop: "20px", marginBottom: "20px" }}>Matter Type: {matterType}</div>
                         </div>
-                        {/* <h5 className="card-title">Complainant: The State</h5><br /> <br /> */}
+
+
+                        <table width={"700px"}
+                            style={{ marginBottom: "10px", textAlign: "center" }}>
+                            <tbody>
+
+                                <tr>
+                                    <td><div style={{ fontSize: "10pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 0" }}>The State<br />V</div></td>
+                                </tr>
+
+                                <tr style={{ textAlign: "center" }}>
+                                    <td><div style={{ fontSize: "10pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 10px" }}>{accusedNames}</div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Complainant Information</div>
+
+                        <table width={"700px"}
+                            style={{ marginBottom: "10px", textAlign: "left", fontSize: "9pt" }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{}}><label>Complainant First Name: </label>
+                                        <div style={{ marginBottom: "10px" }}>{complainantName}</div>
+                                    </td>
+
+
+                                    <td style={{}}><label>Complainant Last Name: </label>
+                                        <div style={{ marginBottom: "10px" }}>{complainantName}</div>
+                                    </td>
+
+                                    <td style={{}}><label>Complainant Rank: </label>
+                                        <div style={{ marginBottom: "10px" }}>{complainantRank}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{}}><label>Complainant Regimental #</label>
+                                        <div style={{ marginBottom: "10px" }}>{complainantRegNum}</div></td>
+
+                                    <td style={{}}><label>Complainant Email Address: </label>
+                                        <div style={{ marginBottom: "10px" }}>{complainantEmail}</div>
+                                    </td>
+
+                                    <td style={{}}><label>Complainant Station: </label>
+                                        <div style={{ marginBottom: "10px" }}>{complainantStation}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
                         <div className="text-left complainant-details">
+                            {accuseds.map((accused: any, i: number) => (
+                                <>
+                                    <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused {i + 1}  Information</div>
+
+
+                                    <table width={"700px"} className="accused-table" key={accused.id}
+                                        style={{ marginBottom: "10px" }}>
+                                        <tbody style={{ fontSize: "10pt", }}>
+                                            <tr>
+                                                <td style={{ width: "160px" }}><label>Name of Accused: </label></td>
+                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>-{accused.adulthood}.</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                    <table width={"700px"} className="accused-table" key={accused.id}
+                                        style={{ marginBottom: "10px" }}>
+                                        <tbody style={{ fontSize: "9.5pt", }}>
+                                            <tr>
+                                                <td><label>ID: </label></td>
+                                                <td>{accused.identification}</td>
+                                                <td><label>Gender Identity: </label></td>
+                                                <td>{accused.gender}</td>
+                                            </tr>
+                                            <tr>
+
+                                            </tr>
+                                            <tr>
+                                                <td><label>Date Of Birth: </label></td>
+                                                <td>{accused.dateOfBirth}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label>Address: </label></td>
+                                                <td colSpan={3}>{accused.address}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style={{ width: "300px" }}><label>National of Trinidad and Tobago: </label></td>
+                                                <td style={{ width: "100px" }}>{accused.tntNational ? 'Yes' : 'No'}</td>
+                                                <td style={{ width: "300px" }}><label>Resident of Trinidad and Tobago: </label></td>
+                                                <td>{accused.tntResident ? 'Yes' : 'No'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label>National of another Country: </label></td>
+                                                <td>{accused.otherNational ? 'Yes' : 'No'}</td>
+                                                <td style={{ width: "250px" }}><label>Resident of another Country: </label></td>
+                                                <td>{accused.otherResident ? 'Yes' : 'No'}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label>Previous Criminal Record: </label></td>
+                                                <td>{accused.previousCriminalRecord}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </>
+                            ))}
+
+                        </div>
+
+                        <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Offences</div>
+
+
+                        <div className="text-left complainant-details" style={{}}>
+                            <table className="" width={"700px"}>
+                                {/* <thead>
+                                    <tr>
+                                        <th style={{ width: "120px" }}>Accused</th>
+                                        <th style={{ width: "100px" }}>ICCS<br />Code</th>
+                                        <th style={{ width: "100px" }}>Name of<br />Offence</th>
+                                        <th style={{ width: "100px" }}>Date of<br />Offence</th>
+                                        <th style={{ width: "260px" }}>Particulars of Offence</th>
+                                    </tr>
+                                </thead> */}
+                                <tbody>
+
+                                    {accuseds.map((accused: any, i: number) => (
+                                        <Offences
+                                            first_name={accused.firstName}
+                                            last_name={accused.lastName}
+                                            accused_id={accused.id}
+                                            key={i}
+                                        />
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        
+                        
+                        
+                       
+
+
+
+
+                        {/* <div className="text-left complainant-details">
                             {accuseds.map((accused: any, i: number) => (
                                 <table className="accused-table" key={accused.id}>
                                     <tbody>
@@ -224,67 +403,8 @@ export const View = ({ }: SignProps) => {
                                 </table>
                             ))}
 
-                        </div>
-                        <br /><br />
-
-                        <h5 className="card-title">Offences</h5><br />
-                        <div className="text-left complainant-details">
-                            <table className="offence-table" >
-                                <thead>
-                                    <tr>
-                                        <th>Accused First Name</th>
-                                        <th>Accused Last Name</th>
-                                        <th>UNODC Code</th>
-                                        <th>Date Of Offence</th>
-                                        <th>Particulars Of Offence</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* { offences.map((offence) => (
-                                        
-                                            <tr key={offence.id}>
-                                                <td>{offence.firstName}</td>
-                                                <td>{offence.lastName}</td>
-                                                <td>{offence.ICCS}</td>
-                                                <td>{offence.dateOfOffence}</td>
-                                                <td>{offence.particulars}</td>
-                                            </tr>                                        
-                                       
-                                    ))} */}
-                                    {accuseds.map((accused: any) => (
-                                        <Offences
-                                            first_name={accused.firstName}
-                                            last_name={accused.lastName}
-                                            accused_id={accused.id}
-                                            key={accused.id}
-                                        />
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <br /><br />
-                        <div className="text-left complainant-details">
-
-                            {submissionType == 'COMPLAINT WITHOUT OATH' ?
-                                <></>
-                                :
-                                <p>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-                                </p>
-                            }
-
-                            {/* <p><strong>{' ' + currentDate()}</strong></p> */}
-                            <br /><br /><br />
-
-                            <Signatures 
-                                submission_id={parseInt('' + id)}
-                                complainant_email={complainantEmail} 
-                                complainant_name={complainantName} 
-                                already_signed={status == 'signed'}
-                                already_verified={status == 'verified'} 
-                            />
-
-                        </div>
+                        </div> */}
+                       
 
                     </div>
 

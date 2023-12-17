@@ -320,10 +320,10 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                 }
             </>
             :<>
-                <h5 className="m-0 text-center fw-bold">Signed</h5>
+                <h5 className="m-0 mb-3 text-center fw-bold">Signed</h5>
             
             </>
-}
+        }
                 
             
 
