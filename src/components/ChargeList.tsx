@@ -37,9 +37,8 @@ const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
             <table className="charge-table mt-2 mb-0">
                 <thead>
                     <tr>
+                        <th>ICCS Code</th>
                         <th>Name Of Offence</th>
-                        <th>ICCS</th>
-                        {/* <th>UNODC</th> */}
                         <th>Counts</th>
                         <th>Date Of Offence</th>
                         <th>Particulars Of Offence</th>
@@ -48,9 +47,8 @@ const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
                 <tbody>
                     {accused_charges.map((charge: any) => (
                         <tr key={charge.id}>
-                            <td>{ charge.name }</td>
                             <td>{ charge.ICCS }</td>
-                            {/* <td>{ charge.UNODC }</td> */}
+                            <td>{ charge.name }</td>
                             <td>{ charge.counts }</td>
                             <td>{charge.dateOfOffence}</td>
                             <td>{ charge.particulars }</td>
