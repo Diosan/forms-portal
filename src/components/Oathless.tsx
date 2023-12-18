@@ -183,7 +183,7 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
         userId: decoded.id,
         matterType: matterType,
         adultOnly: adultOnly,
-        type: 'oathless'
+        type: 'complaint_without_oath'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {

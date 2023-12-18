@@ -183,7 +183,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
         userId: decoded.id,
         matterType: matterType,
         adultOnly: adultOnly,
-        type: 'summons'
+        type: 'complaint_without_oath_summons'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {

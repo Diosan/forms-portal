@@ -183,7 +183,7 @@ export const Warrant = ({ new_submission }: SubmissionProps) => {
         userId: decoded.id,
         matterType: matterType,
         adultOnly: adultOnly,
-        type: 'warrant'
+        type: 'complaint_with_oath_warrant'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
