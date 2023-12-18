@@ -33,6 +33,8 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
     const [chargeSchema, setChargeSchema] = useState({})
     const [chargeUI, setChargeUI] = useState({})
     const [accuseds, setAccuseds] = useState<{}[]>([])
+    const [type, setType] = useState('')
+    const [accusedSaved, setAccusedSaved] = useState(false)
 
     const requestSignature = () => {
         // alert('Performing requestSignature in Charge component')
@@ -41,6 +43,9 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
 
     const accusedAdded = (accused: any) => {
         setAccuseds([accused, ...accuseds])
+        if(type == 'indictment') {
+            setAccusedSaved(true)
+        } 
     }
 
 
@@ -68,6 +73,13 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
             // console.log('submissions_accuseds: ', submissions_accuseds.data.accuseds)
             setAccuseds(submissions_accuseds.data.accuseds)
             // console.log('accuseds: ', accuseds)
+        })();
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            let submission = await axios.get(API_URL + "/api/submissions/" + submission_id)
+            setType(submission.data.submission.type)
         })();
     }, []);
 
@@ -107,7 +119,7 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
                 editable={editable} 
             />
 
-            {editable?
+            {editable && !accusedSaved ?
                 <AddAccused 
                     submission_id={submission_id}
                     accused_added={accusedAdded}                  
