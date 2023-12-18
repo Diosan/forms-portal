@@ -413,7 +413,7 @@ export const exportPDF = (elementId:string, serverUrl:string, submissionId:numbe
         // Create a URL for the PDF blob
         console.log(response || "")
         // Open the PDF in a new window or tab
-        window.open(response?.data?.efilingResponse?.documentLink, '_blank');
+        // window.open(response?.data?.efilingResponse?.documentLink, '_blank');
         resolve(response?.data?.efilingResponse?.documentlink);
       })
       .catch(error => {

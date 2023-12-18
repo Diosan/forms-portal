@@ -28,18 +28,9 @@ const log = (type: any) => console.log.bind(console, type)
 
 export const SignIndictment = ({ submission_id, complainant_email, submissionType, complainant_rank, complainant_name, complainant_regnum, already_signed, already_verified }: SignIndictmentProps) => {
 
-    const printPDF = async (submissionId: number) => {
-
-        try {
-            const message = await exportPDF('container-pdf', 'https://swif.ttlawcourts.org/api/pdf/puppeteer', submissionId);
-            alert('Submission successful!');
-        } catch (error) {
-            console.log(error)
-            alert('Failed to submit the form. Please check your email for confirmation.');
-        }
-    };
-
+    
     const navigate = useNavigate()
+    const [isChecked, setIsChecked] = useState(false);
 
     const [otpSent, setOtpSent] = useState(false)
     const [verifyOtpSent, setVerifyOtpSent] = useState(false)
@@ -61,6 +52,27 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     const [isFinalSigned, setIsFinalSigned] = useState(false)
 
     const [showResendLink, setShowResendLink] = useState(true)
+
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+
+
+
+
+
+
+    const printPDF = async (submissionId: number) => {
+
+        try {
+            const message = await exportPDF('container-pdf', `${API_URL}/api/pdf/puppeteer`, submissionId);
+            alert('Submission successful!');
+            navigate(`/sign/${submissionId}`);
+        } catch (error) {
+            console.log(error)
+            alert('Failed to submit the form. Please check your email for confirmation.');
+        }
+    };
+
 
     const commisionedChange = (event: any) => {
         setCommissionedEmail(event.target.value)
@@ -148,9 +160,13 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             }
         )
 
-        console.log('\n\n\n verification response: ', verified.data)
+        console.log('\n\n verified: ', verified)
 
         if (verified.data.outcome == 'success') {
+
+            
+            // alert('Verification Successful');
+
 
             let returned_signature = await axios.post(
                 API_URL + '/api/submissions/complainant_sign',
@@ -161,39 +177,50 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             )
 
             console.log('\n\n\n returned_signature: ', returned_signature.data);
-
             setSignatureHash(returned_signature.data.signature.hash)
             setSignatureName(returned_signature.data.user.firstName + ' ' + returned_signature.data.user.lastName)
             setSignatureDate(returned_signature.data.signature.createdAt)
 
-
             // console.log('\n\n\n Signature hash: ', returned_signature.data.submission.hash)
             // console.log('\n\n\n')
 
-            let signed_submission = await axios.post(
+            setRefreshTrigger(oldValue => oldValue + 1);
+
+            await axios.post(
                 API_URL + '/api/submissions/update',
                 {
                     id: submission_id,
                     status: 'signed'
                 }
-            )
+            ).then(response => {
+                setRefreshTrigger(oldValue => oldValue + 1);
+
+                console.log("response from axios")
+                console.log(response.data);
+                setTimeout(async () => {
+                    // Refresh the page and submit the submission
+                    await printPDF(submission_id);
+                        setSigned(true);
+                    }, 1000); // Wait for 500 milliseconds
+            }) 
 
             console.log('\n\n\n commissionedEmail: ', commissionedEmail)
 
-            // let signRequest = await axios.post(
-            //     API_URL + '/api/submissions/sign_request',
-            //     {
-            //         submission_id: submission_id,
-            //         commisioned_email: commissionedEmail
-            //     }
-            // )
+        
 
-            printPDF(submission_id)
+            //refresh the page and submit the submission
 
-            setSigned(true)
+            // printPDF(submission_id)
+            // setSigned(true)
+            
+
+
+
 
         } else {
             alert('Verification failed. Try again');
+            return verified.data
+
         }
 
     }
@@ -311,7 +338,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             // console.log('\n\n\n retreived signature: ', signature.data)
 
         })();
-    }, [])
+    }, [refreshTrigger])
 
 
 
@@ -328,6 +355,10 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             }
         }, 300); // 500 milliseconds delay
     }
+
+    const handleCheckboxChange = (event:any) => {
+        setIsChecked(event.target.checked);
+    };
 
 
 
@@ -376,8 +407,8 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
             {submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
                 <>
-                    <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
-                        <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p>
+                    <div style={{ margin: "10px 0 20px 0", padding: "0 " }}>
+                        <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 0  0" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p>
                     </div>
                 </>
                 :
@@ -386,13 +417,17 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             }
 
 
-            <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
+            {!isFinalSigned &&
+            
+                <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
                 <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
                     
                     <div className="form-group field field-boolean">
                         <div className="checkbox">
                             <label>
-                                <input type="checkbox" />
+                                <input type="checkbox" checked={isChecked}
+                                    onChange={handleCheckboxChange}
+                                />
                                 <span>Summary of evidence is included in appendix A below</span>
                             </label>
                         </div>                            
@@ -401,13 +436,14 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
                 </p>
             </div>
+            }
 
 
 
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
 
                 <div className="" style={{ display:"block", margin:"15px auto", width:"200px"}} >
-                    <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                    <button  disabled={!isChecked} className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
                 </div>
 
                 : <></>
@@ -452,12 +488,15 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                                     {submissionType == 'COMPLAINT WITHOUT OATH' ?
                                         <></>
                                         :
-                                        // <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-                                        // </p>
-                                        <div style={{ margin: "10px 0 0 0", padding: "10px " }}>
-                                            <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-                                            </p>
-                                        </div>
+                                        <>
+                                        {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
+                                         </p>
+                                         <div style={{ margin: "10px 0 0 0", padding: "10px " }}>
+                                             <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
+                                             </p>
+                                         </div> */}
+                                         </>
+                                        
                                     }
                                 </div>
                                 
