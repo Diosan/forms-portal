@@ -1,6 +1,6 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
 import { useEffect, useState } from "react"
-import { API_URL } from "../config/api"
+const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'

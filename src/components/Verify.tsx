@@ -236,6 +236,8 @@ export const Verify = ({ }: VerifyProps) => {
                                 complainant_name={complainantName} 
                                 already_signed={status == 'signed'}
                                 already_verified={status == 'verified'} 
+                                submissionType="" 
+                                complainant_rank=""
                             />
 
                         </div>
