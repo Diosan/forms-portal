@@ -348,8 +348,8 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                         :
                         <>
                             {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-                            </p>
-                            <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
+                            </p> */}
+                            {/* <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
                                 <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p>
                             </div> */}
                         </>
@@ -370,13 +370,48 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             }
 
 
-            {!otpSent && !signed && !already_signed && !isFinalSigned ?
-            <div className="" style={{ display:"block", margin:"15px auto", width:"200px"}} >
-                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+
+            {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
+            </p> */}
+
+            {submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
+                <>
+                    <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
+                        <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p>
+                    </div>
+                </>
+                :
+                <>
+                </>
+            }
+
+
+            <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
+                <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
+                    
+                    <div className="form-group field field-boolean">
+                        <div className="checkbox">
+                            <label>
+                                <input type="checkbox" />
+                                <span>Summary of evidence is included in appendix A below</span>
+                            </label>
+                        </div>                            
+                    </div>
+                        
+
+                </p>
             </div>
 
-            : <></>
-        }
+
+
+            {!otpSent && !signed && !already_signed && !isFinalSigned ?
+
+                <div className="" style={{ display:"block", margin:"15px auto", width:"200px"}} >
+                    <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                </div>
+
+                : <></>
+            }
 
 
             {otpSent && !signed && !already_signed ?

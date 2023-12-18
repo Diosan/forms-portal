@@ -215,14 +215,16 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
       agency: "DPP",
       court: complainantCourt,
       courtDistrict: complainantCourtDistrict,
-      firstName: "DPP",
-      lastName: "DPP",
+      firstName: "N/A",
+      lastName: "N/A",
       email: "off_harry@link868.com",
       regNum: "N/A",
       rank: "N/A",
       unit: "N/A",
       submissionId: submissionId
     }
+
+    setComplainantEmail("off_harry@link868.com")
 
     console.log('Complainant being sent to server: ', complainant);
 
