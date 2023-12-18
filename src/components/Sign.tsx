@@ -43,6 +43,55 @@ type SignProps = {}
 
 const log = (type: any) => console.log.bind(console, type)
 
+function formatName(data: { firstName: any; lastName: any }) {
+    return `${data.firstName} ${data.lastName}`;
+  }
+
+
+  // Define a type for the individual person object
+type Person = {
+    firstName: string;
+    lastName: string;
+    // Add other fields from your JSON data as needed
+};
+
+// Define a type for the props of the NameDisplay component
+type NameDisplayProps = {
+    data: Person[];
+};
+
+
+
+
+  function NameDisplay({ data }: NameDisplayProps) {
+    // Function to generate formatted names
+    const generateDisplayText = (data:any, maxNames = 6) => {
+        return data.slice(0, maxNames).map((person:any, index:number) => (
+            // <div key={index}>{person.firstName} {person.lastName}</div>
+            <div style={{fontSize:"12pt", lineHeight:"18pt"}}  key={index}>
+                {person.firstName} {person.lastName}{index < data.length - 1 && index < maxNames - 1 ? ', ' : ''}
+            </div>
+            ));
+        };
+
+    return (
+        <div>
+            {generateDisplayText(data)}
+            {data.length > 6 && <div>and others</div>}
+        </div>
+    );
+}
+
+
+
+
+
+
+
+
+
+
+
 export const Sign = ({ }: SignProps) => {
 
     const { id } = useParams()
@@ -51,7 +100,7 @@ export const Sign = ({ }: SignProps) => {
 
     const auth = new AuthService
 
-
+    const maxNamesPerLine = 6;
 
     const [status, setStatus] = useState('')
     const [complainantName, setComplainantName] = useState('')
@@ -96,11 +145,17 @@ export const Sign = ({ }: SignProps) => {
             setComplainantAgency(submission.data.complainant.agency)
             setComplainantRegNum(submission.data.complainant.regNum)
             setComplainantEmail(submission.data.complainant.email)
+            setComplainantRank(submission.data.complainant.rank)
+            setComplainantStation(submission.data.complainant.unit)
             setCourt(submission.data.complainant.court)
             setMatterType(submission.data.submission.matterType)
             setDistrict(submission.data.complainant.courtDistrict)
             setAccuseds(submission.data.accuseds)
+
             console.log(submission.data.accuseds.length)
+
+            const formattedNames = submission.data.accuseds.map((item: any, index: any) => formatName(item));
+
 
 
 
@@ -264,11 +319,17 @@ export const Sign = ({ }: SignProps) => {
                             <tbody>
 
                                 <tr>
-                                    <td><div style={{ fontSize: "10pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 0" }}>The State<br />V</div></td>
+                                    <td><div style={{ fontSize: "12pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 0" }}>The State<br />V</div></td>
                                 </tr>
 
                                 <tr style={{ textAlign: "center" }}>
-                                    <td><div style={{ fontSize: "10pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 10px" }}>{accusedNames}</div></td>
+                                    <td><div style={{ fontSize: "10pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 10px" }}>
+                                        
+                                        {/* {accusedNames} */}
+                                        <NameDisplay data={accuseds} />
+                                        
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -312,7 +373,7 @@ export const Sign = ({ }: SignProps) => {
                         <div className="text-left complainant-details">
                             {accuseds.map((accused: any, i: number) => (
                                 <>
-                                    <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused {i + 1}  Information</div>
+                                    <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused Number {i + 1}  Information</div>
 
 
                                     <table width={"700px"} className="accused-table" key={accused.id}
@@ -322,6 +383,10 @@ export const Sign = ({ }: SignProps) => {
                                                 <td style={{ width: "160px" }}><label>Name of Accused: </label></td>
                                                 <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
                                             </tr>
+                                            <tr>
+                                                <td style={{ width: "160px" }}><label>Alias: </label></td>
+                                                <td colSpan={3}>{i + 1} {accused.alias}</td>
+                                            </tr>
                                         </tbody>
                                     </table>
 
@@ -329,11 +394,11 @@ export const Sign = ({ }: SignProps) => {
                                     <table width={"700px"} className="accused-table" key={accused.id}
                                         style={{ marginBottom: "10px" }}>
                                         <tbody style={{ fontSize: "9.5pt", }}>
-                                            <tr>
+                                        <tr>
                                                 <td><label>ID: </label></td>
                                                 <td>{accused.identification}</td>
-                                                <td><label>Gender Identity: </label></td>
-                                                <td>{accused.gender}</td>
+                                                <td><label>ID Type: </label></td>
+                                                <td>{accused.identificationType}</td>
                                             </tr>
                                             <tr>
 
@@ -341,6 +406,8 @@ export const Sign = ({ }: SignProps) => {
                                             <tr>
                                                 <td><label>Date Of Birth: </label></td>
                                                 <td>{accused.dateOfBirth}</td>
+                                                <td><label>Gender Identity: </label></td>
+                                                <td>{accused.gender}</td>
                                             </tr>
                                             <tr>
                                                 <td><label>Address: </label></td>
@@ -348,10 +415,10 @@ export const Sign = ({ }: SignProps) => {
                                             </tr>
 
                                             <tr>
-                                                <td style={{ width: "300px" }}><label>National of Trinidad and Tobago: </label></td>
-                                                <td style={{ width: "100px" }}>{accused.tntNational ? 'Yes' : 'No'}</td>
+                                                <td style={{ width: "280px" }}><label>National of Trinidad and Tobago: </label></td>
+                                                <td style={{ width: "160px" }}>{accused.tntNational ? 'Yes' : 'No'}</td>
                                                 <td style={{ width: "300px" }}><label>Resident of Trinidad and Tobago: </label></td>
-                                                <td>{accused.tntResident ? 'Yes' : 'No'}</td>
+                                                <td style={{ width: "160px" }}>{accused.tntResident ? 'Yes' : 'No'}</td>
                                             </tr>
                                             <tr>
                                                 <td><label>National of another Country: </label></td>
@@ -417,7 +484,7 @@ export const Sign = ({ }: SignProps) => {
                                 complainant_rank={complainantRank}
                                 complainant_email={complainantEmail}
                                 complainant_name={complainantName}
-                                already_signed={status == 'signed'}
+                                already_signed={status == "signed"}
                                 submissionType={submissionType}
                                 already_verified={status == 'verified'}
                             />

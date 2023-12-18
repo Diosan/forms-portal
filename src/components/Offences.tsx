@@ -56,17 +56,17 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
                             <div style={{margin:"0 0 10px 0", borderBottom:"1px solid #666"}}>
                                 <table style={{ fontSize: "10pt" }}>
                                     <tr key={offence.index}>
-                                        <td style={{ textAlign:"left", width: "100px"}}><div style={{fontWeight:"bold", textAlign:"left",fontSize:"9pt"}}>ICCS Code</div>
+                                        <td style={{ textAlign:"left", width: "90px"}}><div style={{fontWeight:"bold", textAlign:"left",fontSize:"9pt"}}>ICCS Code</div>
                                         <div>{offence.ICCS}</div>
                                         </td>
                                         <td style={{ width: "630px", border: "none" }}>
-                                            <table style={{ fontSize: "10pt", margin:"0 0 0 0" }}>
+                                            <table style={{ fontSize: "10pt", margin:"0 0 0 0", padding:"0 0 0 7px", borderLeft:"1px solid #888"}}>
                                                 <tr key={offence.id}>
-                                                    <td style={{ width: "120px", border: "none" }}><label>Name of Offence</label></td>
+                                                    <td style={{ width: "120px", border: "none" }}><label style={{ padding: "0 0 0 7px" }}>Name of Offence</label></td>
                                                     <td style={{ width: "400px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.name} </div></td>
                                                 </tr>
                                                 <tr key={offence.id}>
-                                                    <td style={{ width: "170px", border: "none" }}><label>Period of Offence</label></td>
+                                                    <td style={{ width: "170px", border: "none" }}><label style={{ padding: "0 0 0 7px" }}>Period of Offence</label></td>
                                                     <td style={{ width: "470px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.dateOfOffence} </div></td>
                                                 </tr>
                                             </table>
@@ -77,7 +77,7 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
 
 
                                 <div>
-                                    <div style={{ textAlign:"center", width: "700px", fontWeight: "bold", fontSize: "10pt", margin:"10px 0 5px 0" }}>Statement of Offence</div>
+                                    <div style={{ textAlign:"left", width: "700px", fontWeight: "bold", fontSize: "10pt", margin:"10px 0 2px 0" }}>Statement of Offence</div>
                                 </div>
 
                                 <div>
@@ -85,11 +85,11 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
                                 </div>
 
                                 <div>
-                                    <div style={{ textAlign:"center", width: "700px", fontWeight: "bold", fontSize: "10pt", margin:"10px 0 5px" }}>Particulars of Offence</div>
+                                    <div style={{ textAlign:"left", width: "700px", fontWeight: "bold", fontSize: "10pt", margin:"15px 0 2px" }}>Particulars of Offence</div>
                                 </div>
 
                                 <div>
-                                    <div style={{ fontSize: "10pt", lineHeight:"13pt",   margin:"0 0 5px" }}>{offence.particulars} </div>
+                                    <div style={{ fontSize: "10pt", lineHeight:"13pt",   margin:"0 0 10px" }}>{offence.particulars} </div>
                                 </div>
 
 

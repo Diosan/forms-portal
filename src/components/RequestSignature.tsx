@@ -68,8 +68,8 @@ export const RequestSignature = ({submission_id, complainant_email}:RequestSigna
                 onSubmit={requestSignature}
                 onError={log('errors')}
             >
-            <div className="d-grid gap-2">
-                <button className="btn btn-dark" type="submit">Request Signature</button>
+            <div className="">
+                <button className="btn btn-primary" type="submit">Ready to Sign</button>
             </div>
             </Form>
             

@@ -77,10 +77,10 @@ export const LeftColumn = (({ }: HeaderProps) => {
                             <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
                             <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> Complaint With Oath</a></li>
                             <li className="nav-item jud-header-item"><a className="nav-link" href="/oathless"> Complaint Without Oath</a></li>
-                            {/* <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Summons</a></li>
-                            <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Warrant Or Summons</a></li>                        
-                            <li className="nav-item jud-header-item"><a className="nav-link" href="/not_police"> Complaint By Person Other Than Police</a></li> 
-                            <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictable</a></li> */}
+                            <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Without Oath Requesting Summons</a></li>
+                            <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint  With Oath Requesting Warrant Or Summons</a></li>                        
+                            {/* <li className="nav-item jud-header-item"><a className="nav-link" href="/not_police"> Complaint By Person Other Than Police</a></li>                             */}
+                            <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictable</a></li>
                             <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-left">Logout</button></li>
                         </>
                         }
