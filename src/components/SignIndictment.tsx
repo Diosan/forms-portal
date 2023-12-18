@@ -419,11 +419,15 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
             {submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
                 <>
-
-                    <select value={oathType} onChange={oathTypeChange} >
+                    <div  style={{width:"200px", margin:"30px auto 20px auto"}}>
+                    <select value={oathType} 
+                        style={{padding:"5px", width:"200px", fontSize: "20px"}}
+                        onChange={oathTypeChange} >
                         <option value="oath">Oath</option>
                         <option value="affirmation">Affirmation</option> 
                     </select>
+                    </div>
+                    
 
                     {oathType == 'oath' ?
                         <>

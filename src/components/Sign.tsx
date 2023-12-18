@@ -45,10 +45,10 @@ const log = (type: any) => console.log.bind(console, type)
 
 function formatName(data: { firstName: any; lastName: any }) {
     return `${data.firstName} ${data.lastName}`;
-  }
+}
 
 
-  // Define a type for the individual person object
+// Define a type for the individual person object
 type Person = {
     firstName: string;
     lastName: string;
@@ -63,16 +63,16 @@ type NameDisplayProps = {
 
 
 
-  function NameDisplay({ data }: NameDisplayProps) {
+function NameDisplay({ data }: NameDisplayProps) {
     // Function to generate formatted names
-    const generateDisplayText = (data:any, maxNames = 6) => {
-        return data.slice(0, maxNames).map((person:any, index:number) => (
+    const generateDisplayText = (data: any, maxNames = 6) => {
+        return data.slice(0, maxNames).map((person: any, index: number) => (
             // <div key={index}>{person.firstName} {person.lastName}</div>
-            <div style={{fontSize:"12pt", lineHeight:"18pt"}}  key={index}>
+            <div style={{ fontSize: "12pt", lineHeight: "18pt" }} key={index}>
                 {person.firstName} {person.lastName}{index < data.length - 1 && index < maxNames - 1 ? ', ' : ''}
             </div>
-            ));
-        };
+        ));
+    };
 
     return (
         <div>
@@ -212,8 +212,8 @@ export const Sign = ({ }: SignProps) => {
                     setSubmissionType('COMPLAINT ON OATH REQUESTING WARRANT')
                     break;
                 case 'indictment':
-                        setSubmissionType('INDICTMENT')
-                        break;
+                    setSubmissionType('INDICTMENT')
+                    break;
                 default:
                     setSubmissionType('COMPLAINT ON OATH')
             }
@@ -328,11 +328,11 @@ export const Sign = ({ }: SignProps) => {
 
                                 <tr style={{ textAlign: "center" }}>
                                     <td><div style={{ fontSize: "10pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 10px" }}>
-                                        
+
                                         {/* {accusedNames} */}
                                         <NameDisplay data={accuseds} />
-                                        
-                                        </div>
+
+                                    </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -398,7 +398,7 @@ export const Sign = ({ }: SignProps) => {
                                     <table width={"700px"} className="accused-table" key={accused.id}
                                         style={{ marginBottom: "10px" }}>
                                         <tbody style={{ fontSize: "9.5pt", }}>
-                                        <tr>
+                                            <tr>
                                                 <td><label>ID: </label></td>
                                                 <td>{accused.identification}</td>
                                                 <td><label>ID Type: </label></td>
@@ -475,27 +475,35 @@ export const Sign = ({ }: SignProps) => {
 
 
 
-                        <div className="text-left complainant-details">
-
-
-
-                            {/* <p><strong>{' ' + currentDate()}</strong></p> */}
-
-                            <div id="anchorSign"></div>
-                            <SignIndictment
-                                submission_id={parseInt('' + id)}
-                                complainant_regnum={complainantRegNum}
-                                complainant_rank={complainantRank}
-                                complainant_email={complainantEmail}
-                                complainant_name={complainantName}
-                                already_signed={status == "signed"}
-                                submissionType={submissionType}
-                                already_verified={status == 'verified'}
-                            />
-
-                        </div>
 
                     </div>
+
+                    {/* SIGNING BOX */}
+                    <div className="text-left complainant-details" 
+                    style={{
+                        width:"750px",
+                        maxWidth: "750px",
+                        padding: "10px 50px 10px 20px"
+                    }}>
+
+
+
+                        {/* <p><strong>{' ' + currentDate()}</strong></p> */}
+
+                        <div id="anchorSign"></div>
+                        <SignIndictment
+                            submission_id={parseInt('' + id)}
+                            complainant_regnum={complainantRegNum}
+                            complainant_rank={complainantRank}
+                            complainant_email={complainantEmail}
+                            complainant_name={complainantName}
+                            already_signed={status == "signed"}
+                            submissionType={submissionType}
+                            already_verified={status == 'verified'}
+                        />
+
+                    </div>
+                    {/* end of signing box */}
 
 
 
