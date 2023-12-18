@@ -65,7 +65,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
         try {
             const message = await exportPDF('container-pdf', `${API_URL}/api/pdf/puppeteer`, submissionId);
-            alert('Submission successful!');
+            // alert('Submission successful!');
             navigate(`/sign/${submissionId}`);
         } catch (error) {
             console.log(error)
@@ -175,11 +175,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
         console.log('\n\n verified: ', verified)
 
         if (verified.data.outcome == 'success') {
-
-            
             // alert('Verification Successful');
-
-
             let returned_signature = await axios.post(
                 API_URL + '/api/submissions/complainant_sign',
                 {
@@ -192,9 +188,11 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             setSignatureHash(returned_signature.data.signature.hash)
             setSignatureName(returned_signature.data.user.firstName + ' ' + returned_signature.data.user.lastName)
             setSignatureDate(returned_signature.data.signature.createdAt)
-
             // console.log('\n\n\n Signature hash: ', returned_signature.data.submission.hash)
             // console.log('\n\n\n')
+
+            printPDF(submission_id)
+            setSigned(true)
 
             setRefreshTrigger(oldValue => oldValue + 1);
 
@@ -209,11 +207,11 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
                 console.log("response from axios")
                 console.log(response.data);
-                setTimeout(async () => {
-                    // Refresh the page and submit the submission
-                    await printPDF(submission_id);
-                        setSigned(true);
-                    }, 1000); // Wait for 500 milliseconds
+                // setTimeout(async () => {
+                //     // Refresh the page and submit the submission
+                //     await printPDF(submission_id);
+                //         setSigned(true);
+                //     }, 1000); // Wait for 500 milliseconds
             }) 
 
             console.log('\n\n\n commissionedEmail: ', commissionedEmail)
@@ -417,7 +415,10 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
             </p> */}
 
-            {submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
+
+            {!isFinalSigned &&
+                
+                    submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
                 <>
                     <div  style={{width:"200px", margin:"30px auto 20px auto"}}>
                     <select value={oathType} 
@@ -484,7 +485,10 @@ knowledge;
                 :
                 <>
                 </>
+            
             }
+
+            
 
 
             {!isFinalSigned &&
