@@ -182,7 +182,8 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
         email: decoded.email,
         userId: decoded.id,
         matterType: matterType,
-        adultOnly: adultOnly
+        adultOnly: adultOnly,
+        type: 'indictment'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
