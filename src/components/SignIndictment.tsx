@@ -66,6 +66,10 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const [acknowledged, setAcknowledged] = useState(false)
 
+    const acknowledgedChange = (event: any) => {
+        setAcknowledged(event.target.checked);
+    }
+
     const oathTypeChange = (event: any) => {
         setOathType(event.target.value)
       }
@@ -454,7 +458,7 @@ knowledge;
                     <div className="form-group field field-boolean">
                         <div className="checkbox">
                             <label>
-                                <input type="checkbox" />
+                                <input value = "test" type="checkbox" onChange={acknowledgedChange} />
                                 <span>Summary of evidence is included in appendix A below</span>
                             </label>
                         </div>                            
@@ -469,7 +473,12 @@ knowledge;
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
 
                 <div className="" style={{ display:"block", margin:"15px auto", width:"200px"}} >
-                    <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                    { acknowledged ?
+                        <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                        :
+                        <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                    }
+                    
                 </div>
 
                 : <></>
