@@ -50,8 +50,8 @@ export const LeftColumn = (({ }: HeaderProps) => {
     return (
         <div className="pt-3 px-3 left-column"
             style={{
-                maxWidth: "300px",
-                minWidth:"250px",
+                maxWidth: "200px",
+                minWidth:"220px",
                 flexShrink: 0, position: "fixed", 
                 backgroundColor: "#fff",
                 top: 0, left: 0, height: "100%"
@@ -80,7 +80,7 @@ export const LeftColumn = (({ }: HeaderProps) => {
                             <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Without Oath Requesting Summons</a></li>
                             <li className="nav-item jud-header-item"><a className="nav-link" href="/warrant"> Complaint  With Oath Requesting Warrant Or Summons</a></li>                        
                             {/* <li className="nav-item jud-header-item"><a className="nav-link" href="/not_police"> Complaint By Person Other Than Police</a></li>                             */}
-                            <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictable</a></li>
+                            {/* <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictable</a></li> */}
                             <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-left">Logout</button></li>
                         </>
                         }
