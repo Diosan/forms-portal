@@ -411,7 +411,7 @@ export const Warrant = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint With Oath Requesting Warrant Or Summons {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint With Oath Requesting Warrant {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
