@@ -183,7 +183,7 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
         userId: decoded.id,
         matterType: matterType,
         adultOnly: adultOnly,
-        type: 'complaint_without_oath'
+        type: 'oathless'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
@@ -411,7 +411,7 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint With Oath {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint Without Oath {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>

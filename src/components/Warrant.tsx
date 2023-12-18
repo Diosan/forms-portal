@@ -46,7 +46,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const Summons = ({ new_submission }: SubmissionProps) => {
+export const Warrant = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
     // alert('Performing requestSignature in Submission component')
@@ -183,7 +183,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
         userId: decoded.id,
         matterType: matterType,
         adultOnly: adultOnly,
-        type: 'summons'
+        type: 'warrant'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
@@ -411,7 +411,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint Without Oath Requesting Summons {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint With Oath Requesting Warrant Or Summons {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
