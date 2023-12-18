@@ -196,13 +196,7 @@ export const Sign = ({ }: SignProps) => {
             }
             setAccusedNames(accusedNames)
 
-
-
-
-
-
-
-
+            console.log('Setting submission type')
 
             switch (submission.data.submission.type) {
                 case 'complaint_with_oath':
@@ -211,9 +205,19 @@ export const Sign = ({ }: SignProps) => {
                 case 'complaint_without_oath':
                     setSubmissionType('COMPLAINT WITHOUT OATH')
                     break;
+                case 'complaint_without_oath_summary':
+                    setSubmissionType('COMPLAINT WITHOUT OATH REQUESTING SUMMONS')
+                    break;
+                case 'complaint_with_oath_warrant':
+                    setSubmissionType('COMPLAINT ON OATH REQUESTING WARRANT')
+                    break;
+                case 'indictment':
+                        setSubmissionType('INDICTMENT')
+                        break;
                 default:
                     setSubmissionType('COMPLAINT ON OATH')
             }
+
 
         }
 

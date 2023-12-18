@@ -151,15 +151,24 @@ export const View = ({ }: SignProps) => {
 
 
 
-            switch (submission.data.submission.type) {
-                case 'complaint_with_oath':
-                    setSubmissionType('COMPLAINT ON OATH')
+           switch (submission.data.submission.type) {
+            case 'complaint_with_oath':
+                setSubmissionType('COMPLAINT ON OATH')
+                break;
+            case 'complaint_without_oath':
+                setSubmissionType('COMPLAINT WITHOUT OATH')
+                break;
+            case 'complaint_without_oath_summary':
+                setSubmissionType('COMPLAINT WITHOUT OATH REQUESTING SUMMONS')
+                break;
+            case 'complaint_with_oath_warrant':
+                setSubmissionType('COMPLAINT ON OATH REQUESTING WARRANT')
+                break;
+            case 'indictment':
+                    setSubmissionType('INDICTMENT')
                     break;
-                case 'complaint_without_oath':
-                    setSubmissionType('COMPLAINT WITHOUT OATH')
-                    break;
-                default:
-                    setSubmissionType('COMPLAINT ON OATH')
+            default:
+                setSubmissionType('COMPLAINT ON OATH')
             }
 
         }
