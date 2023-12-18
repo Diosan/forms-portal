@@ -1,6 +1,6 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
 import { useEffect, useState } from "react"
-const API_URL = import.meta.env.VITE_API_URL
+
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
@@ -11,9 +11,7 @@ import "../assets/Style.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
-import { NotPoliceCharges } from "./NotPoliceCharges"
-// import { RequestSignature } from "./RequestSignature"
-import { NotPoliceRequestSignature } from "./NotPoliceRequestSignature"
+import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
@@ -55,6 +53,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
     setChargeSaved(true)
   }
 
+  const API_URL = import.meta.env.VITE_API_URL
 
   const auth = new AuthService
   const dispatch = useAppDispatch();
@@ -83,25 +82,32 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
   const [complainantLastName, setComplainantLastName] = useState('')
   const [complainantEmail, setComplainantEmail] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
+  const [complainantRank, setComplainantRank] = useState('')
+  const [complainantUnit, setComplainantUnit] = useState('')
   const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
-  const [complainantCourt, setComplainantCourt] = useState('')
+  const [complainantCourt, setComplainantCourt] = useState('High Court')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
 
   const [chargeSaved, setChargeSaved] = useState(false)
 
-  const [matterType, setMatterType] = useState('')
+  const [matterType, setMatterType] = useState('Indictable')
+  const [adultOnly, setAdultOnly] = useState('adult')
 
   const matterTypeChange = (event: any) => {
     setMatterType(event.target.value)
+  }
+
+  const adultOnlyChange = (event: any) => {
+    setAdultOnly(event.target.value)
   }
 
   const complainantCourtDistrictChange = (event: any) => {
     setComplainantCourtDistrict(event.target.value)
   }
 
-  const complainantCourtChange = (event: any) => {
-    setComplainantCourt(event.target.value)
-  }
+  // const complainantCourtChange = (event: any) => {
+  //   setComplainantCourt(event.target.value)
+  // }
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -109,6 +115,14 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
 
   const complainantRegNumberChange = (event: any) => {
     setComplainantRegNum(event.target.value)
+  }
+
+  const complainantRankChange = (event: any) => {
+    setComplainantRank(event.target.value)
+  }
+
+  const complainantUnitChange = (event: any) => {
+    setComplainantUnit(event.target.value)
   }
 
   const complainantFirstNameChange = (event: any) => {
@@ -167,8 +181,9 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
         title: submissionTitle,
         email: decoded.email,
         userId: decoded.id,
-        type: 'not_police',
-        matterType: matterType
+        matterType: matterType,
+        adultOnly: adultOnly,
+        type: 'complaint_without_oath_summons'
       }
       axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
@@ -204,6 +219,8 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
       lastName: complainantLastName,
       email: complainantEmail,
       regNum: complainantRegNum,
+      rank: complainantRank,
+      unit: complainantUnit,
       submissionId: submissionId
     }
 
@@ -316,6 +333,8 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
             setComplainantCourt(returned_submission.data.complainant.court)
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantRank(returned_submission.data.complainant.rank)
+            setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
             break
           case 'charge_saved':
@@ -326,6 +345,8 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
             setComplainantCourt(returned_submission.data.complainant.court)
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantRank(returned_submission.data.complainant.rank)
+            setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)
             break
@@ -338,24 +359,27 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
             setComplainantCourt(returned_submission.data.complainant.court)
             setComplainantCourtDistrict(returned_submission.data.complainant.courtDistrict)
             setComplainantRegNum(returned_submission.data.complainant.regNum)
+            setComplainantRank(returned_submission.data.complainant.rank)
+            setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
             setChargeSaved(true)
             break
           default:
-            console.log('Submission: ', returned_submission.data.submission)
+            console.log('Submission: ', returned_submission.data.complainant)
             break
         }
 
-        // if(returned_submission.data.submission.status == 'complainant_saved') {
-        //   setSubmissionComplainantSaved(true)
-        //   setComplainantFirstName(returned_submission.data.complainant.firstName)
-        //   setComplainantLastName(returned_submission.data.complainant.lastName)
-        //   setComplainantAgency(returned_submission.data.complainant.agency)
-        //   setComplainantRegNum(returned_submission.data.complainant.regNum)
-        //   setComplainantEmail(returned_submission.data.complainant.email)
-        // } else {
-        //   console.log('Submission: ', returned_submission.data.submission)
-        // }
+        
+          setSubmissionComplainantSaved(true)
+          setComplainantFirstName(returned_submission.data.complainant.firstName)
+          setComplainantLastName(returned_submission.data.complainant.lastName)
+          setComplainantAgency(returned_submission.data.complainant.agency)
+          setComplainantRank(returned_submission.data.complainant.rank)
+          setComplainantUnit(returned_submission.data.complainant.unit)
+          setComplainantRegNum(returned_submission.data.complainant.regNum)
+          setComplainantEmail(returned_submission.data.complainant.email)
+        
+          console.log('Complainant: ', returned_submission.data.complainant)
 
       }
     })();
@@ -387,7 +411,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint Warrant Or Summons {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Complaint Without Oath Requesting Summons {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
@@ -405,10 +429,10 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                       <fieldset>
                         <div className="form-group field field-string">
                           <label className="control-label fs-6">
-                            Edit Submission Title
+                            In house reference
                           </label>
 
-                          <div className="d-flex mt-2">
+                          <div className=" mt-2">
                             <input
                               className="form-control fs-5 mt-0 mb-0 flex-grow-1"
                               type="text"
@@ -416,22 +440,36 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                               onChange={submissionTitleChange}
                             />
                             {!submissionTitleSaved ?
-                              <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
-                                <option>Select matter type</option>
-                                <option value="Indictable">Indictable</option>
-                                <option value="Summary">Summary</option>
-                                <option value="Either-way">Either-way</option>
-                                <option value="Indictable with Summary">Indictable with Summary</option>
-                              </select>
+                              <>
+                              <label className="control-label fs-6  my-2">
+                                Category Of Accused
+                              </label>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
+                                  <option value="adult">Adult only</option>
+                                  <option value="child">Child only</option>
+                                  <option value="both">Both</option>
+                                </select>
+                                <label className="control-label fs-6 my-2">
+                                Matter Type
+                              </label>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
+                                  <option>Select matter type</option>
+                                  <option value="Indictable">Indictable</option>
+                                  <option value="Summary">Summary</option>
+                                  <option value="Either-way">Either-way</option>
+                                  <option value="Indictable with Summary">Indictable with Summary</option>
+                                  <option value="Indictable with Either-way">Indictable with Either-way</option>
+                                </select>
+                              </>
                               : <></>
                             }
                             <button
                               type="submit"
-                              className="btn btn-md btn-light ms-1" // Use btn-light for a button with no background
+                              className="btn btn-md btn-dark ms-1  my-2 mt-3" // Use btn-light for a button with no background
                             >
                               <i className="text-gray">
-                                <FontAwesomeIcon icon={faCheck} />
-                              </i>
+                                <FontAwesomeIcon icon={faCheck} /> 
+                              </i> Continue
                             </button>
                           </div>
 
@@ -466,23 +504,35 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                             <div>
                            
                               <div className="card fade show" style={{ border: "none", backgroundColor:"#ddd"}} >
-                              <h4 className="text-center mb-4">Complainant</h4>
+                              <h4 className="text-center mb-4">Complainant Information</h4>
                                 <form onSubmit={saveComplainant}>
 
-                                  <div className="mb-3">
+                                  {/* <div className="mb-3">
                                     <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
                                       <option>Select court</option>
                                       <option value="High Court">High Court</option>
                                       <option value="District Court">District Court</option>
                                     </select>
-                                  </div>
+                                  </div> */}
 
                                   <div className="mb-3">
                                     <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
-                                      <option>Select court district</option>
-                                      <option value="North Trinidad">North Trinidad</option>
-                                      <option value="South Trinidad">South Trinidad</option>
-                                      <option value="Tobago">Tobago</option>
+                                      <option>Select court location</option>
+                                      {adultOnly == 'adult' || adultOnly == 'both' ?
+                                          <>
+                                            <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
+                                            <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
+                                            <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
+                                          </>
+                                        :
+                                          <>
+                                            <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
+                                            <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
+                                            <option value="Children Court – Tobago">Children Court – Tobago</option>
+                                          </> 
+                                      }
+
+
                                     </select>
                                   </div>
 
@@ -493,7 +543,13 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                                     </select>
                                   </div>
                                   <div className="mb-3">
-                                    <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Agency ID" required />
+                                    <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="text" className="form-control" id="rank" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
                                   </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
@@ -558,6 +614,8 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                                     <br /><label>Court:</label> {complainantCourt}
                                     <br /><label>Court District:</label> {complainantCourtDistrict}
                                     <br /><label>Regimental Number:</label> {complainantRegNum}
+                                    <br /><label>Rank:</label> {complainantRank}
+                                    <br /><label>Station/Unit:</label> {complainantUnit}
                                     <br /><label>Email:</label> {complainantEmail}
                                   </div>
 
@@ -579,7 +637,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
                   <></>
                   :
                   <div className="p-2" style={{ backgroundColor: "#fff" }}>
-                    <NotPoliceCharges
+                    <Charges
                       submission_id={submissionId}
                       request_signature={requestSignature}
                       editable={editable}
@@ -589,7 +647,7 @@ export const Summons = ({ new_submission }: SubmissionProps) => {
 
                 {chargeSaved ?
                   <>
-                  <NotPoliceRequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                  <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
                   </>
                   : <></>
                 }

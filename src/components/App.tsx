@@ -10,6 +10,7 @@ import { PasswordReset } from './ResetPassword'
 import Transcend  from './Transcend'
 import { Submissions } from './Submissions'
 import { Summons } from './Summons'
+import { Warrant } from './Warrant'
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { Sign } from './Sign'
@@ -58,6 +59,7 @@ function App() {
         <Route path= "/not_police" element={ <PrivateRoute><NotPolice new_submission={ true }/></PrivateRoute>} />
         <Route path= "/not_police/:id" element={ <PrivateRoute><NotPolice new_submission={false }/></PrivateRoute>} />
         <Route path= "/summons" element={ <PrivateRoute><Summons new_submission={ true }/></PrivateRoute>} />
+        <Route path= "/warrant" element={ <PrivateRoute><Warrant new_submission={ true }/></PrivateRoute>} />
         <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
         <Route path= "/view/:id" element={ <PrivateRoute><View /></PrivateRoute> } />
         
