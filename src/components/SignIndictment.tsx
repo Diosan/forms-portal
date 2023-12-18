@@ -74,6 +74,18 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     };
 
 
+    const [oathType, setOathType] = useState('oath')
+
+    const [acknowledged, setAcknowledged] = useState(false)
+
+    const acknowledgedChange = (event: any) => {
+        setAcknowledged(event.target.checked);
+    }
+
+    const oathTypeChange = (event: any) => {
+        setOathType(event.target.value)
+      }
+
     const commisionedChange = (event: any) => {
         setCommissionedEmail(event.target.value)
         console.log('\n\n\n Commisioned changed', commissionedEmail)
@@ -407,9 +419,63 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
             {submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
                 <>
-                    <div style={{ margin: "10px 0 20px 0", padding: "0 " }}>
-                        <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 0  0" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p>
-                    </div>
+
+                    <select value={oathType} onChange={oathTypeChange} >
+                        <option value="oath">Oath</option>
+                        <option value="affirmation">Affirmation</option> 
+                    </select>
+
+                    {oathType == 'oath' ?
+                        <>
+                            <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
+                                {/* <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p> */}
+                                
+                                <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
+                                    I {complainant_name} {complainant_rank} {complainant_regnum},
+
+                                    solemnly swear that I have signed this complaint on oath and by that I declare that –
+
+                                    
+
+                                    <br/><br/>(i)         I make this [application/complaint] conscientiously, wilfully and honestly having reasonable grounds for believing that the named
+                                    accused person or persons has or have committed the offence alleged as stated in the complaint and that the particulars are true to
+                                    the best of my knowledge;
+
+                                    <br/><br/>(ii)        I acknowledge this declaration to be an oath that is binding;
+
+                                    <br/><br/>(iii)       I acknowledge that the wilful false affirmation of this declaration is an offence.
+                                </p>
+                            
+                            </div>
+                        </>
+                        :
+                        <>
+                            <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
+                                {/* <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p> */}
+                                
+                                <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
+                                    I {complainant_name} {complainant_rank} {complainant_regnum},
+
+                                    do solemnly, sincerely, and truly affirm, that I have signed this complaint on oath and by that I declare that –
+
+                                    
+
+                                    <br/><br/>(i)          I make this complaint conscientiously, wilfully and honestly having reasonable grounds for believing that the named accused person
+
+or persons has or have committed the offence alleged as stated in the complaint and that the particulars are true to the best of my
+
+knowledge;
+
+                                    <br/><br/>(ii)        I acknowledge this declaration to be an oath that is binding;
+
+                                    <br/><br/>(iii)       I acknowledge that the wilful false swearing of this oath is an offence
+                                </p>
+                            
+                            </div>                        
+                        </>
+                    }
+
+
                 </>
                 :
                 <>
@@ -425,9 +491,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                     <div className="form-group field field-boolean">
                         <div className="checkbox">
                             <label>
-                                <input type="checkbox" checked={isChecked}
-                                    onChange={handleCheckboxChange}
-                                />
+                                <input value = "test" type="checkbox" onChange={acknowledgedChange} />
                                 <span>Summary of evidence is included in appendix A below</span>
                             </label>
                         </div>                            
@@ -443,7 +507,12 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
 
                 <div className="" style={{ display:"block", margin:"15px auto", width:"200px"}} >
-                    <button  disabled={!isChecked} className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                    { acknowledged ?
+                        <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                        :
+                        <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                    }
+                    
                 </div>
 
                 : <></>
