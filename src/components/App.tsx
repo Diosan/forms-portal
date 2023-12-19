@@ -32,7 +32,7 @@ import { View } from './View';
 
 import { Oathless } from './Oathless';
 
-
+import { Admin } from './Admin';
 
 function App() {
   console.log("APP")
@@ -63,8 +63,9 @@ function App() {
         <Route path= "/warrant" element={ <PrivateRoute><Warrant new_submission={ true }/></PrivateRoute>} />
         <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
         <Route path= "/view/:id" element={ <PrivateRoute><View /></PrivateRoute> } />
+        <Route  path= "/admin999" element={ <PrivateRoute><Admin /></PrivateRoute>} />
         <Route path= "/sub/complete" element={ <PrivateRoute><CompletedSubmission /></PrivateRoute> } />
-        
+
       </Routes>
     <Footer />
     </>
