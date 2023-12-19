@@ -7,6 +7,8 @@ import Accused from "./Accused"
 const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import '../assets/Accused.css'
+import { Navigate, useNavigate, useParams } from "react-router-dom"
+
 
 
 type AccusedListProps = {
@@ -22,7 +24,9 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
     // const persons = useAppSelector((state) => state.person.persons)
     const accuseds = useAppSelector((state) => state.accused.accuseds)
     const [submissionAccuseds, setSubmissionAccuseds] = useState([])
-    const [accusedRemoved, setAccusedRemoved] = useState(false)
+    const [refreshKey, setRefreshKey] = useState(0);
+    const navigate = useNavigate()
+
 
     useEffect( () => {
         // async () => {
@@ -30,11 +34,12 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
         //     // let returned_accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
         //     // console.log('Returned accuseds: ', accuseds)
         // }
+        console.log('Loading... '+ refreshKey)
 
         const fetchData = async () => {
             // console.log('Loading accuseds list ' + API_URL + '/api/submissions/accuseds/' + submission_id)
             let returned_accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
-            // console.log('Returned accuseds: ', returned_accuseds.data.accuseds)
+            console.log('Returned accuseds: ', returned_accuseds.data.accuseds)
             return returned_accuseds.data.accuseds
         }
 
@@ -45,7 +50,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
         })
         
 
-    }, [accusedRemoved])
+    }, [refreshKey, submission_id])
 
     // console.log('Loading accuseds list')
 
@@ -64,14 +69,18 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
 
     const removeAccused = async (accusedId:any) => {
         console.log(accusedId)
+        // setRefreshKey(oldKey => oldKey + 1);
+        // return
         try {
           const response = await fetch(`${API_URL}/api/accuseds/remove-accused/${accusedId}`, { method: 'DELETE' });
           if (response.ok) {
             console.log("Accused removed successfully");
+            setRefreshKey(oldKey => oldKey + 1);
+            // navigate(`/submission/${submission_id}`)
             // Optionally, update the state to reflect the change in the UI
           } else {
             console.error("Failed to remove accused");
-            setAccusedRemoved(true)
+            setRefreshKey(oldKey => oldKey + 1);
           }
         } catch (error) {
           console.error("Error removing accused:", error);
