@@ -318,7 +318,12 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
       if (!new_submission) {
         setSubmissionId(parseInt('' + id))
         let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
-        // console.log('Returned submission: ', returned_submission.data)
+        console.log('Returned submission: ', returned_submission.data)
+        if(returned_submission?.data?.submission?.status == 'final'){
+          navigate(`/sign/${id}`)
+        }
+
+
         setSubmissionTitle(returned_submission.data.submission.description)
         setSubmissionTitleSaved(true)
 
