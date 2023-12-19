@@ -63,8 +63,12 @@ function App() {
         <Route path= "/warrant" element={ <PrivateRoute><Warrant new_submission={ true }/></PrivateRoute>} />
         <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
         <Route path= "/view/:id" element={ <PrivateRoute><View /></PrivateRoute> } />
-        <Route  path= "/admin999" element={ <PrivateRoute><Admin /></PrivateRoute>} />
         <Route path= "/sub/complete" element={ <PrivateRoute><CompletedSubmission /></PrivateRoute> } />
+        <Route  path= "/admin9876543210" element={ <PrivateRoute><Admin /></PrivateRoute>} />
+
+        
+        
+
 
       </Routes>
     <Footer />
