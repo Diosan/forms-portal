@@ -48,6 +48,10 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
         } 
     }
 
+    const handleAccusedRemoved = (removedAccusedId) => {
+        setAccuseds(accuseds.filter(accused => accused.id !== removedAccusedId));
+    };
+
 
 
     useEffect(() => {
@@ -117,6 +121,7 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
                 request_signature={requestSignature}
                 submission_accuseds={accuseds}
                 editable={editable} 
+                onAccusedRemoved={handleAccusedRemoved} 
             />
 
             {editable && !accusedSaved ?

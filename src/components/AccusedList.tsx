@@ -16,9 +16,10 @@ type AccusedListProps = {
     request_signature: any,
     submission_accuseds: any,
     editable: boolean
+    onAccusedRemoved: (accusedId: number) => void // Add this line
 }
 
-const AccusedList = ({submission_id, request_signature, submission_accuseds, editable}: AccusedListProps) => {
+const AccusedList = ({submission_id, request_signature, submission_accuseds, editable, onAccusedRemoved}: AccusedListProps) => {
 
 
     // const persons = useAppSelector((state) => state.person.persons)
@@ -73,6 +74,19 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
         // return
         try {
           const response = await fetch(`${API_URL}/api/accuseds/remove-accused/${accusedId}`, { method: 'DELETE' });
+          
+          if (response.ok) {
+            console.log("Accused removed successfully");
+            onAccusedRemoved(accusedId); // Invoke the callback
+            setRefreshKey(oldKey => oldKey + 1);
+            } else {
+                console.error("Failed to remove accused");
+            }
+          
+          
+          
+          
+          
           if (response.ok) {
             console.log("Accused removed successfully");
             setRefreshKey(oldKey => oldKey + 1);
