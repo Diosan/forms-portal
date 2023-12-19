@@ -14,23 +14,25 @@ export const CompletedSubmission = ({ }: CompletedProps) => {
 
     const location = useLocation();
     const id = location.state?.id;
+    const navigate = useNavigate()
 
     const viewCompletedSubmission = (event: any) => {
-        <Navigate to={`/submission/${id}`} replace={true} />
+        // console.log("where " + id);
+        navigate(`/sign/${id}`)
       }
-
+ 
 
     return (
         <>
             <div className="submissions-container">
 
-                <h2>Completed</h2>
-                <p>Your submission has been successfully received and forwarded to the E-filing portal. 
+                <h2 className="my-3 mb-4">Submision completed</h2>
+                {/* <p className="mt-3">Your submission has been successfully received and forwarded to the E-filing portal. 
                     If you have any questions or need assistance, feel free to contact our support team. 
-                </p>
+                </p> */}
 
                 <p>
-                <button style={{ color: "#fff", textDecoration: "none" }} onClick={viewCompletedSubmission} type="button" className="btn btn-link btn-xs">
+                <button style={{ color: "#blue", textDecoration: "none" }} onClick={viewCompletedSubmission} type="button" className="btn btn-dark btn-md">
                     <FontAwesomeIcon icon={faEye} /> View Submission
                 </button>                    
 
