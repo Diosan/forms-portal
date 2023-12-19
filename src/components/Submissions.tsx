@@ -76,7 +76,10 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
 
     useEffect(() => {
-        axios.get(API_URL + '/api/submissions')
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        axios.get(API_URL + '/api/submissions', config)
             .then((response) => {
                 console.log('Submissions fetched from server: ', response.data);
                 const submissionsData = response?.data?.submissions?.rows || [];
