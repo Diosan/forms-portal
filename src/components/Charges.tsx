@@ -98,7 +98,7 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
                     <button type="submit">Add Accused</button>
                 </div>
             </Form> */}
-            <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor:"#444", color:"#fff", borderBottom: "1px solid #ddd" }}>
+            <div id="anchorAccusedCharges" className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor:"#444", color:"#fff", borderBottom: "1px solid #ddd" }}>
                 <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Accused and Charges</h5>
                 
                 <>

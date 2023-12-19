@@ -389,6 +389,16 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
     })();
   }, [id, new_submission, editingSubmissionTitle]);
 
+  const goToAnchor = () => {
+    setTimeout(() => {
+        console.log('Anchor');
+        const anchorElement = document.getElementById('anchorSign');
+        if (anchorElement) {
+            anchorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 300); // 500 milliseconds delay
+}
+
 
 
   return (
@@ -648,6 +658,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                     />
                   </div>
                 }
+
 
                 {chargeSaved ?
                   <>

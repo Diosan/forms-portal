@@ -6,6 +6,23 @@
   transition: all 0.2s ease-in-out;
 }
 
+.submissions-container .group-submission .submission-card {
+  border:none!important;
+  border-radius:0px!important;
+  border-bottom:1px solid #eee!important;
+}
+
+.submissions-container .group-submission {
+  background-color:#fff!important
+}
+
+.submissions-container .group-submission .submission-card .card-body{
+  padding:5px!important;
+  margin:0!important;
+}
+.submissions-container .group-submission .submission-card .card-body h5{
+  margin:0!important;
+}
 .swf-content{
   box-shadow: -5px -10px 13px -2px rgba(0, 0, 0, 0.2);
 }

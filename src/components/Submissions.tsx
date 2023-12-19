@@ -170,9 +170,9 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
                             <div className="d-flex justify-content-between align-items-center mb-4" style={{}}>
                                 <h3 className='text-left flex-grow-1' style={{ marginRight: 'auto' }}>My Submissions</h3>
-                                <div className="row" style={{ maxWidth: "200px", margin: "0 auto" }} >
+                                {/* <div className="row" style={{ maxWidth: "200px", margin: "0 auto" }} >
                                     <a href="/submission" className="btn m-0 btn-primary new-submission-btn float-end">New +</a>
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* <table>
@@ -200,7 +200,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                     {/* Render "pending" submissions with a different background color */}
                                     {groupedSubmissions['pending'] && (
                                         <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '##dfdfdf' }}>
-                                            <h4 className="my-2 mb-4 fs-5">Pending Submissions</h4>
+                                            <h4 className="my-2 mb-4 fs-5 fw-bold text-left">Pending Submissions</h4>
                                             {groupedSubmissions['pending'].map((submission:any) => (
                                                 <a
                                                     href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
@@ -208,7 +208,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                 >
                                                     <div className="card submission-card" style={{ padding: '1px' }}>
                                                         <div className="card-body" style={{ padding: '10px 25px' }}>
-                                                            <h5 className="card-title text-left">{submission.description}</h5>
+                                                            <h5 className="card-title fs-6 text-left">{submission.description}</h5>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -219,7 +219,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                     {/* Render "pending" submissions with a different background color */}
                                     {groupedSubmissions['complainant_saved'] && (
                                         <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '#dfdfdf' }}>
-                                            <h4 className="my-2 mb-4">Complainant Saved Submissions</h4>
+                                            <h4 className="my-2 mb-4 text-left">Complainant Saved</h4>
                                             {groupedSubmissions['pending'].map((submission:any) => (
                                                 <a
                                                     href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
@@ -294,7 +294,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                     )} */}
 
 
-                                    {groupedSubmissions['final'] && (
+                                    {/* {groupedSubmissions['final'] && (
                                         <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
                                             <h4 className="my-2 mb-4 fs-5">Completed Submissions</h4>
                                             {groupedSubmissions['final'].map((submission:any) => (
@@ -310,7 +310,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                 </a>
                                             ))}
                                         </div>
-                                    )}
+                                    )} */}
 
 
                                 </div>

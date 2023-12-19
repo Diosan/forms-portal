@@ -28,6 +28,7 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
   const dispatch = useAppDispatch();
 
   const processForm = async (form: any) => {
+    goToAnchor();
     console.log('Submitted form data: ', form.formData)
     dispatch(addAccused({ 
         name: form.formData.firstName + ' ' + form.formData.lastName,
@@ -102,6 +103,16 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
         setAccusedUI(response.data.UI)
         })
     }, []);
+
+    const goToAnchor = () => {
+      setTimeout(() => {
+          console.log('Anchor');
+          const anchorElement = document.getElementById('anchorAccusedCharges');
+          if (anchorElement) {
+              anchorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+      }, 300); // 500 milliseconds delay
+  }
 
     // useEffect(() => {
     //     axios.get(API_URL + '/schema/charge')

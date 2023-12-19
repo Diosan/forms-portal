@@ -22,6 +22,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
     // const persons = useAppSelector((state) => state.person.persons)
     const accuseds = useAppSelector((state) => state.accused.accuseds)
     const [submissionAccuseds, setSubmissionAccuseds] = useState([])
+    const [accusedRemoved, setAccusedRemoved] = useState(false)
 
     useEffect( () => {
         // async () => {
@@ -44,7 +45,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
         })
         
 
-    }, [])
+    }, [accusedRemoved])
 
     // console.log('Loading accuseds list')
 
@@ -52,22 +53,54 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
         request_signature()
     }
 
+
+    // const removeAccuseds = (id:any) => {
+    //     axios.get(API_URL + '/accused/remove')
+    //     .then((response) => {
+    //       console.log(response.data)
+    //       setAccusedRemoved(true)
+    //     })
+    // }
+
+    const removeAccused = async (accusedId:any) => {
+        console.log(accusedId)
+        try {
+          const response = await fetch(`${API_URL}/api/accuseds/remove-accused/${accusedId}`, { method: 'DELETE' });
+          if (response.ok) {
+            console.log("Accused removed successfully");
+            // Optionally, update the state to reflect the change in the UI
+          } else {
+            console.error("Failed to remove accused");
+            setAccusedRemoved(true)
+          }
+        } catch (error) {
+          console.error("Error removing accused:", error);
+        }
+      };
+
+
+
     return <>
        
         {}
 
             {submission_accuseds.slice().reverse().map((accused: any, index:any) => (
- 
-            
-                <div className="card accused-card mt-4" key={accused.id}>
+                <>
+                <div className="text-left mt-2 mb-1"><button className="btn btn-link" 
+                    style={{ padding:"0"}}  type="submit" 
+                    onClick={() => removeAccused(accused.id)}>X Remove this accused</button>
+                </div>
+                <div className="card accused-card mt-0 " key={accused.id}>
                     <div className="accused-index">Accused {index+1}</div>
                     <div className="card-body">
                         <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName} {accused.lastName}</h5>
-                        <p className="card-text text-left">
+                        <p className="card-text text-left p-0 m-0">
                             <label>Address:</label> {accused.addressLine1}<br/>
                                                     {accused.cityTown}<br/>
-                                                    {accused.countryCode}<br/>
-                            <br/><label>Date Of Birth:</label> {accused.dateOfBirth}
+                                                    {accused.countryCode}
+                        </p>
+                        <p className="card-text text-left">
+                            <label>Date Of Birth:</label> {accused.dateOfBirth}
                             <br/><label>Gender Identity:</label> {accused.gender}
                             <br/><label>Adult Or Child:</label> {accused.adulthood}
                         </p>
@@ -82,6 +115,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
 
                     </div>
                 </div>
+                </>
 
             ))}
 
