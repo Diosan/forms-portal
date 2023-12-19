@@ -12,11 +12,16 @@ import { store } from "../store/store"
 import AddAccused from "./AddAccused";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import Accused from "./Accused";
 
 type ChargesProps = {
     submission_id: number,
     request_signature: any,
     editable: boolean
+}
+
+interface Accused {
+    id: number;
 }
 
 const log = (type: any) => console.log.bind(console, type)
@@ -32,7 +37,8 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
     const [accusedUI, setAccusedUI] = useState({})
     const [chargeSchema, setChargeSchema] = useState({})
     const [chargeUI, setChargeUI] = useState({})
-    const [accuseds, setAccuseds] = useState<{}[]>([])
+    const [accuseds, setAccuseds] = useState<Accused[]>([]);
+
     const [type, setType] = useState('')
     const [accusedSaved, setAccusedSaved] = useState(false)
 
@@ -48,8 +54,8 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
         } 
     }
 
-    const handleAccusedRemoved = (removedAccusedId) => {
-        setAccuseds(accuseds.filter(accused => accused.id !== removedAccusedId));
+    const handleAccusedRemoved = (removedAccusedId:number) => {
+        setAccuseds(accuseds.filter((accused:Accused) => accused.id !== removedAccusedId));
     };
 
 
