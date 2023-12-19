@@ -82,11 +82,21 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
         if (selectedOption) {
 
             const id = selectedOption.getAttribute('data-id');
-            console.log('Code id:', id);
-        
+            const name: any = selectedOption.getAttribute('data-name');
+            const code: any = selectedOption.getAttribute('data-code');
+            const index: any = selectedOption.getAttribute('data-index');
 
-            let charge: any = codes.find((code: any) => code.id == id);
+            console.log('\n\n\n Codes:', codes)
+            
+            console.log('Code id:', id);
+            console.log('Code:', code);
+            console.log('Code name:', name);
+            console.log('Index:', index);        
+
+            // let charge: any = codes.find((code: any) => code.id == id)
+            let charge:any = codes[index]
             if(charge) {
+                console.log('Charge found: ', charge)
                 await setChargeName(charge.name)
                 await setUNODC(charge.ICCS)
             }
@@ -568,15 +578,20 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
                             <br/>
                             <div className="form-group field field-string">                  
-                                    <label className="control-label">ICCS Code</label>
+                                    <label className="control-label">Charge</label>
                                     <input 
                                         type="text" 
                                         className="form-control"
                                         list="codelist"
-                                        value={UNODC}
                                         onChange={UNODCChange}
                                     />
     
+                                    <label>ICCS Code:</label>
+                                    <input
+                                        type="text" 
+                                        className="form-control" 
+                                        value={UNODC}
+                                        disabled /> 
 
                                     <label>Charge name:</label>
                                     <input
@@ -587,8 +602,9 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                     
 
                                     <datalist id="codelist">
-                                        {codes.map((code:any) => (
-                                            <option key={code.id} value={code.ICCS} data-id={code.id} > {code.name} </option>
+                                        { codes.sort((a:any, b:any) => (a.id < b.id ? -1 : 1)).map((code:any, index) => (
+                                            // codes.sort((a, b) => a.id - b.id)
+                                            <option key={code.id} value={code.id} data-id={code.id} data-name={code.name} data-code={code.ICCS} data-index={index}> {code.name} </option>
                                         ))}
                                     </datalist>
                                 
