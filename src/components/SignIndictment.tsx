@@ -193,15 +193,14 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
             printPDF(submission_id)
             setSigned(true)
-
             setRefreshTrigger(oldValue => oldValue + 1);
 
             await axios.post(
-                API_URL + '/api/submissions/update',
-                {
-                    id: submission_id,
-                    status: 'signed'
-                }
+            API_URL + '/api/submissions/update',
+            {
+                id: submission_id,
+                status: 'signed'
+            }
             ).then(response => {
                 setRefreshTrigger(oldValue => oldValue + 1);
 

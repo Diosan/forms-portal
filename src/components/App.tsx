@@ -13,6 +13,7 @@ import { Summons } from './Summons'
 import { Warrant } from './Warrant'
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
+import { CompletedSubmission } from './CompleteSubmission'
 import { Sign } from './Sign'
 import { Verify } from './Verify'
 import { LeftColumn } from "./LeftColumn"
@@ -62,6 +63,7 @@ function App() {
         <Route path= "/warrant" element={ <PrivateRoute><Warrant new_submission={ true }/></PrivateRoute>} />
         <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
         <Route path= "/view/:id" element={ <PrivateRoute><View /></PrivateRoute> } />
+        <Route path= "/sub/complete" element={ <PrivateRoute><CompletedSubmission /></PrivateRoute> } />
         
       </Routes>
     <Footer />
