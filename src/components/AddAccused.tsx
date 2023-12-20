@@ -147,8 +147,8 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
         onSubmit={processForm}
         onError={log('errors')}
     >
-        <div className="d-grid gap-2">
-            <button className="btn btn-secondary" type="submit">Add Accused</button>
+        <div className="gap-2 pb-5"  style={{borderBottom:"10px solid #eee"}}>
+            <button className="btn btn-secondary" type="submit">Add this Accused</button>
         </div>
     </Form>
   );

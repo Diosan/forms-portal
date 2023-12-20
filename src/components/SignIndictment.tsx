@@ -907,7 +907,7 @@ knowledge;
                             <br />
 
                             <div className="text-center mb-2" style={{ fontSize: "11pt", margin: "0 20px" }}>
-                                A <strong>Signinig code</strong> has been sent to your registered email address. Please enter this code below to authenticate and complete the signing process..
+                                A <strong>Signinig code</strong> has been sent to your registered email address. Please enter the code into the box below to authenticate and complete the signing process..
                             </div>
                             <div className="text-center mb-4">
                                 <div style={{ display: "block", margin: "0 auto", width: "200px" }}><input

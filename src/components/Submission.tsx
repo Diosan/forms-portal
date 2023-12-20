@@ -501,7 +501,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
 
 
-              <div className="px-4 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
+              <div className="px-2 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
 
 
 
@@ -661,9 +661,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
 
                 {chargeSaved ?
-                  <>
-                  <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
-                  </>
+                  <div className="" style={{backgroundColor:"#fff", border:"10px solid #eee", borderRadius:"none!important"}}>
+                    <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Summary of Evidence</h5>
+                    <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                  </div>
                   : <></>
                 }
 

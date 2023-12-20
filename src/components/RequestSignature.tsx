@@ -58,7 +58,7 @@ export const RequestSignature = ({submission_id, complainant_email}:RequestSigna
     },[])
 
     return (
-        <div className="px-1 mt-2"   style={{ backgroundColor:"#fff" }}>
+        <div className="px-1 mt-2 summ" >
 
             <Form 
                 schema={summarySchema}

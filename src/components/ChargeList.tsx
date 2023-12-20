@@ -4,15 +4,19 @@ import "../assets/Charge.css"
 const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faPencilAlt, faCheck, faTrash, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+
 type ChargeListProps = {
     accused_id: number,
-    accused_charges: any[]
+    accused_charges: any[],
+    onChargeRemoved: (chargeId: number) => void 
 }
 
-const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
+const ChargeList = ({accused_id, accused_charges, onChargeRemoved}: ChargeListProps) => {
     // const charges = useAppSelector((state) => state.charge.charges)
-
     // const [accusedCharges, setAccusedCharges] = useState([])
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect( () => {
 
@@ -29,6 +33,25 @@ const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
 
     },[])
 
+    const removeCharge = async (chargeId:any) => {
+        console.log(chargeId)
+        // setRefreshKey(oldKey => oldKey + 1);
+        // return
+        try {
+          const response = await fetch(`${API_URL}/api/accuseds/remove-charge/${chargeId}/${accused_id}`, { method: 'DELETE' });
+          
+          if (response.ok) {
+            console.log("Accused removed successfully");
+            // setRefreshKey(oldKey => oldKey + 1);
+            onChargeRemoved(chargeId); 
+            } else {
+                console.error("Failed to remove accused");
+            }
+        } catch (error) {
+          console.error("Error removing accused:", error);
+        }
+      };
+
     return (
     
         <div className="mt-3">
@@ -42,16 +65,19 @@ const ChargeList = ({accused_id, accused_charges}: ChargeListProps) => {
                         <th>Counts</th>
                         <th>Date Of Offence</th>
                         <th>Particulars Of Offence</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {accused_charges.map((charge: any) => (
+                        
                         <tr key={charge.id}>
                             <td>{ charge.ICCS }</td>
                             <td>{ charge.name }</td>
                             <td>{ charge.counts }</td>
                             <td>{charge.dateOfOffence}</td>
                             <td>{ charge.particulars }</td>
+                            <td><button className="btn btn-link" style={{ padding:"0"}}  type="submit" onClick={() => removeCharge(charge.id)}><FontAwesomeIcon icon={faTrashCan} /></button></td>
                         </tr>
                     ))}
                 </tbody>

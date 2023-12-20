@@ -8,6 +8,8 @@ const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import '../assets/Accused.css'
 import { Navigate, useNavigate, useParams } from "react-router-dom"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faPencilAlt, faCheck, faTrash, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -83,19 +85,15 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
                 console.error("Failed to remove accused");
             }
           
-          
-          
-          
-          
-          if (response.ok) {
-            console.log("Accused removed successfully");
-            setRefreshKey(oldKey => oldKey + 1);
-            // navigate(`/submission/${submission_id}`)
-            // Optionally, update the state to reflect the change in the UI
-          } else {
-            console.error("Failed to remove accused");
-            setRefreshKey(oldKey => oldKey + 1);
-          }
+        //   if (response.ok) {
+        //     console.log("Accused removed successfully");
+        //     setRefreshKey(oldKey => oldKey + 1);
+        //     // navigate(`/submission/${submission_id}`)
+        //     // Optionally, update the state to reflect the change in the UI
+        //   } else {
+        //     console.error("Failed to remove accused");
+        //     setRefreshKey(oldKey => oldKey + 1);
+        //   }
         } catch (error) {
           console.error("Error removing accused:", error);
         }
@@ -111,7 +109,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
                 <>
                 <div className="text-left mt-2 mb-1"><button className="btn btn-link" 
                     style={{ padding:"0"}}  type="submit" 
-                    onClick={() => removeAccused(accused.id)}>X Remove this accused</button>
+                    onClick={() => removeAccused(accused.id)}><FontAwesomeIcon icon={faTrashCan} /> Remove this accused</button>
                 </div>
                 <div className="card accused-card mt-0 " key={accused.id}>
                     <div className="accused-index">Accused {index+1}</div>

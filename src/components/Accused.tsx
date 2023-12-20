@@ -18,6 +18,12 @@ type AccusedProps = {
     editable: boolean 
 }
 
+interface Charge {
+    id: number;
+    // include other properties of a charge here
+    // e.g., name: string;
+}
+
 
 
 const log = (type: any) => console.log.bind(console, type)
@@ -34,7 +40,9 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [relatedMatters, setRelatedMatters] = useState(false)
 
-    const [accusedCharges, setAccusedCharges] = useState<{}[]>([])
+    // const [accusedCharges, setAccusedCharges] = useState<{}[]>([])
+    const [accusedCharges, setAccusedCharges] = useState<Charge[]>([]);
+
 
     const [accusedPendings, setAccusedPendings] = useState<{}[]>([])
 
@@ -408,12 +416,22 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
         })();
     }, []);
 
+    
+
+    const handleChargeRemoval = (removedChargeId:number) => {
+        // Update the state to reflect the removed charge
+        setAccusedCharges(currentCharges => 
+            currentCharges.filter(charge => charge.id !== removedChargeId)
+        );
+    };
+
     return (
         <>
             
 
 
-            <ChargeList accused_id={accused_id} accused_charges={accusedCharges} />
+            <ChargeList accused_id={accused_id} accused_charges={accusedCharges} onChargeRemoved={handleChargeRemoval}
+ />
 
             {   previousRecord ?
                     <>
