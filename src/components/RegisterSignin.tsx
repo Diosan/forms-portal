@@ -16,6 +16,10 @@ import '../assets/Auth.css'
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faPencilAlt, faCheck, faTrash, faTrashCan, faSpinner } from '@fortawesome/free-solid-svg-icons';
+
+
 
 type RegisterSigninProps = {}
 
@@ -196,12 +200,14 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const signIn = (event: any) => {
         event.preventDefault()
+        setLoading(true);
         setSigninError(false)
         console.log(`>>> signin with ${email} and password: ${password}`)
         dispatch(login({ username: email, password: password }) as any)
             .unwrap()
             .then((response: any) => {
                 setSigninError(false)
+                setLoading(false);
                 // window.location.reload();
                 console.log(response)
             })
@@ -237,6 +243,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const requestNewPassword = (event: any) => {
         event.preventDefault()
+        setLoading(true);
         console.log(password);
         const checkTokenValidity = async () => {
             try {
@@ -254,6 +261,8 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
             } catch (error) {
                 console.error('Error checking token validity:', error);
                 setChangePassword(false);
+            } finally {
+            setLoading(false); // Stop loading after the async operation is done
             }
         };
 
@@ -377,7 +386,16 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
 
                                                         <div className="mt-2">
-                                                            <button className="mt-0 btn btn-primary">Submit</button>
+                                                                <button className="mt-1 btn btn-primary" disabled={loading}>
+                                                                    {loading ? (
+                                                                        <>
+                                                                            <FontAwesomeIcon icon={faSpinner} spin />
+                                                                            &nbsp;Submitting request...
+                                                                        </>
+                                                                    ) : (
+                                                                        "Submit"
+                                                                    )}
+                                                                </button>
                                                         </div>
 
 
@@ -423,7 +441,16 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                             </div>
 
                                                             <div className="">
-                                                                <button className="mt-1 btn btn-primary">Log In</button>
+                                                                <button className="mt-1 btn btn-primary"  disabled={loading}>
+                                                                {loading ? (
+                                                                    <>
+                                                                        <FontAwesomeIcon icon={faSpinner} spin />
+                                                                        &nbsp;Log in...
+                                                                    </>
+                                                                ) : (
+                                                                    "Log In"
+                                                                )}
+                                                                </button>
                                                             </div>
 
                                                             {signinError && (
