@@ -116,16 +116,26 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
                 <div className="card accused-card mt-0 " key={accused.id}>
                     <div className="accused-index">Accused {index+1}</div>
                     <div className="card-body">
-                        <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName} {accused.lastName}</h5>
+                        <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName}{' ' + accused.middleName} {accused.lastName}</h5>
                         <p className="card-text text-left p-0 m-0">
-                            <label>Address:</label> {accused.addressLine1}<br/>
-                                                    {accused.cityTown}<br/>
-                                                    {accused.countryCode}
+                            <label>Address:</label> {accused.addressLine1}
+                                                    {accused.addressLine2 == null ? <></> : <>{', ' + accused.addressLine2}</>}
+                                                    {accused.addressLine3 == null ? <></> : <>{', ' + accused.addressLine3}</>}
+                                                    {accused.cityTown == null ? <></> : <>{', ' + accused.cityTown}</>}
+                                                    {accused.postalCode == null ? <></> : <>{', ' + accused.postalCode}</>}
+                                                    {accused.communityCode == null ? <></> : <>{', ' + accused.communityCode}</>}
+                                                    {accused.countryCode == null ? <></> : <>{', ' + accused.countryCode}</>}
                         </p>
                         <p className="card-text text-left">
-                            <label>Date Of Birth:</label> {accused.dateOfBirth}
-                            <br/><label>Gender Identity:</label> {accused.gender}
-                            <br/><label>Adult Or Child:</label> {accused.adulthood}
+                            {accused.email == null ? <></> : <><label>Email:</label> {accused.email}</>}
+                            {accused.identificationType == null ? <></> : <><label>Identification Type:</label> {accused.identificationType} <br/> </>}                            
+                            {accused.identification == null ? <></> : <><label>Identification Number:</label> {accused.identification} <br/> </>} 
+                            {accused.gender == null ? <></> : <><label>Gender Identity:</label> {accused.gender} <br/> </>} 
+                            {accused.adulthood == null ? <></> : <><label>Adult/Child:</label> {accused.adulthood} <br/> </>}
+                            {accused.dateOfBirth == null ? <></> : <><label>Date Of Birth:</label> {accused.dateOfBirth} <br/> </>}
+                            {accused.alias == null ? <></> : <><label>Alias:</label> {accused.alias} <br/> </>}
+                            
+
                         </p>
 
 

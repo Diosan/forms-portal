@@ -50,6 +50,7 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
       communityCode: form.formData.communityCode,
       countryCode: form.formData.countryCode,
       submissionId: submission_id,
+      email: form.formData.email,
       dateOfBirth: form.formData.dateOfBirth,
       aproximateAge: form.formData.aproximateAge,
       gender: form.formData.gender,
