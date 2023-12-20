@@ -342,6 +342,7 @@ export const View = ({ }: SignProps) => {
                                             <tr>
 
                                             </tr>
+
                                             <tr>
                                                 { accused.dateOfBirth == null ? <></> :
                                                     <>
@@ -349,12 +350,26 @@ export const View = ({ }: SignProps) => {
                                                         <td>{accused.dateOfBirth}</td>                                                    
                                                     </>
                                                 }
+                                                { accused.aproximateAge == null ? <></> :
+                                                    <>
+                                                        <td><label>Aproximate Age: </label></td>
+                                                        <td>{accused.aproximateAge}</td>                                                    
+                                                    </>
+                                                }
+                                            </tr>
+                                            <tr>
                                                 { accused.gender == null ? <></> :
                                                     <>
                                                         <td><label>Gender Identity: </label></td>
                                                         <td>{accused.gender}</td>                                                    
                                                     </>
-                                                }                                                
+                                                }  
+                                                { accused.email == null ? <></> :
+                                                    <>
+                                                        <td><label>Email: </label></td>
+                                                        <td>{accused.email}</td>                                                    
+                                                    </>
+                                                }                                               
                                             </tr>
                                             <tr>
                                                 <td><label>Address: </label></td>
