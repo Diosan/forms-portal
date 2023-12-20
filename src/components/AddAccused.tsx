@@ -49,6 +49,7 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
       postalCode: form.formData.postalCode,
       communityCode: form.formData.communityCode,
       countryCode: form.formData.countryCode,
+      countryName: form.formData.countryCode,
       submissionId: submission_id,
       email: form.formData.email,
       dateOfBirth: form.formData.dateOfBirth,
