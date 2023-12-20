@@ -313,12 +313,16 @@ export const View = ({ }: SignProps) => {
                                         <tbody style={{ fontSize: "10pt", }}>
                                             <tr>
                                                 <td style={{ width: "160px" }}><label>Name of Accused: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
+                                                <td colSpan={3}>{i + 1} {accused.firstName}{accused.middleName == null ? '' : ' ' + accused.middleName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
                                             </tr>
-                                            <tr>
-                                                <td style={{ width: "160px" }}><label>Alias: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.alias}</td>
-                                            </tr>
+                                            {accused.alias == null ? 
+                                                <></>
+                                                :
+                                                <tr>
+                                                    <td style={{ width: "160px" }}><label>Alias: </label></td>
+                                                    <td colSpan={3}>{i + 1} {accused.alias}</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
 
@@ -326,24 +330,42 @@ export const View = ({ }: SignProps) => {
                                     <table width={"700px"} className="accused-table" key={accused.id}
                                         style={{ marginBottom: "10px" }}>
                                         <tbody style={{ fontSize: "9.5pt", }}>
-                                            <tr>
-                                                <td><label>ID: </label></td>
-                                                <td>{accused.identification}</td>
-                                                <td><label>ID Type: </label></td>
-                                                <td>{accused.identificationType}</td>
-                                            </tr>
+                                            { accused.identification == null ? <></> :
+                                                <tr>
+                                                    <td><label>ID: </label></td>
+                                                    <td>{accused.identification}</td>
+                                                    <td><label>ID Type: </label></td>
+                                                    <td>{accused.identificationType}</td>
+                                                </tr>                                                
+                                            }
+
                                             <tr>
 
                                             </tr>
                                             <tr>
-                                                <td><label>Date Of Birth: </label></td>
-                                                <td>{accused.dateOfBirth}</td>
-                                                <td><label>Gender Identity: </label></td>
-                                                <td>{accused.gender}</td>
+                                                { accused.dateOfBirth == null ? <></> :
+                                                    <>
+                                                        <td><label>Date Of Birth: </label></td>
+                                                        <td>{accused.dateOfBirth}</td>                                                    
+                                                    </>
+                                                }
+                                                { accused.gender == null ? <></> :
+                                                    <>
+                                                        <td><label>Gender Identity: </label></td>
+                                                        <td>{accused.gender}</td>                                                    
+                                                    </>
+                                                }                                                
                                             </tr>
                                             <tr>
                                                 <td><label>Address: </label></td>
-                                                <td colSpan={3}>{accused.address}</td>
+                                                <td colSpan={3}>{accused.addressLine1}
+                                                    {accused.addressLine2 == null ? <></> : <>{', ' + accused.addressLine2}</>}
+                                                    {accused.addressLine3 == null ? <></> : <>{', ' + accused.addressLine3}</>}
+                                                    {accused.cityTown == null ? <></> : <>{', ' + accused.cityTown}</>}
+                                                    {accused.postalCode == null ? <></> : <>{', ' + accused.postalCode}</>}
+                                                    {accused.communityCode == null ? <></> : <>{', ' + accused.communityCode}</>}
+                                                    {accused.countryName == null ? <></> : <>{', ' + accused.countryName}</>}
+                                                </td>
                                             </tr>
 
                                             <tr>
