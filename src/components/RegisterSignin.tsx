@@ -220,9 +220,11 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const signinVerify = async (event: any) => {
         event.preventDefault()
+        setLoading(true);
         // const dispatch = useAppDispatch();
         console.log(">>> signin")
-        dispatch(verifyOtp({ otp: signinOTP }) as any)
+        try {
+            dispatch(verifyOtp({ otp: signinOTP }) as any)
             .unwrap()
             .then(async (message: any) => {
                 console.log("Reidrecting...")
@@ -238,6 +240,13 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                 console.log(error)
                 setSigninVerifyError(true)
             });
+
+        } catch (error) {
+            console.error('Error checking token validity:', error);
+            setChangePassword(false);
+        }finally {
+            setLoading(false); // Stop loading after the async operation is done
+        }
 
     }
 
@@ -352,7 +361,19 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                             pattern="\d{6}"
                                                         />
 
-                                                        <div className="text-center"><button type="submit" className="btn btn-lg btn-secondary" >Confirm</button></div>
+                                                        <div className="text-center">
+                                                            
+                                                            <button type="submit" className="mt-1 btn btn-primary"  disabled={loading}>
+                                                                    {loading ? (
+                                                                        <>
+                                                                            <FontAwesomeIcon icon={faSpinner} spin />
+                                                                            &nbsp;Confirming...
+                                                                        </>
+                                                                    ) : (
+                                                                        "Confirm"
+                                                                    )}
+                                                                </button>                                                            
+                                                        </div>
 
 
                                                     </div>
@@ -410,7 +431,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                 : (
                                                     <>
                                                         <form onSubmit={signIn} className="swf-form">
-                                                            <h4 className="mb-3">Login</h4>
+                                                            <h4 className="mb-3">Log in</h4>
 
                                                             {emailSent && (
                                                                 <div className="mt-1 mb-1 text-center" style={{ borderRadius:"5px", backgroundColor:"#eee", 

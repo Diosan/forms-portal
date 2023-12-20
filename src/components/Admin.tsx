@@ -39,7 +39,7 @@ interface Submission {
     status: string
 }
 
-export const Admin  = ({ }: SubmissionsProps) => {
+export const Admin = ({ }: SubmissionsProps) => {
 
     const navigate = useNavigate()
     const dispatch = useAppDispatch();
@@ -150,7 +150,7 @@ export const Admin  = ({ }: SubmissionsProps) => {
                     flexShrink: 0, position: "fixed", top: 0, left: 0, height: "100%"
                 }}
             >
-                
+
             </div>
 
 
@@ -162,19 +162,39 @@ export const Admin  = ({ }: SubmissionsProps) => {
                         <h3 className='text-left flex-grow-1' style={{ marginRight: 'auto' }}>Submissions Admin</h3>
                     </div>
 
-                    {submissions.map((submission:any) => (
+                    {submissions.map((submission: any) => (
 
-                            <div className="card submission-card" style={{ padding: '1px' }} key={submission.id}>
-                                <div className="card-body" style={{ padding: '10px 25px' }}>
-                                    <h5 className="card-title text-left">{submission.description}</h5>
-                                </div>
+                        // <div className="card submission-card" style={{ padding: '1px' }} key={submission.id}>
+                        //     <div className="card-body" style={{ padding: '10px 25px' }}>
+                        //         <h5 className="card-title text-left">{submission.description}</h5>
+                        //     </div>
+                        // </div>
+
+
+                        <div className="card submission-card d-flex" style={{ padding: '1px' }}>
+                        <div className="card-body d-flex justify-content-between" style={{ padding: '10px 25px' }}>
+                            <h5 className="card-title fs-6 text-left">{submission.description || (`Submission: ${submission.id}`)}</h5>
+                            <div className="action-buttons">
+                                <button className="btn btn-link">
+                                    <i className="fa fa-edit"></i> Edit
+                                </button>
+                                <button className="btn btn-link">
+                                    <i className="fa fa-trash"></i> Delete
+                                </button>
                             </div>
-                      
+                        </div>
+                        </div>
+
+
+
+
+
                     ))}
 
                 </div>
-
             </div>
+
+            
 
 
 

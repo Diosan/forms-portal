@@ -206,11 +206,33 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                     href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
                                                     key={submission.id}
                                                 >
-                                                    <div className="card submission-card" style={{ padding: '1px' }}>
-                                                        <div className="card-body" style={{ padding: '10px 25px' }}>
-                                                            <h5 className="card-title fs-6 text-left">{submission.description}</h5>
+                                                    <div className="card submission-card d-flex" style={{ padding: '1px' }}>
+                                                        <div className="card-body d-flex justify-content-between" style={{ padding: '10px 25px' }}>
+                                                            <h5 className="card-title fs-6 text-left">{submission.description || (`Submission: ${submission.id}` )}</h5>
+                                                            <div className="action-buttons">
+                                                                <button className="btn btn-link">
+                                                                    <i className="fa fa-edit"></i> Edit
+                                                                </button>
+                                                                <button className="btn btn-link">
+                                                                    <i className="fa fa-trash"></i> Delete
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    {/* <div className="card submission-card" style={{ padding: '1px' }}>
+                                                        <div className="card-body" style={{ padding: '10px 25px' }}>
+                                                            <h5 className="card-title fs-6 text-left">{submission.description || (`Submission: ${submission.id}` )}</h5>
+                                                        </div>
+                                                    </div> */}
+
+
                                                 </a>
                                             ))}
                                         </div>
