@@ -114,7 +114,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
                 <div className="card accused-card mt-0 " key={accused.id}>
                     <div className="accused-index">Accused {index+1}</div>
                     <div className="card-body">
-                        <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName}{' ' + accused.middleName} {accused.lastName}</h5>
+                        <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName}{accused.middleName == null ? '' : ' ' + accused.middleName} {accused.lastName}</h5>
                         <p className="card-text text-left p-0 m-0">
                             <label>Address:</label> {accused.addressLine1}
                                                     {accused.addressLine2 == null ? <></> : <>{', ' + accused.addressLine2}</>}
