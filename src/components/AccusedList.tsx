@@ -134,6 +134,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
                             {accused.gender == null ? <></> : <><label>Gender Identity:</label> {accused.gender} <br/> </>} 
                             {accused.adulthood == null ? <></> : <><label>Adult/Child:</label> {accused.adulthood} <br/> </>}
                             {accused.dateOfBirth == null ? <></> : <><label>Date Of Birth:</label> {accused.dateOfBirth} <br/> </>}
+                            {accused.aproximateAge == null ? <></> : <><label>Approximate Age:</label> {accused.aproximateAge} <br/> </>}
                             {accused.alias == null ? <></> : <><label>Alias:</label> {accused.alias} <br/> </>}
                             
 
