@@ -122,15 +122,17 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
                                                     {accused.cityTown == null ? <></> : <>{', ' + accused.cityTown}</>}
                                                     {accused.postalCode == null ? <></> : <>{', ' + accused.postalCode}</>}
                                                     {accused.communityCode == null ? <></> : <>{', ' + accused.communityCode}</>}
-                                                    {accused.countryCode == null ? <></> : <>{', ' + accused.countryCode}</>}
+                                                    {accused.countryName == null ? <></> : <>{', ' + accused.countryName}</>}
+                                                    {/* {accused.countryCode == null ? <></> : <>{', ' + accused.countryCode}</>} */}
                         </p>
                         <p className="card-text text-left">
-                            {accused.email == null ? <></> : <><label>Email:</label> {accused.email}</>}
+                            {accused.email == null ? <></> : <><label>Email:</label> {accused.email} <br/> </>}
                             {accused.identificationType == null ? <></> : <><label>Identification Type:</label> {accused.identificationType} <br/> </>}                            
                             {accused.identification == null ? <></> : <><label>Identification Number:</label> {accused.identification} <br/> </>} 
                             {accused.gender == null ? <></> : <><label>Gender Identity:</label> {accused.gender} <br/> </>} 
                             {accused.adulthood == null ? <></> : <><label>Adult/Child:</label> {accused.adulthood} <br/> </>}
                             {accused.dateOfBirth == null ? <></> : <><label>Date Of Birth:</label> {accused.dateOfBirth} <br/> </>}
+                            {accused.aproximateAge == null ? <></> : <><label>Approximate Age:</label> {accused.aproximateAge} <br/> </>}
                             {accused.alias == null ? <></> : <><label>Alias:</label> {accused.alias} <br/> </>}
                             
 
