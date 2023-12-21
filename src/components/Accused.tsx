@@ -567,7 +567,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                         <button className="btn btn-link btn-xs" 
                         style={{  textDecoration: "none" }} onClick={addNewCharge} 
                         type="button">
-                            <FontAwesomeIcon icon={faPlus} /> New Charge
+                            <FontAwesomeIcon icon={faPlus} /> Add Charge
                         </button>
                     }
 
