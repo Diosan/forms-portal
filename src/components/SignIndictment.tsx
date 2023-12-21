@@ -174,7 +174,8 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                     .signature-format {
                         width: 300px;
                         border: 2px solid #000; 
-                        padding:5px 10px 7px 10px
+                        padding:5px 10px 7px 10px;
+                        background-color:#ebf7ff
                         }
                         
                         .signature-format .col {
@@ -994,7 +995,7 @@ knowledge;
                     </div> */}
 
                     <div className="signature-container">
-                        <div className=" signature-format" style={{backgroundColor:"#fff"}}>
+                        <div className=" signature-format" style={{backgroundColor:"#ebf7ff"}}>
                             {/* <!-- Row 1 --> */}
                             <div style={{display:"flex"}}>
                                 <div className="col-6 col">
