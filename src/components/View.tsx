@@ -14,6 +14,8 @@ import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
 import { Offences } from "./Offences"
+import { Pending } from "./Pending"
+import { Convictions } from "./Convictions"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 import {
@@ -406,9 +408,9 @@ export const View = ({ }: SignProps) => {
 
                         </div>
 
+
+
                         <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Offences</div>
-
-
                         <div className="text-left complainant-details" style={{}}>
                             <table className="" width={"700px"}>
                                 {/* <thead>
@@ -423,19 +425,42 @@ export const View = ({ }: SignProps) => {
                                 <tbody>
 
                                     {accuseds.map((accused: any, i: number) => (
-                                        <Offences
-                                            first_name={accused.firstName}
-                                            last_name={accused.lastName}
-                                            accused_id={accused.id}
-                                            key={i}
-                                        />
+                                        <>
+                                            <Offences
+                                                first_name={accused.firstName}
+                                                last_name={accused.lastName}
+                                                accused_id={accused.id}
+                                                key={i}
+                                            />
+
+                                            {accused.previousCriminalRecord == 'Yes' ?
+                                                <>
+                                                    <Pending
+                                                        first_name={accused.firstName}
+                                                        last_name={accused.lastName}
+                                                        accused_id={accused.id}
+                                                        key={i}
+                                                    />
+
+                                                    <Convictions
+                                                        first_name={accused.firstName}
+                                                        last_name={accused.lastName}
+                                                        accused_id={accused.id}
+                                                        key={i}
+                                                    />
+                                                </>
+                                                : <></>
+                                            }
+                                           
+                                        </>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
-                        
-                        
-                        
+
+
+
+
                         
                        
 
