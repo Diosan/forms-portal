@@ -55,6 +55,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+    const [additionalNotes, setAdditionalNotes] = useState(false)
 
 
 
@@ -78,9 +79,15 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     const [oathType, setOathType] = useState('oath')
 
     const [acknowledged, setAcknowledged] = useState(false)
+    const [additionalAcknowledged, setAdditionalAcknowledged] = useState(false)
+    
 
     const acknowledgedChange = (event: any) => {
         setAcknowledged(event.target.checked);
+    }
+
+    const additionalAcknowledgedChange = (event: any) => {
+        setAdditionalAcknowledged(event.target.checked);
     }
 
     const oathTypeChange = (event: any) => {
@@ -666,6 +673,15 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             // console.log('\n\n\n complainant_email: ', complainant_email)
             let the_email = await complainant_email
             // console.log('\n\n\n the_email: ', the_email)
+            console.log('\n\n\n Checking for additional notes: ', submission.data.submission)
+            if(submission.data.submission.additionalNotes == null){
+                console.log('addtionalNotes is null')
+                setAdditionalNotes(false)
+            } else {
+                console.log('addtionalNotes is NOT null')
+                setAdditionalNotes(true)                
+            }
+            
             if (submission.data.submission.status == 'final') {
                 // console.log('retreived submission is signed')
 
@@ -868,6 +884,19 @@ knowledge;
                             </label>
                         </div>                            
                     </div>
+
+                    { additionalNotes ?
+                        <div className="form-group field field-boolean">
+                            <div className="checkbox">
+                                <label>
+                                    <input value = "test" type="checkbox" onChange={additionalAcknowledgedChange} />
+                                    <span>Additional notes is included in appendix B below</span>
+                                </label>
+                            </div>                            
+                        </div>
+                        : <></>
+                    }
+
                         
 
                 </p>
@@ -879,7 +908,7 @@ knowledge;
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
 
                 <div className="" style={{ display:"block", margin:"15px auto", width:"200px"}} >
-                    { acknowledged ?
+                    { acknowledged && additionalAcknowledged ?
                         <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
                         :
                         <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
