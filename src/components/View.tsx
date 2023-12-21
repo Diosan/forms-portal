@@ -87,6 +87,8 @@ export const View = ({ }: SignProps) => {
 
     const [status, setStatus] = useState('')
     const [complainantName, setComplainantName] = useState('')
+    const [complainantFirstName, setComplainantFirstName] = useState('')
+    const [complainantLastName, setComplainantLastName] = useState('')
     const [complainantAgency, setComplainantAgency] = useState('')
     const [complainantRegNum, setComplainantRegNum] = useState('')
     const [complainantRank, setComplainantRank] = useState('')
@@ -125,6 +127,8 @@ export const View = ({ }: SignProps) => {
             setStatus(submission.data.submission.status)
             setTitle(submission.data.submission.description)
             setComplainantName(submission.data.complainant.firstName + ' ' + submission.data.complainant.lastName)
+            setComplainantFirstName(submission.data.complainant.firstName)
+            setComplainantLastName(submission.data.complainant.lastName)
             setComplainantAgency(submission.data.complainant.agency)
             setComplainantRegNum(submission.data.complainant.regNum)
             setComplainantEmail(submission.data.complainant.email)
@@ -148,9 +152,6 @@ export const View = ({ }: SignProps) => {
            }
            setAccusedNames(accusedNames)
 
-
-
-
            switch (submission.data.submission.type) {
             case 'complaint_with_oath':
                 setSubmissionType('COMPLAINT ON OATH')
@@ -170,12 +171,10 @@ export const View = ({ }: SignProps) => {
             default:
                 setSubmissionType('COMPLAINT ON OATH')
             }
-
         }
 
 
         const fetchCharges = async (accused: any) => {
-
             let firstName = accused.firstName
             let lastName = accused.lastName
 
@@ -275,12 +274,12 @@ export const View = ({ }: SignProps) => {
                             <tbody>
                                 <tr>
                                     <td style={{}}><label>Complainant First Name: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantName}</div>
+                                        <div style={{ marginBottom: "10px" }}>{complainantFirstName}</div>
                                     </td>
 
 
                                     <td style={{}}><label>Complainant Last Name: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantName}</div>
+                                        <div style={{ marginBottom: "10px" }}>{complainantLastName}</div>
                                     </td>
 
                                     <td style={{}}><label>Complainant Rank: </label>

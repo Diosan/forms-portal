@@ -45,21 +45,21 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
             navigate('/submissions');
         }
         else {
-            console.log("Cannot navigate to submissions page")
+            //console.log("Cannot navigate to submissions page")
             // dispatch(logout() as any)
             // .unwrap()
             // .then((response:any) => {
-            //     console.log(response)
+            //     //console.log(response)
             //     navigate("/"); 
             // })
             // .catch((error: any) => {
-            //     console.log(error)
+            //     //console.log(error)
             // });
         }
     }, [isLoggedIn, isVerified, token, otpRequired]);
 
-    console.log(">>> STATE <<<")
-    console.log(state)
+    //console.log(">>> STATE <<<")
+    //console.log(state)
 
     const dispatch = useAppDispatch();
 
@@ -135,7 +135,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const signinEmailChange = (event: any) => {
         setSigninEmail(event.target.value)
-        console.log(event.target.value)
+        //console.log(event.target.value)
     }
 
     const signinPasswordChange = (event: any) => {
@@ -152,7 +152,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const passwordResetLink = async (event: any) => {
         event.preventDefault()
-        console.log("clicked")
+        //console.log("clicked")
         setChangePassword(true)
     }
 
@@ -169,31 +169,31 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
             password: password
         }
 
-        // console.log('Registration URL: ' + API_URL + '/api/users')
+        // //console.log('Registration URL: ' + API_URL + '/api/users')
 
         axios.post(API_URL + '/api/users', user)
             .then((response) => {
 
                 switch (response.data.outcome) {
                     case 'success':
-                        console.log(response.data.message)
+                        //console.log(response.data.message)
                         setRegistrationError(false)
                         setRegistrationSuccess({ success: true, message: response.data.message })
                         setRegEmail(response.data.email)
                         break
                     case 'error':
-                        console.log('Registration error: ' + response.data.error)
+                        //console.log('Registration error: ' + response.data.error)
                         setRegistrationSuccess({ success: false, message: '' })
                         setRegistrationError(true)
                         setRegErrorMessage(response.data.error)
                         break
                     default:
-                        console.log('Unknown registration outcome')
+                        //console.log('Unknown registration outcome')
                         break
                 }
 
             }, (error) => {
-                console.log('Registration error: ', error.response)
+                //console.log('Registration error: ', error.response)
             })
 
     }
@@ -202,19 +202,19 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
         event.preventDefault()
         setLoading(true);
         setSigninError(false)
-        console.log(`>>> signin with ${email} and password: ${password}`)
+        // //console.log(`>>> signin with ${email} and password: ${password}`)
         dispatch(login({ username: email, password: password }) as any)
             .unwrap()
             .then((response: any) => {
                 setSigninError(false)
                 setLoading(false);
                 // window.location.reload();
-                console.log(response)
+                // //console.log(response)
             })
             .catch((error: any) => {
                 setLoading(false);
                 setSigninError(true)
-                // console.log(error)
+                // //console.log(error)
             });
     }
 
@@ -222,22 +222,22 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
         event.preventDefault()
         setLoading(true);
         // const dispatch = useAppDispatch();
-        console.log(">>> signin")
+        //console.log(">>> signin")
         try {
             dispatch(verifyOtp({ otp: signinOTP }) as any)
             .unwrap()
             .then(async (message: any) => {
-                console.log("Reidrecting...")
-                console.log(message)
+                //console.log("Reidrecting...")
+                //console.log(message)
                 let decoded = await auth.decodedToken()
-                console.log(decoded)
+                //console.log(decoded)
                 if (isVerified) {
                     navigate('/submissions');
                 }
             })
             .catch((error: any) => {
                 // Handle the error
-                console.log(error)
+                //console.log(error)
                 setSigninVerifyError(true)
             });
 
@@ -253,14 +253,14 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
     const requestNewPassword = (event: any) => {
         event.preventDefault()
         setLoading(true);
-        console.log(password);
+        //console.log(password);
         const checkTokenValidity = async () => {
             try {
-                console.log("...requesting token" + email)
+                //console.log("...requesting token" + email)
                 const response = await axios.post(`${API_URL}/api/users/password/forgotPasswordRequest`,
                     { username: email });
                 // Check response to determine if the token is valid
-                console.log(".......response is coming from server >", response)
+                //console.log(".......response is coming from server >", response)
                 if (response.data.outcome === "success") {
                     setChangePassword(false);
                     setEmailSent(true)
@@ -291,12 +291,12 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
         dispatch(logout() as any)
             .unwrap()
             .then(() => {
-                console.log("Logging out...")
+                //console.log("Logging out...")
                 navigate("/"); // This will redirect to the home page
             })
             .catch((error: any) => {
                 // Handle the error
-                console.log(error)
+                //console.log(error)
             });
     }
 
