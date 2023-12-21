@@ -353,7 +353,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                         )}
 
                                         {/* Render "complete" submissions with a different background color */}
-                                        {/* {groupedSubmissions['signed'] && (
+                                        {groupedSubmissions['signed'] && (
                                         <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
                                             <h4 className="my-2 mb-4 fs-5">Signed Submissions</h4>
                                             {groupedSubmissions['signed'].map((submission:any) => (
@@ -369,7 +369,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                 </a>
                                             ))}
                                         </div>
-                                    )} */}
+                                    )}
 
 
                                         {/* {groupedSubmissions['verified'] && (
@@ -391,7 +391,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                     )} */}
 
 
-                                        {/* {groupedSubmissions['final'] && (
+                                        {groupedSubmissions['final'] && (
                                         <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
                                             <h4 className="my-2 mb-4 fs-5">Completed Submissions</h4>
                                             {groupedSubmissions['final'].map((submission:any) => (
@@ -407,7 +407,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                 </a>
                                             ))}
                                         </div>
-                                    )} */}
+                                    )}
 
 
                                     </div>
