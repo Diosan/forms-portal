@@ -50,30 +50,30 @@ interface AuthResponse {
       .then((response) => {
         switch (response.data.outcome) {
           case 'success':
-            console.log(response.data.message);
+            //console.log(response.data.message);
             return response.data; // Return the response data
           case 'error':
-            console.log('Registration error: ' + response.data.error);
+            //console.log('Registration error: ' + response.data.error);
             throw new Error(response.data.error); // Throw an error with the message
           default:
-            console.log('Unknown registration outcome');
+            //console.log('Unknown registration outcome');
             throw new Error('Unknown registration outcome'); // Throw a generic error
         }
       }, (error) => {
-        console.log('Registration error: ', error.response);
+        //console.log('Registration error: ', error.response);
         throw error; // Rethrow the error
       });
   };
 
 
 const login = (email: string, password: string): Promise<LoginResponse> => {
-    console.log(`ok logging in... with: ${email} and ${password}`);
+    //console.log(`ok logging in... with: ${email} and ${password}`);
     
     return axios.post(API_URL + '/api/authenticate/login', { email, password }, {withCredentials:true})
       .then((response: { data: LoginResponse }) => {
         if (response.data.outcome === 'success') {
           // Ensure that user data is always defined
-          // console.log(response.data)
+          // //console.log(response.data)
 
           return response.data;
 
@@ -82,7 +82,7 @@ const login = (email: string, password: string): Promise<LoginResponse> => {
           throw new Error(response.data.error || 'Login failed');
         }
     }, (error) => {
-        console.log('Registration error: ', error.response);
+        //console.log('Registration error: ', error.response);
         throw error; 
     });
   };
@@ -107,10 +107,10 @@ const registrationVerify = (regEmail: string, regOTP: string): Promise<void> => 
           // navigate("/submissions");
           break;
         case 'error':
-          console.log('OTP verification failed');
+          //console.log('OTP verification failed');
           break;
         default:
-          console.log('Unknown verification outcome');
+          //console.log('Unknown verification outcome');
           break;
       }
     });
@@ -130,7 +130,7 @@ const resendOTP = (email:string): any => {
   return axios.post(API_URL + '/api/authenticate/resend-otp', { email}, {withCredentials:true})
     .then((response) => {
       if (response.data.outcome === 'success') {
-        // console.log(response.data)
+        // //console.log(response.data)
         localStorage.removeItem("user");
         localStorage.removeItem('userToken');
 
@@ -142,7 +142,7 @@ const resendOTP = (email:string): any => {
         throw new Error(response.data.error || 'OTP Sending failed');
       }
   }, (error) => {
-      console.log('OTP error: ', error.response);
+      //console.log('OTP error: ', error.response);
       throw error; 
   });
 };
@@ -159,7 +159,7 @@ const resendSigningOtp = (email:string): any => {
         throw new Error(response.data.error || 'OTP Sending failed');
       }
   }, (error) => {
-      console.log('OTP error: ', error.response);
+      //console.log('OTP error: ', error.response);
       throw error; 
   });
 };
@@ -167,19 +167,19 @@ const resendSigningOtp = (email:string): any => {
 
 
 const resetPassword = (password:string, token:string): any => {
-  console.log("Resetting password")
+  //console.log("Resetting password")
 
   return axios.put(API_URL + '/password/new', { password, token}, {withCredentials:true})
     .then((response) => {
       if (response.data.outcome === 'success') {
-        console.log(response.data)
+        //console.log(response.data)
         return response.data;
 
       } else {
         throw new Error(response.data.error || 'Password Reset Failed');
       }
   }, (error) => {
-      console.log('Password reset failed: ', error.response);
+      //console.log('Password reset failed: ', error.response);
       throw error; 
   });
 };

@@ -413,7 +413,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
       {auth.loggedIn() ?
         <>
           <div className="swf-container container"
-            style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
+            style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
           >
 
 
@@ -503,23 +503,15 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
               <div className="px-2 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
 
-
-
-
-
-
-
                 {submissionTitleSaved ?
                   <div>
                             
-
-                          
                           {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
                             <div>
                            
-                              <div className="card fade show" style={{ border: "none", backgroundColor:"#ddd"}} >
-                              <h4 className="text-center mb-4">Complainant Information</h4>
-                                <form onSubmit={saveComplainant}>
+                              <div className="card fade show m-3" style={{ border: "none", backgroundColor:"#ddd"}} >
+                              <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
+                                <form onSubmit={saveComplainant} className="m-3">
 
                                   {/* <div className="mb-3">
                                     <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
@@ -582,8 +574,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     className="btn btn-md btn-light ms-1 float-end" // Use btn-light for a button with no background
                                     >
                                       <i className="text-gray">
-                                        <FontAwesomeIcon icon={faCheck} /> Update
-                                      </i>
+                                        <FontAwesomeIcon icon={faCheck} />
+                                      </i>  Save
                                   </button>
                                   {/* </div> */}
 
