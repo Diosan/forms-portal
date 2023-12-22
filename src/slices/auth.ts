@@ -101,11 +101,14 @@ export const register = createAsyncThunk(
   }
 );
 
+
+
+
 export const login = createAsyncThunk(
   "auth/login",
   async ({ username, password }: LoginPayload, thunkAPI) => {
     try {
-      console.log("..trying to login - at slice")
+      // console.log("..trying to login - at slice")
       const response = await AuthService.login(username, password);
       thunkAPI.dispatch(setMessage(response.message));
 
@@ -125,11 +128,12 @@ export const login = createAsyncThunk(
        return { user: null, otpRequired: true, token: response.token };
 
     } catch (error: any) {
+      console.log(error)
       console.log("..trying to login - got a response from service",)
       const message =
         (error.response &&
           error.response.data &&
-          error.response.data.message) ||
+          error.response.data.error) ||
         error.message ||
         error.toString();
       thunkAPI.dispatch(setMessage(message));

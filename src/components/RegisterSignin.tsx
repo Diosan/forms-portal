@@ -90,7 +90,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
     const [signinError, setSigninError] = useState(false)
     const [signinSuccess, setSigninSuccess] = useState({ success: false, message: '' })
-    const [signinErrorMessage, setSigninErrorMessage] = useState('Incorrect Username of Password')
+    const [signinErrorMessage, setSigninErrorMessage] = useState('')
     const [signinEmail, setSigninEmail] = useState('')
     const [signinPassword, setSigninPassword] = useState('')
     const [signinOTP, setSigninOTP] = useState('')
@@ -209,12 +209,13 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                 setSigninError(false)
                 setLoading(false);
                 // window.location.reload();
-                // //console.log(response)
+                console.log(response)
             })
             .catch((error: any) => {
                 setLoading(false);
                 setSigninError(true)
-                // //console.log(error)
+                setSigninErrorMessage(error)
+                console.log(error)
             });
     }
 
