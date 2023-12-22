@@ -880,7 +880,7 @@ knowledge;
                         <div className="checkbox">
                             <label>
                                 <input value = "test" type="checkbox" onChange={acknowledgedChange} />
-                                <span>Summary of evidence is included in appendix A below</span>
+                                <span>Summary of evidence is included in appendix A below.</span>
                             </label>
                         </div>                            
                     </div>
@@ -890,7 +890,7 @@ knowledge;
                             <div className="checkbox">
                                 <label>
                                     <input value = "test" type="checkbox" onChange={additionalAcknowledgedChange} />
-                                    <span>Additional notes is included in appendix B below</span>
+                                    <span>Additional notes is included in appendix B below.</span>
                                 </label>
                             </div>                            
                         </div>
