@@ -254,6 +254,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
     const requestNewPassword = (event: any) => {
         event.preventDefault()
         setLoading(true);
+        setSigninErrorMessage('')
         //console.log(password);
         const checkTokenValidity = async () => {
             try {
@@ -268,8 +269,11 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                 } else {
                     setChangePassword(false);
                 }
-            } catch (error) {
-                console.error('Error checking token validity:', error);
+            } catch (error:any) {
+                let message = error && error.response && error.response.data && error.response.data.error ? error.response.data.error : "Error resetting password";
+                setSigninErrorMessage(message);
+                setSigninError(true)
+                console.error(message);
                 setChangePassword(false);
             } finally {
             setLoading(false); // Stop loading after the async operation is done
@@ -280,6 +284,9 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
 
     }
+
+
+
 
     const handleResendOTP = () => {
         dispatch(resendOTP({ email }) as any)
