@@ -908,11 +908,25 @@ knowledge;
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
 
                 <div className="" style={{ display:"block", margin:"15px auto", width:"200px"}} >
-                    { acknowledged && additionalAcknowledged ?
-                        <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+
+                    { additionalNotes ?
+                        <>
+                            { acknowledged && additionalAcknowledged ?
+                                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                                :
+                                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                            }
+                        </>
                         :
-                        <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                        <>
+                            { acknowledged ?
+                                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                                :
+                                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                            }
+                        </>
                     }
+
                     
                 </div>
 

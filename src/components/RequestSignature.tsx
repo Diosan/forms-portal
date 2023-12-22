@@ -26,7 +26,11 @@ export const RequestSignature = ({submission_id, complainant_email}:RequestSigna
             
             let submissionForRequest = await axios.post(
                 API_URL + '/api/submissions/update/',
-                { id: submission_id, summaryOfEvidence: form.formData.summaryOfEvidence}
+                { 
+                    id: submission_id, 
+                    summaryOfEvidence: form.formData.summaryOfEvidence,
+                    additionalNotes: form.formData.additionalNotes
+                }
             )           
             
             let requestResult = await axios.post(
