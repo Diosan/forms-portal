@@ -1,6 +1,9 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
 import { useEffect, useState, useRef } from "react"
+import { useSelector } from "react-redux"
 const API_URL = import.meta.env.VITE_API_URL
+import { RootState } from '../store';
+
 import axios from "axios"
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
@@ -83,15 +86,6 @@ function NameDisplay({ data }: NameDisplayProps) {
 }
 
 
-
-
-
-
-
-
-
-
-
 export const Sign = ({ }: SignProps) => {
 
     const { id } = useParams()
@@ -101,6 +95,8 @@ export const Sign = ({ }: SignProps) => {
     const auth = new AuthService
 
     const maxNamesPerLine = 6;
+    const state = useSelector((state: RootState) => state.auth);
+    const { isLoggedIn, otpRequired, token, isVerified } = state
 
     const [status, setStatus] = useState('')
     const [complainantName, setComplainantName] = useState('')
@@ -139,7 +135,21 @@ export const Sign = ({ }: SignProps) => {
     useEffect(() => {
 
         const fetchSubmission = async () => {
-            let submission = await axios.get(API_URL + '/api/submissions/' + id)
+            await axios.get(API_URL + '/api/submissions/' + id,
+            { method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+             }).then(submission => {
+
+                if(submission.data.outcome == "error"){
+                    navigate("/submissions")
+                }
+                console.log("Submission")
+                console.log(submission.data.outcome)
+             
+
             console.log(submission.data)
             setStatus(submission.data.submission.status)
             setTitle(submission.data.submission.description)
@@ -221,6 +231,11 @@ export const Sign = ({ }: SignProps) => {
                 default:
                     setSubmissionType('COMPLAINT ON OATH')
             }
+
+            }).catch(err => {
+                console.group(err)
+                navigate("/submissions")
+            })
 
 
         }
@@ -483,12 +498,12 @@ export const Sign = ({ }: SignProps) => {
                     </div>
 
                     {/* SIGNING BOX */}
-                    <div className="text-left complainant-details" 
-                    style={{
-                        width:"750px",
-                        maxWidth: "750px",
-                        padding: "10px 50px 10px 20px"
-                    }}>
+                    <div className="text-left complainant-details"
+                        style={{
+                            width: "750px",
+                            maxWidth: "750px",
+                            padding: "10px 50px 10px 20px"
+                        }}>
 
 
 

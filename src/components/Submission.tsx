@@ -153,7 +153,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         userId: decoded.id
       }
       console.log('Submission is : ', submission)
-      await axios.post(API_URL + '/api/submissions/update_title', submission)
+      await axios.post(API_URL + '/api/submissions/update_title', {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }, data: submission})
         .then((response) => {
 
           console.log('Posted update to submission title')
@@ -184,7 +188,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         matterType: matterType,
         adultOnly: adultOnly
       }
-      axios.post(API_URL + '/api/submissions', submission)
+      axios.post(API_URL + '/api/submissions', {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+      }, data: submission})
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -226,7 +234,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
     console.log('Complainant being sent to server: ', complainant);
 
     if (!submissionComplainantSaved) {
-      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
+      await axios.post(API_URL + '/api/submissions/saveComplainant', {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }, data: complainant})
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -244,7 +256,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
         })
     } else {
-      await axios.post(API_URL + '/api/submissions/update_complainant', complainant)
+      await axios.post(API_URL + '/api/submissions/update_complainant', {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }, data: complainant})
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -317,7 +333,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
     (async () => {
       if (!new_submission) {
         setSubmissionId(parseInt('' + id))
-        let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
+        let returned_submission = await axios.get(API_URL + '/api/submissions/' + id, {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          }})
         console.log('Returned submission: ', returned_submission.data)
         if(returned_submission?.data?.submission?.status == 'final'){
           navigate(`/sign/${id}`)

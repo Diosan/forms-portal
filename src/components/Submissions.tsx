@@ -335,19 +335,31 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                         {/* Render "charge_saved" submissions with a different background color */}
                                         {groupedSubmissions['charge_saved'] && (
                                             <div className="mt-4 group-submission charge-saved-group" style={{ backgroundColor: '#ddeedd' }}>
-                                                <h4 className="my-2 mb-4 fs-5">Charge Saved Submissions</h4>
+                                                <h4 className="my-2 mb-4 fw-bold fs-5 text-left">Saved Submissions</h4>
                                                 {groupedSubmissions['charge_saved'].map((submission: any) => (
-                                                    <a
-                                                        // href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
-                                                        href={'/sign/' + submission.id}
-                                                        key={submission.id}
-                                                    >
-                                                        <div className="card submission-card" style={{ padding: '1px' }}>
-                                                            <div className="card-body" style={{ padding: '10px 25px' }}>
-                                                                <h5 className="card-title text-left">{submission.description}</h5>
+                                                    
+                                                        <div className="card submission-card d-flex" style={{ padding: '1px' }}>
+                                                            <div className="card-body d-flex justify-content-between" style={{ padding: '10px 25px' }}>
+                                                                <h6 className="card-title text-left">{submission.description}</h6>
+                                                                <div className="action-buttons">
+                                                                    <a
+                                                                        href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
+                                                                        key={submission.id}
+                                                                    >
+                                                                        <button className="btn btn-link">
+                                                                            <i className="fa"><FontAwesomeIcon icon={faPencil} />
+                                                                            </i>
+                                                                        </button>
+                                                                    </a>
+                                                                    <button className="btn btn-link btn-sm" onClick={() => handleDelete(submission.id)}>
+                                                                        <i className="fa"><FontAwesomeIcon icon={faX} />
+                                                                        </i>
+                                                                    </button>
+
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </a>
+                                                    
                                                 ))}
                                             </div>
                                         )}
@@ -393,7 +405,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
                                         {groupedSubmissions['final'] && (
                                         <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
-                                            <h4 className="my-2 mb-4 fs-5">Completed Submissions</h4>
+                                            <h4 className="my-2 mb-4 text-left fw-bold fs-5">Signed and Completed Submissions</h4>
                                             {groupedSubmissions['final'].map((submission:any) => (
                                                 <a
                                                     href={'/sign/' + submission.id}
@@ -401,7 +413,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                 >
                                                     <div className="card submission-card" style={{ padding: '1px' }}>
                                                         <div className="card-body" style={{ padding: '10px 25px' }}>
-                                                            <h5 className="card-title text-left">{submission.description}</h5>
+                                                            <h6 className="card-title text-left">{submission.description}</h6>
                                                         </div>
                                                     </div>
                                                 </a>

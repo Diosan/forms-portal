@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react"
 const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
+import { useSelector } from "react-redux"
+
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
@@ -31,6 +33,7 @@ import { Signatures } from "./Signatures"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { RootState } from '../store';
 
 
 
@@ -85,7 +88,8 @@ export const View = ({ }: SignProps) => {
 
     const auth = new AuthService
 
-
+    const state = useSelector((state: RootState) => state.auth);
+    const { isLoggedIn, otpRequired, token, isVerified } = state
 
     const [status, setStatus] = useState('')
     const [complainantName, setComplainantName] = useState('')
@@ -124,7 +128,13 @@ export const View = ({ }: SignProps) => {
     useEffect(() => {
 
         const fetchSubmission = async () => {
-            let submission = await axios.get(API_URL + '/api/submissions/' + id)
+            let submission = await axios.get(API_URL + '/api/submissions/' + id,
+            { method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+             })
             // console.log('\n\n\n Submision Status: ', submission.data.submission.status)
             setStatus(submission.data.submission.status)
             setTitle(submission.data.submission.description)

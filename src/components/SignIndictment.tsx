@@ -9,6 +9,10 @@ import '../assets/Signature.css'
 import { exportPDF } from '../utils/pdfUtils';
 import { useAppDispatch } from "../store/store"
 import { resendSigningOTP } from "../slices/auth";
+import { useSelector } from "react-redux"
+import { RootState } from '../store';
+import { faArrowLeftLong, faPencilAlt, faCheck, faTrash, faTrashCan, faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 
 
 
@@ -31,6 +35,8 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     const id = { submission_id };
     const navigate = useNavigate()
     const [isChecked, setIsChecked] = useState(false);
+    const state = useSelector((state: RootState) => state.auth);
+    const { isLoggedIn, otpRequired, token, isVerified } = state
 
     const [otpSent, setOtpSent] = useState(false)
     const [verifyOtpSent, setVerifyOtpSent] = useState(false)
@@ -80,7 +86,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const [acknowledged, setAcknowledged] = useState(false)
     const [additionalAcknowledged, setAdditionalAcknowledged] = useState(false)
-    
+
 
     const acknowledgedChange = (event: any) => {
         setAcknowledged(event.target.checked);
@@ -92,7 +98,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const oathTypeChange = (event: any) => {
         setOathType(event.target.value)
-      }
+    }
 
     const commisionedChange = (event: any) => {
         setCommissionedEmail(event.target.value)
@@ -165,7 +171,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     const goToCompletedSubmission = () => {
         // history.push('/sub/complete', { data: id });
         navigate('/sub/complete', { state: { id: submission_id } });
-      };
+    };
 
 
     const sign = async (event: any) => {
@@ -560,22 +566,22 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                 `
 
         try {
-                const element = document.getElementById("container-pdf");
-                if (!element) {
+            const element = document.getElementById("container-pdf");
+            if (!element) {
                 throw new Error('Element not found.');
-                }
-                const htmlContent = element.outerHTML;
-                // const htmlToPrint = `<html><head><style>${stylesForPrinting}</style></head>
-                // <body>${htmlContent}</body
-                // </html>`;
-                // Prepare the data to be sent
-                //   const data = {
-                //     html: htmlContent,
-                //     submissionId: submission_id
-                //   };
-                // console.log(data);
-                // Send the request to the server
-                axios.post(`${API_URL}/api/submissions/sign_submission`, 
+            }
+            const htmlContent = element.outerHTML;
+            // const htmlToPrint = `<html><head><style>${stylesForPrinting}</style></head>
+            // <body>${htmlContent}</body
+            // </html>`;
+            // Prepare the data to be sent
+            //   const data = {
+            //     html: htmlContent,
+            //     submissionId: submission_id
+            //   };
+            // console.log(data);
+            // Send the request to the server
+            axios.post(`${API_URL}/api/submissions/sign_submission`,
                 {
                     submission_id: submission_id,
                     email: complainant_email,
@@ -583,14 +589,14 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                     html: htmlContent
                 })
                 .then(response => {
-                console.log(response || "")
-                if (response.data.outcome == 'success') {
-                    setSigned(true)
-                    goToCompletedSubmission();
-                } else {
-                    alert('Verification failed. Try again');
-                    return
-                }
+                    console.log(response || "")
+                    if (response.data.outcome == 'success') {
+                        setSigned(true)
+                        goToCompletedSubmission();
+                    } else {
+                        alert('Verification failed. Try again');
+                        return
+                    }
 
                 })
                 .catch(error => {
@@ -669,63 +675,79 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
         (async () => {
 
             // let signature = await axios.get(API_URL + '/api/submissions/signature/' + submission_id)
-            let submission = await axios.get(API_URL + '/api/submissions/' + submission_id)
-            // console.log('\n\n\n complainant_email: ', complainant_email)
-            let the_email = await complainant_email
-            // console.log('\n\n\n the_email: ', the_email)
-            console.log('\n\n\n Checking for additional notes: ', submission.data.submission)
-            if(submission.data.submission.additionalNotes == null){
-                console.log('addtionalNotes is null')
-                setAdditionalNotes(false)
+            let submission = await axios.get(API_URL + '/api/submissions/' + submission_id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+            })
+            if (submission.data.outcome == "error") {
+                console.log('Not allowed')
             } else {
-                console.log('addtionalNotes is NOT null')
-                setAdditionalNotes(true)                
+                // console.log('\n\n\n complainant_email: ', complainant_email)
+                let the_email = await complainant_email
+                // console.log('\n\n\n the_email: ', the_email)
+                console.log('\n\n\n Checking for additional notes: ', submission.data.submission)
+                if (submission.data.submission.additionalNotes == null) {
+                    console.log('addtionalNotes is null')
+                    setAdditionalNotes(false)
+                } else {
+                    console.log('addtionalNotes is NOT null')
+                    setAdditionalNotes(true)
+                }
+
+                if (submission.data.submission.status == 'final') {
+                    // console.log('retreived submission is signed')
+
+                    let retrieved_signature = await axios.post(
+                        API_URL + '/api/submissions/signature/',
+                        {
+                            submission_id: submission.data.submission.id,
+                            userId: submission.data.submission.userId
+                        }
+                    )
+
+
+                    console.log('\n\n\n Signature for signed submission: ', retrieved_signature.data)
+                    setSignatureHash(retrieved_signature.data.signature.hash)
+                    setSignatureName(retrieved_signature.data.user.firstName + ' ' + retrieved_signature.data.user.lastName)
+                    setSignatureDate(retrieved_signature.data.signature.createdAt)
+
+                } else {
+                    console.log('retreived submission is NOT signed')
+                }
+
+                if (submission.data.submission.status == 'final') {
+                    setIsFinalSigned(true)
+                }
+
+                let returned_verifiers = await axios.get(API_URL + '/api/submissions/verifiers/1')
+
+                let verifs = returned_verifiers.data.verifiers;
+                await setVerifiers([...verifs, ...verifiers])
+                // verifs.map(async (verif: any) => {
+                //     console.log('\n verif: ', verif)
+                //     setVerifiers([verif, ...verifiers])
+                //     // console.log('\n verifiers: ', verifiers)
+                // })
+
+                // console.log('\n\n\n verifs: ', verifs)
+                // console.log('\n\n\n')
+
+                // await setVerifiers([...verifiers, ...verifs])
+
+                // console.log('\n\n\n verifiers: ', verifiers)
+                // console.log('\n\n\n')
+
+                // console.log('\n\n\n retreived signature: ', signature.data)
+
             }
-            
-            if (submission.data.submission.status == 'final') {
-                // console.log('retreived submission is signed')
-
-                let retrieved_signature = await axios.post(
-                    API_URL + '/api/submissions/signature/',
-                    {
-                        submission_id: submission.data.submission.id,
-                        userId: submission.data.submission.userId
-                    }
-                )
 
 
-                console.log('\n\n\n Signature for signed submission: ', retrieved_signature.data)
-                setSignatureHash(retrieved_signature.data.signature.hash)
-                setSignatureName(retrieved_signature.data.user.firstName + ' ' + retrieved_signature.data.user.lastName)
-                setSignatureDate(retrieved_signature.data.signature.createdAt)
-                
-            } else {
-                console.log('retreived submission is NOT signed')
-            }
 
-            if (submission.data.submission.status == 'final') {
-                setIsFinalSigned(true)
-            }
 
-            let returned_verifiers = await axios.get(API_URL + '/api/submissions/verifiers/1')
 
-            let verifs = returned_verifiers.data.verifiers;
-            await setVerifiers([...verifs, ...verifiers])
-            // verifs.map(async (verif: any) => {
-            //     console.log('\n verif: ', verif)
-            //     setVerifiers([verif, ...verifiers])
-            //     // console.log('\n verifiers: ', verifiers)
-            // })
-
-            // console.log('\n\n\n verifs: ', verifs)
-            // console.log('\n\n\n')
-
-            // await setVerifiers([...verifiers, ...verifs])
-
-            // console.log('\n\n\n verifiers: ', verifiers)
-            // console.log('\n\n\n')
-
-            // console.log('\n\n\n retreived signature: ', signature.data)
 
         })();
     }, [refreshTrigger])
@@ -746,7 +768,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
         }, 300); // 500 milliseconds delay
     }
 
-    const handleCheckboxChange = (event:any) => {
+    const handleCheckboxChange = (event: any) => {
         setIsChecked(event.target.checked);
     };
 
@@ -763,7 +785,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
                 <>
                     <h5 className="m-0 text-center fw-bold">I'm Ready to Sign</h5>
-                
+
                     {submissionType == 'COMPLAINT WITHOUT OATH' ?
                         <></>
                         :
@@ -779,13 +801,13 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
                 </>
                 : <>
-                    {!isFinalSigned  ?
+                    {!isFinalSigned ?
                         <h5 className="m-0 mb-3 text-center fw-bold">Enter Signing Code</h5>
-                    :
-                    <>
-                        <div style={{fontSize:"20px", fontWeight:"bold"}}className="m-0 mb-3 text-left fw-bold">Signed</div>
-                    </>
-                }
+                        :
+                        <>
+                            <div style={{ fontSize: "20px", fontWeight: "bold" }} className="m-0 mb-3 text-left fw-bold">Signed</div>
+                        </>
+                    }
 
                 </>
             }
@@ -797,66 +819,66 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
 
             {!isFinalSigned &&
-                
-                    submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
+
+                submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
                 <>
-                    <div  style={{width:"200px", margin:"30px auto 20px auto"}}>
-                    <select value={oathType} 
-                        style={{padding:"5px", width:"200px", fontSize: "20px"}}
-                        onChange={oathTypeChange} >
-                        <option value="oath">Oath</option>
-                        <option value="affirmation">Affirmation</option> 
-                    </select>
+                    <div style={{ width: "200px", margin: "30px auto 20px auto" }}>
+                        <select value={oathType}
+                            style={{ padding: "5px", width: "200px", fontSize: "20px" }}
+                            onChange={oathTypeChange} >
+                            <option value="oath">Oath</option>
+                            <option value="affirmation">Affirmation</option>
+                        </select>
                     </div>
-                    
+
 
                     {oathType == 'oath' ?
                         <>
                             <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
                                 {/* <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p> */}
-                                
+
                                 <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
                                     I {complainant_name} {complainant_rank} {complainant_regnum},
 
                                     solemnly swear that I have signed this complaint on oath and by that I declare that –
 
-                                    
 
-                                    <br/><br/>(i)         I make this [application/complaint] conscientiously, wilfully and honestly having reasonable grounds for believing that the named
+
+                                    <br /><br />(i)         I make this [application/complaint] conscientiously, wilfully and honestly having reasonable grounds for believing that the named
                                     accused person or persons has or have committed the offence alleged as stated in the complaint and that the particulars are true to
                                     the best of my knowledge;
 
-                                    <br/><br/>(ii)        I acknowledge this declaration to be an oath that is binding;
+                                    <br /><br />(ii)        I acknowledge this declaration to be an oath that is binding;
 
-                                    <br/><br/>(iii)       I acknowledge that the wilful false affirmation of this declaration is an offence.
+                                    <br /><br />(iii)       I acknowledge that the wilful false affirmation of this declaration is an offence.
                                 </p>
-                            
+
                             </div>
                         </>
                         :
                         <>
                             <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
                                 {/* <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p> */}
-                                
+
                                 <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
                                     I {complainant_name} {complainant_rank} {complainant_regnum},
 
                                     do solemnly, sincerely, and truly affirm, that I have signed this complaint on oath and by that I declare that –
 
-                                    
 
-                                    <br/><br/>(i)          I make this complaint conscientiously, wilfully and honestly having reasonable grounds for believing that the named accused person
 
-or persons has or have committed the offence alleged as stated in the complaint and that the particulars are true to the best of my
+                                    <br /><br />(i)          I make this complaint conscientiously, wilfully and honestly having reasonable grounds for believing that the named accused person
 
-knowledge;
+                                    or persons has or have committed the offence alleged as stated in the complaint and that the particulars are true to the best of my
 
-                                    <br/><br/>(ii)        I acknowledge this declaration to be an oath that is binding;
+                                    knowledge;
 
-                                    <br/><br/>(iii)       I acknowledge that the wilful false swearing of this oath is an offence
+                                    <br /><br />(ii)        I acknowledge this declaration to be an oath that is binding;
+
+                                    <br /><br />(iii)       I acknowledge that the wilful false swearing of this oath is an offence
                                 </p>
-                            
-                            </div>                        
+
+                            </div>
                         </>
                     }
 
@@ -865,69 +887,69 @@ knowledge;
                 :
                 <>
                 </>
-            
+
             }
 
-            
+
 
 
             {!isFinalSigned &&
-            
-                <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
-                <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
-                    
-                    <div className="form-group field field-boolean">
-                        <div className="checkbox">
-                            <label>
-                                <input value = "test" type="checkbox" onChange={acknowledgedChange} />
-                                <span>Summary of evidence is included in appendix A below.</span>
-                            </label>
-                        </div>                            
-                    </div>
 
-                    { additionalNotes ?
+                <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
+                    <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
+
                         <div className="form-group field field-boolean">
                             <div className="checkbox">
                                 <label>
-                                    <input value = "test" type="checkbox" onChange={additionalAcknowledgedChange} />
-                                    <span>Additional notes is included in appendix B below.</span>
+                                    <input value="test" type="checkbox" onChange={acknowledgedChange} />
+                                    <span>Summary of evidence is included in appendix A below.</span>
                                 </label>
-                            </div>                            
+                            </div>
                         </div>
-                        : <></>
-                    }
 
-                        
+                        {additionalNotes ?
+                            <div className="form-group field field-boolean">
+                                <div className="checkbox">
+                                    <label>
+                                        <input value="test" type="checkbox" onChange={additionalAcknowledgedChange} />
+                                        <span>Additional notes is included in appendix B below.</span>
+                                    </label>
+                                </div>
+                            </div>
+                            : <></>
+                        }
 
-                </p>
-            </div>
+
+
+                    </p>
+                </div>
             }
 
 
 
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
 
-                <div className="" style={{ display:"block", margin:"15px auto", width:"200px"}} >
+                <div className="" style={{ display: "block", margin: "15px auto", width: "200px" }} >
 
-                    { additionalNotes ?
+                    {additionalNotes ?
                         <>
-                            { acknowledged && additionalAcknowledged ?
-                                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                            {acknowledged && additionalAcknowledged ?
+                                <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
                                 :
-                                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                                <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
                             }
                         </>
                         :
                         <>
-                            { acknowledged ?
-                                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP}>Request Signing Code</button>
+                            {acknowledged ?
+                                <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
                                 :
-                                <button className="btn btn-primary" style={{  width:"200px"}}  type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                                <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
                             }
                         </>
                     }
 
-                    
+
                 </div>
 
                 : <></>
@@ -973,19 +995,19 @@ knowledge;
                                         <></>
                                         :
                                         <>
-                                        {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
+                                            {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
                                          </p>
                                          <div style={{ margin: "10px 0 0 0", padding: "10px " }}>
                                              <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
                                              </p>
                                          </div> */}
-                                         </>
-                                        
+                                        </>
+
                                     }
                                 </div>
-                                
-                                    <div className="text-center m-1"><button type="submit" className="btn btn-md btn-primary" >Sign and Submit</button></div>
-                                
+
+                                <div className="text-center m-1"><button type="submit" className="btn btn-md btn-primary" >Sign and Submit</button></div>
+
 
                             </div>
 
@@ -1000,9 +1022,9 @@ knowledge;
                     <div className="text-center fs-6 mt-0">
                         {showResendLink ?
                             <><span className="mobile-text">{textReset}</span><span><button onClick={reSendOTP} className="btn btn-md btn-link" >Click to resend</button></span></>
-                        :<>
-                            <><span style={{color:"#0d6efd"}} className="mobile-text">{textCodeResent}</span></>
-                        </>
+                            : <>
+                                <><span style={{ color: "#0d6efd" }} className="mobile-text">{textCodeResent}</span></>
+                            </>
                         }
                     </div>
                 </>
@@ -1038,19 +1060,19 @@ knowledge;
                     </div> */}
 
                     <div className="signature-container">
-                        <div className=" signature-format" style={{backgroundColor:"#ebf7ff"}}>
+                        <div className=" signature-format" style={{ backgroundColor: "#ebf7ff" }}>
                             {/* <!-- Row 1 --> */}
-                            <div style={{display:"flex"}}>
+                            <div style={{ display: "flex" }}>
                                 <div className="col-6 col">
-                                <div className="logo-placeholder d-flex swf-sign">
-                                    <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
+                                    <div className="logo-placeholder d-flex swf-sign">
+                                        <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-6 col">
-                                <div style={{ fontSize: "8pt", textAlign:"right" }} className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
-                                <div style={{ fontSize: "8pt", textAlign:"right" }} className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
-                                {/* <div className="text-placeholder text-right">[ip address]</div> */}
-                            </div>
+                                <div className="col-6 col">
+                                    <div style={{ fontSize: "8pt", textAlign: "right" }} className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
+                                    <div style={{ fontSize: "8pt", textAlign: "right" }} className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
+                                    {/* <div className="text-placeholder text-right">[ip address]</div> */}
+                                </div>
                             </div>
 
                             {/* <!-- Row 2 --> */}
@@ -1060,7 +1082,7 @@ knowledge;
 
                             {/* <!-- Row 3 --> */}
                             <div className="col-12 col">
-                                <p className="hash-placeholder text-left"   style={{ fontSize: "8pt", lineHeight:"10pt"}}>
+                                <p className="hash-placeholder text-left" style={{ fontSize: "8pt", lineHeight: "10pt" }}>
                                     {signatureHash}</p>
                             </div>
                         </div>
