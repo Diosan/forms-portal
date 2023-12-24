@@ -6,6 +6,12 @@ import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
 import "../assets/Style.css"
+import { Tooltip } from 'react-tooltip'
+
+
+// import * as ReactTooltip from 'react-tooltip';
+
+
 
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
@@ -27,7 +33,7 @@ import axios from "axios";
 import dotenv from "dotenv"
 import { login, logout, verifyOtp } from "../slices/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -153,11 +159,13 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         userId: decoded.id
       }
       console.log('Submission is : ', submission)
-      await axios.post(API_URL + '/api/submissions/update_title', {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }, data: submission})
+      await axios.post(API_URL + '/api/submissions/update_title', submission, 
+        { 
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          }
+      })
         .then((response) => {
 
           console.log('Posted update to submission title')
@@ -188,11 +196,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         matterType: matterType,
         adultOnly: adultOnly
       }
-      axios.post(API_URL + '/api/submissions', {
+      axios.post(API_URL + '/api/submissions', submission, {
       headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
-      }, data: submission})
+      }})
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -234,11 +242,13 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
     console.log('Complainant being sent to server: ', complainant);
 
     if (!submissionComplainantSaved) {
-      await axios.post(API_URL + '/api/submissions/saveComplainant', {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }, data: complainant})
+      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant, 
+      { 
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          }
+      })
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -256,11 +266,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
         })
     } else {
-      await axios.post(API_URL + '/api/submissions/update_complainant', {
+      await axios.post(API_URL + '/api/submissions/update_complainant',complainant, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
-        }, data: complainant})
+        }})
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -462,8 +472,20 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                     <form onSubmit={saveTitle} >
                       <fieldset>
                         <div className="form-group field field-string">
-                          <label className="control-label fs-6">
-                            In house reference
+
+                        
+
+                          <Tooltip style={{maxWidth:"200px"}} id="my-tooltip" />
+
+                        
+                          <label id="" className="control-label fs-6">
+                            In house reference <a
+                              data-tooltip-id="my-tooltip"
+                              data-tooltip-content= "Enter a short description that helps you quickly identify this submission (Eg. John Doe, Dec 13 2023)"
+                              data-tooltip-place="top"
+                            >
+                            <FontAwesomeIcon icon={faQuestionCircle} />
+                              </a>
                           </label>
 
                           <div className=" mt-2">
@@ -547,14 +569,14 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                       {adultOnly == 'adult' || adultOnly == 'both' ?
                                           <>
                                             <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
-                                            <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
-                                            <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
+                                            <option value="Criminal Court - South Trinidad">Criminal Court - South Trinidad</option>
+                                            <option value="Criminal Court - Tobago">Criminal Court - Tobago</option>
                                           </>
                                         :
                                           <>
-                                            <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
-                                            <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
-                                            <option value="Children Court – Tobago">Children Court – Tobago</option>
+                                            <option value="Children Court - North Trinidad">Children Court - North Trinidad</option>
+                                            <option value="Children Court - South Trinidad">Children Court - South Trinidad</option>
+                                            <option value="Children Court - Tobago">Children Court - Tobago</option>
                                           </> 
                                       }
 
@@ -584,18 +606,19 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
                                   </div>
                                   <div className="mb-3">
-                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
+                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
                                   </div>
 
                                   {/* <div className="d-grid gap-2"> */}
                                   {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
                                   <button
                                     type="submit"
-                                    className="btn btn-md btn-light ms-1 float-end" // Use btn-light for a button with no background
+                                    className="btn btn-md btn-primary ms-1 float-end" // Use btn-light for a button with no background
                                     >
-                                      <i className="text-gray">
+                                      {/* <i className="text-gray">
                                         <FontAwesomeIcon icon={faCheck} />
-                                      </i>  Save
+                                      </i>  */}
+                                      Save and Continue
                                   </button>
                                   {/* </div> */}
 
