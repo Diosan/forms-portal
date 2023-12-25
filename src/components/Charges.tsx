@@ -6,6 +6,7 @@ import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import AccusedList from "./AccusedList"
+import { useSelector } from "react-redux";
 import Add from "./Add"
 import { Provider } from "react-redux"
 import { store } from "../store/store"
@@ -13,6 +14,10 @@ import AddAccused from "./AddAccused";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Accused from "./Accused";
+import { RootState } from "../store";
+import AuthService from "../services/AuthService"
+
+
 
 type ChargesProps = {
     submission_id: number,
@@ -38,6 +43,8 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
     const [chargeSchema, setChargeSchema] = useState({})
     const [chargeUI, setChargeUI] = useState({})
     const [accuseds, setAccuseds] = useState<Accused[]>([]);
+    const state = useSelector((state: RootState) => state.auth);
+    const { isLoggedIn, otpRequired, token, isVerified } = state
 
     const [type, setType] = useState('')
     const [accusedSaved, setAccusedSaved] = useState(false)
@@ -79,7 +86,13 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
     useEffect(() => {
         (async () => {
             // console.log('submission_id in Charges component: ', submission_id)
-            let submissions_accuseds = await axios.get(API_URL + '/api/submissions/' + submission_id)
+            let submissions_accuseds = await axios.get(API_URL + '/api/submissions/' + submission_id,
+            { 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
             // console.log('submissions_accuseds: ', submissions_accuseds.data.accuseds)
             setAccuseds(submissions_accuseds.data.accuseds)
             // console.log('accuseds: ', accuseds)
@@ -88,7 +101,13 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
 
     useEffect(() => {
         (async () => {
-            let submission = await axios.get(API_URL + "/api/submissions/" + submission_id)
+            let submission = await axios.get(API_URL + "/api/submissions/" + submission_id,
+            { 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
             setType(submission.data.submission.type)
         })();
     }, []);

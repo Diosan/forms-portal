@@ -150,7 +150,7 @@ export const Sign = ({ }: SignProps) => {
                 console.log(submission.data.outcome)
              
 
-            console.log(submission.data)
+            console.log(submission.data.submission.status)
             setStatus(submission.data.submission.status)
             setTitle(submission.data.submission.description)
             setComplainantName(submission.data.complainant.firstName + ' ' + submission.data.complainant.lastName)
@@ -316,6 +316,17 @@ export const Sign = ({ }: SignProps) => {
                 {/* <div className="fade show">
                     <h4 className='mb-3'> Complaint With Oath ({title})</h4>
                 </div> */}
+                {status === "charge_saved" ? (
+                    <>
+                        <h5 className='mb-1' style={{color:"blue"}}><strong>Please review this submission carefully. </strong></h5>
+                        <h6 className='mb-4' style={{color:"blue", lineHeight:"1.4rem"}}>After ensuring accuracy, select the necessary box(es) at the end<br/>
+                        and click '<strong>Request Signing Code</strong>' to continue.</h6>
+                    </>
+                ) : status === "final" ? (
+                    <h5 className='mb-3' style={{color:"blue"}}><strong>Signed Submission</strong></h5>
+                ) : null
+                }
+
 
                 <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#333", color: "#fff" }}>
                     <div className="row" style={{ maxWidth: "200px", margin: "0 auto", color: "#fff", textDecoration: "none" }} >

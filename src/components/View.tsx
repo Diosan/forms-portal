@@ -229,6 +229,8 @@ export const View = ({ }: SignProps) => {
 
 
             <div className="container submissions-container" style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}>
+            <h6 className='mb-4' style={{color:"blue"}}>An email with instructions to sign this submission <br/>
+            has been sent to the complainant's email address.</h6>
 
 
                 {/* <div className="fade show">
