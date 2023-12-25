@@ -156,7 +156,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         id: submissionId,
         title: submissionTitle,
         email: decoded.email,
-        userId: decoded.id
+        userId: decoded.id,
+        type: 'complaint_with_oath'
       }
       console.log('Submission is : ', submission)
       await axios.post(API_URL + '/api/submissions/update_title', submission, 
