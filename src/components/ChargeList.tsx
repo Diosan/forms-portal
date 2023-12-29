@@ -1,8 +1,17 @@
 import React, {useEffect, useState} from "react";
-import { useAppSelector  } from "../store/store";
+import { useAppSelector  } from "../store";
 import "../assets/Charge.css"
 const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
+import { useAppDispatch } from '../store';
+import { RootState } from "../store";
+import { useSelector } from "react-redux";
+
+import { setAccused, removeAccused, addAccused } from '../slices/accused';
+import { deleteCharge, countCharge } from '../slices/charge';
+
+
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faPencilAlt, faCheck, faTrash, faTrashCan } from '@fortawesome/free-solid-svg-icons';
@@ -16,39 +25,26 @@ type ChargeListProps = {
 const ChargeList = ({accused_id, accused_charges, onChargeRemoved}: ChargeListProps) => {
     // const charges = useAppSelector((state) => state.charge.charges)
     // const [accusedCharges, setAccusedCharges] = useState([])
-    const [refreshKey, setRefreshKey] = useState(0);
 
-    useEffect( () => {
-
-        // const fetchData = async () => {
-        //     let returned_charges = await axios.get(API_URL + '/api/accuseds/charges/' + accused_id)
-        //     return returned_charges.data.charges
-        // }
-
-        // fetchData()
-        // .then( returned_accuseds => { 
-        //     setAccusedCharges(returned_accuseds)
-        //     // console.log('returned_accuseds: ', returned_accuseds) 
-        // })
-
-    },[])
+    const dispatch = useAppDispatch(); // Now you have the dispatch function
 
     const removeCharge = async (chargeId:any) => {
-        console.log(chargeId)
+        console.log("Charge ID: ",chargeId)
         // setRefreshKey(oldKey => oldKey + 1);
         // return
         try {
           const response = await fetch(`${API_URL}/api/accuseds/remove-charge/${chargeId}/${accused_id}`, { method: 'DELETE' });
           
           if (response.ok) {
-            console.log("Accused removed successfully");
+            console.log("Charge removed successfully");
+            dispatch(deleteCharge(chargeId));
             // setRefreshKey(oldKey => oldKey + 1);
             onChargeRemoved(chargeId); 
             } else {
-                console.error("Failed to remove accused");
+                console.error("Failed to remove charge");
             }
         } catch (error) {
-          console.error("Error removing accused:", error);
+          console.error("Error removing charge:", error);
         }
       };
 

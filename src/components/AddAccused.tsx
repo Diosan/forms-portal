@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from "react"
 import { addAccused } from "../store/features/accusedSlice"
-import { useAppDispatch } from "../store/store"
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
@@ -8,6 +7,20 @@ const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
 import '../assets/Accused.css'
 import { Navigate, useNavigate, useParams } from "react-router-dom"
+
+
+import { useAppDispatch } from '../store/store';
+import { countCharge, deleteCharge } from '../slices/charge';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faPencilAlt, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import Accused from "./Accused";
+import { RootState } from "../store";
+import AuthService from "../services/AuthService"
+
+
+
+
+
 
 type AddAccusedProps = {
   submission_id: number,
@@ -23,6 +36,8 @@ const log = (type: any) => console.log.bind(console, type)
 const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
 
   const navigate = useNavigate()
+
+  
    
   const name = useRef<string>("")
   const dispatch = useAppDispatch();
@@ -78,7 +93,8 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
           console.log('Redirection to submissions view with id ' + submission_id)
           // navigate('/submission/' + submission_id)
           // window.location.reload()
-          accused_added(response.data.accused)      
+          accused_added(response.data.accused)  
+          setShowAddForm(false)  
           break
         case 'error':
           console.log('Error saving accused')
@@ -96,6 +112,15 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
   const [chargeSchema, setChargeSchema] = useState({})
   const [chargeUI, setChargeUI] = useState({})
   const [formData, setFormData] = useState({})
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddAccused, setShowAddAccused] = useState(false);
+
+
+  const toggleAddAccused = () => {
+    setShowAddAccused(true);
+      setShowAddForm(true)
+  };
+
 
     useEffect(() => {
         axios.get(API_URL + '/schema/accused')
@@ -138,20 +163,30 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
     //     Add
     //   </button>
     // </div>
+    <>
+      { (showAddForm ) ? (
+        <Form 
+            schema={accusedSchema}
+            uiSchema={accusedUI}
+            // @ts-ignore
+            validator={validator}
+            formData={formData}
+            onSubmit={processForm}
+            onError={log('errors')}
+        >
+            <div className="gap-2 pb-5"  style={{borderBottom:"10px solid #eee"}}>
+                <button className="btn btn-secondary" type="submit">Save Accused</button>
+            </div>
+        </Form>):(
+          <>
+          <button className="my-4 btn btn-secondary" onClick={toggleAddAccused}><FontAwesomeIcon icon={faPlus} /> Add an Accused</button>
+          </>
 
-    <Form 
-        schema={accusedSchema}
-        uiSchema={accusedUI}
-        // @ts-ignore
-        validator={validator}
-        formData={formData}
-        onSubmit={processForm}
-        onError={log('errors')}
-    >
-        <div className="gap-2 pb-5"  style={{borderBottom:"10px solid #eee"}}>
-            <button className="btn btn-secondary" type="submit">Add this Accused</button>
-        </div>
-    </Form>
+      )}
+       
+
+    </>
+   
   );
 };
 

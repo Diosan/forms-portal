@@ -1,41 +1,19 @@
 // Import Form and validator from RJSF form despite what documentation says or fails to say
 import { useEffect, useState } from "react"
-
-import { RJSFSchema, UiSchema } from '@rjsf/utils'
-import Form from 'react-jsonschema-form'
-import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
 import "../assets/Style.css"
 import { Tooltip } from 'react-tooltip'
-
-
-// import * as ReactTooltip from 'react-tooltip';
-
-
-
-// import "../assets/javascript/submission"
-import { Step } from "./Step"
-import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
 import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
-
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../store/store";
-import { resetPassword } from "../slices/auth";
 import { RootState } from "../store";
-import * as Yup from 'yup';
-import { FaCheck, FaTimes } from 'react-icons/fa'; // Import icons
-import { clearMessage } from "../slices/message"
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import dotenv from "dotenv"
-import { login, logout, verifyOtp } from "../slices/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
-
-
+import { countCharge, deleteCharge } from '../slices/charge';
 
 type SubmissionProps = {
   new_submission: boolean
@@ -49,9 +27,6 @@ type submissionStep = {
 
 const log = (type: any) => console.log.bind(console, type)
 
-
-
-
 export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
@@ -62,12 +37,24 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const API_URL = import.meta.env.VITE_API_URL
 
   const auth = new AuthService
-  const dispatch = useAppDispatch();
+
+  const count = useSelector((state: RootState) => state.charge.charge_count); 
 
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
-  const state = useSelector((state: RootState) => state.auth);
-  const { isLoggedIn, otpRequired, token, isVerified } = state
+  const authenticate = useSelector((state: RootState) => state.auth);
+  const accuseds = useSelector((state: RootState) => state.accused.accused);
+  const accusedCount = useSelector((state: RootState) => state.accused.count);
+  const charge_count = useSelector((state: RootState) => state.charge.charge_count);
+  // const state = useSelector((state: RootState) => state);
+
+  // console.log(useSelector((state: RootState) => state.charge))
+ 
+
+ 
+
+
+  const { isLoggedIn, otpRequired, token, isVerified } = authenticate
   const [changePassword, setChangePassword] = useState(false);
 
   const [editable, setEditable] = useState(true)
@@ -93,8 +80,12 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
   const [complainantCourt, setComplainantCourt] = useState('High Court')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
+  const [hasAccused, setHasAccused] = useState(false)
 
   const [chargeSaved, setChargeSaved] = useState(false)
+  const accusedList = useSelector((state: RootState) => state.accused.accused);
+
+
 
   const [matterType, setMatterType] = useState('Indictable')
   const [adultOnly, setAdultOnly] = useState('adult')
@@ -114,6 +105,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   // const complainantCourtChange = (event: any) => {
   //   setComplainantCourt(event.target.value)
   // }
+
+  const checkHasAccused = (areThereAccused:boolean) => {
+    setHasAccused(areThereAccused);
+    console.log("Are there accused: ", areThereAccused)
+  };
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -309,18 +305,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const [currentStep, setCurrentStep] = useState(1)
 
-  // const submissionSteps: submissionStep[] = [
-  //   {id: 1, title: 'Step 1'},
-  //   {id: 2, title: 'Step 2'},
-  //   {id: 3, title: 'Step 3'},
-  //   {id: 4, title: 'Step 4'}
-  // ]
-
-  // const submissionSteps = [1,2,3,4,5]
-
-  // const nextStep = () => {
-  //   if (currentStep < submissionSteps.length) setCurrentStep(currentStep + 1)
-  // }
+  
 
   const previousStep = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
@@ -329,14 +314,6 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const finishSubmission = () => {
 
   }
-
-  // useEffect(() => {
-  //   axios.get(API_URL + '/schema/main')
-  //   .then((response) => {
-  //     setSchema(response.data.schema)
-  //     setUI(response.data.UI)
-  //   })
-  // }, []);
 
   const { id } = useParams()
 
@@ -430,6 +407,26 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
     }, 300); // 500 milliseconds delay
 }
 
+   // useEffect to track changes in accusedList
+   useEffect(() => {
+    console.log("chargesCount: ",count)
+    if (count > 0) {
+      setHasAccused(true)
+      console.log('accused count: ', accusedCount, 'charges count: ', count );
+    }
+    else{
+      setHasAccused(false)
+      console.log('Accused list is empty.');
+    }
+  }, [accusedCount, count]);
+
+  useEffect(() => {
+    console.log('The charge Count has changed:', count);
+  }, [accusedCount]);
+
+
+
+
 
 
   return (
@@ -438,18 +435,27 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
     <div className="d-flex">
 
-
-
-
+      
+        
       {auth.loggedIn() ?
         <>
           <div className="swf-container container"
-            style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
+            style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 220px", flexGrow: 1 }}
           >
 
 
             <div id="regForm" className="fade show m-0 py-0">
               <div>
+
+              <div>
+                {/* Displaying the count of accused */}
+                {/* <p>Number of Charges: {count}</p> */}
+
+                {/* rest of your component */}
+              </div>
+
+              
+
                 <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#333", color: "#fff" }}>
                   <div className="row" style={{ maxWidth: "200px", margin: "0 auto", color: "#fff", textDecoration: "none" }} >
                     <a style={{ color: "#fff", textDecoration: "none" }} href="/submissions" className="m-0 btn-link new-submission-btn float-start">
@@ -690,13 +696,14 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                     <Charges
                       submission_id={submissionId}
                       request_signature={requestSignature}
+                      hasAccused={checkHasAccused}
                       editable={editable}
                     />
                   </div>
                 }
 
 
-                {chargeSaved ?
+                { ( hasAccused && charge_count > 0) ?
                   <div className="" style={{backgroundColor:"#fff", border:"10px solid #eee", borderRadius:"none!important"}}>
                     <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Summary of Evidence</h5>
                     <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
@@ -704,49 +711,6 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                   : <></>
                 }
 
-
-                {/* <Complainant /> */}
-
-                {/* <Form 
-                      schema={schema}
-                      uiSchema={UI}
-                      // @ts-ignore
-                      validator={validator}
-                      // onChange={log('changed')}
-                      onSubmit={processForm}
-                      onError={log('errors')}
-                  >
-                        <div className="progress-buttons">
-                          <button className="btn btn-secondary" type="submit">Next ❯</button>
-                        </div>
-                  </Form> */}
-
-
-                {/* {submissionSteps.map((step) => <Step isActive={step.id == currentStep} step={step.id} title={step.title} key={step.id} /> )} */}
-
-
-
-                {/* <div style={{overflow:'auto'}}>
-                    <div style={{float:'right'}}>
-                      {currentStep > 1 ? <a id="prevBtn" className="btn btn-secondary" onClick={previousStep} >❮ Previous</a>  : ''  }
-                      {currentStep < submissionSteps.length 
-                        ? <a id="nextBtn" className="btn btn-secondary" onClick={nextStep} >Next ❯</a> 
-                        : <a id="nextBtn" className="btn btn-success" onClick={finishSubmission} >Finish ❯</a>}                        
-                      
-                    </div>
-                </div> */}
-
-
-                {/* <div style={{textAlign:'center', marginTop:'20px'}}>
-
-                    {submissionSteps.map(step => {
-                      if (step.id == currentStep) {
-                        return <span className="step active" key={step.id}></span>
-                      }
-                      return <span className="step" key={step.id}></span> 
-                    })}
-
-                </div> */}
 
 
               </div>

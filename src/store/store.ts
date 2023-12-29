@@ -1,5 +1,8 @@
 import { PersonSlice } from "./features/personSlice"
 import { AccusedSlice } from "./features/accusedSlice"
+import chargesSlice from "../slices/charge"
+
+
 import AuthSlice from './features/authSlice';
 
 import { configureStore } from "@reduxjs/toolkit"
@@ -9,7 +12,7 @@ export const store=configureStore({
     reducer: {
         person: PersonSlice.reducer,
         accused: AccusedSlice.reducer,
-        charge: AccusedSlice.reducer,
+        charge: chargesSlice,
         auth: AuthSlice
     }
 })

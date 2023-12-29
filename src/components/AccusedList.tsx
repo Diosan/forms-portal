@@ -3,8 +3,13 @@ import React, {useEffect, useState} from "react"
 import { useAppSelector  } from "../store/store"
 import AddCharge from "./AddCharge"
 import ChargeList from "./ChargeList"
+import { useDispatch, useSelector } from 'react-redux';
 import Accused from "./Accused"
 const API_URL = import.meta.env.VITE_API_URL
+import { useAppDispatch, RootState } from "../store";
+import { setAccused } from "../slices/accused";
+
+
 import axios from "axios"
 import '../assets/Accused.css'
 import { Navigate, useNavigate, useParams } from "react-router-dom"
@@ -18,30 +23,35 @@ type AccusedListProps = {
     request_signature: any,
     submission_accuseds: any,
     editable: boolean
-    onAccusedRemoved: (accusedId: number) => void // Add this line
+    onAccusedRemoved: (accusedId: number) => void
 }
 
 const AccusedList = ({submission_id, request_signature, submission_accuseds, editable, onAccusedRemoved}: AccusedListProps) => {
 
 
     // const persons = useAppSelector((state) => state.person.persons)
-    const accuseds = useAppSelector((state) => state.accused.accuseds)
+    // const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+
+    // const accuseds = useAppSelector((state) => state.accused.accuseds)
     const [submissionAccuseds, setSubmissionAccuseds] = useState([])
     const [refreshKey, setRefreshKey] = useState(0);
     const navigate = useNavigate()
+    const accuseds = useSelector((state: RootState) => state.accused.accused);
 
+    const saveAccusedList = (accusedList:any) => {
+        dispatch(setAccused(accusedList));
+      };
 
     useEffect( () => {
-        // async () => {
-        //     console.log('Loading accuseds list')
-        //     // let returned_accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
-        //     // console.log('Returned accuseds: ', accuseds)
-        // }
+      
         console.log('Loading... '+ refreshKey)
 
         const fetchData = async () => {
-            // console.log('Loading accuseds list ' + API_URL + '/api/submissions/accuseds/' + submission_id)
-            let returned_accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
+            const returned_accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
+            const foundAccuseds = returned_accuseds.data.accuseds
+            saveAccusedList(returned_accuseds);
+            // Update local state if needed
             console.log('Returned accuseds: ', returned_accuseds.data.accuseds)
             return returned_accuseds.data.accuseds
         }
@@ -49,11 +59,11 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
         fetchData()
         .then( returned_accuseds => { 
             setSubmissionAccuseds(returned_accuseds)
-            // console.log('returned_accuseds: ', returned_accuseds) 
+            console.log('returned_accuseds: ', returned_accuseds) 
         })
         
 
-    }, [refreshKey, submission_id])
+    }, [dispatch, submission_id])
 
     // console.log('Loading accuseds list')
 

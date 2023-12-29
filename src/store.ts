@@ -4,19 +4,26 @@ import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 
 import authReducer from "./slices/auth";
 import messageReducer from "./slices/message";
+import accusedReducer from "./slices/accused";
+import chargesReducer from "./slices/charge";
+
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
+
 
 // Persist Config
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'message'] // You can choose which slices to persist
+  whitelist: ['auth', 'message', 'charge'] // You can choose which slices to persist
 };
 
 // Combined Reducer
 const rootReducer = combineReducers({
   auth: authReducer,
   message: messageReducer,
+  accused: accusedReducer,
+  charge: chargesReducer,
+
 });
 
 // Persisted Reducer

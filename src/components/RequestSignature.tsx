@@ -6,6 +6,10 @@ import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faPencilAlt, faCheck, faTrash, faTrashCan, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { RootState } from "../store";
+import { useSelector } from "react-redux";
+import { countCharge, deleteCharge } from '../slices/charge';
+import { useAppDispatch } from '../store';
 
 
 type RequestSignatureProps = {
@@ -19,11 +23,15 @@ const log = (type: any) => console.log.bind(console, type)
 export const RequestSignature = ({ submission_id, complainant_email }: RequestSignatureProps) => {
 
     const navigate = useNavigate()
+    const dispatch = useAppDispatch(); // Now you have the dispatch function
+
 
     const [summarySchema, setSummarySchema] = useState({})
     const [summaryUI, setSummaryUI] = useState({})
     const [loading, setLoading] = useState(false);
+    const count = useSelector((state: RootState) => state.charge?.charge_count); // Using optional chaining
 
+    
 
     const requestSignature = async ( form: any) => {
 
@@ -67,6 +75,13 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
         getForm()
 
     }, [])
+
+    useEffect(() => {
+        // console.log('The charge count has changed:', count);
+        // console.log("counting in accused: ",  count)
+        console.log("counting in request signature: ",  count)
+
+      }, [count]);
 
     return (
         <div className="px-1 mt-2 summ" >

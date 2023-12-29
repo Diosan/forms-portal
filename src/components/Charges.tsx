@@ -9,8 +9,10 @@ import AccusedList from "./AccusedList"
 import { useSelector } from "react-redux";
 import Add from "./Add"
 import { Provider } from "react-redux"
-import { store } from "../store/store"
+import { store } from "../store"
 import AddAccused from "./AddAccused";
+import { useAppDispatch } from '../store';
+import { setAccused, removeAccused, addAccused } from '../slices/accused';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Accused from "./Accused";
@@ -22,7 +24,8 @@ import AuthService from "../services/AuthService"
 type ChargesProps = {
     submission_id: number,
     request_signature: any,
-    editable: boolean
+    editable: boolean,
+    hasAccused: any,
 }
 
 interface Accused {
@@ -31,12 +34,9 @@ interface Accused {
 
 const log = (type: any) => console.log.bind(console, type)
 
-const processForm = (form: any) => {
-    console.log('Submitted form data: ', form.formData)
-    alert('Hurrah!');
-}
 
-export const Charges = ({submission_id, request_signature, editable}: ChargesProps) => {
+
+export const Charges = ({submission_id, request_signature, editable, hasAccused}: ChargesProps) => {
 
     const [accusedSchema, setAccusedSchema] = useState({})
     const [accusedUI, setAccusedUI] = useState({})
@@ -45,6 +45,16 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
     const [accuseds, setAccuseds] = useState<Accused[]>([]);
     const state = useSelector((state: RootState) => state.auth);
     const { isLoggedIn, otpRequired, token, isVerified } = state
+
+    const [showAddAccused, setShowAddAccused] = useState(false);
+    const [showAddForm, setShowAddForm] = useState(false);
+
+    const dispatch = useAppDispatch(); // Now you have the dispatch function
+
+    const toggleAddAccused = () => {
+        setShowAddAccused(true);
+        setShowAddForm(true)
+    };
 
     const [type, setType] = useState('')
     const [accusedSaved, setAccusedSaved] = useState(false)
@@ -56,6 +66,9 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
 
     const accusedAdded = (accused: any) => {
         setAccuseds([accused, ...accuseds])
+        //dispatch_async(dispatch
+        dispatch(addAccused(accused));
+
         if(type == 'indictment') {
             setAccusedSaved(true)
         } 
@@ -63,7 +76,10 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
 
     const handleAccusedRemoved = (removedAccusedId:number) => {
         setAccuseds(accuseds.filter((accused:Accused) => accused.id !== removedAccusedId));
+        dispatch(removeAccused(removedAccusedId));
     };
+
+ 
 
 
 
@@ -93,9 +109,11 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
                     'Authorization': 'Bearer ' + token
                 }
             })
-            // console.log('submissions_accuseds: ', submissions_accuseds.data.accuseds)
-            setAccuseds(submissions_accuseds.data.accuseds)
-            // console.log('accuseds: ', accuseds)
+            console.log('submissions_accuseds: ', submissions_accuseds.data.accuseds)
+            setAccuseds(submissions_accuseds?.data?.accuseds || []);
+            const numAccused:any = submissions_accuseds?.data?.accuseds
+            //update the parent component
+            if(numAccused.length > 0 ){hasAccused(true)}else{hasAccused(false)} 
         })();
     }, []);
 
@@ -108,7 +126,12 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
                     'Authorization': 'Bearer ' + token
                 }
             })
-            setType(submission.data.submission.type)
+            setType(submission.data.submission.type);
+            setAccuseds(submission?.data?.accuseds || []);
+            const numAccused:any = submission?.data?.accuseds
+            //update the parent component
+            if(numAccused.length > 0 ){hasAccused(true)}else{hasAccused(false)} 
+            
         })();
     }, []);
 
@@ -150,10 +173,25 @@ export const Charges = ({submission_id, request_signature, editable}: ChargesPro
             />
 
             {editable && !accusedSaved ?
-                <AddAccused 
-                    submission_id={submission_id}
-                    accused_added={accusedAdded}                  
-                />
+                <>
+                    {/* { (showAddForm ) ? (
+                        <AddAccused 
+                        submission_id={submission_id}
+                        accused_added={accusedAdded} 
+                        />               
+                    ):(
+                        <>
+                        <button className="my-4" onClick={toggleAddAccused}>Add an Accused</button>
+                        </>
+
+                    )} */}
+                    <>
+                        <AddAccused 
+                        submission_id={submission_id}
+                        accused_added={accusedAdded} 
+                        />               
+                </>
+                </>
               : <></>
             }
 

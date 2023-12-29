@@ -18,8 +18,10 @@ const AddCharge = ({accused_id, accused_charges}: ChargeProps) => {
   const name = useRef<string>("")
   const dispatch = useAppDispatch();
 
+
+
   const processForm = async (form: any) => {
-    console.log('Submitted form data: ', form.formData)
+    console.log('Submitted charge data: ', form.formData)
     dispatch(addCharge({
         accused_id: accused_id,
         ICCS: 'ABC123', // form.formData.ICCS,
@@ -47,7 +49,8 @@ const AddCharge = ({accused_id, accused_charges}: ChargeProps) => {
       switch(response.data.outcome) {
         case 'success':
           console.log('Charge successfully saved', response.data.charge)
-          accused_charges.push(response.data.charge)          
+          accused_charges.push(response.data.charge)     
+          dispatch(addCharge(response.data.charge));
           break
         case 'error':
           console.log('Error saving charge')
@@ -88,9 +91,9 @@ const AddCharge = ({accused_id, accused_charges}: ChargeProps) => {
         onSubmit={processForm}
         onError={log('errors')}
     >
-        <div className="d-grid gap-2">
+        {/* <div className="d-flex  d-grid gap-2 justify-content-end">
             <button className="btn btn-secondary" type="submit">Add Charge</button>
-        </div>
+        </div> */}
     </Form>
 
 

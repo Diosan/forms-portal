@@ -2,27 +2,14 @@
 import { useEffect, useState } from "react"
 const API_URL = import.meta.env.VITE_API_URL
 import axios from "axios"
-import { RJSFSchema, UiSchema } from '@rjsf/utils'
-import Form from 'react-jsonschema-form'
-import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
 import "../assets/Style.css"
-// import "../assets/javascript/submission"
-import { Step } from "./Step"
-import { Complainant } from "./Complainant"
-import { Charges } from "./Charges"
-// import AuthService from "../services/AuthService"
+
 import { Navigate, useNavigate } from "react-router-dom"
 import { Submission } from "./Submission"
 import { RootState } from '../store';
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../store"
-import { clearMessage } from "../slices/message"
-import { login, logout, verifyOtp } from "../slices/auth";
-import { LeftColumn } from "./LeftColumn"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
-
 
 
 
@@ -45,21 +32,8 @@ export const Admin = ({ }: SubmissionsProps) => {
     const dispatch = useAppDispatch();
 
     const [submissions, setSubmissions] = useState<Submission[]>([]);
-    // const state = useSelector((state: RootState) => state.auth);
-    // const { isLoggedIn, otpRequired, token, isVerified } = state
+    const count = useSelector((state: RootState) => state.charge?.charge_count); // Using optional chaining
 
-    // useEffect(() => {
-    //     if (isLoggedIn && isVerified && token && !otpRequired) {
-    //         navigate('/submissions');
-    //     }
-    //     else {
-    //         console.log("Cannot navigate to submissions page")
-    //     }
-    // }, [isLoggedIn, isVerified, token, otpRequired]);
-
-
-    // console.log(">>> STATE <<<")
-    // console.log(state)
 
 
 
@@ -74,75 +48,17 @@ export const Admin = ({ }: SubmissionsProps) => {
             })
     }, []);
 
-
-    // useEffect(() => {
-    //     axios.get(API_URL + '/api/submissions')
-    //         .then((response) => {
-    //             console.log('Submissions fetched from server: ', response.data);
-    //             const submissionsData = response?.data?.submissions?.rows || [];
-
-    //             // Sort submissions first by status (ascending), then by createdAt (or any other criteria)
-    //             const sortedSubmissions = submissionsData.sort((a: any, b: any) => {
-    //                 if (a.status === b.status) {
-    //                     // If status is the same, you can further sort by createdAt (or other criteria)
-    //                     return a.createdAt.localeCompare(b.createdAt);
-    //                 }
-    //                 // Sort by status in ascending order
-    //                 return a.status.localeCompare(b.status);
-    //             });
-
-    //             setSubmissions(sortedSubmissions);
-    //             console.log('Sorted Submissions: ', sortedSubmissions);
-    //         });
-    // }, []);
+    useEffect(() => {
+        // console.log('The charge count has changed:', count);
+        console.log("counting in accused: ",  count)
+      }, [count]);
 
 
-    // const submissionComponent = (submission: any) => {
 
-    //     let path = ''
-
-    //     switch(submission.type) { 
-    //         case 'indictable': { 
-    //            //statements; 
-    //            break; 
-    //         } 
-    //         case '': { 
-    //            //statements; 
-    //            break; 
-    //         } 
-    //         default: { 
-    //            //statements; 
-    //            break; 
-    //         } 
-    //      }       
-
-    // }
-
-
-    // const handleLogout = (event: any) => {
-    //     event.preventDefault()
-    //     dispatch(logout() as any)
-    //         .unwrap()
-    //         .then(() => {
-    //             console.log("Logging out...")
-    //             navigate("/"); // This will redirect to the home page
-    //         })
-    //         .catch((error: any) => {
-    //             // Handle the error
-    //             console.log(error)
-    //         });
-    // }
-
-    // const groupedSubmissions:any = submissions.reduce((groups:any, submission) => {
-    //     if (!groups[submission.status]) {
-    //         groups[submission.status] = [];
-    //     }
-    //     groups[submission.status].push(submission);
-    //     return groups;
-    // }, {});
 
     return (
         <div className="d-flex">
+            <p>Counting Charges {count}</p>
 
             <div className="pt-3 px-3 mx-3"
                 style={{

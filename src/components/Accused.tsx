@@ -4,12 +4,18 @@ import axios from "axios"
 import AddCharge from "./AddCharge"
 import ChargeList from "./ChargeList"
 import PendingList from "./PendingList"
+import { useAppDispatch } from '../store';
+import { RootState } from "../store";
+import { useSelector } from "react-redux";
 
 import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faPencilAlt, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { setAccused, removeAccused, addAccused } from '../slices/accused';
+import { countCharge, deleteCharge } from '../slices/charge';
+
 
 
 type AccusedProps = {
@@ -31,8 +37,19 @@ const log = (type: any) => console.log.bind(console, type)
 const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const { submission_id } = useParams()
+    // const state = useSelector((state: RootState) => state);
+    const count = useSelector((state: RootState) => state.charge?.charge_count); // Using optional chaining
+
 
     const navigate = useNavigate()
+    const dispatch = useAppDispatch(); // Now you have the dispatch function
+
+    // Selecting state
+
+
+    const accuseds = useSelector((state: RootState) => state.accused.accused);
+    // const accusedCount = useSelector((state: RootState) => state.accused.count);
+    // const chargesCount = useSelector((state: RootState) => state.charges.count);
 
     const [accused, setAccused] = useState({})
 
@@ -42,7 +59,6 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     // const [accusedCharges, setAccusedCharges] = useState<{}[]>([])
     const [accusedCharges, setAccusedCharges] = useState<Charge[]>([]);
-
 
     const [accusedPendings, setAccusedPendings] = useState<{}[]>([])
 
@@ -186,8 +202,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
     }
 
 
-
-    const addCharge = async (form: any) => {
+    const newCharge = async (form: any) => {
 
         setShowAddNewCharge(false)
 
@@ -197,7 +212,6 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
         setFormData({})
     
         let charge = {
-          //   name: form.formData.name,
           name: chargeName,
           ICCS: UNODC, 
           UNODC: UNODC,
@@ -213,8 +227,11 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
     
           switch(response.data.outcome) {
             case 'success':
-              console.log('Charge successfully saved', response.data.charge)
+              console.log('New Charge successfully saved', response.data.charge)
+              
+            dispatch(countCharge(response.data.charge))
               setAccusedCharges([response.data.charge, ...accusedCharges]) //response.data.charge
+
             //   navigate('/submission/' + submission_id)
             //   window.location.reload()   
               request_signature()        
@@ -416,6 +433,11 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
         })();
     }, []);
 
+    useEffect(() => {
+        // console.log('The charge count has changed:', count);
+        console.log("counting in accused: ",  count)
+      }, [count]);
+
     
 
     const handleChargeRemoval = (removedChargeId:number) => {
@@ -564,11 +586,13 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                 <div className="add-charge px-4 pt-2 pb-2" style={{backgroundColor:"#eee"}}>
                     {/* <div>Add New Charge</div> */}
                     { !showAddNewCharge && 
+                    <div className="">
                         <button className="btn btn-link btn-xs" 
                         style={{  textDecoration: "none" }} onClick={addNewCharge} 
                         type="button">
                             <FontAwesomeIcon icon={faPlus} /> Add Charge
                         </button>
+                        </div>
                     }
 
                     {/* <AddCharge accused_id={accused_id} accused_charges={accusedCharges} /> */}
@@ -634,7 +658,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                 // @ts-ignore
                                 validator={validator}
                                 formData={formData}
-                                onSubmit={addCharge}
+                                onSubmit={newCharge}
                                 onError={log('errors')}
                             >
                                 <div className="">
