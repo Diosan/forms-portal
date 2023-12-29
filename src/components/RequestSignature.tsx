@@ -35,9 +35,17 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
     const { isLoggedIn, otpRequired, token, isVerified } = state
     const count = useSelector((state: RootState) => state.charge?.charge_count); // Using optional chaining
 
-    
+    const [formData, setFormData] = useState({
+        summaryOfEvidence: "",
+        additionalNotes: ""
+    })    
 
     const requestSignature = async ( form: any) => {
+
+        setFormData({
+            summaryOfEvidence: form.formData.summaryOfEvidence,
+            additionalNotes: form.formData.additionalNotes
+        })
 
         if (confirm('Click OK if you are sure you are ready to request a signature') == true) {
 
@@ -53,17 +61,25 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                     }
                 )
 
-                let requestResult = await axios.post(
-                    API_URL + '/api/submissions/request_signature',
-                    {
-                        submission_id: submission_id,
-                        complainant_email: complainant_email
-                    }
-                )
+                try {
+                    let requestResult = await axios.post(
+                        API_URL + '/api/submissions/request_signature',
+                        {
+                            submission_id: submission_id,
+                            complainant_email: complainant_email
+                        }
+                    )
 
-                if (requestResult.data.outcome == 'success') {
-                    navigate('/view/' + submission_id)
+                    if (requestResult.data.outcome == 'success') {
+                        navigate('/view/' + submission_id)
+                    } else {
+                        console.log('There was an error requesting signature')
+                    }
+                } catch (err) {
+                    setLoading(false)
+                    throw new Error('Unable to request signature')
                 }
+
             } else {
                 navigate('/sign/' + submission_id)
             }
@@ -143,6 +159,7 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                 uiSchema={summaryUI}
                 // @ts-ignore
                 validator={validator}
+                formData={formData}
                 onSubmit={requestSignature}
                 onError={log('errors')}
             >
