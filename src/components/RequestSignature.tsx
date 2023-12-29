@@ -28,7 +28,11 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
 
     const [summarySchema, setSummarySchema] = useState({})
     const [summaryUI, setSummaryUI] = useState({})
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const [indictment, setIndictment] = useState(false)
+
+    const state = useSelector((state: RootState) => state.auth);
+    const { isLoggedIn, otpRequired, token, isVerified } = state
     const count = useSelector((state: RootState) => state.charge?.charge_count); // Using optional chaining
 
     
@@ -39,25 +43,29 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
 
             setLoading(true);
 
-            let submissionForRequest = await axios.post(
-                API_URL + '/api/submissions/update/',
-                {
-                    id: submission_id,
-                    summaryOfEvidence: form.formData.summaryOfEvidence,
-                    additionalNotes: form.formData.additionalNotes
-                }
-            )
+            if(indictment) {
+                let submissionForRequest = await axios.post(
+                    API_URL + '/api/submissions/update/',
+                    {
+                        id: submission_id,
+                        summaryOfEvidence: form.formData.summaryOfEvidence,
+                        additionalNotes: form.formData.additionalNotes
+                    }
+                )
 
-            let requestResult = await axios.post(
-                API_URL + '/api/submissions/request_signature',
-                {
-                    submission_id: submission_id,
-                    complainant_email: complainant_email
-                }
-            )
+                let requestResult = await axios.post(
+                    API_URL + '/api/submissions/request_signature',
+                    {
+                        submission_id: submission_id,
+                        complainant_email: complainant_email
+                    }
+                )
 
-            if (requestResult.data.outcome == 'success') {
-                navigate('/view/' + submission_id)
+                if (requestResult.data.outcome == 'success') {
+                    navigate('/view/' + submission_id)
+                }
+            } else {
+                navigate('/sign/' + submission_id)
             }
 
         }
@@ -73,6 +81,48 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
         }
 
         getForm()
+
+    }, [])
+
+    useEffect(() => {
+
+        const getSubmission = async () => {
+            let submission = await axios.get(
+                API_URL + '/api/submissions/' + submission_id,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                }
+            )
+            console.log('Fetched submission: ', submission.data.submission)
+            setIndictment(submission.data.submission.type == 'indictment')
+
+        }
+
+        getSubmission()
+
+    }, [])
+
+    useEffect(() => {
+
+        const getSubmission = async () => {
+            let submission = await axios.get(
+                API_URL + '/api/submissions/' + submission_id,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                }
+            )
+            console.log('Fetched submission: ', submission.data.submission)
+            setIndictment(submission.data.submission.type == 'indictment')
+
+        }
+
+        getSubmission()
 
     }, [])
 

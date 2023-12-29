@@ -6,6 +6,12 @@ import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
 import "../assets/Style.css"
+import { Tooltip } from 'react-tooltip'
+
+
+// import * as ReactTooltip from 'react-tooltip';
+
+
 
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
@@ -27,7 +33,7 @@ import axios from "axios";
 import dotenv from "dotenv"
 import { login, logout, verifyOtp } from "../slices/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -150,10 +156,17 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
         id: submissionId,
         title: submissionTitle,
         email: decoded.email,
-        userId: decoded.id
+        userId: decoded.id,
+        type: 'indictment'
       }
       console.log('Submission is : ', submission)
-      await axios.post(API_URL + '/api/submissions/update_title', submission)
+      await axios.post(API_URL + '/api/submissions/update_title', submission, 
+        { 
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          }
+      })
         .then((response) => {
 
           console.log('Posted update to submission title')
@@ -185,7 +198,11 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
         adultOnly: adultOnly,
         type: 'indictment'
       }
-      axios.post(API_URL + '/api/submissions', submission)
+      axios.post(API_URL + '/api/submissions', submission, {
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+      }})
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -217,19 +234,23 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
       courtDistrict: complainantCourtDistrict,
       firstName: "N/A",
       lastName: "N/A",
-      email: "off_harry@link868.com",
+      email: "dpp@link868.com",
       regNum: "N/A",
       rank: "N/A",
       unit: "N/A",
       submissionId: submissionId
     }
 
-    setComplainantEmail("off_harry@link868.com")
-
     console.log('Complainant being sent to server: ', complainant);
 
     if (!submissionComplainantSaved) {
-      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
+      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant, 
+      { 
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          }
+      })
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -247,7 +268,11 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
 
         })
     } else {
-      await axios.post(API_URL + '/api/submissions/update_complainant', complainant)
+      await axios.post(API_URL + '/api/submissions/update_complainant',complainant, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }})
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -320,8 +345,17 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
     (async () => {
       if (!new_submission) {
         setSubmissionId(parseInt('' + id))
-        let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
-        // console.log('Returned submission: ', returned_submission.data)
+        let returned_submission = await axios.get(API_URL + '/api/submissions/' + id, {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          }})
+        console.log('Returned submission: ', returned_submission.data)
+        if(returned_submission?.data?.submission?.status == 'final'){
+          navigate(`/sign/${id}`)
+        }
+
+
         setSubmissionTitle(returned_submission.data.submission.description)
         setSubmissionTitleSaved(true)
 
@@ -387,6 +421,16 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
     })();
   }, [id, new_submission, editingSubmissionTitle]);
 
+  const goToAnchor = () => {
+    setTimeout(() => {
+        console.log('Anchor');
+        const anchorElement = document.getElementById('anchorSign');
+        if (anchorElement) {
+            anchorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 300); // 500 milliseconds delay
+}
+
 
 
   return (
@@ -401,7 +445,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
       {auth.loggedIn() ?
         <>
           <div className="swf-container container"
-            style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
+            style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
           >
 
 
@@ -413,7 +457,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictment {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictable {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
@@ -430,8 +474,20 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                     <form onSubmit={saveTitle} >
                       <fieldset>
                         <div className="form-group field field-string">
-                          <label className="control-label fs-6">
-                            In house reference
+
+                        
+
+                          <Tooltip style={{maxWidth:"200px"}} id="my-tooltip" />
+
+                        
+                          <label id="" className="control-label fs-6">
+                            In house reference <a
+                              data-tooltip-id="my-tooltip"
+                              data-tooltip-content= "Enter a short description that helps you quickly identify this submission (Eg. John Doe, Dec 13 2023)"
+                              data-tooltip-place="top"
+                            >
+                            <FontAwesomeIcon icon={faQuestionCircle} />
+                              </a>
                           </label>
 
                           <div className=" mt-2">
@@ -489,25 +545,17 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
 
 
 
-              <div className="px-4 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
-
-
-
-
-
-
+              <div className="px-2 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
 
                 {submissionTitleSaved ?
                   <div>
                             
-
-                          
                           {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
                             <div>
                            
-                              <div className="card fade show" style={{ border: "none", backgroundColor:"#ddd"}} >
-                              <h4 className="text-center mb-4">Complainant Information</h4>
-                                <form onSubmit={saveComplainant}>
+                              <div className="card fade show m-3" style={{ border: "none", backgroundColor:"#ddd"}} >
+                              <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
+                                <form onSubmit={saveComplainant} className="m-3">
 
                                   {/* <div className="mb-3">
                                     <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
@@ -523,14 +571,14 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                                       {adultOnly == 'adult' || adultOnly == 'both' ?
                                           <>
                                             <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
-                                            <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
-                                            <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
+                                            <option value="Criminal Court - South Trinidad">Criminal Court - South Trinidad</option>
+                                            <option value="Criminal Court - Tobago">Criminal Court - Tobago</option>
                                           </>
                                         :
                                           <>
-                                            <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
-                                            <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
-                                            <option value="Children Court – Tobago">Children Court – Tobago</option>
+                                            <option value="Children Court - North Trinidad">Children Court - North Trinidad</option>
+                                            <option value="Children Court - South Trinidad">Children Court - South Trinidad</option>
+                                            <option value="Children Court - Tobago">Children Court - Tobago</option>
                                           </> 
                                       }
 
@@ -560,18 +608,19 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                                     <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
                                   </div>
                                   <div className="mb-3">
-                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
+                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
                                   </div> */}
 
                                   {/* <div className="d-grid gap-2"> */}
                                   {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
                                   <button
                                     type="submit"
-                                    className="btn btn-md btn-light ms-1 float-end" // Use btn-light for a button with no background
+                                    className="btn btn-md btn-primary ms-1 float-end" // Use btn-light for a button with no background
                                     >
-                                      <i className="text-gray">
-                                        <FontAwesomeIcon icon={faCheck} /> Update
-                                      </i>
+                                      {/* <i className="text-gray">
+                                        <FontAwesomeIcon icon={faCheck} />
+                                      </i>  */}
+                                      Save and Continue
                                   </button>
                                   {/* </div> */}
 
@@ -584,48 +633,6 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                             : <></>
                           }
 
-                          {submissionComplainantSaved && !editingSubmissionComplainant ?
-                            <>
-                              
-                              <div className="card fade show p-2" style={{ border: "none" }}>
-                                {/* <div className="fade show">
-                                  <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
-                                </div> */}
-                                
-
-                                {/* <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor:"#444", color:"#fff", borderBottom: "1px solid #ddd" }}>
-                                  <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Complainant</h5>
-                                  {!submissionTitleSaved || editingSubmissionTitle ?
-                                    <></>
-                                    : <>
-                                      <button style={{ color: "#fff", textDecoration: "none" }} onClick={editComplainant} type="button" className="btn btn-link btn-xs">
-                                        <FontAwesomeIcon icon={faPencilAlt} />
-                                      </button>
-
-                                    </>
-                                  }
-                                </div> */}
-
-
-                                {/* <div className="card-body" style={{ border: "1px solid #ddd", backgroundColor: "#eee" }}>
-                                  <div className="text-left complainant-details mt-2">
-                                    <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
-                                    <br /><label>Agency:</label> {complainantAgency}
-                                    <br /><label>Court:</label> {complainantCourt}
-                                    <br /><label>Court District:</label> {complainantCourtDistrict}
-                                    <br /><label>Regimental Number:</label> {complainantRegNum}
-                                    <br /><label>Rank:</label> {complainantRank}
-                                    <br /><label>Station/Unit:</label> {complainantUnit}
-                                    <br /><label>Email:</label> {complainantEmail}
-                                  </div>
-
-                                </div> */}
-
-
-                              </div>
-                            </>
-                            : <></>
-                          }
 
                   </div>
                   : <></>
@@ -645,10 +652,12 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                   </div>
                 }
 
+
                 {chargeSaved ?
-                  <>
-                  <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
-                  </>
+                  <div className="" style={{backgroundColor:"#fff", border:"10px solid #eee", borderRadius:"none!important"}}>
+                    <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Summary of Evidence</h5>
+                    <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                  </div>
                   : <></>
                 }
 
