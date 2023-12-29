@@ -12,7 +12,7 @@ import { RootState } from "../store";
 import axios from "axios";
 import dotenv from "dotenv"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck, faExpand, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { countCharge, deleteCharge } from '../slices/charge';
 
 type SubmissionProps = {
@@ -38,7 +38,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const auth = new AuthService
 
-  const count = useSelector((state: RootState) => state.charge.charge_count); 
+  const count = useSelector((state: RootState) => state.charge.charge_count);
 
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
@@ -49,9 +49,9 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   // const state = useSelector((state: RootState) => state);
 
   // console.log(useSelector((state: RootState) => state.charge))
- 
 
- 
+
+
 
 
   const { isLoggedIn, otpRequired, token, isVerified } = authenticate
@@ -85,6 +85,14 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const [chargeSaved, setChargeSaved] = useState(false)
   const accusedList = useSelector((state: RootState) => state.accused.accused);
 
+  // State to track the active section
+  const [activeSection, setActiveSection] = useState(null); // No section is active initially
+
+  // Event handlers for buttons
+  const handleSectionChange = (sectionId: any) => {
+    setActiveSection(sectionId);
+  };
+
 
 
   const [matterType, setMatterType] = useState('Indictable')
@@ -106,7 +114,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   //   setComplainantCourt(event.target.value)
   // }
 
-  const checkHasAccused = (areThereAccused:boolean) => {
+  const checkHasAccused = (areThereAccused: boolean) => {
     setHasAccused(areThereAccused);
     console.log("Are there accused: ", areThereAccused)
   };
@@ -156,13 +164,13 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         type: 'complaint_with_oath'
       }
       console.log('Submission is : ', submission)
-      await axios.post(API_URL + '/api/submissions/update_title', submission, 
-        { 
+      await axios.post(API_URL + '/api/submissions/update_title', submission,
+        {
           headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
           }
-      })
+        })
         .then((response) => {
 
           console.log('Posted update to submission title')
@@ -194,10 +202,11 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         adultOnly: adultOnly
       }
       axios.post(API_URL + '/api/submissions', submission, {
-      headers: {
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
-      }})
+        }
+      })
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -239,13 +248,13 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
     console.log('Complainant being sent to server: ', complainant);
 
     if (!submissionComplainantSaved) {
-      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant, 
-      { 
+      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant,
+        {
           headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
           }
-      })
+        })
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -263,11 +272,12 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
         })
     } else {
-      await axios.post(API_URL + '/api/submissions/update_complainant',complainant, {
+      await axios.post(API_URL + '/api/submissions/update_complainant', complainant, {
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }})
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        }
+      })
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -305,7 +315,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const [currentStep, setCurrentStep] = useState(1)
 
-  
+
 
   const previousStep = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
@@ -323,11 +333,12 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
         setSubmissionId(parseInt('' + id))
         let returned_submission = await axios.get(API_URL + '/api/submissions/' + id, {
           headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
-          }})
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }
+        })
         console.log('Returned submission: ', returned_submission.data)
-        if(returned_submission?.data?.submission?.status == 'final'){
+        if (returned_submission?.data?.submission?.status == 'final') {
           navigate(`/sign/${id}`)
         }
 
@@ -381,17 +392,17 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             break
         }
 
-        
-          setSubmissionComplainantSaved(true)
-          setComplainantFirstName(returned_submission.data.complainant.firstName)
-          setComplainantLastName(returned_submission.data.complainant.lastName)
-          setComplainantAgency(returned_submission.data.complainant.agency)
-          setComplainantRank(returned_submission.data.complainant.rank)
-          setComplainantUnit(returned_submission.data.complainant.unit)
-          setComplainantRegNum(returned_submission.data.complainant.regNum)
-          setComplainantEmail(returned_submission.data.complainant.email)
-        
-          console.log('Complainant: ', returned_submission.data.complainant)
+
+        setSubmissionComplainantSaved(true)
+        setComplainantFirstName(returned_submission.data.complainant.firstName)
+        setComplainantLastName(returned_submission.data.complainant.lastName)
+        setComplainantAgency(returned_submission.data.complainant.agency)
+        setComplainantRank(returned_submission.data.complainant.rank)
+        setComplainantUnit(returned_submission.data.complainant.unit)
+        setComplainantRegNum(returned_submission.data.complainant.regNum)
+        setComplainantEmail(returned_submission.data.complainant.email)
+
+        console.log('Complainant: ', returned_submission.data.complainant)
 
       }
     })();
@@ -399,22 +410,22 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
   const goToAnchor = () => {
     setTimeout(() => {
-        console.log('Anchor');
-        const anchorElement = document.getElementById('anchorSign');
-        if (anchorElement) {
-            anchorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+      console.log('Anchor');
+      const anchorElement = document.getElementById('anchorSign');
+      if (anchorElement) {
+        anchorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }, 300); // 500 milliseconds delay
-}
+  }
 
-   // useEffect to track changes in accusedList
-   useEffect(() => {
-    console.log("chargesCount: ",count)
+  // useEffect to track changes in accusedList
+  useEffect(() => {
+    console.log("chargesCount: ", count)
     if (count > 0) {
       setHasAccused(true)
-      console.log('accused count: ', accusedCount, 'charges count: ', count );
+      console.log('accused count: ', accusedCount, 'charges count: ', count);
     }
-    else{
+    else {
       setHasAccused(false)
       console.log('Accused list is empty.');
     }
@@ -435,8 +446,8 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
     <div className="d-flex">
 
-      
-        
+
+
       {auth.loggedIn() ?
         <>
           <div className="swf-container container"
@@ -447,14 +458,44 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
             <div id="regForm" className="fade show m-0 py-0">
               <div>
 
-              <div>
-                {/* Displaying the count of accused */}
-                {/* <p>Number of Charges: {count}</p> */}
+                <div>
+                  {/* Displaying the count of accused */}
+                  {/* <p>Number of Charges: {count}</p> */}
 
-                {/* rest of your component */}
-              </div>
+                  {/* rest of your component */}
+                </div>
 
-              
+                <div className="container p-0 mb-3">
+                  <div className="row">
+                    <div className="col col-10 d-flex justify-content-start">
+                      <button className="btn btn-light me-2">Complainant</button>
+                      <button className="btn btn-light me-2">Accused(s)</button>
+                      <button className="btn btn-light">Summary of Evidence</button>
+                    </div>
+
+                    <div className="col col-2 d-flex justify-content-end">
+                      <button className="btn btn-light">
+                        <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faExpandArrowsAlt} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col col-10 d-flex justify-content-start">
+                    <button className="btn btn-light me-2" onClick={() => handleSectionChange('swf-complainant')}>Complainant</button>
+                    <button className="btn btn-light me-2" onClick={() => handleSectionChange('swf-accused')}>Accused(s)</button>
+                    <button className="btn btn-light" onClick={() => handleSectionChange('swf-summary')}>Summary of Evidence</button>
+                  </div>
+
+                  <div className="col col-2 d-flex justify-content-end">
+                    <button className="btn btn-light">
+                      <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faExpandArrowsAlt} />
+                    </button>
+                  </div>
+                </div>
+
+
 
                 <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#333", color: "#fff" }}>
                   <div className="row" style={{ maxWidth: "200px", margin: "0 auto", color: "#fff", textDecoration: "none" }} >
@@ -480,19 +521,19 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                       <fieldset>
                         <div className="form-group field field-string">
 
-                        
 
-                          <Tooltip style={{maxWidth:"200px"}} id="my-tooltip" />
 
-                        
+                          <Tooltip style={{ maxWidth: "200px" }} id="my-tooltip" />
+
+
                           <label id="" className="control-label fs-6">
                             In house reference <a
                               data-tooltip-id="my-tooltip"
-                              data-tooltip-content= "Enter a short description that helps you quickly identify this submission (Eg. John Doe, Dec 13 2023)"
+                              data-tooltip-content="Enter a short description that helps you quickly identify this submission (Eg. John Doe, Dec 13 2023)"
                               data-tooltip-place="top"
                             >
-                            <FontAwesomeIcon icon={faQuestionCircle} />
-                              </a>
+                              <FontAwesomeIcon icon={faQuestionCircle} />
+                            </a>
                           </label>
 
                           <div className=" mt-2">
@@ -504,17 +545,17 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                             />
                             {!submissionTitleSaved ?
                               <>
-                              <label className="control-label fs-6  my-2">
-                                Category Of Accused
-                              </label>
+                                <label className="control-label fs-6  my-2">
+                                  Category Of Accused
+                                </label>
                                 <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
                                   <option value="adult">Adult only</option>
                                   <option value="child">Child only</option>
                                   <option value="both">Both</option>
                                 </select>
                                 <label className="control-label fs-6 my-2">
-                                Matter Type
-                              </label>
+                                  Matter Type
+                                </label>
                                 <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
                                   <option>Select matter type</option>
                                   <option value="Indictable">Indictable</option>
@@ -531,7 +572,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                               className="btn btn-md btn-dark ms-1  my-2 mt-3" // Use btn-light for a button with no background
                             >
                               <i className="text-gray">
-                                <FontAwesomeIcon icon={faCheck} /> 
+                                <FontAwesomeIcon icon={faCheck} />
                               </i> Continue
                             </button>
                           </div>
@@ -552,17 +593,19 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
               <div className="px-2 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
 
+              <div id="swf-complainant" style={{ display: activeSection === 'swf-complainant' ? 'block' : 'none' }}>
+
                 {submissionTitleSaved ?
                   <div>
-                            
-                          {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
-                            <div>
-                           
-                              <div className="card fade show m-3" style={{ border: "none", backgroundColor:"#ddd"}} >
-                              <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
-                                <form onSubmit={saveComplainant} className="m-3">
 
-                                  {/* <div className="mb-3">
+                    {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
+                      <div>
+
+                          <div className="card fade show m-3" style={{ border: "none", backgroundColor: "#ddd" }} >
+                            <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
+                            <form onSubmit={saveComplainant} className="m-3">
+
+                              {/* <div className="mb-3">
                                     <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
                                       <option>Select court</option>
                                       <option value="High Court">High Court</option>
@@ -570,146 +613,153 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                     </select>
                                   </div> */}
 
-                                  <div className="mb-3">
-                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
-                                      <option>Select court location</option>
-                                      {adultOnly == 'adult' || adultOnly == 'both' ?
-                                          <>
-                                            <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
-                                            <option value="Criminal Court - South Trinidad">Criminal Court - South Trinidad</option>
-                                            <option value="Criminal Court - Tobago">Criminal Court - Tobago</option>
-                                          </>
-                                        :
-                                          <>
-                                            <option value="Children Court - North Trinidad">Children Court - North Trinidad</option>
-                                            <option value="Children Court - South Trinidad">Children Court - South Trinidad</option>
-                                            <option value="Children Court - Tobago">Children Court - Tobago</option>
-                                          </> 
-                                      }
-
-
-                                    </select>
-                                  </div>
-
-                                  <div className="mb-3">
-                                    <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
-                                      <option>Select complainant agency</option>
-                                      <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
-                                    </select>
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="rank" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
-                                  </div>
-
-                                  {/* <div className="d-grid gap-2"> */}
-                                  {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
-                                  <button
-                                    type="submit"
-                                    className="btn btn-md btn-primary ms-1 float-end" // Use btn-light for a button with no background
-                                    >
-                                      {/* <i className="text-gray">
-                                        <FontAwesomeIcon icon={faCheck} />
-                                      </i>  */}
-                                      Save and Continue
-                                  </button>
-                                  {/* </div> */}
-
-
-                                </form>
-
-                              </div>
-                              <br />
-                            </div>
-                            : <></>
-                          }
-
-                          {submissionComplainantSaved && !editingSubmissionComplainant ?
-                            <>
-                              
-                              <div className="card fade show p-2" style={{ border: "none" }}>
-                                {/* <div className="fade show">
-                                  <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
-                                </div> */}
-                                
-
-                                <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor:"#444", color:"#fff", borderBottom: "1px solid #ddd" }}>
-                                  <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Complainant</h5>
-                                  {!submissionTitleSaved || editingSubmissionTitle ?
-                                    <></>
-                                    : <>
-                                      {/* <a href="#" className="small" onClick={editTitle}>Edit Title</a> */}
-                                      {/* <button type="button" className="btn btn-primary btn-xs"> */}
-                                      <button style={{ color: "#fff", textDecoration: "none" }} onClick={editComplainant} type="button" className="btn btn-link btn-xs">
-                                        <FontAwesomeIcon icon={faPencilAlt} />
-                                      </button>
-
+                              <div className="mb-3">
+                                <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                  <option>Select court location</option>
+                                  {adultOnly == 'adult' || adultOnly == 'both' ?
+                                    <>
+                                      <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
+                                      <option value="Criminal Court - South Trinidad">Criminal Court - South Trinidad</option>
+                                      <option value="Criminal Court - Tobago">Criminal Court - Tobago</option>
+                                    </>
+                                    :
+                                    <>
+                                      <option value="Children Court - North Trinidad">Children Court - North Trinidad</option>
+                                      <option value="Children Court - South Trinidad">Children Court - South Trinidad</option>
+                                      <option value="Children Court - Tobago">Children Court - Tobago</option>
                                     </>
                                   }
-                                </div>
 
 
-                                <div className="card-body" style={{ border: "1px solid #ddd", backgroundColor: "#eee" }}>
-                                  <div className="text-left complainant-details mt-2">
-                                    <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
-                                    <br /><label>Agency:</label> {complainantAgency}
-                                    <br /><label>Court:</label> {complainantCourt}
-                                    <br /><label>Court District:</label> {complainantCourtDistrict}
-                                    <br /><label>Regimental Number:</label> {complainantRegNum}
-                                    <br /><label>Rank:</label> {complainantRank}
-                                    <br /><label>Station/Unit:</label> {complainantUnit}
-                                    <br /><label>Email:</label> {complainantEmail}
-                                  </div>
-
-                                </div>
-
-
+                                </select>
                               </div>
-                            </>
-                            : <></>
-                          }
+
+                              <div className="mb-3">
+                                <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
+                                  <option>Select complainant agency</option>
+                                  <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                                </select>
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="rank" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
+                              </div>
+                              <div className="mb-3">
+                                <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
+                              </div>
+
+                              {/* <div className="d-grid gap-2"> */}
+                              {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
+                              <button
+                                type="submit"
+                                className="btn btn-md btn-primary ms-1 float-end" // Use btn-light for a button with no background
+                              >
+                                {/* <i className="text-gray">
+                                        <FontAwesomeIcon icon={faCheck} />
+                                      </i>  */}
+                                Save and Continue
+                              </button>
+                              {/* </div> */}
+
+
+                            </form>
+
+                          </div>
+
+                        </div>
+
+
+
+                      : <></>
+                    }
+
+                    {submissionComplainantSaved && !editingSubmissionComplainant ?
+                      <>
+
+                        <div className="card fade show p-2" style={{ border: "none" }}>
+                          {/* <div className="fade show">
+                                  <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
+                                </div> */}
+
+
+                          <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#444", color: "#fff", borderBottom: "1px solid #ddd" }}>
+                            <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Complainant</h5>
+                            {!submissionTitleSaved || editingSubmissionTitle ?
+                              <></>
+                              : <>
+                                {/* <a href="#" className="small" onClick={editTitle}>Edit Title</a> */}
+                                {/* <button type="button" className="btn btn-primary btn-xs"> */}
+                                <button style={{ color: "#fff", textDecoration: "none" }} onClick={editComplainant} type="button" className="btn btn-link btn-xs">
+                                  <FontAwesomeIcon icon={faPencilAlt} />
+                                </button>
+
+                              </>
+                            }
+                          </div>
+
+
+                          <div className="card-body" style={{ border: "1px solid #ddd", backgroundColor: "#eee" }}>
+                            <div className="text-left complainant-details mt-2">
+                              <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
+                              <br /><label>Agency:</label> {complainantAgency}
+                              <br /><label>Court:</label> {complainantCourt}
+                              <br /><label>Court District:</label> {complainantCourtDistrict}
+                              <br /><label>Regimental Number:</label> {complainantRegNum}
+                              <br /><label>Rank:</label> {complainantRank}
+                              <br /><label>Station/Unit:</label> {complainantUnit}
+                              <br /><label>Email:</label> {complainantEmail}
+                            </div>
+
+                          </div>
+
+
+                        </div>
+                      </>
+                      : <></>
+                    }
 
                   </div>
                   : <></>
                 }
 
-                {/* { !submissionTitleSaved ? <></> : <Complainant />} */}
-
-                {!submissionComplainantSaved ?
-                  <></>
-                  :
-                  <div className="p-2" style={{ backgroundColor: "#fff" }}>
-                    <Charges
-                      submission_id={submissionId}
-                      request_signature={requestSignature}
-                      hasAccused={checkHasAccused}
-                      editable={editable}
-                    />
-                  </div>
-                }
+                </div>
 
 
-                { ( hasAccused && charge_count > 0) ?
-                  <div className="" style={{backgroundColor:"#fff", border:"10px solid #eee", borderRadius:"none!important"}}>
-                    <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Summary of Evidence</h5>
-                    <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
-                  </div>
-                  : <></>
-                }
+                <div id="swf-accused" style={{ display: activeSection === 'swf-accused' ? 'block' : 'none' }}>
+                  {!submissionComplainantSaved ?
+                    <></>
+                    :
+                    <div className="p-2" style={{ backgroundColor: "#fff" }}>
+                      <Charges
+                        submission_id={submissionId}
+                        request_signature={requestSignature}
+                        hasAccused={checkHasAccused}
+                        editable={editable}
+                      />
+                    </div>
+                  }
+                </div>
+
+                <div id="swf-summary" style={{ display: activeSection === 'swf-summary' ? 'block' : 'none' }}>
+                    {(hasAccused && charge_count > 0) ?
+                      <div className="" style={{ backgroundColor: "#fff", border: "10px solid #eee", borderRadius: "none!important" }}>
+                        <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Summary of Evidence</h5>
+                        <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                      </div>
+                      : <></>
+                    }
+                </div>
 
 
 
