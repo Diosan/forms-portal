@@ -79,10 +79,6 @@ export const Charges = ({submission_id, request_signature, editable, hasAccused}
         dispatch(removeAccused(removedAccusedId));
     };
 
- 
-
-
-
     useEffect(() => {
         axios.get(API_URL + '/schema/accused')
         .then((response) => {
@@ -129,7 +125,7 @@ export const Charges = ({submission_id, request_signature, editable, hasAccused}
             setType(submission.data.submission.type);
             setAccuseds(submission?.data?.accuseds || []);
             const numAccused:any = submission?.data?.accuseds
-            //update the parent component
+            //update the parent component ---
             if(numAccused.length > 0 ){hasAccused(true)}else{hasAccused(false)} 
             
         })();
