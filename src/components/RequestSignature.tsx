@@ -96,8 +96,8 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                     }
                 }
             )
-            console.log('Fetched submission: ', submission.data.submission)
-            setIndictment(submission.data.submission.type == 'indictment')
+            console.log('Fetched submission: ', submission?.data?.submission)
+            setIndictment(submission?.data?.submission?.type == 'indictment')
 
         }
 
@@ -117,8 +117,8 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                     }
                 }
             )
-            console.log('Fetched submission: ', submission.data.submission)
-            setIndictment(submission.data.submission.type == 'indictment')
+            console.log('Fetched submission: ', submission?.data?.submission)
+            setIndictment(submission?.data?.submission?.type == 'indictment')
 
         }
 
@@ -158,10 +158,6 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                     </button>
                 </div>
             </Form>
-
-
-
-
         </div>
 
 

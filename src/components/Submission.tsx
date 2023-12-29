@@ -12,7 +12,7 @@ import { RootState } from "../store";
 import axios from "axios";
 import dotenv from "dotenv"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck, faExpand, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck, faAngleDoubleRight, faAngleDoubleLeft, faExpand, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { countCharge, deleteCharge } from '../slices/charge';
 
 type SubmissionProps = {
@@ -86,11 +86,34 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const accusedList = useSelector((state: RootState) => state.accused.accused);
 
   // State to track the active section
-  const [activeSection, setActiveSection] = useState(null); // No section is active initially
 
   // Event handlers for buttons
-  const handleSectionChange = (sectionId: any) => {
-    setActiveSection(sectionId);
+  const handleSectionChange = (section: any) => {
+    console.log(section)
+    setVisibleSections(prevState => ({
+      complainant: false,
+      accused: false,
+      summary: false,
+      all: false,
+      [section]: true,
+    }));
+  };
+
+  const [visibleSections, setVisibleSections] = useState({
+    complainant: true,
+    accused: false,
+    summary: false,
+    all: false,
+  });
+
+  // Function to make all sections visible
+  const handleShowAllSections = () => {
+    setVisibleSections({
+      complainant: true,
+      accused: true,
+      summary: true,
+      all: true,
+    });
   };
 
 
@@ -469,32 +492,26 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                 <div className="container p-0 mb-3">
                   <div className="row">
                     <div className="col col-10 d-flex justify-content-start">
-                      <button className="btn btn-light me-2">Complainant</button>
-                      <button className="btn btn-light me-2">Accused(s)</button>
-                      <button className="btn btn-light">Summary of Evidence</button>
-                    </div>
+                      <button className="btn btn-link me-2" onClick={() => handleSectionChange('complainant')}>Complainant</button>
+                      <button className="btn btn-link" onClick={() => handleSectionChange('accused')}>
+                        <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faAngleDoubleRight} />
+                      </button>
+                      <button className="btn btn-link me-2" onClick={() => handleSectionChange('accused')}>Accuseds & Charges</button>
+                      <button className="btn btn-link" onClick={() => handleSectionChange('summary')}>
+                        <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faAngleDoubleRight} />
+                      </button>
+                      <button className="btn btn-link" onClick={() => handleSectionChange('summary')}>Summary of Evidence</button>
 
+                    </div>
                     <div className="col col-2 d-flex justify-content-end">
-                      <button className="btn btn-light">
+                      <button className="btn btn-link" onClick={handleShowAllSections}>
                         <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faExpandArrowsAlt} />
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className="col col-10 d-flex justify-content-start">
-                    <button className="btn btn-light me-2" onClick={() => handleSectionChange('swf-complainant')}>Complainant</button>
-                    <button className="btn btn-light me-2" onClick={() => handleSectionChange('swf-accused')}>Accused(s)</button>
-                    <button className="btn btn-light" onClick={() => handleSectionChange('swf-summary')}>Summary of Evidence</button>
-                  </div>
 
-                  <div className="col col-2 d-flex justify-content-end">
-                    <button className="btn btn-light">
-                      <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faExpandArrowsAlt} />
-                    </button>
-                  </div>
-                </div>
 
 
 
@@ -594,13 +611,12 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
               <div className="px-2 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
 
-              <div id="swf-complainant" style={{ display: activeSection === 'swf-complainant' ? 'block' : 'none' }}>
+                <div id="swf-complainant" style={{ display: visibleSections.complainant || visibleSections.all ? 'block' : 'none' }}>
+                  {submissionTitleSaved ?
+                    <div>
 
-                {submissionTitleSaved ?
-                  <div>
-
-                    {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
-                      <div>
+                      {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
+                        <div>
 
                           <div className="card fade show m-3" style={{ border: "none", backgroundColor: "#ddd" }} >
                             <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
@@ -682,62 +698,68 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
 
 
-                      : <></>
-                    }
+                        : <></>
+                      }
 
-                    {submissionComplainantSaved && !editingSubmissionComplainant ?
-                      <>
+                      {submissionComplainantSaved && !editingSubmissionComplainant ?
+                        <>
 
-                        <div className="card fade show p-2" style={{ border: "none" }}>
-                          {/* <div className="fade show">
+                          <div className="card fade show p-2" style={{ border: "none" }}>
+                            {/* <div className="fade show">
                                   <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
                                 </div> */}
 
 
-                          <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#444", color: "#fff", borderBottom: "1px solid #ddd" }}>
-                            <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Complainant</h5>
-                            {!submissionTitleSaved || editingSubmissionTitle ?
-                              <></>
-                              : <>
-                                {/* <a href="#" className="small" onClick={editTitle}>Edit Title</a> */}
-                                {/* <button type="button" className="btn btn-primary btn-xs"> */}
-                                <button style={{ color: "#fff", textDecoration: "none" }} onClick={editComplainant} type="button" className="btn btn-link btn-xs">
-                                  <FontAwesomeIcon icon={faPencilAlt} />
-                                </button>
+                            <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#444", color: "#fff", borderBottom: "1px solid #ddd" }}>
+                              <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Complainant Information</h5>
+                              {!submissionTitleSaved || editingSubmissionTitle ?
+                                <></>
+                                : <>
+                                  {/* <a href="#" className="small" onClick={editTitle}>Edit Title</a> */}
+                                  {/* <button type="button" className="btn btn-primary btn-xs"> */}
+                                  <button style={{ color: "#fff", textDecoration: "none" }} onClick={editComplainant} type="button" className="btn btn-link btn-xs">
+                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                  </button>
 
-                              </>
-                            }
-                          </div>
-
-
-                          <div className="card-body" style={{ border: "1px solid #ddd", backgroundColor: "#eee" }}>
-                            <div className="text-left complainant-details mt-2">
-                              <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
-                              <br /><label>Agency:</label> {complainantAgency}
-                              <br /><label>Court:</label> {complainantCourt}
-                              <br /><label>Court District:</label> {complainantCourtDistrict}
-                              <br /><label>Regimental Number:</label> {complainantRegNum}
-                              <br /><label>Rank:</label> {complainantRank}
-                              <br /><label>Station/Unit:</label> {complainantUnit}
-                              <br /><label>Email:</label> {complainantEmail}
+                                </>
+                              }
                             </div>
 
+
+                            <div className="card-body" style={{ border: "1px solid #ddd", backgroundColor: "#eee" }}>
+                              <div className="text-left complainant-details mt-2">
+                                <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
+                                <br /><label>Agency:</label> {complainantAgency}
+                                <br /><label>Court:</label> {complainantCourt}
+                                <br /><label>Court District:</label> {complainantCourtDistrict}
+                                <br /><label>Regimental Number:</label> {complainantRegNum}
+                                <br /><label>Rank:</label> {complainantRank}
+                                <br /><label>Station/Unit:</label> {complainantUnit}
+                                <br /><label>Email:</label> {complainantEmail}
+                              </div>
+
+                            </div>
+                            <div className="d-flex justify-content-end mt-3">
+                              <button className="btn btn-link me-2 px-0" onClick={() => handleSectionChange('accused')}>
+                                Next: Accuseds & Charges <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faAngleDoubleRight} /></button>
+                            </div>
+
+
+
                           </div>
+                        </>
+                        : <></>
+                      }
 
-
-                        </div>
-                      </>
-                      : <></>
-                    }
-
-                  </div>
-                  : <></>
-                }
+                    </div>
+                    : <></>
+                  }
 
                 </div>
 
 
-                <div id="swf-accused" style={{ display: activeSection === 'swf-accused' ? 'block' : 'none' }}>
+                <div id="swf-accused" style={{ display: visibleSections.accused || visibleSections.all ? 'block' : 'none' }}>
+
                   {!submissionComplainantSaved ?
                     <></>
                     :
@@ -750,16 +772,32 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                       />
                     </div>
                   }
+
+                  <div className="container p-0 mb-3">
+                    <div className="row">
+                      <div className="col col-6 d-flex justify-content-start">
+                        <button className="btn btn-link me-2" onClick={() => handleSectionChange('complainant')}>
+                          <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faAngleDoubleLeft} />Complainant</button>
+                      </div>
+                      <div className="col col-6 d-flex justify-content-end">
+                        <button className="btn btn-link" onClick={() => handleSectionChange('summary')}>
+                          Next: Summary of Evidence <i className="fa fa-expand"></i> <FontAwesomeIcon icon={faAngleDoubleRight} /></button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div id="swf-summary" style={{ display: activeSection === 'swf-summary' ? 'block' : 'none' }}>
-                    {(hasAccused && charge_count > 0) ?
-                      <div className="" style={{ backgroundColor: "#fff", border: "10px solid #eee", borderRadius: "none!important" }}>
-                        <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Summary of Evidence</h5>
-                        <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
-                      </div>
-                      : <></>
-                    }
+
+
+                <div id="swf-summary" style={{ display: visibleSections.summary || visibleSections.all ? 'block' : 'none' }}>
+
+                  {(hasAccused && charge_count > 0) ?
+                    <div className="" style={{ backgroundColor: "#fff", border: "10px solid #eee", borderRadius: "none!important" }}>
+                      <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Summary of Evidence</h5>
+                      <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                    </div>
+                    : <></>
+                  }
                 </div>
 
 

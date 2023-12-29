@@ -121,6 +121,11 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
       setShowAddForm(true)
   };
 
+  const hideAccusedForm = () => {
+    setShowAddAccused(false);
+      setShowAddForm(false)
+  };
+
 
     useEffect(() => {
         axios.get(API_URL + '/schema/accused')
@@ -175,11 +180,12 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
             onError={log('errors')}
         >
             <div className="gap-2 pb-5"  style={{borderBottom:"10px solid #eee"}}>
-                <button className="btn btn-secondary" type="submit">Save Accused</button>
+            <a className="btn btn-light mx-2" onClick={hideAccusedForm}>Cancel</a>
+            <button className="btn btn-secondary mx-2" type="submit">Save this Accused</button>
             </div>
         </Form>):(
           <>
-          <button className="my-4 btn btn-secondary" onClick={toggleAddAccused}><FontAwesomeIcon icon={faPlus} /> Add an Accused</button>
+          <button className="my-3 btn btn-secondary" onClick={toggleAddAccused}><FontAwesomeIcon icon={faPlus} /> Add an Accused</button>
           </>
 
       )}

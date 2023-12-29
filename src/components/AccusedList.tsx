@@ -50,7 +50,7 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
         const fetchData = async () => {
             const returned_accuseds = await axios.get(API_URL + '/api/submissions/accuseds/' + submission_id)
             const foundAccuseds = returned_accuseds.data.accuseds
-            saveAccusedList(returned_accuseds);
+            saveAccusedList(foundAccuseds);
             // Update local state if needed
             console.log('Returned accuseds: ', returned_accuseds.data.accuseds)
             return returned_accuseds.data.accuseds
@@ -116,49 +116,49 @@ const AccusedList = ({submission_id, request_signature, submission_accuseds, edi
         {}
 
             {submission_accuseds.slice().reverse().map((accused: any, index:any) => (
-                <>
-                <div className="text-left mt-2 mb-1"><button className="btn btn-link" 
-                    style={{ padding:"0"}}  type="submit" 
-                    onClick={() => removeAccused(accused.id)}><FontAwesomeIcon icon={faTrashCan} /> Remove this accused</button>
-                </div>
-                <div className="card accused-card mt-0 " key={accused.id}>
-                    <div className="accused-index">Accused {index+1}</div>
-                    <div className="card-body">
-                        <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName}{accused.middleName == null ? '' : ' ' + accused.middleName} {accused.lastName}</h5>
-                        <p className="card-text text-left p-0 m-0">
-                            <label>Address:</label> {accused.addressLine1}
-                                                    {accused.addressLine2 == null ? <></> : <>{', ' + accused.addressLine2}</>}
-                                                    {accused.addressLine3 == null ? <></> : <>{', ' + accused.addressLine3}</>}
-                                                    {accused.cityTown == null ? <></> : <>{', ' + accused.cityTown}</>}
-                                                    {accused.postalCode == null ? <></> : <>{', ' + accused.postalCode}</>}
-                                                    {accused.communityCode == null ? <></> : <>{', ' + accused.communityCode}</>}
-                                                    {accused.countryName == null ? <></> : <>{', ' + accused.countryName}</>}
-                                                    {/* {accused.countryCode == null ? <></> : <>{', ' + accused.countryCode}</>} */}
-                        </p>
-                        <p className="card-text text-left">
-                            {accused.email == null ? <></> : <><label>Email:</label> {accused.email} <br/> </>}
-                            {accused.identificationType == null ? <></> : <><label>Identification Type:</label> {accused.identificationType} <br/> </>}                            
-                            {accused.identification == null ? <></> : <><label>Identification Number:</label> {accused.identification} <br/> </>} 
-                            {accused.gender == null ? <></> : <><label>Gender Identity:</label> {accused.gender} <br/> </>} 
-                            {accused.adulthood == null ? <></> : <><label>Adult/Child:</label> {accused.adulthood} <br/> </>}
-                            {accused.dateOfBirth == null ? <></> : <><label>Date Of Birth:</label> {accused.dateOfBirth} <br/> </>}
-                            {accused.aproximateAge == null ? <></> : <><label>Approximate Age:</label> {accused.aproximateAge} <br/> </>}
-                            {accused.alias == null ? <></> : <><label>Alias:</label> {accused.alias} <br/> </>}
-                            
+                <div key={index}>
+                    <div className="text-left mt-2 mb-1"><button className="btn btn-link" 
+                        style={{ padding:"0"}}  type="submit" 
+                        onClick={() => removeAccused(accused.id)}><FontAwesomeIcon icon={faTrashCan} /> Remove this accused</button>
+                    </div>
+                    <div className="card accused-card mt-0 " key={accused.id}>
+                        <div className="accused-index">Accused {index+1}</div>
+                        <div className="card-body">
+                            <h5 className="card-title text-left fw-bold pb-2" style={{borderBottom:"1px solid #ccc"}}>{accused.firstName}{accused.middleName == null ? '' : ' ' + accused.middleName} {accused.lastName}</h5>
+                            <p className="card-text text-left p-0 m-0">
+                                <label>Address:</label> {accused.addressLine1}
+                                                        {accused.addressLine2 == null ? <></> : <>{', ' + accused.addressLine2}</>}
+                                                        {accused.addressLine3 == null ? <></> : <>{', ' + accused.addressLine3}</>}
+                                                        {accused.cityTown == null ? <></> : <>{', ' + accused.cityTown}</>}
+                                                        {accused.postalCode == null ? <></> : <>{', ' + accused.postalCode}</>}
+                                                        {accused.communityCode == null ? <></> : <>{', ' + accused.communityCode}</>}
+                                                        {accused.countryName == null ? <></> : <>{', ' + accused.countryName}</>}
+                                                        {/* {accused.countryCode == null ? <></> : <>{', ' + accused.countryCode}</>} */}
+                            </p>
+                            <p className="card-text text-left">
+                                {accused.email == null ? <></> : <><label>Email:</label> {accused.email} <br/> </>}
+                                {accused.identificationType == null ? <></> : <><label>Identification Type:</label> {accused.identificationType} <br/> </>}                            
+                                {accused.identification == null ? <></> : <><label>Identification Number:</label> {accused.identification} <br/> </>} 
+                                {accused.gender == null ? <></> : <><label>Gender Identity:</label> {accused.gender} <br/> </>} 
+                                {accused.adulthood == null ? <></> : <><label>Adult/Child:</label> {accused.adulthood} <br/> </>}
+                                {accused.dateOfBirth == null ? <></> : <><label>Date Of Birth:</label> {accused.dateOfBirth} <br/> </>}
+                                {accused.aproximateAge == null ? <></> : <><label>Approximate Age:</label> {accused.aproximateAge} <br/> </>}
+                                {accused.alias == null ? <></> : <><label>Alias:</label> {accused.alias} <br/> </>}
+                                
 
-                        </p>
+                            </p>
 
 
 
-                        <Accused 
-                            request_signature={requestSignature} 
-                            accused_id={accused.id}
-                            editable={editable} 
-                        />
+                            <Accused 
+                                request_signature={requestSignature} 
+                                accused_id={accused.id}
+                                editable={editable} 
+                            />
 
+                        </div>
                     </div>
                 </div>
-                </>
 
             ))}
 

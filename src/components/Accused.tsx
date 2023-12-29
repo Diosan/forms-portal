@@ -229,8 +229,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             case 'success':
               console.log('New Charge successfully saved', response.data.charge)
               
-            dispatch(countCharge(response.data.charge))
-              setAccusedCharges([response.data.charge, ...accusedCharges]) //response.data.charge
+            dispatch(countCharge(1))
+            setAccusedCharges([response.data.charge, ...accusedCharges]) //response.data.charge
 
             //   navigate('/submission/' + submission_id)
             //   window.location.reload()   
