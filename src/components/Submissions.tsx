@@ -21,7 +21,7 @@ import { clearMessage } from "../slices/message"
 import { login, logout, verifyOtp } from "../slices/auth";
 import { LeftColumn } from "./LeftColumn"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faPencil, faTrash, faTrashCan, faX } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeftLong, faPencil, faTrash, faTrashCan, faX, faEye } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -243,7 +243,9 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
                 {token ?
                     <>
-                        <div className="container submissions-container" style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}>
+                        <div className="container submissions-container" 
+                        style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 220px", flexGrow: 1 }}
+                        >
 
                             <div>
                                 {/* <div className="row">
@@ -343,18 +345,18 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                                 <h6 className="card-title text-left">{submission.description}</h6>
                                                                 <div className="action-buttons">
                                                                     <a
-                                                                        href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
+                                                                        href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/view/' + submission.id}
                                                                         key={submission.id}
                                                                     >
-                                                                        <button className="btn btn-link">
-                                                                            <i className="fa"><FontAwesomeIcon icon={faPencil} />
-                                                                            </i>
+                                                                        <button className="btn btn-link text-decoration-none">
+                                                                            <i className="fa"><FontAwesomeIcon icon={faEye} />
+                                                                            </i> View
                                                                         </button>
                                                                     </a>
-                                                                    <button className="btn btn-link btn-sm" onClick={() => handleDelete(submission.id)}>
+                                                                    {/* <button className="btn btn-link btn-sm" onClick={() => handleDelete(submission.id)}>
                                                                         <i className="fa"><FontAwesomeIcon icon={faX} />
                                                                         </i>
-                                                                    </button>
+                                                                    </button> */}
 
                                                                 </div>
                                                             </div>

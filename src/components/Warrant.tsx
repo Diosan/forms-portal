@@ -27,7 +27,8 @@ import axios from "axios";
 import dotenv from "dotenv"
 import { login, logout, verifyOtp } from "../slices/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck, faAngleDoubleRight, faAngleDoubleLeft, faExpand, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
+import { Tooltip } from 'react-tooltip'
 
 
 
@@ -92,6 +93,11 @@ export const Warrant = ({ new_submission }: SubmissionProps) => {
 
   const [matterType, setMatterType] = useState('Indictable')
   const [adultOnly, setAdultOnly] = useState('adult')
+  const [hasAccused, setHasAccused] = useState(false)
+  const checkHasAccused = (areThereAccused: boolean) => {
+    setHasAccused(areThereAccused);
+    console.log("Are there accused: ", areThereAccused)
+  };
 
   const matterTypeChange = (event: any) => {
     setMatterType(event.target.value)
@@ -399,8 +405,8 @@ export const Warrant = ({ new_submission }: SubmissionProps) => {
       {auth.loggedIn() ?
         <>
           <div className="swf-container container"
-            style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
-          >
+            style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 220px", flexGrow: 1 }}
+            >
 
 
             <div id="regForm" className="fade show m-0 py-0">
@@ -428,8 +434,15 @@ export const Warrant = ({ new_submission }: SubmissionProps) => {
                     <form onSubmit={saveTitle} >
                       <fieldset>
                         <div className="form-group field field-string">
-                          <label className="control-label fs-6">
-                            In house reference
+                        <Tooltip style={{ maxWidth: "200px" }} id="my-tooltip" />
+                          <label id="" className="control-label fs-6">
+                            In house reference <a
+                              data-tooltip-id="my-tooltip"
+                              data-tooltip-content="Enter a short description that helps you quickly identify this submission (Eg. John Doe, Dec 13 2023)"
+                              data-tooltip-place="top"
+                            >
+                              <FontAwesomeIcon icon={faQuestionCircle} />
+                            </a>
                           </label>
 
                           <div className=" mt-2">
@@ -640,6 +653,7 @@ export const Warrant = ({ new_submission }: SubmissionProps) => {
                     <Charges
                       submission_id={submissionId}
                       request_signature={requestSignature}
+                      hasAccused={checkHasAccused}
                       editable={editable}
                     />
                   </div>

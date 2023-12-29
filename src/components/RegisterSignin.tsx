@@ -6,6 +6,8 @@ import { login, logout, resendOTP, verifyOtp } from "../slices/auth";
 import { clearMessage } from "../slices/message"
 import { RootState } from '../store';
 import AuthService from "../services/AuthService"
+import { useLocation } from 'react-router-dom';
+
 
 // import { useAppDispatch } from '../useAppDispatch'; 
 // const API_URL = import.meta.env.VITE_API_URL
@@ -21,15 +23,16 @@ import { faArrowLeftLong, faPencilAlt, faCheck, faTrash, faTrashCan, faSpinner }
 
 
 
-type RegisterSigninProps = {}
+type RegisterSigninProps = {
+    createPassword: boolean;
+    setCreatePassword: React.Dispatch<React.SetStateAction<boolean>>; 
+}
 
 type Error = {
     description: string
 }
 
-export const RegisterSignin = ({ }: RegisterSigninProps) => {
-
-
+export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSigninProps) => {
 
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
@@ -38,7 +41,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
     const [changePassword, setChangePassword] = useState(false);
     const auth = new AuthService
 
-
+    const location = useLocation();
 
     useEffect(() => {
         if (isLoggedIn && isVerified && token && !otpRequired) {
@@ -66,6 +69,13 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
     useEffect(() => {
         dispatch(clearMessage());
     }, [dispatch]);
+
+    useEffect(() => {
+        console.log(location?.state?.setChangePassword || false)
+        setCreatePassword(location?.state?.setChangePassword || false);
+    }, []);
+
+
 
     const initialValues = {
         username: "",
@@ -103,11 +113,6 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
     const agencyChange = (event: any) => {
         setAgency(event.target.value)
     }
-
-
-
-
-
 
     const regNumberChange = (event: any) => {
         setRegNumber(event.target.value)
@@ -153,7 +158,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
     const passwordResetLink = async (event: any) => {
         event.preventDefault()
         //console.log("clicked")
-        setChangePassword(true)
+        setCreatePassword(true)
     }
 
     const register = (event: any) => {
@@ -308,6 +313,12 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
             });
     }
 
+    const gotToLogin = async (event: any) => {
+        event.preventDefault()
+        setCreatePassword(false)
+        navigate("/login")
+    }
+
 
 
     return (
@@ -315,6 +326,17 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
         <>
             <section className="admin-main-section d-flex align-items-center justify-content-center vh-100">
                 <section className="form-container  text-left" style={{ width: "100%", maxWidth: '500px' }}>
+
+                {createPassword ? (
+                    <p className="text-center" style={{color:"blue"}}>
+                        Enter your agency's email address in the box below <br/>then click submit to begin the password reset process.
+                    </p>
+                ):(
+                    <p className="text-center" style={{color:"blue"}}>
+                    <span style={{fontWeight:"bold"}}>Is this your first time accessing SWIF? </span><br/>
+                    If so, please use the "Click to reset" link below <br/>to begin the password reset process.
+                </p>
+                )}
 
                     {isLoggedIn ?
                         <Navigate to="/submissions" replace={true} />
@@ -340,7 +362,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                 </div>
                                 <div className="col-md-8" style={{ padding: '30px' }}>
 
-
+                                
 
                                     {otpRequired ?
                                         <>
@@ -372,15 +394,15 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                         <div className="text-center">
                                                             
                                                             <button type="submit" className="mt-1 btn btn-primary"  disabled={loading}>
-                                                                    {loading ? (
-                                                                        <>
-                                                                            <FontAwesomeIcon icon={faSpinner} spin />
-                                                                            &nbsp;Confirming...
-                                                                        </>
-                                                                    ) : (
-                                                                        "Confirm"
-                                                                    )}
-                                                                </button>                                                            
+                                                                {loading ? (
+                                                                    <>
+                                                                        <FontAwesomeIcon icon={faSpinner} spin />
+                                                                        &nbsp;Confirming...
+                                                                    </>
+                                                                ) : (
+                                                                    "Confirm"
+                                                                )}
+                                                            </button>                                                            
                                                         </div>
 
 
@@ -393,7 +415,7 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
 
                                         </>
                                         : <>
-                                            {changePassword ? (
+                                            {createPassword ? (
                                                 <>
                                                     <form onSubmit={requestNewPassword} className="swf-form">
                                                         <h4 className="mb-3">Forgot your password?</h4>
@@ -428,12 +450,11 @@ export const RegisterSignin = ({ }: RegisterSigninProps) => {
                                                         </div>
 
 
-                                                        <div className="mt-3 small mb-4">
-                                                            <a href="/" className="">
-                                                                Click here to Log in.
-                                                            </a>
-                                                        </div>
+                                                        
                                                     </form>
+                                                    <div className="mt-3 small mb-4">
+                                                            <span><a href="#" className="" onClick={gotToLogin}>Click to login</a></span>
+                                                        </div>
                                                 </>
                                             )
                                                 : (

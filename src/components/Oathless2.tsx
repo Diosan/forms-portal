@@ -27,7 +27,10 @@ import axios from "axios";
 import dotenv from "dotenv"
 import { login, logout, verifyOtp } from "../slices/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+
+import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck, faAngleDoubleRight, faAngleDoubleLeft, faExpand, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
+import { Tooltip } from 'react-tooltip'
+
 
 
 
@@ -84,6 +87,11 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
   const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
   const [complainantCourt, setComplainantCourt] = useState('')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
+  const [hasAccused, setHasAccused] = useState(false)
+  const checkHasAccused = (areThereAccused: boolean) => {
+    setHasAccused(areThereAccused);
+    console.log("Are there accused: ", areThereAccused)
+  };
 
   const [chargeSaved, setChargeSaved] = useState(false)
 
@@ -374,8 +382,8 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
       {auth.loggedIn() ?
         <>
           <div className="swf-container container"
-            style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
-          >
+            style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 220px", flexGrow: 1 }}
+            >
 
 
             <div id="regForm" className="fade show m-0 py-0">
@@ -581,6 +589,7 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
                     <Charges
                       submission_id={submissionId}
                       request_signature={requestSignature}
+                      hasAccused={checkHasAccused}
                       editable={editable}
                     />
                   </div>

@@ -43,7 +43,7 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
             {Object.keys(offences).map((index, accused_id) => (
                                             
 
-                <div key={index}  style={{margin:"0 0 20px 0", padding:"0"}}>
+                <div key={accused_id}  style={{margin:"0 0 20px 0", padding:"0"}}>
                     
                     <div style={{fontSize:"11pt"}}><span style={{fontSize:"10pt", fontWeight:"bold"}}>Accused </span>- {first_name + " " + last_name}</div>
                     <div style={{}}>
@@ -51,7 +51,7 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
 
 
                     {offences[parseInt(index)].map((offence: any, index) => (
-                        <>
+                        <div key={index}>
                         
                             <div style={{margin:"0 0 10px 0", borderBottom:"1px solid #666"}}>
                                 <table style={{ fontSize: "10pt" }}>
@@ -95,7 +95,7 @@ export const Offences = ({ first_name, last_name, accused_id, key }: OffencesPro
 
                             </div>
                             
-                        </>
+                        </div>
                         
                     ))}
                     </div>

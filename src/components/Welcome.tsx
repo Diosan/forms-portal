@@ -14,6 +14,8 @@ export const Welcome = ({}: WelcomeProps) => {
 
             <RegisterSignin />
 
+            
+
         </div>
     </>
     )

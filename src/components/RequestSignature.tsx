@@ -63,9 +63,11 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
 
                 if (requestResult.data.outcome == 'success') {
                     navigate('/view/' + submission_id)
+                    setLoading(false);
                 }
             } else {
                 navigate('/sign/' + submission_id)
+                setLoading(false);
             }
 
         }

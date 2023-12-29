@@ -36,14 +36,16 @@ import { Admin } from './Admin';
 
 function App() {
   console.log("APP")
+  const [createPassword, setCreatePassword] = useState<boolean>(false);
+
   return (
     <>
     {/* <Header /> */}
-    <LeftColumn />
+    <LeftColumn setCreatePassword={setCreatePassword} />
 
       <Routes>
         <Route path= "/" element={<Welcome />} />
-        <Route path= "/login" element={<RegisterSignin />} />
+        <Route path= "/login" element={<RegisterSignin setCreatePassword={setCreatePassword} createPassword={createPassword} />} />
         <Route path= "/password/new" element={ <PasswordReset/>} />
         <Route path= "/password/reset/:token" element={ <PasswordReset/>} />
 

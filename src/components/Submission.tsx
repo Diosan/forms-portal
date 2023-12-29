@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react"
 import "../assets/Submission.css"
 import "../assets/Style.css"
-import { Tooltip } from 'react-tooltip'
 import { Charges } from "./Charges"
 import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
@@ -13,6 +12,8 @@ import axios from "axios";
 import dotenv from "dotenv"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck, faAngleDoubleRight, faAngleDoubleLeft, faExpand, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
+import { Tooltip } from 'react-tooltip'
+
 import { countCharge, deleteCharge } from '../slices/charge';
 
 type SubmissionProps = {
@@ -542,8 +543,6 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
 
                           <Tooltip style={{ maxWidth: "200px" }} id="my-tooltip" />
-
-
                           <label id="" className="control-label fs-6">
                             In house reference <a
                               data-tooltip-id="my-tooltip"
@@ -559,6 +558,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                               className="form-control fs-5 mt-0 mb-0 flex-grow-1"
                               type="text"
                               value={submissionTitle}
+                              placeholder="E.g. Your name VS Accused Name"
                               onChange={submissionTitleChange}
                             />
                             {!submissionTitleSaved ?

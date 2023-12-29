@@ -62,7 +62,7 @@ type NameDisplayProps = {
         return data.slice(0, maxNames).map((person:any, index:number) => (
             // <div key={index}>{person.firstName} {person.lastName}</div>
             <div style={{fontSize:"12pt", lineHeight:"18pt"}}  key={index}>
-                {person.firstName} {person.lastName}{index < data.length - 1 && index < maxNames - 1 ? ', ' : ''}
+                {person.firstName} {person.lastName}{index < data.length - 1 && index < maxNames - 1 ? ' ' : ''}
             </div>
             ));
         };
@@ -100,6 +100,9 @@ export const View = ({ }: SignProps) => {
     const [complainantRank, setComplainantRank] = useState('')
     const [complainantEmail, setComplainantEmail] = useState('')
     const [complainantStation, setComplainantStation] = useState('')
+    const [summaryOfEvidence, setSummaryOfEvidence] = useState('')
+
+    const [additionalNotes, setAdditionalNotes] = useState('')
     const [matterType, setMatterType] = useState('')
     const [accusedNames, setAccusedNames] = useState('')
     const [title, setTitle] = useState('')
@@ -117,7 +120,7 @@ export const View = ({ }: SignProps) => {
     const [submissionType, setSubmissionType] = useState('')
 
     const signSubmission = () => {
-        console.log('Signing form ')
+        console.log('View form ')
     }
 
     const currentDate = () => {
@@ -129,13 +132,13 @@ export const View = ({ }: SignProps) => {
 
         const fetchSubmission = async () => {
             let submission = await axios.get(API_URL + '/api/submissions/' + id,
-            { method: 'DELETE',
+            { method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
                 },
              })
-            // console.log('\n\n\n Submision Status: ', submission.data.submission.status)
+            console.log('\n\n\n Submision Status: ', submission.data)
             setStatus(submission.data.submission.status)
             setTitle(submission.data.submission.description)
             setComplainantName(submission.data.complainant.firstName + ' ' + submission.data.complainant.lastName)
@@ -150,6 +153,9 @@ export const View = ({ }: SignProps) => {
             setMatterType(submission.data.submission.matterType)
             setComplainantRank(submission.data.complainant.rank)
             setComplainantStation(submission.data.complainant.unit)
+            setSummaryOfEvidence(submission?.data?.submission?.summaryOfEvidence || "")
+            setAdditionalNotes(submission?.data?.submission?.additionalNotes || "")
+
 
 
            // Your provided array of accused
@@ -186,27 +192,27 @@ export const View = ({ }: SignProps) => {
         }
 
 
-        const fetchCharges = async (accused: any) => {
-            let firstName = accused.firstName
-            let lastName = accused.lastName
+        // const fetchCharges = async (accused: any) => {
+        //     let firstName = accused.firstName
+        //     let lastName = accused.lastName
 
-            let charges = await axios.get(API_URL + '/api/accuseds/charges/' + accused.id)
+        //     let charges = await axios.get(API_URL + '/api/accuseds/charges/' + accused.id)
 
-            charges.data.charges.map((charge: any, i: number) => {
+        //     charges.data.charges.map((charge: any, i: number) => {
 
-                let offence = {
-                    id: charge.id,
-                    firstName: firstName,
-                    lastName: lastName,
-                    ICCS: charge.ICCS,
-                    dateOfOffence: charge.dateOfOffence,
-                    particulars: charge.particulars
-                }
-                console.log('Adding charge ' + i + ' to offences ', offence)
-                setOffences([...offences, offence])
-            })
+        //         let offence = {
+        //             id: charge.id,
+        //             firstName: firstName,
+        //             lastName: lastName,
+        //             ICCS: charge.ICCS,
+        //             dateOfOffence: charge.dateOfOffence,
+        //             particulars: charge.particulars
+        //         }
+        //         console.log('Adding charge ' + i + ' to offences ', offence)
+        //         setOffences([...offences, offence])
+        //     })
 
-        }
+        // }
 
 
         if (auth.loggedIn()) {
@@ -317,7 +323,7 @@ export const View = ({ }: SignProps) => {
 
                         <div className="text-left complainant-details">
                             {accuseds.map((accused: any, i: number) => (
-                                <>
+                                <div key={i}>
                                     <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused Number {i + 1}  Information</div>
 
 
@@ -414,7 +420,7 @@ export const View = ({ }: SignProps) => {
                                             </tr>
                                         </tbody>
                                     </table>
-                                </>
+                                </div>
                             ))}
 
                         </div>
@@ -436,7 +442,7 @@ export const View = ({ }: SignProps) => {
                                 <tbody>
 
                                     {accuseds.map((accused: any, i: number) => (
-                                        <>
+                                        <div key={i}>
                                             <Offences
                                                 first_name={accused.firstName}
                                                 last_name={accused.lastName}
@@ -463,11 +469,27 @@ export const View = ({ }: SignProps) => {
                                                 : <></>
                                             }
                                            
-                                        </>
+                                        </div>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
+
+
+                        <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>
+                            Summary of Evidence
+                        </div>
+                        <div className="text-left mb-3">
+                            {summaryOfEvidence}
+                        </div>
+
+                        <div className="mt-2" style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>
+                            Additional Notes
+                        </div>
+                        <div className="text-left mb-3">
+                            {additionalNotes}
+                        </div>
+                        
 
 
 
