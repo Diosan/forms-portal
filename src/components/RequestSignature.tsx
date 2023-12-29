@@ -43,7 +43,7 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
 
             setLoading(true);
 
-            if(indictment) {
+            if(!indictment) {
                 let submissionForRequest = await axios.post(
                     API_URL + '/api/submissions/update/',
                     {
@@ -84,6 +84,27 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
 
     }, [])
 
+    // useEffect(() => {
+
+    //     const getSubmission = async () => {
+    //         let submission = await axios.get(
+    //             API_URL + '/api/submissions/' + submission_id,
+    //             {
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'Authorization': 'Bearer ' + token
+    //                 }
+    //             }
+    //         )
+    //         console.log('Fetched submission: ', submission.data.submission)
+    //         setIndictment(submission.data.submission.type == 'indictment')
+
+    //     }
+
+    //     getSubmission()
+
+    // }, [])
+
     useEffect(() => {
 
         const getSubmission = async () => {
@@ -96,28 +117,9 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                     }
                 }
             )
-            console.log('Fetched submission: ', submission?.data?.submission)
-            setIndictment(submission?.data?.submission?.type == 'indictment')
-
-        }
-
-        getSubmission()
-
-    }, [])
-
-    useEffect(() => {
-
-        const getSubmission = async () => {
-            let submission = await axios.get(
-                API_URL + '/api/submissions/' + submission_id,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    }
-                }
-            )
-            console.log('Fetched submission: ', submission?.data?.submission)
+            console.log('Fetched submission: ', submission.data.submission)
+            // console.log('indictment variable being set to: ', submission.data.submission.type == 'indictment')
+            // setIndictment(submission.data.submission.type == 'indictment')
             setIndictment(submission?.data?.submission?.type == 'indictment')
 
         }
