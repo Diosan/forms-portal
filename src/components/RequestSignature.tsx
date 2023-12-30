@@ -51,15 +51,16 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
 
             setLoading(true);
 
+            let submissionForRequest = await axios.post(
+                API_URL + '/api/submissions/update/',
+                {
+                    id: submission_id,
+                    summaryOfEvidence: form.formData.summaryOfEvidence,
+                    additionalNotes: form.formData.additionalNotes
+                }
+            )
+
             if(!indictment) {
-                let submissionForRequest = await axios.post(
-                    API_URL + '/api/submissions/update/',
-                    {
-                        id: submission_id,
-                        summaryOfEvidence: form.formData.summaryOfEvidence,
-                        additionalNotes: form.formData.additionalNotes
-                    }
-                )
 
                 try {
                     let requestResult = await axios.post(
