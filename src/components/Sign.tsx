@@ -406,11 +406,11 @@ export const Sign = ({ }: SignProps) => {
 
                         <div className="text-left complainant-details">
                             {accuseds.map((accused: any, i: number) => (
-                                <>
+                                <div key={accused.id}>
                                     <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused Number {i + 1}  Information</div>
 
 
-                                    <table width={"700px"} className="accused-table" key={accused.id}
+                                    <table width={"700px"} className="accused-table" 
                                         style={{ marginBottom: "10px" }}>
                                         <tbody style={{ fontSize: "10pt", }}>
                                             <tr>
@@ -425,7 +425,7 @@ export const Sign = ({ }: SignProps) => {
                                     </table>
 
 
-                                    <table width={"700px"} className="accused-table" key={accused.id}
+                                    <table width={"700px"} className="accused-table"
                                         style={{ marginBottom: "10px" }}>
                                         <tbody style={{ fontSize: "9.5pt", }}>
                                             <tr>
@@ -466,7 +466,7 @@ export const Sign = ({ }: SignProps) => {
                                             </tr>
                                         </tbody>
                                     </table>
-                                </>
+                                </div>
                             ))}
 
                         </div>

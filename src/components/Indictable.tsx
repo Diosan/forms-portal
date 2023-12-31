@@ -64,6 +64,10 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
   const auth = new AuthService
   const dispatch = useAppDispatch();
 
+  const count = useSelector((state: RootState) => state.charge.charge_count);
+  const accusedCount = useSelector((state: RootState) => state.accused.count);
+  const charge_count = useSelector((state: RootState) => state.charge.charge_count);
+
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
   const state = useSelector((state: RootState) => state.auth);
@@ -93,6 +97,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
   const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
   const [complainantCourt, setComplainantCourt] = useState('High Court')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
+  const [hasAccused, setHasAccused] = useState(false)
 
   const [chargeSaved, setChargeSaved] = useState(false)
 
@@ -114,6 +119,11 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
   // const complainantCourtChange = (event: any) => {
   //   setComplainantCourt(event.target.value)
   // }
+
+  const checkHasAccused = (areThereAccused: boolean) => {
+    setHasAccused(areThereAccused);
+    console.log("Are there accused: ", areThereAccused)
+  };
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -330,6 +340,23 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
   const finishSubmission = () => {
 
   }
+
+    // useEffect to track changes in accusedList
+    useEffect(() => {
+      console.log("chargesCount: ", count)
+      if (count > 0) {
+        setHasAccused(true)
+        console.log('accused count: ', accusedCount, 'charges count: ', count);
+      }
+      else {
+        setHasAccused(false)
+        console.log('Accused list is empty.');
+      }
+    }, [accusedCount, count]);
+  
+    useEffect(() => {
+      console.log('The charge Count has changed:', count);
+    }, [accusedCount]);
 
   // useEffect(() => {
   //   axios.get(API_URL + '/schema/main')
@@ -647,6 +674,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                     <Charges
                       submission_id={submissionId}
                       request_signature={requestSignature}
+                      hasAccused={checkHasAccused}
                       editable={editable}
                     />
                   </div>
