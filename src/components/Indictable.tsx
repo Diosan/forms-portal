@@ -484,7 +484,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictable {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictment {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
@@ -581,7 +581,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                             <div>
                            
                               <div className="card fade show m-3" style={{ border: "none", backgroundColor:"#ddd"}} >
-                              <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
+                              <h4 className="text-center mt-3 mb-1">Location</h4>
                                 <form onSubmit={saveComplainant} className="m-3">
 
                                   {/* <div className="mb-3">
