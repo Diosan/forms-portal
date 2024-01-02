@@ -581,7 +581,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                             <div>
                            
                               <div className="card fade show m-3" style={{ border: "none", backgroundColor:"#ddd"}} >
-                              <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
+                              {/* <h4 className="text-center mt-3 mb-1">Complainant Information</h4> */}
                                 <form onSubmit={saveComplainant} className="m-3">
 
                                   {/* <div className="mb-3">
