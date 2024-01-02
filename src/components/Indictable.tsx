@@ -379,7 +379,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
           }})
         console.log('Returned submission: ', returned_submission.data)
         if(returned_submission?.data?.submission?.status == 'final'){
-          navigate(`/sign/${id}`)
+          navigate(`/indictment/sign/${id}`)
         }
 
 

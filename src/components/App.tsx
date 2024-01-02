@@ -15,6 +15,7 @@ import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { CompletedSubmission } from './CompleteSubmission'
 import { Sign } from './Sign'
+import { SignDPP } from './SignDPP';
 import { Verify } from './Verify'
 import { LeftColumn } from "./LeftColumn"
 import PrivateRoute from './PrivateRoute'; // Import the PrivateRoute component
@@ -56,6 +57,7 @@ function App() {
         <Route path= "/transcend" element={ <PrivateRoute><Transcend /></PrivateRoute> } />
         <Route path= "/simple_ref" element={ <PrivateRoute><SimpleRef /></PrivateRoute> } />
         <Route path= "/sign/:id" element={ <PrivateRoute><Sign /></PrivateRoute> } />
+        <Route path= "/indictment/sign/:id" element={ <PrivateRoute><SignDPP /></PrivateRoute> } />
         <Route path= "/indictable" element={ <PrivateRoute><Indictable new_submission={ true } /></PrivateRoute>} />
         <Route path= "/indictable/:id" element={ <PrivateRoute><Indictable new_submission={ false } /></PrivateRoute>} />
         <Route path= "/verify/:id" element={ <PrivateRoute><Verify /></PrivateRoute> } />
