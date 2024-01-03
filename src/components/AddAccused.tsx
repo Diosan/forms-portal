@@ -86,11 +86,9 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
 
     await axios.post(API_URL + '/api/submissions/save_accused', accused)
     .then((response) => {
-
       switch(response.data.outcome) {
         case 'success':
           console.log('Accused successfully saved', response.data.accused)
-          console.log('Redirection to submissions view with id ' + submission_id)
           // navigate('/submission/' + submission_id)
           // window.location.reload()
           accused_added(response.data.accused)  
@@ -98,11 +96,13 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
           break
         case 'error':
           console.log('Error saving accused')
+          setShowAddForm(false)
           break
         default:
           console.log('Unknown accused save outcome')
           break
       }
+      setShowAddForm(false)
 
     })
     
