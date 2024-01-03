@@ -158,7 +158,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
 
     // console.log('Before decoding token')
     let decoded = await auth.decodedToken()
-    console.log(decoded)
+    console.log("Decoded", decoded)
 
     if (submissionTitleSaved) {
       console.log('submissionId is ' + submissionId)

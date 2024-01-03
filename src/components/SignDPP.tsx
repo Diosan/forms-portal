@@ -77,11 +77,11 @@ function NameDisplay({ data }: NameDisplayProps) {
                         <td>
                             <span>{person.firstName} </span><br /><span className="fw-normal" style={{ fontSize: "9pt" }}>Accused First Name</span>
                         </td>
-                        <td className="mx-2" style={{ paddingLeft:"25px" }}>
+                        <td className="mx-2" style={{ paddingLeft: "25px" }}>
                             <span>{person.lastName} </span><br /><span className="fw-normal" style={{ fontSize: "9pt" }}>Accused Last Name</span>
                         </td>
                     </tr>
-                    {person.alias != "" && (
+                    {person.alias && (
                         <tr>
                             <td>
                                 <span>otherwise called</span>
@@ -157,84 +157,85 @@ export const SignDPP = ({ }: SignProps) => {
 
         const fetchSubmission = async () => {
             await axios.get(API_URL + '/api/submissions/' + id,
-            { method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                },
-             }).then(submission => {
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                }).then(submission => {
 
-                if(submission.data.outcome == "error"){
+                    if (submission.data.outcome == "error") {
+                        navigate("/submissions")
+                    }
+                    console.log("Submission")
+                    console.log(submission.data.outcome)
+
+
+                    console.log(submission.data.submission.status)
+                    setStatus(submission.data.submission.status)
+                    setTitle(submission.data.submission.description)
+                    setComplainantName(submission.data.complainant.firstName + ' ' + submission.data.complainant.lastName)
+                    setComplainantFirstName(submission.data.complainant.firstName)
+                    setComplainantLastName(submission.data.complainant.lastName)
+                    setComplainantAgency(submission.data.complainant.agency)
+                    setComplainantRegNum(submission.data.complainant.regNum)
+                    setComplainantEmail(submission.data.complainant.email)
+                    setComplainantRank(submission.data.complainant.rank)
+                    setComplainantStation(submission.data.complainant.unit)
+                    setCourt(submission.data.complainant.court)
+                    setMatterType(submission.data.submission.matterType)
+                    setDistrict(submission.data.complainant.courtDistrict)
+                    setAccusedAlias(submission?.data?.accuseds || "")
+                    setAccuseds(submission.data.accuseds)
+
+                    console.log(submission.data.accuseds)
+
+                    const formattedNames = submission.data.accuseds.map((item: any, index: any) => formatName(item));
+
+
+
+
+
+
+                    // Your provided array of accused
+                    const accusedArray = submission.data.accuseds;
+                    // Extract the first and last names of up to 3 accused individuals
+                    let accusedNames = accusedArray.slice(0, 3).map((accused: { firstName: any; lastName: any }) => `${accused.firstName} ${accused.lastName}`).join(', ');
+
+                    // Add "and" before the last accused if there are more than one accused
+                    if (accusedArray.length > 1) {
+                        const lastIndex = accusedArray.length - 1;
+                        accusedNames = `${accusedNames.slice(0, accusedNames.lastIndexOf(','))}, and ${accusedNames.slice(accusedNames.lastIndexOf(',') + 2)}`;
+                    }
+                    setAccusedNames(accusedNames)
+
+                    console.log('Setting submission type')
+
+                    switch (submission.data.submission.type) {
+                        case 'complaint_with_oath':
+                            setSubmissionType('COMPLAINT ON OATH')
+                            break;
+                        case 'complaint_without_oath':
+                            setSubmissionType('COMPLAINT WITHOUT OATH')
+                            break;
+                        case 'complaint_without_oath_summons':
+                            setSubmissionType('COMPLAINT WITHOUT OATH REQUESTING SUMMONS')
+                            break;
+                        case 'complaint_with_oath_warrant':
+                            setSubmissionType('COMPLAINT ON OATH REQUESTING WARRANT')
+                            break;
+                        case 'indictment':
+                            setSubmissionType('INDICTMENT')
+                            break;
+                        default:
+                            setSubmissionType('COMPLAINT ON OATH')
+                    }
+
+                }).catch(err => {
+                    console.group(err)
                     navigate("/submissions")
-                }
-                console.log("Submission")
-                console.log(submission.data.outcome)
-             
-
-            console.log(submission.data.submission.status)
-            setStatus(submission.data.submission.status)
-            setTitle(submission.data.submission.description)
-            setComplainantName(submission.data.complainant.firstName + ' ' + submission.data.complainant.lastName)
-            setComplainantFirstName(submission.data.complainant.firstName)
-            setComplainantLastName(submission.data.complainant.lastName)
-            setComplainantAgency(submission.data.complainant.agency)
-            setComplainantRegNum(submission.data.complainant.regNum)
-            setComplainantEmail(submission.data.complainant.email)
-            setComplainantRank(submission.data.complainant.rank)
-            setComplainantStation(submission.data.complainant.unit)
-            setCourt(submission.data.complainant.court)
-            setMatterType(submission.data.submission.matterType)
-            setDistrict(submission.data.complainant.courtDistrict)
-            setAccusedAlias(submission?.data?.accuseds || "")
-            setAccuseds(submission.data.accuseds)
-
-            console.log(submission.data.accuseds)
-
-            const formattedNames = submission.data.accuseds.map((item: any, index: any) => formatName(item));
-
-
-
-
-
-
-            // Your provided array of accused
-            const accusedArray = submission.data.accuseds;
-            // Extract the first and last names of up to 3 accused individuals
-            let accusedNames = accusedArray.slice(0, 3).map((accused: { firstName: any; lastName: any }) => `${accused.firstName} ${accused.lastName}`).join(', ');
-
-            // Add "and" before the last accused if there are more than one accused
-            if (accusedArray.length > 1) {
-                const lastIndex = accusedArray.length - 1;
-                accusedNames = `${accusedNames.slice(0, accusedNames.lastIndexOf(','))}, and ${accusedNames.slice(accusedNames.lastIndexOf(',') + 2)}`;
-            }
-            setAccusedNames(accusedNames)
-
-            console.log('Setting submission type')
-
-            switch (submission.data.submission.type) {
-                case 'complaint_with_oath':
-                    setSubmissionType('COMPLAINT ON OATH')
-                    break;
-                case 'complaint_without_oath':
-                    setSubmissionType('COMPLAINT WITHOUT OATH')
-                    break;
-                case 'complaint_without_oath_summons':
-                    setSubmissionType('COMPLAINT WITHOUT OATH REQUESTING SUMMONS')
-                    break;
-                case 'complaint_with_oath_warrant':
-                    setSubmissionType('COMPLAINT ON OATH REQUESTING WARRANT')
-                    break;
-                case 'indictment':
-                    setSubmissionType('INDICTMENT')
-                    break;
-                default:
-                    setSubmissionType('COMPLAINT ON OATH')
-            }
-
-            }).catch(err => {
-                console.group(err)
-                navigate("/submissions")
-            })
+                })
 
 
         }
@@ -317,12 +318,12 @@ export const SignDPP = ({ }: SignProps) => {
                 </div> */}
                 {status === "charge_saved" ? (
                     <>
-                        <h5 className='mb-1' style={{color:"blue"}}><strong>Please review this submission carefully. </strong></h5>
-                        <h6 className='mb-4' style={{color:"blue", lineHeight:"1.4rem"}}>After ensuring accuracy, select the necessary box(es) at the end<br/>
-                        and click '<strong>Request Signing Code</strong>' to continue.</h6>
+                        <h5 className='mb-1' style={{ color: "blue" }}><strong>Please review this submission carefully. </strong></h5>
+                        <h6 className='mb-4' style={{ color: "blue", lineHeight: "1.4rem" }}>After ensuring accuracy, select the necessary box(es) at the end<br />
+                            and click '<strong>Request Signing Code</strong>' to continue.</h6>
                     </>
                 ) : status === "final" ? (
-                    <h5 className='mb-3' style={{color:"blue"}}><strong>Signed Submission</strong></h5>
+                    <h5 className='mb-3' style={{ color: "blue" }}><strong>Signed Submission</strong></h5>
                 ) : null
                 }
 
@@ -339,9 +340,9 @@ export const SignDPP = ({ }: SignProps) => {
 
                 <div className="card fade show">
                     <div id="container-pdf" className="card-body">
-                        
-                        
-                    <table width={"700px"}
+
+
+                        <table width={"700px"}
                             style={{ marginBottom: "10px", textAlign: "left" }}>
                             <tbody>
 
@@ -351,11 +352,11 @@ export const SignDPP = ({ }: SignProps) => {
 
                                 </tr>
 
-                              
+
                             </tbody>
                         </table>
 
-                        <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt" }}>
+                        <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt", borderBottom: "1px solid #666", marginBottom:"30px"  }}>
                             {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt" }}>REPUBLIC OF TRINIDAD AND TOBAGO</div> */}
                             {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "13pt" }}>{submissionType}</div> */}
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>IN THE {court.toUpperCase()} OF JUSTICE</div>
@@ -364,117 +365,33 @@ export const SignDPP = ({ }: SignProps) => {
                             <p> INDICTMENT BY THE DIRECTOR OF PUBLIC PROSECUTIONS </p>
 
                         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
                         
-                        <div className="text-left mt-2 complainant-details">
-                            {accuseds.map((accused: any, i: number) => (
-                                <div key={accused.id}>
-                                    {/* <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused Number {i + 1}  Information</div> */}
-                                    {/* <table width={"700px"} className="accused-table" 
-                                        style={{ marginBottom: "10px" }}>
-                                        <tbody style={{ fontSize: "10pt", }}>
-                                            <tr>
-                                                <td style={{ width: "160px" }}><label>Name of Accused: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td style={{ width: "160px" }}><label>Alias: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.alias}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table> */}
-
-                                    {/* <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused Number {i + 1}  Information</div> */}
-                                    <table width={"700px"} className="accused-table" 
-                                        style={{ marginBottom: "10px" }}>
-                                        <tbody style={{ fontSize: "10pt", }}>
-                                            <tr>
-                                                {/* <td style={{ width: "160px" }}><label>Name of Accused: </label></td> */}
-                                                <td colSpan={3}>{accused.firstName} &nbsp;{accused.lastName}&nbsp;
-                                                {accused.alias != "" && (
-                                                    <strong>otherwise called &nbsp;{accused.alias}&nbsp;</strong>
-                                                )}
-                                                &nbsp;is charged with the following offences:
-                                                
-                                                </td>
-                                            </tr>
-                                            {/* <tr>
-                                                <td style={{ width: "160px" }}><label>Alias: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.alias}</td>
-                                            </tr> */}
-                                        </tbody>
-                                    </table>
-
-
-                                    <table width={"700px"} className="accused-table"
-                                        style={{ marginBottom: "10px" }}>
-                                        <tbody style={{ fontSize: "9.5pt", }}>
-                                            {/* <tr>
-                                                <td><label>ID: </label></td>
-                                                <td>{accused.identification}</td>
-                                                <td><label>ID Type: </label></td>
-                                                <td>{accused.identificationType}</td>
-                                            </tr>
-                                            <tr>
-
-                                            </tr> */}
-                                            {/* <tr>
-                                                <td><label>Date Of Birth: </label></td>
-                                                <td>{accused.dateOfBirth}</td>
-                                                <td><label>Gender Identity: </label></td>
-                                                <td>{accused.gender}</td>
-                                            </tr> */}
-                                            {/* <tr>
-                                                <td><label>Address: </label></td>
-                                                <td colSpan={3}>{accused.address}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style={{ width: "280px" }}><label>National of Trinidad and Tobago: </label></td>
-                                                <td style={{ width: "160px" }}>{accused.tntNational ? 'Yes' : 'No'}</td>
-                                                <td style={{ width: "300px" }}><label>Resident of Trinidad and Tobago: </label></td>
-                                                <td style={{ width: "160px" }}>{accused.tntResident ? 'Yes' : 'No'}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><label>National of another Country: </label></td>
-                                                <td>{accused.otherNational ? 'Yes' : 'No'}</td>
-                                                <td style={{ width: "250px" }}><label>Resident of another Country: </label></td>
-                                                <td>{accused.otherResident ? 'Yes' : 'No'}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><label>Previous Criminal Record: </label></td>
-                                                <td>{accused.previousCriminalRecord}</td>
-                                            </tr> */}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            ))}
-
-                        </div>
 
                         {/* <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Offences</div> */}
 
 
-
-
-
-
                         <div className="text-left complainant-details" style={{}}>
-                            <table className="" width={"700px"}>
-                                {/* <thead>
-                                    <tr>
-                                        <th style={{ width: "120px" }}>Accused</th>
-                                        <th style={{ width: "100px" }}>ICCS<br />Code</th>
-                                        <th style={{ width: "100px" }}>Name of<br />Offence</th>
-                                        <th style={{ width: "100px" }}>Date of<br />Offence</th>
-                                        <th style={{ width: "260px" }}>Particulars of Offence</th>
-                                    </tr>
-                                </thead> */}
+                            <table className="" width={"650px"}>
                                 <tbody>
 
                                     {accuseds.map((accused: any, i: number) => (
                                         <IndictmentOffences
                                             first_name={accused.firstName}
                                             last_name={accused.lastName}
+                                            alias={accused.alias || ""}
                                             accused_id={accused.id}
                                             key={i}
                                         />
@@ -486,19 +403,19 @@ export const SignDPP = ({ }: SignProps) => {
 
 
 
+
+
+
+
                     </div>
 
                     {/* SIGNING BOX */}
                     <div className="text-left complainant-details"
                         style={{
-                            width: "750px",
+                            width: "720px",
                             maxWidth: "750px",
                             padding: "10px 50px 10px 20px"
                         }}>
-
-
-
-                        {/* <p><strong>{' ' + currentDate()}</strong></p> */}
 
                         <div id="anchorSign"></div>
                         <SignIndictment

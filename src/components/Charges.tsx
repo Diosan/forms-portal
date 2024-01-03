@@ -168,8 +168,8 @@ export const Charges = ({submission_id, request_signature, editable, hasAccused}
                 onAccusedRemoved={handleAccusedRemoved} 
             />
 
-            {editable && !accusedSaved ?
-                <>
+            {/* {editable && !accusedSaved ?
+                <> */}
                     {/* { (showAddForm ) ? (
                         <AddAccused 
                         submission_id={submission_id}
@@ -187,9 +187,9 @@ export const Charges = ({submission_id, request_signature, editable, hasAccused}
                         accused_added={accusedAdded} 
                         />               
                 </>
-                </>
+                {/* </>
               : <></>
-            }
+            } */}
 
             
 
