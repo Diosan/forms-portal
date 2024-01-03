@@ -81,14 +81,16 @@ function NameDisplay({ data }: NameDisplayProps) {
                             <span>{person.lastName} </span><br /><span className="fw-normal" style={{ fontSize: "9pt" }}>Accused Last Name</span>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <span>otherwise called</span>
-                        </td>
-                        <td>
-                            <span>{person.alias} </span>
-                        </td>
-                    </tr>
+                    {person.alias != "" && (
+                        <tr>
+                            <td>
+                                <span>otherwise called</span>
+                            </td>
+                            <td>
+                                <span>{person.alias} </span>
+                            </td>
+                        </tr>
+                    )}
                 </table>
                 {/* {person.firstName} {person.lastName}{index < data.length - 1 && index < maxNames - 1 ? ', ' : ''} */}
             </div>
@@ -125,6 +127,7 @@ export const SignDPP = ({ }: SignProps) => {
     const [complainantRank, setComplainantRank] = useState('')
     const [complainantEmail, setComplainantEmail] = useState('')
     const [complainantStation, setComplainantStation] = useState('')
+    const [alias, setAccusedAlias] = useState('')
     const [matterType, setMatterType] = useState('')
     const [title, setTitle] = useState('')
     const [accuseds, setAccuseds] = useState([])
@@ -182,9 +185,10 @@ export const SignDPP = ({ }: SignProps) => {
             setCourt(submission.data.complainant.court)
             setMatterType(submission.data.submission.matterType)
             setDistrict(submission.data.complainant.courtDistrict)
+            setAccusedAlias(submission?.data?.accuseds || "")
             setAccuseds(submission.data.accuseds)
 
-            console.log(submission.data.accuseds.length)
+            console.log(submission.data.accuseds)
 
             const formattedNames = submission.data.accuseds.map((item: any, index: any) => formatName(item));
 
@@ -385,7 +389,10 @@ export const SignDPP = ({ }: SignProps) => {
                                         <tbody style={{ fontSize: "10pt", }}>
                                             <tr>
                                                 {/* <td style={{ width: "160px" }}><label>Name of Accused: </label></td> */}
-                                                <td colSpan={3}>{accused.firstName} &nbsp;&nbsp;{accused.lastName}&nbsp;<strong>otherwise called &nbsp;{accused.alias}&nbsp;</strong>
+                                                <td colSpan={3}>{accused.firstName} &nbsp;{accused.lastName}&nbsp;
+                                                {accused.alias != "" && (
+                                                    <strong>otherwise called &nbsp;{accused.alias}&nbsp;</strong>
+                                                )}
                                                 &nbsp;is charged with the following offences:
                                                 
                                                 </td>
