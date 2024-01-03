@@ -24,7 +24,7 @@ export const IndictmentOffences = ({ first_name, last_name, accused_id, key }: O
             groupedOffences[accused_id] = charges.data.charges;
             setOffences(groupedOffences);
 
-            console.log(groupedOffences);
+            console.log(charges?.data?.charges?.length || 0);
 
             // Increment the accused count when new data is fetched
             setAccusedCount((count) => count + 1);
@@ -45,15 +45,17 @@ export const IndictmentOffences = ({ first_name, last_name, accused_id, key }: O
 
                 <div key={accused_id}  style={{margin:"0 0 20px 0", padding:"0"}}>
                     
-                    <div style={{fontSize:"11pt"}}><span style={{fontSize:"10pt", fontWeight:"bold"}}>Accused </span>- {first_name + " " + last_name}</div>
+                    {/* <div style={{fontSize:"11pt"}}><span style={{fontSize:"10pt", fontWeight:"bold"}}>Accused </span>- {key + " " + last_name}</div> */}
                     <div style={{}}>
-                    <label style={{ fontSize: "10pt", margin:"0 0 7px 0" }}>Offences</label>
+                    {/* <label style={{ fontSize: "10pt", margin:"0 0 7px 0" }}>Offences</label> */}
 
 
-                    {offences[parseInt(index)].map((offence: any, index) => (
-                        <div key={index}>
+                    {offences[parseInt(index)].map((offence: any, offenceIndex) => (
+                        <div key={offenceIndex}>
                         
                             <div style={{margin:"0 0 10px 0", borderBottom:"1px solid #666"}}>
+                            <div style={{fontWeight:"bold", fontSize:"10pt", textDecoration:"underline", margin:"0 0 10px 0"}}>Count {offenceIndex + 1}</div>
+
                                 <table style={{ fontSize: "10pt" }}>
                                     <tr key={offence.index}>
                                         <td style={{ textAlign:"left", width: "90px"}}><div style={{fontWeight:"bold", textAlign:"left",fontSize:"9pt"}}>ICCS Code</div>
@@ -65,10 +67,10 @@ export const IndictmentOffences = ({ first_name, last_name, accused_id, key }: O
                                                     <td style={{ width: "120px", border: "none" }}><label style={{ padding: "0 0 0 7px" }}>Name of Offence</label></td>
                                                     <td style={{ width: "400px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.name} </div></td>
                                                 </tr>
-                                                <tr key={offence.id}>
+                                                {/* <tr key={offence.id}>
                                                     <td style={{ width: "170px", border: "none" }}><label style={{ padding: "0 0 0 7px" }}>Period of Offence</label></td>
                                                     <td style={{ width: "470px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.dateOfOffence} </div></td>
-                                                </tr>
+                                                </tr> */}
                                             </table>
                                         </td>
                                     </tr>

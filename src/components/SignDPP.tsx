@@ -16,7 +16,7 @@ import "../assets/Signature.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
-import { Offences } from "./Offences"
+import { IndictmentOffences } from "./IndictmentOffences"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 import {
@@ -351,58 +351,16 @@ export const SignDPP = ({ }: SignProps) => {
                             </tbody>
                         </table>
 
-
-             
-                        
-                        
                         <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt" }}>
                             {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt" }}>REPUBLIC OF TRINIDAD AND TOBAGO</div> */}
                             {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "13pt" }}>{submissionType}</div> */}
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>IN THE {court.toUpperCase()} OF JUSTICE</div>
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>CRIMINAL DIVISION {"("} {district.toUpperCase()} {")"} </div>
                             {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt", marginTop: "20px", marginBottom: "20px" }}>Matter Type: {matterType}</div> */}
-                            <div> INDICTMENT BY THE DIRECTOR <br/>OF PUBLIC PROSECUTIONS </div>
+                            <p> INDICTMENT BY THE DIRECTOR OF PUBLIC PROSECUTIONS </p>
 
                         </div>
-
-                     
-
-                        {/* <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Complainant Information</div> */}
-
-                        {/* <table width={"700px"}
-                            style={{ marginBottom: "10px", textAlign: "left", fontSize: "9pt" }}>
-                            <tbody>
-                                <tr>
-                                    <td style={{}}><label>Complainant First Name: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantFirstName}</div>
-                                    </td>
-
-
-                                    <td style={{}}><label>Complainant Last Name: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantLastName}</div>
-                                    </td>
-
-                                    <td style={{}}><label>Complainant Rank: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantRank}</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{}}><label>Complainant Regimental #</label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantRegNum}</div></td>
-
-                                    <td style={{}}><label>Complainant Email Address: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantEmail}</div>
-                                    </td>
-
-                                    <td style={{}}><label>Complainant Station: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantStation}</div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table> */}
-
-                        {/* <h5 className="card-title">Complainant: The State</h5><br /> <br /> */}
-
+                        
                         <div className="text-left mt-2 complainant-details">
                             {accuseds.map((accused: any, i: number) => (
                                 <div key={accused.id}>
@@ -507,7 +465,7 @@ export const SignDPP = ({ }: SignProps) => {
                                 <tbody>
 
                                     {accuseds.map((accused: any, i: number) => (
-                                        <Offences
+                                        <IndictmentOffences
                                             first_name={accused.firstName}
                                             last_name={accused.lastName}
                                             accused_id={accused.id}
