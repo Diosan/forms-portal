@@ -42,25 +42,28 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
 
     const requestSignature = async ( form: any) => {
 
-        setFormData({
-            summaryOfEvidence: form.formData.summaryOfEvidence,
-            additionalNotes: form.formData.additionalNotes
-        })
+        if(!indictment) {
+            setFormData({
+                summaryOfEvidence: form.formData.summaryOfEvidence,
+                additionalNotes: form.formData.additionalNotes
+            })
+        }
+
 
         if (confirm('Click OK if you are sure you are ready to request a signature') == true) {
 
             setLoading(true);
 
-            let submissionForRequest = await axios.post(
-                API_URL + '/api/submissions/update/',
-                {
-                    id: submission_id,
-                    summaryOfEvidence: form.formData.summaryOfEvidence,
-                    additionalNotes: form.formData.additionalNotes
-                }
-            )
-
             if(!indictment) {
+
+                let submissionForRequest = await axios.post(
+                    API_URL + '/api/submissions/update/',
+                    {
+                        id: submission_id,
+                        summaryOfEvidence: form.formData.summaryOfEvidence,
+                        additionalNotes: form.formData.additionalNotes
+                    }
+                )
 
                 try {
                     let requestResult = await axios.post(
@@ -82,8 +85,18 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                 }
 
             } else {
+
+                let submissionForRequest = await axios.post(
+                    API_URL + '/api/submissions/update/',
+                    {
+                        id: submission_id,
+                        summaryOfEvidence: '-',
+                        additionalNotes: ''
+                    }
+                )
                 navigate('/indictment/sign/' + submission_id)
                 setLoading(false);
+
             }
 
         }
@@ -156,7 +169,25 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
     return (
         <div className="px-1 mt-2 summ" >
 
-            <Form
+            {indictment ?
+                <>
+                    <br/>
+                    <button className="btn btn-primary" type="submit" disabled={loading} onClick={requestSignature}>
+                        {loading ? (
+                            <>
+                                <FontAwesomeIcon icon={faSpinner} spin />
+                                &nbsp;Please wait...
+                            </>
+                        ) : (
+                            "Ready to Sign"
+                        )}
+                        
+                    </button>
+                    <br/><br/>                
+                </> 
+
+                :
+                <Form
                 schema={summarySchema}
                 uiSchema={summaryUI}
                 // @ts-ignore
@@ -179,6 +210,8 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                     </button>
                 </div>
             </Form>
+            }            
+
         </div>
 
 

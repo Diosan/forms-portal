@@ -683,7 +683,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
 
                 {chargeSaved ?
                   <div className="" style={{backgroundColor:"#fff", border:"10px solid #eee", borderRadius:"none!important"}}>
-                    <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Summary of Evidence</h5>
+                    <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Director of Public Prosecutions</h5>
                     <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
                   </div>
                   : <></>
