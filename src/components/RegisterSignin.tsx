@@ -106,6 +106,9 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
     const [signinOTP, setSigninOTP] = useState('')
     const [signinVerifyError, setSigninVerifyError] = useState(false)
 
+
+
+
     const [confirmMessage, setConfirmMessage] = useState("Instructions for resetting your password have been sent to your email address.")
 
     const [emailSent, setEmailSent] = useState(false)
@@ -205,6 +208,19 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
 
     const signIn = (event: any) => {
         event.preventDefault()
+
+
+        const newEmail = email
+        setEmail(newEmail);
+        
+        // Extracting the agency name
+        const domain = newEmail.split('@')[1];
+        const agencyName = domain ? domain.split('.')[0] : '';
+        setAgency(agencyName);
+
+        console.log(agencyName)
+        localStorage.setItem('email', email)
+        localStorage.setItem('agency', agencyName)
         setLoading(true);
         setSigninError(false)
         // //console.log(`>>> signin with ${email} and password: ${password}`)

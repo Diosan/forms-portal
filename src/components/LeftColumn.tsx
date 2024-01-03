@@ -10,7 +10,7 @@ import { RootState } from '../store';
 
 
 interface LeftColumnProps {
-  setCreatePassword: React.Dispatch<React.SetStateAction<boolean>>;
+    setCreatePassword: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
@@ -18,12 +18,16 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
     const [loading, setLoading] = useState(false);
     const state = useSelector((state: RootState) => state.auth);
     const { isLoggedIn, otpRequired, token, isVerified } = state
+    const [agency, setAgency] = useState('')
+    const [email, setEmail] = useState('')
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const handleLogout = (event: any) => {
         event.preventDefault()
+        localStorage.removeItem("email")
+        localStorage.removeItem("agency")
         dispatch(logout() as any)
             .unwrap()
             .then(() => {
@@ -35,6 +39,23 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                 console.log(error)
             });
     }
+
+    // Pull agency from local storage when component mounts
+    useEffect(() => {
+        const storedAgency = localStorage.getItem('agency');
+        if (storedAgency) {
+            setAgency(storedAgency);
+        }
+    }, []); // Empty dependency array means this effect runs once on mount
+
+    // Update local storage when agency changes
+    useEffect(() => {
+        if (agency) {
+            localStorage.setItem('agency', agency);
+        }
+    }, [agency]); // This effect runs every time 'agency' changes
+
+
 
 
     const goHome = (event: any) => {
@@ -50,8 +71,8 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                 // Handle the error
                 console.log(error)
             });
-            setCreatePassword(false)
-            navigate('/login');
+        setCreatePassword(false)
+        navigate('/login');
 
     }
 
@@ -81,14 +102,21 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                             </> :
                             <>
                                 {/* <li className="nav-item active jud-header-item" onClick={goHome}><a className="nav-link" href="/">Welcome  </a></li> */}
+
                                 <li className="nav-item active jud-header-item"><a className="nav-link" href="/">Home  </a></li>
-                                <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
-                                <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> Complaint With Oath</a></li>
-                                <li className="nav-item jud-header-item"><a className="nav-link" href="/oathless"> Complaint Without Oath</a></li>
-                                <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Without Oath Requesting Summons</a></li>
-                                <li className="nav-item jud-header-item"><a className="nav-link" href="/warrant"> Complaint  With Oath Requesting Warrant</a></li>
-                                {/* <li className="nav-item jud-header-item"><a className="nav-link" href="/not_police"> Complaint By Person Other Than Police</a></li>                             */}
-                                <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment</a></li>
+                                {agency != 'dpp' ? (
+                                    <>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> Complaint With Oath</a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/oathless"> Complaint Without Oath</a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Without Oath Requesting Summons</a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/warrant"> Complaint  With Oath Requesting Warrant</a></li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment</a></li>
+                                    </>
+                                )}
                                 <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-left">Logout</button></li>
                             </>
                         }
