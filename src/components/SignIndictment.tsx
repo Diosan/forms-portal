@@ -581,6 +581,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             //   };
             // console.log(data);
             // Send the request to the server
+            // console.log('\n\n\n\ submission_id: ' + submission_id)
             axios.post(`${API_URL}/api/submissions/sign_submission`,
                 {
                     submission_id: submission_id,
@@ -784,7 +785,11 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {/* {!otpSent && signed ? */}
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
                 <>
-                    <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
+                    {submissionType == 'INDICTMENT' ?
+                        <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTION</h5>
+                        :
+                        <h5 className="m-0 text-center fw-bold">I'm Ready to Sign</h5>
+                    }
 
                     {submissionType == 'COMPLAINT WITHOUT OATH' ?
                         <></>
@@ -893,8 +898,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
 
 
-            {!isFinalSigned &&
-
+            {!isFinalSigned && submissionType != 'INDICTMENT' ?
                 <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
                     <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
 
@@ -923,6 +927,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
                     </p>
                 </div>
+                : <></>
             }
 
 
@@ -931,23 +936,31 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
                 <div className="" style={{ display: "block", margin: "15px auto", width: "200px" }} >
 
-                    {additionalNotes ?
-                        <>
-                            {acknowledged && additionalAcknowledged ?
-                                <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
-                                :
-                                <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
-                            }
-                        </>
+                    { submissionType == 'INDICTMENT' ?
+                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
                         :
                         <>
-                            {acknowledged ?
-                                <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
+                            {additionalNotes ?
+                                <>
+                                    {acknowledged && additionalAcknowledged ?
+                                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
+                                        :
+                                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                                    }
+                                </>
                                 :
-                                <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
-                            }
+                                <>
+                                    {acknowledged ?
+                                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
+                                        :
+                                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
+                                    }
+                                </>
+                            }                        
                         </>
                     }
+
+
 
 
                 </div>
