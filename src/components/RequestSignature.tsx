@@ -82,7 +82,7 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
                 }
 
             } else {
-                navigate('/sign/' + submission_id)
+                navigate('/indictment/sign/' + submission_id)
                 setLoading(false);
             }
 

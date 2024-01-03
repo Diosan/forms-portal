@@ -784,7 +784,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {/* {!otpSent && signed ? */}
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
                 <>
-                    <h5 className="m-0 text-center fw-bold">I'm Ready to Sign</h5>
+                    <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
 
                     {submissionType == 'COMPLAINT WITHOUT OATH' ?
                         <></>

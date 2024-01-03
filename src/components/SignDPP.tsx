@@ -16,7 +16,7 @@ import "../assets/Signature.css"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
-import { Offences } from "./Offences"
+import { IndictmentOffences } from "./IndictmentOffences"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 import {
@@ -71,8 +71,26 @@ function NameDisplay({ data }: NameDisplayProps) {
     const generateDisplayText = (data: any, maxNames = 6) => {
         return data.slice(0, maxNames).map((person: any, index: number) => (
             // <div key={index}>{person.firstName} {person.lastName}</div>
-            <div style={{ fontSize: "12pt", lineHeight: "18pt" }} key={index}>
-                {person.firstName} {person.lastName}{index < data.length - 1 && index < maxNames - 1 ? ', ' : ''}
+            <div style={{ fontSize: "10pt", lineHeight: "18pt" }} key={index}>
+                <table>
+                    <tr>
+                        <td>
+                            <span>{person.firstName} </span><br /><span className="fw-normal" style={{ fontSize: "9pt" }}>Accused First Name</span>
+                        </td>
+                        <td className="mx-2" style={{ paddingLeft:"25px" }}>
+                            <span>{person.lastName} </span><br /><span className="fw-normal" style={{ fontSize: "9pt" }}>Accused Last Name</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>otherwise called</span>
+                        </td>
+                        <td>
+                            <span>{person.alias} </span>
+                        </td>
+                    </tr>
+                </table>
+                {/* {person.firstName} {person.lastName}{index < data.length - 1 && index < maxNames - 1 ? ', ' : ''} */}
             </div>
         ));
     };
@@ -172,29 +190,6 @@ export const SignDPP = ({ }: SignProps) => {
 
 
 
-
-            // if (submission.data.accuseds.length === 0) {
-            //     return ''; // Return an empty string if the array is empty.
-            // }
-
-            // if (submission.data.accuseds.length <= 2) {
-            //     // If there are 3 or fewer array members, concatenate their names with commas.
-            //     if (submission.data.accuseds.length == 2) {
-            //         const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
-            //         setAccusedNames(names.join('and '))
-            //     } else {
-            //         const names = submission.data.accuseds.map((item: any) => `${item.firstName} ${item.lastName}`);
-            //         setAccusedNames(names.join(' '))
-            //     }
-            //     // return names.join(', ');
-            // } else {
-            //     // If there are more than 3 array members, concatenate the names of the first 3 with commas,
-            //     // then add "and other" for the remaining members.
-            //     const namesOfFirstThree = submission.data.accuseds.slice(0, 3).map((item: any) => `${item.firstName} ${item.lastName}`);
-            //     const remainingCount = submission.data.accuseds.length - 3;
-            //     setAccusedNames(`${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`)
-            //     // return `${namesOfFirstThree.join(', ')} and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`;
-            // }
 
 
 
@@ -340,77 +335,37 @@ export const SignDPP = ({ }: SignProps) => {
 
                 <div className="card fade show">
                     <div id="container-pdf" className="card-body">
+                        
+                        
+                    <table width={"700px"}
+                            style={{ marginBottom: "10px", textAlign: "left" }}>
+                            <tbody>
+
+                                <tr>
+                                    <td><div style={{ fontSize: "12pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 0" }}>The State V</div></td>
+                                    <td><div style={{ fontSize: "12pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 0" }}><NameDisplay data={accuseds} /></div></td>
+
+                                </tr>
+
+                              
+                            </tbody>
+                        </table>
+
                         <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt" }}>
-                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt" }}>REPUBLIC OF TRINIDAD AND TOBAGO</div>
-                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "13pt" }}>{submissionType}</div>
+                            {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt" }}>REPUBLIC OF TRINIDAD AND TOBAGO</div> */}
+                            {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "13pt" }}>{submissionType}</div> */}
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>IN THE {court.toUpperCase()} OF JUSTICE</div>
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>CRIMINAL DIVISION {"("} {district.toUpperCase()} {")"} </div>
-                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt", marginTop: "20px", marginBottom: "20px" }}>Matter Type: {matterType}</div>
+                            {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt", marginTop: "20px", marginBottom: "20px" }}>Matter Type: {matterType}</div> */}
+                            <p> INDICTMENT BY THE DIRECTOR OF PUBLIC PROSECUTIONS </p>
+
                         </div>
-
-                        <table width={"700px"}
-                            style={{ marginBottom: "10px", textAlign: "center" }}>
-                            <tbody>
-
-                                <tr>
-                                    <td><div style={{ fontSize: "12pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 0" }}>The State<br />V</div></td>
-                                </tr>
-
-                                <tr style={{ textAlign: "center" }}>
-                                    <td><div style={{ fontSize: "10pt", fontWeight: "bold", lineHeight: "13pt", margin: "0 0 10px" }}>
-
-                                        {/* {accusedNames} */}
-                                        <NameDisplay data={accuseds} />
-
-                                    </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Complainant Information</div>
-
-                        <table width={"700px"}
-                            style={{ marginBottom: "10px", textAlign: "left", fontSize: "9pt" }}>
-                            <tbody>
-                                <tr>
-                                    <td style={{}}><label>Complainant First Name: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantFirstName}</div>
-                                    </td>
-
-
-                                    <td style={{}}><label>Complainant Last Name: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantLastName}</div>
-                                    </td>
-
-                                    <td style={{}}><label>Complainant Rank: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantRank}</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{}}><label>Complainant Regimental #</label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantRegNum}</div></td>
-
-                                    <td style={{}}><label>Complainant Email Address: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantEmail}</div>
-                                    </td>
-
-                                    <td style={{}}><label>Complainant Station: </label>
-                                        <div style={{ marginBottom: "10px" }}>{complainantStation}</div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        {/* <h5 className="card-title">Complainant: The State</h5><br /> <br /> */}
-
-                        <div className="text-left complainant-details">
+                        
+                        <div className="text-left mt-2 complainant-details">
                             {accuseds.map((accused: any, i: number) => (
                                 <div key={accused.id}>
-                                    <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused Number {i + 1}  Information</div>
-
-
-                                    <table width={"700px"} className="accused-table" 
+                                    {/* <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused Number {i + 1}  Information</div> */}
+                                    {/* <table width={"700px"} className="accused-table" 
                                         style={{ marginBottom: "10px" }}>
                                         <tbody style={{ fontSize: "10pt", }}>
                                             <tr>
@@ -422,13 +377,31 @@ export const SignDPP = ({ }: SignProps) => {
                                                 <td colSpan={3}>{i + 1} {accused.alias}</td>
                                             </tr>
                                         </tbody>
+                                    </table> */}
+
+                                    {/* <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Accused Number {i + 1}  Information</div> */}
+                                    <table width={"700px"} className="accused-table" 
+                                        style={{ marginBottom: "10px" }}>
+                                        <tbody style={{ fontSize: "10pt", }}>
+                                            <tr>
+                                                {/* <td style={{ width: "160px" }}><label>Name of Accused: </label></td> */}
+                                                <td colSpan={3}>{accused.firstName} &nbsp;&nbsp;{accused.lastName}&nbsp;<strong>otherwise called &nbsp;{accused.alias}&nbsp;</strong>
+                                                &nbsp;is charged with the following offences:
+                                                
+                                                </td>
+                                            </tr>
+                                            {/* <tr>
+                                                <td style={{ width: "160px" }}><label>Alias: </label></td>
+                                                <td colSpan={3}>{i + 1} {accused.alias}</td>
+                                            </tr> */}
+                                        </tbody>
                                     </table>
 
 
                                     <table width={"700px"} className="accused-table"
                                         style={{ marginBottom: "10px" }}>
                                         <tbody style={{ fontSize: "9.5pt", }}>
-                                            <tr>
+                                            {/* <tr>
                                                 <td><label>ID: </label></td>
                                                 <td>{accused.identification}</td>
                                                 <td><label>ID Type: </label></td>
@@ -436,14 +409,14 @@ export const SignDPP = ({ }: SignProps) => {
                                             </tr>
                                             <tr>
 
-                                            </tr>
-                                            <tr>
+                                            </tr> */}
+                                            {/* <tr>
                                                 <td><label>Date Of Birth: </label></td>
                                                 <td>{accused.dateOfBirth}</td>
                                                 <td><label>Gender Identity: </label></td>
                                                 <td>{accused.gender}</td>
-                                            </tr>
-                                            <tr>
+                                            </tr> */}
+                                            {/* <tr>
                                                 <td><label>Address: </label></td>
                                                 <td colSpan={3}>{accused.address}</td>
                                             </tr>
@@ -463,7 +436,7 @@ export const SignDPP = ({ }: SignProps) => {
                                             <tr>
                                                 <td><label>Previous Criminal Record: </label></td>
                                                 <td>{accused.previousCriminalRecord}</td>
-                                            </tr>
+                                            </tr> */}
                                         </tbody>
                                     </table>
                                 </div>
@@ -471,7 +444,7 @@ export const SignDPP = ({ }: SignProps) => {
 
                         </div>
 
-                        <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Offences</div>
+                        {/* <div style={{ fontWeight: "bold", padding: "3px 5px", fontSize: "10pt", marginBottom: "10px", backgroundColor: "#eee", width: "700px", textAlign: "left" }}>Offences</div> */}
 
 
 
@@ -492,7 +465,7 @@ export const SignDPP = ({ }: SignProps) => {
                                 <tbody>
 
                                     {accuseds.map((accused: any, i: number) => (
-                                        <Offences
+                                        <IndictmentOffences
                                             first_name={accused.firstName}
                                             last_name={accused.lastName}
                                             accused_id={accused.id}
