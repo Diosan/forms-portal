@@ -949,12 +949,19 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
 
-                <div className="" style={{ display: "block", margin: "15px auto", width: "200px" }} >
+                <div className="" style={{ width:"100%", maxWidth:"400px", display: "block", margin: "15px auto"}} >
 
                     { submissionType == 'INDICTMENT' ?
                         <>
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" required minLength={4} maxLength={80} className="form-control" value={signingName} onChange={signingNameChange} />
+                            <div className="mt-3 mb-3" style={{margin:"0 auto"}}>
+                                <input type="text" 
+                                id="name" name="name" required minLength={4}
+                                className=" mt-3 mb-1 py-3 px-0"
+                                style={{maxWidth:"400px", width:"100%", border:"none!important", 
+                                        borderBottom:"1px solid #000!important", backgroundColor:"transparent"}} 
+                                value={signingName} onChange={signingNameChange} />
+                                <label htmlFor="name" className="fs-6">Signed By:</label>
+                            </div>
                             <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
                         </>
                         :

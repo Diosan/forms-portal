@@ -109,7 +109,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
 
 
 
-    const [confirmMessage, setConfirmMessage] = useState("Instructions for resetting your password have been sent to your email address.")
+    const [confirmMessage, setConfirmMessage] = useState("")
 
     const [emailSent, setEmailSent] = useState(false)
 
@@ -283,21 +283,31 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
 
     const requestNewPassword = (event: any) => {
         event.preventDefault()
+        console.log("--------------");
         setLoading(true);
+        setSigninError(false)
         setSigninErrorMessage('')
-        //console.log(password);
+        console.log("--------------");
         const checkTokenValidity = async () => {
             try {
-                //console.log("...requesting token" + email)
+                // console.log("...requesting token" + email)
                 const response = await axios.post(`${API_URL}/api/users/password/forgotPasswordRequest`,
                     { username: email });
                 // Check response to determine if the token is valid
-                //console.log(".......response is coming from server >", response)
+                console.log(response.data.outcome)
                 if (response.data.outcome === "success") {
+                    setConfirmMessage("Instructions for resetting your password have been sent to your email address.")
+                    console.log(response.data.outcome)
                     setChangePassword(false);
+                    setCreatePassword(false);
                     setEmailSent(true)
+                    setSigninError(false)
                 } else {
                     setChangePassword(false);
+                    setConfirmMessage("")
+                    setCreatePassword(true);
+                    setSigninErrorMessage("An error occurred. Email address may be incorrect.");
+                    setSigninError(true)
                 }
             } catch (error:any) {
                 let message = error && error.response && error.response.data && error.response.data.error ? error.response.data.error : "Error resetting password";
@@ -305,6 +315,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
                 setSigninError(true)
                 console.error(message);
                 setChangePassword(false);
+                setCreatePassword(false);
             } finally {
             setLoading(false); // Stop loading after the async operation is done
             }
@@ -423,7 +434,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
                                                                     <>
                                                                         <FontAwesomeIcon icon={faSpinner} spin />
                                                                         &nbsp;Confirming...
-                                                                    </>
+                                                                    </> 
                                                                 ) : (
                                                                     "Confirm"
                                                                 )}
@@ -479,7 +490,13 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
                                                     </form>
                                                     <div className="mt-3 small mb-4">
                                                             <span><a href="#" className="" onClick={gotToLogin}>Click to login</a></span>
+                                                    </div>
+
+                                                    {signinError && (
+                                                        <div className="mt-1 mb-1" style={{ color: "red", fontSize: "12px" }} role="alert">
+                                                            {signinErrorMessage}
                                                         </div>
+                                                    )}
                                                 </>
                                             )
                                                 : (
@@ -488,7 +505,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
                                                             <h4 className="mb-3">Log in</h4>
 
                                                             {emailSent && (
-                                                                <div className="mt-1 mb-1 text-center" style={{ borderRadius:"5px", backgroundColor:"#eee", 
+                                                                <div className="mt-1 mb-1 text-center" style={{ borderRadius:"5px", backgroundColor:"#d9f5ff", 
                                                                     padding:"7px 10px", lineHeight:"1rem", color: "#004085", fontSize: "13px" }} role="alert">
                                                                     {confirmMessage}
                                                                 </div>

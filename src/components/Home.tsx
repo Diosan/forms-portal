@@ -29,6 +29,11 @@ export const Welcome = ({ }: WelcomeProps) => {
         console.log("link clicked")
     }
 
+    const goToLogin = async (event: any) => {
+        event.preventDefault()
+        navigate('/login', { state: { setChangePassword: false } });
+    }
+
     return (
         <>
             <div className="swf-container">
@@ -49,12 +54,12 @@ export const Welcome = ({ }: WelcomeProps) => {
                             Judiciary of Trinidad and Tobago
                         </h6>
                     </div>
-                    <div className="py-4 px-3 mt-5" style={{backgroundColor:"#d3edfe", borderRadius:"5px", color:"#333", maxWidth:"400px", marginLeft:"auto", marginRight:"auto"}}>
+                    <div className="py-4 px-3 mt-5" style={{backgroundColor:"#d3edfe", borderRadius:"5px", color:"#333", maxWidth:"430px", marginLeft:"auto", marginRight:"auto"}}>
                         <h5 className="mb-3">
                             Is this your first time accessing SWIF?
                         </h5>
                         <p className="m-0">
-                            If so, please click the button below to set up your SWIF account using your agency email address.<br/>
+                            If so, please click the button below to set up your SWIF account using your organisation's email address.<br/>
 
                             <button className="mt-3 btn btn-primary" onClick={passwordResetLink}>
                                 Create SWiF Account
@@ -62,6 +67,12 @@ export const Welcome = ({ }: WelcomeProps) => {
 
                         </p>
                     </div>
+
+                    <p className="my-3">or</p>
+
+                    <button className="mt-0 btn btn-link" onClick={goToLogin}>
+                                Login
+                            </button>  
 
                 </div>
             </div>
