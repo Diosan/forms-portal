@@ -63,7 +63,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const [additionalNotes, setAdditionalNotes] = useState(false)
 
-
+    const [signingName, setSigningName] = useState('')
 
 
 
@@ -106,6 +106,11 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
         console.log('\n\n\n')
     }
 
+    const signingNameChange = (event: any) => {
+        setSigningName(event.target.value)
+
+    }
+
     const dispatch = useAppDispatch();
 
     const signOTPChange = (event: any) => {
@@ -117,12 +122,14 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
         // console.log('\n\n\n complainant_email: ', complainant_email)
         console.log('\n\n\n Sending OTP')
         goToAnchor();
+        let signing_name = submissionType == 'INDICTMENT' ? signingName : complainant_name
+        let signing_email = submissionType == 'INDICTMENT' ? await localStorage.getItem('email') : complainant_email
         let otp_send = await axios.post(
             API_URL + '/api/submissions/send_otp',
             {
                 submission_id: submission_id,
-                email: complainant_email,
-                name: complainant_name
+                email: signing_email,
+                name: signing_name
             }
         )
         console.log('otp_send: ', otp_send.data)
@@ -170,7 +177,12 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const goToCompletedSubmission = () => {
         // history.push('/sub/complete', { data: id });
-        navigate('/sub/complete', { state: { id: submission_id } });
+        if(submissionType == 'INDICTMENT') {
+            navigate('/ind/complete', { state: { id: submission_id } });
+        } else {
+            navigate('/sub/complete', { state: { id: submission_id } });
+        }
+        
     };
 
 
@@ -582,10 +594,13 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             // console.log(data);
             // Send the request to the server
             // console.log('\n\n\n\ submission_id: ' + submission_id)
+
+            let signing_email = submissionType == 'INDICTMENT' ? await localStorage.getItem('email') : complainant_email
+
             axios.post(`${API_URL}/api/submissions/sign_submission`,
                 {
                     submission_id: submission_id,
-                    email: complainant_email,
+                    email: signing_email,
                     otp: signOTP,
                     html: htmlContent
                 })
@@ -937,7 +952,11 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                 <div className="" style={{ display: "block", margin: "15px auto", width: "200px" }} >
 
                     { submissionType == 'INDICTMENT' ?
-                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
+                        <>
+                            <label htmlFor="name">Name:</label>
+                            <input type="text" id="name" name="name" required minLength={4} maxLength={80} className="form-control" value={signingName} onChange={signingNameChange} />
+                            <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
+                        </>
                         :
                         <>
                             {additionalNotes ?
