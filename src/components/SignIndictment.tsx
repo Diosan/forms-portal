@@ -177,7 +177,12 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const goToCompletedSubmission = () => {
         // history.push('/sub/complete', { data: id });
-        navigate('/sub/complete', { state: { id: submission_id } });
+        if(submissionType == 'INDICTMENT') {
+            navigate('/ind/complete', { state: { id: submission_id } });
+        } else {
+            navigate('/sub/complete', { state: { id: submission_id } });
+        }
+        
     };
 
 
@@ -589,10 +594,13 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             // console.log(data);
             // Send the request to the server
             // console.log('\n\n\n\ submission_id: ' + submission_id)
+
+            let signing_email = submissionType == 'INDICTMENT' ? await localStorage.getItem('email') : complainant_email
+
             axios.post(`${API_URL}/api/submissions/sign_submission`,
                 {
                     submission_id: submission_id,
-                    email: complainant_email,
+                    email: signing_email,
                     otp: signOTP,
                     html: htmlContent
                 })

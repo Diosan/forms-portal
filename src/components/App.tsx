@@ -14,6 +14,7 @@ import { Warrant } from './Warrant'
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
 import { CompletedSubmission } from './CompleteSubmission'
+import { CompletedIndictment } from './CompleteIndictment'
 import { Sign } from './Sign'
 import { SignDPP } from './SignDPP';
 import { Verify } from './Verify'
@@ -68,6 +69,7 @@ function App() {
         <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
         <Route path= "/view/:id" element={ <PrivateRoute><View /></PrivateRoute> } />
         <Route path= "/sub/complete" element={ <PrivateRoute><CompletedSubmission /></PrivateRoute> } />
+        <Route path= "/ind/complete" element={ <PrivateRoute><CompletedIndictment /></PrivateRoute> } />
         <Route  path= "/admin9876543210" element={ <PrivateRoute><Admin /></PrivateRoute>} />
 
         
