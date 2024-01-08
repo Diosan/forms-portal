@@ -692,7 +692,6 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
             // let signature = await axios.get(API_URL + '/api/submissions/signature/' + submission_id)
             let submission = await axios.get(API_URL + '/api/submissions/' + submission_id, {
-                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
