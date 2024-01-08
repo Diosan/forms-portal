@@ -52,8 +52,20 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
     useEffect(() => {
         if (agency) {
             localStorage.setItem('agency', agency);
+            setAgency(agency);
         }
     }, [agency]); // This effect runs every time 'agency' changes
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const storedAgency = localStorage.getItem('agency');
+            if (storedAgency !== agency) {
+                setAgency(storedAgency || ''); // Update the state if different
+            }
+        }, 300); // every 300 milliseconds
+
+        return () => clearInterval(interval); // Clear interval on component unmount
+    }, [agency]); // Run effect when 'agency' changes
 
 
 
@@ -104,7 +116,7 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                                 {/* <li className="nav-item active jud-header-item" onClick={goHome}><a className="nav-link" href="/">Welcome  </a></li> */}
 
                                 <li className="nav-item active jud-header-item"><a className="nav-link" href="/">Home  </a></li>
-                                {agency != 'dpp' ? (
+                                {agency !== 'dpp' ?
                                     <>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> Complaint With Oath</a></li>
@@ -112,11 +124,16 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Without Oath Requesting Summons</a></li>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/warrant"> Complaint  With Oath Requesting Warrant</a></li>
                                     </>
-                                ) : (
+                                    :
                                     <>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment</a></li>
                                     </>
-                                )}
+                                }
+                                {agency == 'ttlawcourts' &&
+                                    <>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment</a></li>
+                                    </>
+                                }
                                 <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-left">Logout</button></li>
                             </>
                         }

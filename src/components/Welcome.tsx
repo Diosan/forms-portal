@@ -12,7 +12,7 @@ export const Welcome = ({}: WelcomeProps) => {
 
             {/* <a className="btn btn-outline-primary btn-lg">Connect with TTPS</a> */}
 
-            <RegisterSignin />
+            {/* <RegisterSignin /> */}
 
             
 

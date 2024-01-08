@@ -242,6 +242,15 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
 
     const signinVerify = async (event: any) => {
         event.preventDefault()
+        const newEmail = email
+        setEmail(newEmail);
+        
+        // Extracting the agency name
+        const domain = newEmail.split('@')[1];
+        const agencyName = domain ? domain.split('.')[0] : '';
+        setAgency(agencyName);
+
+        console.log(agencyName)
         setLoading(true);
         // const dispatch = useAppDispatch();
         //console.log(">>> signin")
