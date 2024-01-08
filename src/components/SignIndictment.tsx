@@ -954,7 +954,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
                     { submissionType == 'INDICTMENT' ?
                         <>
-                            <div className="mt-3 mb-3" style={{margin:"0 auto"}}>
+                            {/* <div className="mt-3 mb-3" style={{margin:"0 auto"}}>
                                 <input type="text" 
                                 id="name" name="name" required minLength={4}
                                 className=" mt-3 mb-1 py-3 px-0"
@@ -962,8 +962,10 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                                         borderBottom:"1px solid #000!important", backgroundColor:"transparent"}} 
                                 value={signingName} onChange={signingNameChange} />
                                 <label htmlFor="name" className="fs-6">Signed By:</label>
+                            </div> */}
+                            <div className="mt-3 mb-3" style={{maxWidth:"250px", margin:"0 auto"}}>
+                                <button className="btn btn-primary" style={{width:"100%"}} type="submit" onClick={sendOTP}>Request Signing Code</button>
                             </div>
-                            <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
                         </>
                         :
                         <>
