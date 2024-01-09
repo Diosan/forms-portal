@@ -6,6 +6,7 @@ import '../assets/App.css'
 import { RegisterSignin } from './RegisterSignin'
 import { Welcome } from './Home'
 import { Submission } from './Submission'
+import { Consent } from './Consent';
 import { PasswordReset } from './ResetPassword'
 import Transcend  from './Transcend'
 import { Submissions } from './Submissions'
@@ -50,8 +51,8 @@ function App() {
         <Route path= "/login" element={<RegisterSignin setCreatePassword={setCreatePassword} createPassword={createPassword} />} />
         <Route path= "/password/new" element={ <PasswordReset/>} />
         <Route path= "/password/reset/:token" element={ <PasswordReset/>} />
-
         <Route path= "/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
+        <Route path= "/consent" element={<PrivateRoute><Consent new_submission={true} /></PrivateRoute>} />
         <Route path="/oathless" element={<PrivateRoute><Oathless new_submission={true} /></PrivateRoute>} />
         <Route path= "/submission/:id" element={ <PrivateRoute><Submission new_submission={false }/></PrivateRoute>} />
         <Route  path= "/submissions" element={ <PrivateRoute><Submissions /></PrivateRoute>} />
