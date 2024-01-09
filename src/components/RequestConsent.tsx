@@ -47,7 +47,7 @@ export const RequestConsent = ({ submission_id, complainant_email }: RequestSign
             additionalNotes: form.formData.additionalNotes
         })
 
-        if (confirm('Click OK if you are sure you are ready to request a signature') == true) {
+        if (confirm('Click OK if you are sure you are ready to request a consent signature drom the DPP') == true) {
 
             setLoading(true);
 
@@ -60,31 +60,24 @@ export const RequestConsent = ({ submission_id, complainant_email }: RequestSign
                 }
             )
 
-            // if(!indictment) {
+            try {
+                let requestResult = await axios.post(
+                    API_URL + '/api/submissions/request_consent',
+                    {
+                        submission_id: submission_id,
+                        complainant_email: complainant_email
+                    }
+                )
 
-            //     try {
-            //         let requestResult = await axios.post(
-            //             API_URL + '/api/submissions/request_signature',
-            //             {
-            //                 submission_id: submission_id,
-            //                 complainant_email: complainant_email
-            //             }
-            //         )
-
-            //         if (requestResult.data.outcome == 'success') {
-            //             navigate('/view/' + submission_id)
-            //         } else {
-            //             console.log('There was an error requesting signature')
-            //         }
-            //     } catch (err) {
-            //         setLoading(false)
-            //         throw new Error('Unable to request signature')
-            //     }
-
-            // } else {
-            //     navigate('/sign/' + submission_id)
-            //     setLoading(false);
-            // }
+                if (requestResult.data.outcome == 'success') {
+                    navigate('/view/' + submission_id)
+                } else {
+                    console.log('There was an error requesting signature')
+                }
+            } catch (err) {
+                setLoading(false)
+                throw new Error('Unable to request signature')
+            }
 
         }
 

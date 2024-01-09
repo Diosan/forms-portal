@@ -18,6 +18,7 @@ import { CompletedSubmission } from './CompleteSubmission'
 import { CompletedIndictment } from './CompleteIndictment'
 import { Sign } from './Sign'
 import { SignDPP } from './SignDPP';
+import { SignConsent } from './SignConsent';
 import { Verify } from './Verify'
 import { LeftColumn } from "./LeftColumn"
 import PrivateRoute from './PrivateRoute'; // Import the PrivateRoute component
@@ -60,6 +61,7 @@ function App() {
         <Route path= "/simple_ref" element={ <PrivateRoute><SimpleRef /></PrivateRoute> } />
         <Route path= "/sign/:id" element={ <PrivateRoute><Sign /></PrivateRoute> } />
         <Route path= "/indictment/sign/:id" element={ <PrivateRoute><SignDPP /></PrivateRoute> } />
+        <Route path= "/consent/sign/:id" element={ <PrivateRoute><SignConsent /></PrivateRoute> } />
         <Route path= "/indictable" element={ <PrivateRoute><Indictable new_submission={ true } /></PrivateRoute>} />
         <Route path= "/indictable/:id" element={ <PrivateRoute><Indictable new_submission={ false } /></PrivateRoute>} />
         <Route path= "/verify/:id" element={ <PrivateRoute><Verify /></PrivateRoute> } />
