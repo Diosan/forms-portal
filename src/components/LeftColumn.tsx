@@ -120,7 +120,7 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                                     <>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> Complaint With Oath</a></li>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/consent"> Complaint With Oath With Consent</a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/consent"> Complaint With Oath, With Consent</a></li>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/oathless"> Complaint Without Oath</a></li>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/summons"> Complaint Without Oath Requesting Summons</a></li>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/warrant"> Complaint  With Oath Requesting Warrant</a></li>
