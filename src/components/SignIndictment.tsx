@@ -841,7 +841,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
             {!isFinalSigned &&
 
-                submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
+                submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' || submissionType == 'COMPLAINT ON OATH WITH CONSENT' ?
                 <>
                     <div style={{ width: "200px", margin: "30px auto 20px auto" }}>
                         <select value={oathType}
