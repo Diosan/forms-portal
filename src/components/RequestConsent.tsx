@@ -95,26 +95,7 @@ export const RequestConsent = ({ submission_id, complainant_email }: RequestSign
 
     }, [])
 
-    // useEffect(() => {
 
-    //     const getSubmission = async () => {
-    //         let submission = await axios.get(
-    //             API_URL + '/api/submissions/' + submission_id,
-    //             {
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'Authorization': 'Bearer ' + token
-    //                 }
-    //             }
-    //         )
-    //         console.log('Fetched submission: ', submission.data.submission)
-    //         setIndictment(submission.data.submission.type == 'indictment')
-
-    //     }
-
-    //     getSubmission()
-
-    // }, [])
 
     useEffect(() => {
 

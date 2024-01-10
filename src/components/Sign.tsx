@@ -216,6 +216,9 @@ export const Sign = ({ }: SignProps) => {
                 case 'complaint_with_oath':
                     setSubmissionType('COMPLAINT ON OATH')
                     break;
+                case 'complaint_with_consent':
+                    setSubmissionType('COMPLAINT ON OATH WITH CONSENT')
+                    break;
                 case 'complaint_without_oath':
                     setSubmissionType('COMPLAINT WITHOUT OATH')
                     break;
