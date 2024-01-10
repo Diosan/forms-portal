@@ -80,7 +80,7 @@ type NameDisplayProps = {
 
 const log = (type: any) => console.log.bind(console, type)
 
-export const View = ({ }: SignProps) => {
+export const ViewConsent = ({ }: SignProps) => {
 
     const { id } = useParams()
 
@@ -243,7 +243,7 @@ export const View = ({ }: SignProps) => {
                 <h6 className='mb-4' style={{color:"blue"}}>An email with instructions to sign this submission <br/>
                 has been sent to the complainant's email address.</h6>
                 :
-                <h6 className='mb-4' style={{color:"blue"}}>Your request for consent on this submission <br/>
+                <h6 className='mb-4' style={{color:"blue"}}>Your consent on this submission <br/>
                 has been sent.</h6>
             }
 

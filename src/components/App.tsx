@@ -34,6 +34,8 @@ import { Signatures } from './Signatures';
 
 import { View } from './View';
 
+import { ViewConsent } from './ViewConsent';
+
 import { Oathless } from './Oathless';
 
 import { Admin } from './Admin';
@@ -71,6 +73,7 @@ function App() {
         <Route path= "/warrant" element={ <PrivateRoute><Warrant new_submission={ true }/></PrivateRoute>} />
         <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
         <Route path= "/view/:id" element={ <PrivateRoute><View /></PrivateRoute> } />
+        <Route path= "/consent/view/:id" element={ <PrivateRoute><ViewConsent /></PrivateRoute> } />
         <Route path= "/sub/complete" element={ <PrivateRoute><CompletedSubmission /></PrivateRoute> } />
         <Route path= "/ind/complete" element={ <PrivateRoute><CompletedIndictment /></PrivateRoute> } />
         <Route  path= "/admin9876543210" element={ <PrivateRoute><Admin /></PrivateRoute>} />
