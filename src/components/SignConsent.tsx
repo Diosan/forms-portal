@@ -27,7 +27,9 @@ import {
     useParams,
 } from "react-router-dom"
 
-import { SignIndictment } from "./SignIndictment"
+
+import { ConsentIndictment } from "./ConsentIndictment";
+
 import { exportPDF } from '../utils/pdfUtils';
 
 // import MyDocument from './PrintPdfDocument'; 
@@ -521,7 +523,7 @@ export const SignConsent = ({ }: SignProps) => {
                         {/* <p><strong>{' ' + currentDate()}</strong></p> */}
 
                         <div id="anchorSign"></div>
-                        <SignIndictment
+                        <ConsentIndictment
                             submission_id={parseInt('' + id)}
                             complainant_regnum={complainantRegNum}
                             complainant_rank={complainantRank}

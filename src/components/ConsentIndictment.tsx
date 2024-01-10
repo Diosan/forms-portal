@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 const API_URL = import.meta.env.VITE_API_URL
+const DPP_EMAIL = import.meta.env.VITE_DPP_EMAIL
 import axios from "axios"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import Form from 'react-jsonschema-form'
@@ -30,7 +31,7 @@ type SignIndictmentProps = {
 const log = (type: any) => console.log.bind(console, type)
 
 
-export const SignIndictment = ({ submission_id, complainant_email, submissionType, complainant_rank, complainant_name, complainant_regnum, already_signed, already_verified }: SignIndictmentProps) => {
+export const ConsentIndictment = ({ submission_id, complainant_email, submissionType, complainant_rank, complainant_name, complainant_regnum, already_signed, already_verified }: SignIndictmentProps) => {
 
     const id = { submission_id };
     const navigate = useNavigate()
@@ -64,23 +65,6 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     const [additionalNotes, setAdditionalNotes] = useState(false)
 
     const [signingName, setSigningName] = useState('')
-
-
-
-
-    const printPDF = async (submissionId: number) => {
-
-        try {
-            const message = await exportPDF('container-pdf', `${API_URL}/api/pdf/puppeteer`, submissionId);
-            // alert('Submission successful!');
-            navigate(`/sign/${submissionId}`);
-            // navigate('/sign', { state: { data: submissionId } });
-        } catch (error) {
-            console.log(error)
-            alert('Failed to submit the form. Please check your email for confirmation.');
-        }
-    };
-
 
     const [oathType, setOathType] = useState('oath')
 
@@ -128,8 +112,8 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             API_URL + '/api/submissions/send_otp',
             {
                 submission_id: submission_id,
-                email: signing_email,
-                name: signing_name
+                email: DPP_EMAIL,
+                name: 'Director Of Public Prosecutions'
             }
         )
         console.log('otp_send: ', otp_send.data)
@@ -186,7 +170,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     };
 
 
-    const sign = async (event: any) => {
+    const consent = async (event: any) => {
         event.preventDefault()
 
         const stylesForPrinting = `
@@ -583,17 +567,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                 throw new Error('Element not found.');
             }
             const htmlContent = element.outerHTML;
-            // const htmlToPrint = `<html><head><style>${stylesForPrinting}</style></head>
-            // <body>${htmlContent}</body
-            // </html>`;
-            // Prepare the data to be sent
-            //   const data = {
-            //     html: htmlContent,
-            //     submissionId: submission_id
-            //   };
-            // console.log(data);
-            // Send the request to the server
-            // console.log('\n\n\n\ submission_id: ' + submission_id)
+
 
             let signing_email = submissionType == 'INDICTMENT' ? await localStorage.getItem('email') : complainant_email
             let signing_type = submissionType == 'INDICTMENT' ? 'indictment' : 'complaint'
@@ -801,24 +775,8 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {/* {!otpSent && signed ? */}
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
                 <>
-                    {submissionType == 'INDICTMENT' ?
-                        <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
-                        :
-                        <h5 className="m-0 text-center fw-bold">I'm Ready to Sign</h5>
-                    }
-
-                    {submissionType == 'COMPLAINT WITHOUT OATH' ?
-                        <></>
-                        :
-                        <>
-                            {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-                            </p> */}
-                            {/* <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
-                                <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p>
-                            </div> */}
-                        </>
-                    }
-
+                    
+                    <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
 
                 </>
                 : <>
@@ -835,163 +793,12 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
 
 
-            {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-            </p> */}
-
-
-            {!isFinalSigned &&
-
-                submissionType == 'COMPLAINT ON OATH' || submissionType == 'COMPLAINT ON OATH REQUESTING WARRANT' ?
-                <>
-                    <div style={{ width: "200px", margin: "30px auto 20px auto" }}>
-                        <select value={oathType}
-                            style={{ padding: "5px", width: "200px", fontSize: "20px" }}
-                            onChange={oathTypeChange} >
-                            <option value="oath">Oath</option>
-                            <option value="affirmation">Affirmation</option>
-                        </select>
-                    </div>
-
-
-                    {oathType == 'oath' ?
-                        <>
-                            <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
-                                {/* <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p> */}
-
-                                <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
-                                    I {complainant_name} {complainant_rank} {complainant_regnum},
-
-                                    solemnly swear that I have signed this complaint on oath and by that I declare that –
-
-
-
-                                    <br /><br />(i)         I make this [application/complaint] conscientiously, wilfully and honestly having reasonable grounds for believing that the named
-                                    accused person or persons has or have committed the offence alleged as stated in the complaint and that the particulars are true to
-                                    the best of my knowledge;
-
-                                    <br /><br />(ii)        I acknowledge this declaration to be an oath that is binding;
-
-                                    <br /><br />(iii)       I acknowledge that the wilful false affirmation of this declaration is an offence.
-                                </p>
-
-                            </div>
-                        </>
-                        :
-                        <>
-                            <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
-                                {/* <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge</p> */}
-
-                                <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
-                                    I {complainant_name} {complainant_rank} {complainant_regnum},
-
-                                    do solemnly, sincerely, and truly affirm, that I have signed this complaint on oath and by that I declare that –
-
-
-
-                                    <br /><br />(i)          I make this complaint conscientiously, wilfully and honestly having reasonable grounds for believing that the named accused person
-
-                                    or persons has or have committed the offence alleged as stated in the complaint and that the particulars are true to the best of my
-
-                                    knowledge;
-
-                                    <br /><br />(ii)        I acknowledge this declaration to be an oath that is binding;
-
-                                    <br /><br />(iii)       I acknowledge that the wilful false swearing of this oath is an offence
-                                </p>
-
-                            </div>
-                        </>
-                    }
-
-
-                </>
-                :
-                <>
-                </>
-
-            }
-
-
-
-
-            {!isFinalSigned && submissionType != 'INDICTMENT' ?
-                <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
-                    <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
-
-                        <div className="form-group field field-boolean">
-                            <div className="checkbox">
-                                <label>
-                                    <input value="test" type="checkbox" onChange={acknowledgedChange} />
-                                    <span>Summary of evidence is included in appendix A below.</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        {additionalNotes ?
-                            <div className="form-group field field-boolean">
-                                <div className="checkbox">
-                                    <label>
-                                        <input value="test" type="checkbox" onChange={additionalAcknowledgedChange} />
-                                        <span>Additional notes is included in appendix B below.</span>
-                                    </label>
-                                </div>
-                            </div>
-                            : <></>
-                        }
-
-
-
-                    </p>
-                </div>
-                : <></>
-            }
-
-
-
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
 
                 <div className="" style={{ width:"100%", maxWidth:"400px", display: "block", margin: "15px auto"}} >
-
-                    { submissionType == 'INDICTMENT' ?
-                        <>
-                            {/* <div className="mt-3 mb-3" style={{margin:"0 auto"}}>
-                                <input type="text" 
-                                id="name" name="name" required minLength={4}
-                                className=" mt-3 mb-1 py-3 px-0"
-                                style={{maxWidth:"400px", width:"100%", border:"none!important", 
-                                        borderBottom:"1px solid #000!important", backgroundColor:"transparent"}} 
-                                value={signingName} onChange={signingNameChange} />
-                                <label htmlFor="name" className="fs-6">Signed By:</label>
-                            </div> */}
-                            <div className="mt-3 mb-3" style={{maxWidth:"250px", margin:"0 auto"}}>
-                                <button className="btn btn-primary" style={{width:"100%"}} type="submit" onClick={sendOTP}>Request Signing Code</button>
-                            </div>
-                        </>
-                        :
-                        <>
-                            {additionalNotes ?
-                                <>
-                                    {acknowledged && additionalAcknowledged ?
-                                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
-                                        :
-                                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
-                                    }
-                                </>
-                                :
-                                <>
-                                    {acknowledged ?
-                                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Signing Code</button>
-                                        :
-                                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP} disabled>Request Signing Code</button>
-                                    }
-                                </>
-                            }                        
-                        </>
-                    }
-
-
-
-
+                    <div className="mt-3 mb-3" style={{maxWidth:"250px", margin:"0 auto"}}>
+                        <button className="btn btn-primary" style={{ width: "200px" }} type="submit" onClick={sendOTP}>Request Consent Code</button>
+                    </div>
                 </div>
 
                 : <></>
@@ -1000,17 +807,9 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
             {otpSent && !signed && !already_signed ?
                 <>
-                    {/* <div className="mb-3">
-                <label>Commissioned Officer</label><br/>
-                <select className='form-select' value={commissionedEmail} onChange={commisionedChange}>
-                    
-                    {verifiers.map((verifier: any) => (
-                        <option key={verifier.id} value={verifier.email}>{verifier.name}</option>
-                    ))} 
-                </select>
-                </div> */}
 
-                    <form onSubmit={sign}>
+
+                    <form onSubmit={consent}>
                         <div className="" style={{}}>
                             <br />
 
@@ -1032,32 +831,14 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                                 />
                                 </div>
 
-                                <div>
-                                    {submissionType == 'COMPLAINT WITHOUT OATH' ?
-                                        <></>
-                                        :
-                                        <>
-                                            {/* <p style={{ fontSize: "10pt", lineHeight:"13pt", margin:"0 20px 10px"  }}>I <strong>{complainantName}</strong> Police Constable No. <strong>{complainantRegNum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-                                         </p>
-                                         <div style={{ margin: "10px 0 0 0", padding: "10px " }}>
-                                             <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>I <strong>{complainant_name}</strong> {complainant_rank} <strong>{complainant_regnum}</strong>, hereby swear by affixing my signature to this declaration, that I make this complaint conscientiously having reasonable grounds for believing that  the named accused person has committed the offence alleged and stated in the complaint and that the particulars are true to the best of my knowledge
-                                             </p>
-                                         </div> */}
-                                        </>
 
-                                    }
-                                </div>
 
                                 <div className="text-center m-1"><button type="submit" className="btn btn-md btn-primary" >Sign and Submit</button></div>
 
 
                             </div>
 
-                            {/* <span className="mobile-text">Enter the code sent to email </span>
-                        <div className="d-flex flex-row mt-5 otp-row">
-                            <input type="text" className="form-control otp-input" placeholder="  ###### " value={signOTP} onChange={signOTPChange} />
-                            <button type="submit" className="btn btn-secondary otp-button" >Sign And Submit</button>
-                        </div> */}
+
 
                         </div>
                     </form>
@@ -1078,28 +859,6 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {isFinalSigned || already_signed ?
                 <div>
 
-
-                    {/* <div className="signature-format-complainant">
-                        <div className="col-12 col">
-                            <div className="logo-placeholder d-flex swf-sign">
-                                <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
-                            </div>
-                        </div>
-                        <div className="col-12 col">
-                            <div className="text-placeholder text-right">{signatureDate.substring(11, 20)}</div>
-                            <div className="text-placeholder text-right">{signatureDate.substring(0, 10)}</div>
-                            <div className="text-placeholder text-right"></div>
-                        </div>
-
-                        <div className="col-12 col">
-                            <div className="name-placeholder fw-bold  text-left">{signatureName}</div>
-                        </div>
-
-                        <div className="col-12 col">
-                            <p className="hash-placeholder text-left">
-                                {signatureHash}</p>
-                        </div>
-                    </div> */}
 
                     <div className="signature-container">
                         <div className=" signature-format" style={{ backgroundColor: "#ebf7ff" }}>
@@ -1193,7 +952,6 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                                 </form>
                                 :
                                 <div className="d-grid gap-2 verify">
-                                    {/* <button className="btn btn-dark" type="submit" onClick={sendVerifyOTP}>Verify Submission</button> */}
                                 </div>
                             }
                         </>

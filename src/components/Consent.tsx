@@ -571,7 +571,7 @@ export const Consent = ({ new_submission }: SubmissionProps) => {
                                 <label className="control-label fs-6  my-2">
                                   Category Of Accused
                                 </label>
-                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} required>
                                   <option value="adult">Adult only</option>
                                   <option value="child">Child only</option>
                                   <option value="both">Both</option>
@@ -579,7 +579,7 @@ export const Consent = ({ new_submission }: SubmissionProps) => {
                                 <label className="control-label fs-6 my-2">
                                   Matter Type
                                 </label>
-                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} required>
                                   <option>Select matter type</option>
                                   <option value="Indictable">Indictable</option>
                                   <option value="Summary">Summary</option>
@@ -636,7 +636,7 @@ export const Consent = ({ new_submission }: SubmissionProps) => {
                                   </div> */}
 
                               <div className="mb-3">
-                                <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} required>
                                   <option>Select court location</option>
                                   {adultOnly == 'adult' || adultOnly == 'both' ?
                                     <>
@@ -657,7 +657,7 @@ export const Consent = ({ new_submission }: SubmissionProps) => {
                               </div>
 
                               <div className="mb-3">
-                                <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
+                                <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} required>
                                   <option>Select complainant agency</option>
                                   <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                                 </select>
