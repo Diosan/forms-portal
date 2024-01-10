@@ -802,7 +802,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
                 <>
                     {submissionType == 'INDICTMENT' ?
-                        <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTION</h5>
+                        <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
                         :
                         <h5 className="m-0 text-center fw-bold">I'm Ready to Sign</h5>
                     }
