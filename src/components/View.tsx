@@ -243,8 +243,8 @@ export const View = ({ }: SignProps) => {
                 <h6 className='mb-4' style={{color:"blue"}}>An email with instructions to sign this submission <br/>
                 has been sent to the complainant's email address.</h6>
                 :
-                <h6 className='mb-4' style={{color:"blue"}}>A request for consent on this submission <br/>
-                has been sent to the DPP.</h6>
+                <h6 className='mb-4' style={{color:"blue"}}>Your request for consent on this submission <br/>
+                has been sent.</h6>
             }
 
             
