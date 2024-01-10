@@ -136,7 +136,7 @@ export const Sign = ({ }: SignProps) => {
 
         const fetchSubmission = async () => {
             await axios.get(API_URL + '/api/submissions/' + id,
-            { method: 'DELETE',
+            { 
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token

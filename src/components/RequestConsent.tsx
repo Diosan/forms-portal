@@ -47,7 +47,7 @@ export const RequestConsent = ({ submission_id, complainant_email }: RequestSign
             additionalNotes: form.formData.additionalNotes
         })
 
-        if (confirm('Click OK if you are sure you are ready to request a consent signature drom the DPP') == true) {
+        if (confirm('Click OK if you are sure you are ready to request a consent signature from the DPP') == true) {
 
             setLoading(true);
 
