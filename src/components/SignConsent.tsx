@@ -325,7 +325,7 @@ export const SignConsent = ({ }: SignProps) => {
                     <>
                         <h5 className='mb-1' style={{color:"blue"}}><strong>Please review this submission carefully. </strong></h5>
                         <h6 className='mb-4' style={{color:"blue", lineHeight:"1.4rem"}}>After ensuring accuracy, select the necessary box(es) at the end<br/>
-                        and click '<strong>Request Signing Code</strong>' to continue.</h6>
+                        and click '<strong>Request Consent Code</strong>' to continue.</h6>
                     </>
                 ) : status === "final" ? (
                     <h5 className='mb-3' style={{color:"blue"}}><strong>Signed Submission</strong></h5>
