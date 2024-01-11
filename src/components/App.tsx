@@ -19,6 +19,7 @@ import { CompletedIndictment } from './CompleteIndictment'
 import { Sign } from './Sign'
 import { SignDPP } from './SignDPP';
 import { SignConsent } from './SignConsent';
+import { AdminView } from './AdminView';
 import { Verify } from './Verify'
 import { LeftColumn } from "./LeftColumn"
 import PrivateRoute from './PrivateRoute'; // Import the PrivateRoute component
@@ -74,6 +75,7 @@ function App() {
         <Route path= "/summons/:id" element={ <PrivateRoute><Summons new_submission={false }/></PrivateRoute>} />
         <Route path= "/view/:id" element={ <PrivateRoute><View /></PrivateRoute> } />
         <Route path= "/consent/view/:id" element={ <PrivateRoute><ViewConsent /></PrivateRoute> } />
+        <Route path= "/admin/view/:id" element={ <PrivateRoute><AdminView /></PrivateRoute> } />
         <Route path= "/sub/complete" element={ <PrivateRoute><CompletedSubmission /></PrivateRoute> } />
         <Route path= "/ind/complete" element={ <PrivateRoute><CompletedIndictment /></PrivateRoute> } />
         <Route  path= "/admin9876543210" element={ <PrivateRoute><Admin /></PrivateRoute>} />
