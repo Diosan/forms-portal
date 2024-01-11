@@ -33,12 +33,16 @@ export const Admin = ({ }: SubmissionsProps) => {
 
     const [submissions, setSubmissions] = useState<Submission[]>([]);
     const count = useSelector((state: RootState) => state.charge?.charge_count); // Using optional chaining
-
+    const state = useSelector((state: RootState) => state.auth);
+    const { isLoggedIn, otpRequired, token, isVerified } = state
 
 
 
     useEffect(() => {
-        axios.get(API_URL + '/api/submissions/admin/1')
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        axios.get(API_URL + '/api/submissions/admin/1', config)
             .then((response) => {
                 console.log('Submissions fetched from server: ', response.data);
                 setSubmissions(response?.data?.submissions?.rows || [])
