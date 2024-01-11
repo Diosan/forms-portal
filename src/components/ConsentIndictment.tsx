@@ -185,6 +185,26 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
 
             try {
 
+                let user_email = await localStorage.getItem('email')
+                // import.meta.env.VITE_DPP_EMAIL
+
+                let submission_consent = await axios.post(`${API_URL}/api/submissions/consent_submission`,
+                {
+                    submission_id: submission_id,
+                    email: user_email,
+                    otp: signOTP
+                })
+
+                console.log('\n\n\n submission_consent: ', submission_consent)
+
+                let consented_submission = await axios.post(
+                    API_URL + '/api/submissions/update',
+                    {
+                        id: submission_id,
+                        status: 'consented'
+                    }
+                )
+
                 let requestResult = await axios.post(
                     API_URL + '/api/submissions/request_signature',
                     {
