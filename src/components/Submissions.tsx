@@ -213,6 +213,57 @@ export const Submissions = ({ }: SubmissionsProps) => {
         return groups;
     }, {});
 
+    const mySubmissions: any = submissions.reduce((groups: any, submission) => {
+
+        if (
+            submission.status == 'pending' ||
+            submission.status == 'complainant_saved' ||
+            submission.status == 'charge_saved' ||
+            submission.status == 'signed'
+        ) {
+            if (!groups['incomplete']) {
+                groups['incomplete'] = [];    
+            }
+            groups['incomplete'].push(submission);
+        }
+
+        if (submission.status == 'final') {
+            if (!groups['complete']) {
+                groups['complete'] = [];    
+            }
+            groups['complete'].push(submission);
+        }
+
+        return groups;
+    }, {});
+
+    const editComponent = (submission: any) => {
+        let path = ''
+        switch (submission.type) {
+            case 'complaint_with_oath':
+                path = 'submission'
+                break
+            case 'complaint_with_consent':
+                path = 'consent'
+                break
+            case 'complaint_without_oath':
+                path = 'oathless'
+                break
+            case 'complaint_without_oath_summons':
+                path = 'summons'
+                break
+            case 'complaint_with_oath_warrant':
+                path = 'warrant'
+                break
+            case 'indictment':
+                path = 'indictable'
+                break;
+            default:
+                path = 'submission'
+        }
+        return path
+    }
+
 
     console.log("Modal should show for submission ID:", deleteSubmissionId);
 
@@ -282,17 +333,17 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
 
                                         {/* Render "pending" submissions with a different background color */}
-                                        {groupedSubmissions['pending'] && (
+                                        {mySubmissions['incomplete'] && (
                                             <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '##dfdfdf' }}>
-                                                <h4 className="my-2 mb-4 fs-5 fw-bold text-left">Pending Submissions</h4>
-                                                {groupedSubmissions['pending'].map((submission: any) => (
+                                                <h4 className="my-2 mb-4 fs-5 fw-bold text-left">Incomplete Submissions</h4>
+                                                {mySubmissions['incomplete'].map((submission: any) => (
                                                     <div key={submission.id} className="card submission-card d-flex" style={{ padding: '1px' }}>
                                                         <div className="card submission-card d-flex" style={{ padding: '1px' }}>
                                                             <div className="card-body d-flex justify-content-between" style={{ padding: '10px 25px' }}>
                                                                 <h5 className="card-title fs-6 text-left"><i>{`(${submission.id})`}</i> {submission.description || (`-`)}</h5>
                                                                 <div className="action-buttons">
                                                                     <a
-                                                                        href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
+                                                                        href={'/' + editComponent(submission) + '/' + submission.id}
                                                                         key={submission.id}
                                                                     >
                                                                         <button className="btn btn-link">
@@ -316,7 +367,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
 
                                         {/* Render "pending" submissions with a different background color */}
-                                        {groupedSubmissions['complainant_saved'] && (
+                                        {/* {groupedSubmissions['complainant_saved'] && (
                                             <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '#dfdfdf' }}>
                                                 <h4 className="my-2 mb-4 text-left">Complainant Saved</h4>
                                                 {groupedSubmissions['pending'].map((submission: any) => (
@@ -332,10 +383,10 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                     </a>
                                                 ))}
                                             </div>
-                                        )}
+                                        )} */}
 
                                         {/* Render "charge_saved" submissions with a different background color */}
-                                        {groupedSubmissions['charge_saved'] && (
+                                        {/* {groupedSubmissions['charge_saved'] && (
                                             <div className="mt-4 group-submission charge-saved-group" style={{ backgroundColor: '#ddeedd' }}>
                                                 <h4 className="my-2 mb-4 fw-bold fs-5 text-left">Saved Submissions</h4>
                                                 {groupedSubmissions['charge_saved'].map((submission: any) => (
@@ -353,10 +404,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                                             </i> View
                                                                         </button>
                                                                     </a>
-                                                                    {/* <button className="btn btn-link btn-sm" onClick={() => handleDelete(submission.id)}>
-                                                                        <i className="fa"><FontAwesomeIcon icon={faX} />
-                                                                        </i>
-                                                                    </button> */}
+
 
                                                                 </div>
                                                             </div>
@@ -364,10 +412,10 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                     
                                                 ))}
                                             </div>
-                                        )}
+                                        )} */}
 
                                         {/* Render "complete" submissions with a different background color */}
-                                        {groupedSubmissions['signed'] && (
+                                        {/* {groupedSubmissions['signed'] && (
                                         <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
                                             <h4 className="my-2 mb-4 fs-5">Signed Submissions</h4>
                                             {groupedSubmissions['signed'].map((submission:any) => (
@@ -383,7 +431,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                 </a>
                                             ))}
                                         </div>
-                                    )}
+                                        )} */}
 
 
                                         {/* {groupedSubmissions['verified'] && (
@@ -421,7 +469,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                 </a>
                                             ))}
                                         </div>
-                                    )}
+                                        )}
 
 
                                     </div>
