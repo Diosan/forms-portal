@@ -264,6 +264,21 @@ export const Submissions = ({ }: SubmissionsProps) => {
         return path
     }
 
+    const viewComponent = (submission: any) => {
+        let path = ''
+        switch (submission.type) {
+            case 'complaint_with_consent':
+                path = '/consent'
+                break
+            case 'indictment':
+                path = '/indictable'
+                break;
+            default:
+                path = ''
+        }
+        return path
+    }
+
 
     console.log("Modal should show for submission ID:", deleteSubmissionId);
 
@@ -458,7 +473,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                             <h4 className="my-2 mb-4 text-left fw-bold fs-5">Signed and Completed Submissions</h4>
                                             {groupedSubmissions['final'].map((submission:any) => (
                                                 <a
-                                                    href={'/sign/' + submission.id}
+                                                    href={viewComponent(submission) + '/sign/' + submission.id}
                                                     key={submission.id}
                                                 >
                                                     <div className="card submission-card" style={{ padding: '1px' }}>
