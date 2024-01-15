@@ -47,6 +47,9 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     const [signatureHash, setSignatureHash] = useState('')
     const [signatureName, setSignatureName] = useState('')
     const [signatureDate, setSignatureDate] = useState('')
+    const [consentHash, setConsentHash] = useState('')
+    const [consentName, setConsentName] = useState('')
+    const [consentDate, setConsentDate] = useState('')
     const [verificationHash, setVerificationHash] = useState('')
     const [verificationName, setVerificationName] = useState('')
     const [verificationDate, setVerificationDate] = useState('')
@@ -64,6 +67,11 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     const [additionalNotes, setAdditionalNotes] = useState(false)
 
     const [signingName, setSigningName] = useState('')
+
+    const [subType, setSubType] = useState('')
+    const [subStatus, setSubStatus] = useState('')
+
+    
 
 
 
@@ -699,9 +707,32 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                     'Authorization': 'Bearer ' + token
                 },
             })
+            
             if (submission.data.outcome == "error") {
                 console.log('Not allowed')
             } else {
+
+                await setSubType(submission.data.submission.type)
+                await setSubStatus(submission.data.submission.status)
+               
+                if(submission.data.submission.type == 'complaint_with_consent' && submission.data.submission.status == 'consented') {
+                    console.log('\n\n\n This submission is a consent')
+                    let retrieved_signature = await axios.post(
+                        API_URL + '/api/submissions/consent/',
+                        { submission_id: submission.data.submission.id }
+                    )
+
+
+                    console.log('\n\n\n Signature for consented submission: ', retrieved_signature.data)
+                    setConsentHash(retrieved_signature.data.consent.hash)
+                    setConsentDate(retrieved_signature.data.consent.createdAt)
+                    setConsentName(retrieved_signature.data.user.firstName + ' ' + retrieved_signature.data.user.lastName)
+                    
+
+                } else {
+                    console.log('\n\n\n This submission is NOT a consent: ', submission.data.submission.type)
+                }
+
                 // console.log('\n\n\n complainant_email: ', complainant_email)
                 let the_email = await complainant_email
                 // console.log('\n\n\n the_email: ', the_email)
@@ -801,6 +832,43 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             {/* {!otpSent && signed ? */}
             {!otpSent && !signed && !already_signed && !isFinalSigned ?
                 <>
+
+                    { subType == 'complaint_with_consent' && subStatus == 'consented' ?
+                        <div className="text-center">
+                            <div className="signature-container" style={{ margin: "20 auto" }}>
+                                <div className=" signature-format" style={{ backgroundColor: "#ebf7ff" }}>
+                                    {/* <!-- Row 1 --> */}
+                                    <div style={{ display: "flex" }}>
+                                        <div className="col-6 col">
+                                            <div className="logo-placeholder d-flex swf-sign">
+                                                <span className="swf-e-signed">e-signed on</span> <span className="swf-swif">SWiF</span>
+                                            </div>
+                                        </div>
+                                        <div className="col-6 col">
+                                            <div style={{ fontSize: "8pt", textAlign: "right" }} className="text-placeholder text-right">{consentDate.substring(11, 20)}</div>
+                                            <div style={{ fontSize: "8pt", textAlign: "right" }} className="text-placeholder text-right">{consentDate.substring(0, 10)}</div>
+                                            {/* <div className="text-placeholder text-right">[ip address]</div> */}
+                                        </div>
+                                    </div>
+
+                                    {/* <!-- Row 2 --> */}
+                                    <div className="col-12 col">
+                                        <div className="name-placeholder fw-bold  text-left">{consentName}</div>
+                                    </div>
+
+                                    {/* <!-- Row 3 --> */}
+                                    <div className="col-12 col">
+                                        <p className="hash-placeholder text-left" style={{ fontSize: "8pt", lineHeight: "10pt" }}>
+                                            {consentHash}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/><br/>
+                        </div>
+
+                        : <></>
+                    }
+
                     {submissionType == 'INDICTMENT' ?
                         <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
                         :

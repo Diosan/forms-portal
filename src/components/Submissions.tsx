@@ -47,31 +47,29 @@ interface DeleteConfirmationModalProps {
 
 function DeleteConfirmationModal({ onClose, onConfirm }: DeleteConfirmationModalProps) {
     return (
-        <div className="modal" style={{
-            position: 'fixed', top: '50%', left: '50%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            display: 'flex',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent backdrop
-            zIndex: 1000, padding: '30px'
-        }} tabIndex={1}>
+        <div className="modal" style={{ 
+        position: 'fixed', top: '50%', left: '50%', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+        transform: 'translate(-50%, -50%)', 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent backdrop
+        zIndex: 1000, padding: '30px' }} tabIndex={1}>
             <div className="swf-modal-confirm" style={{
-                backgroundColor: 'white',
-                padding: '30px',
-                border: '2px solid #ccc',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}
+            backgroundColor: 'white',
+            padding: '30px',
+            border: '2px solid #ccc',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'}}
             >
                 <p>Are you sure you want to delete this item?</p>
                 <div className="d-flex gap-4">
-                    <button className="" onClick={onConfirm}>Yes</button>
-                    <button className="" onClick={onClose}>No</button>
+                <button className="" onClick={onConfirm}>Yes</button>
+                <button className=""  onClick={onClose}>No</button>
                 </div>
-
+                
             </div>
         </div>
     );
@@ -106,23 +104,22 @@ export const Submissions = ({ }: SubmissionsProps) => {
             console.log("Deleting item with ID:", deleteSubmissionId);
             // Add your deletion logic here
             try {
-                const response = await fetch(`${API_URL}/api/submissions/${deleteSubmissionId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                });
-
+                const response = await fetch(`${API_URL}/api/submissions/${deleteSubmissionId}`, { method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+             });
+                
                 if (response.ok) {
-                    console.log("Submission removed successfully");
-                    setRefreshKey(oldKey => oldKey + 1);
-                } else {
-                    console.error("Failed to Submission accused");
-                }
-            } catch (error) {
+                  console.log("Submission removed successfully");
+                  setRefreshKey(oldKey => oldKey + 1);
+                  } else {
+                      console.error("Failed to Submission accused");
+                  }
+              } catch (error) {
                 console.error("Error removing Submission:", error);
-            }
+              }
             setDeleteSubmissionId(null); // Reset the deletion submission ID after deletion
         }
     };
@@ -192,7 +189,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
     }, [refreshKey]);
 
 
-
+ 
 
     const handleLogout = (event: any) => {
         event.preventDefault()
@@ -215,6 +212,72 @@ export const Submissions = ({ }: SubmissionsProps) => {
         groups[submission.status].push(submission);
         return groups;
     }, {});
+
+    const mySubmissions: any = submissions.reduce((groups: any, submission) => {
+
+        if (
+            submission.status == 'pending' ||
+            submission.status == 'complainant_saved' ||
+            submission.status == 'charge_saved' ||
+            submission.status == 'signed'
+        ) {
+            if (!groups['incomplete']) {
+                groups['incomplete'] = [];    
+            }
+            groups['incomplete'].push(submission);
+        }
+
+        if (submission.status == 'final') {
+            if (!groups['complete']) {
+                groups['complete'] = [];    
+            }
+            groups['complete'].push(submission);
+        }
+
+        return groups;
+    }, {});
+
+    const editComponent = (submission: any) => {
+        let path = ''
+        switch (submission.type) {
+            case 'complaint_with_oath':
+                path = 'submission'
+                break
+            case 'complaint_with_consent':
+                path = 'consent'
+                break
+            case 'complaint_without_oath':
+                path = 'oathless'
+                break
+            case 'complaint_without_oath_summons':
+                path = 'summons'
+                break
+            case 'complaint_with_oath_warrant':
+                path = 'warrant'
+                break
+            case 'indictment':
+                path = 'indictable'
+                break;
+            default:
+                path = 'submission'
+        }
+        return path
+    }
+
+    const viewComponent = (submission: any) => {
+        let path = ''
+        switch (submission.type) {
+            case 'complaint_with_consent':
+                path = '/consent'
+                break
+            case 'indictment':
+                path = '/indictable'
+                break;
+            default:
+                path = ''
+        }
+        return path
+    }
 
 
     console.log("Modal should show for submission ID:", deleteSubmissionId);
@@ -246,8 +309,8 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
                 {token ?
                     <>
-                        <div className="container submissions-container"
-                            style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 220px", flexGrow: 1 }}
+                        <div className="container submissions-container" 
+                        style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 220px", flexGrow: 1 }}
                         >
 
                             <div>
@@ -285,17 +348,17 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
 
                                         {/* Render "pending" submissions with a different background color */}
-                                        {groupedSubmissions['pending'] && (
+                                        {mySubmissions['incomplete'] && (
                                             <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '##dfdfdf' }}>
-                                                <h4 className="my-2 mb-4 fs-5 fw-bold text-left">Pending Submissions</h4>
-                                                {groupedSubmissions['pending'].map((submission: any) => (
+                                                <h4 className="my-2 mb-4 fs-5 fw-bold text-left">Incomplete Submissions</h4>
+                                                {mySubmissions['incomplete'].map((submission: any) => (
                                                     <div key={submission.id} className="card submission-card d-flex" style={{ padding: '1px' }}>
                                                         <div className="card submission-card d-flex" style={{ padding: '1px' }}>
                                                             <div className="card-body d-flex justify-content-between" style={{ padding: '10px 25px' }}>
                                                                 <h5 className="card-title fs-6 text-left"><i>{`(${submission.id})`}</i> {submission.description || (`-`)}</h5>
                                                                 <div className="action-buttons">
                                                                     <a
-                                                                        href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/submission/' + submission.id}
+                                                                        href={'/' + editComponent(submission) + '/' + submission.id}
                                                                         key={submission.id}
                                                                     >
                                                                         <button className="btn btn-link">
@@ -319,7 +382,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
 
                                         {/* Render "pending" submissions with a different background color */}
-                                        {groupedSubmissions['complainant_saved'] && (
+                                        {/* {groupedSubmissions['complainant_saved'] && (
                                             <div className="mt-4 group-submission pending-group" style={{ backgroundColor: '#dfdfdf' }}>
                                                 <h4 className="my-2 mb-4 text-left">Complainant Saved</h4>
                                                 {groupedSubmissions['pending'].map((submission: any) => (
@@ -335,60 +398,55 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                                     </a>
                                                 ))}
                                             </div>
-                                        )}
+                                        )} */}
 
                                         {/* Render "charge_saved" submissions with a different background color */}
-                                        {groupedSubmissions['charge_saved'] && (
+                                        {/* {groupedSubmissions['charge_saved'] && (
                                             <div className="mt-4 group-submission charge-saved-group" style={{ backgroundColor: '#ddeedd' }}>
                                                 <h4 className="my-2 mb-4 fw-bold fs-5 text-left">Saved Submissions</h4>
                                                 {groupedSubmissions['charge_saved'].map((submission: any) => (
+                                                    
+                                                        <div className="card submission-card d-flex" style={{ padding: '1px' }}>
+                                                            <div className="card-body d-flex justify-content-between" style={{ padding: '10px 25px' }}>
+                                                                <h6 className="card-title text-left">{submission.description}</h6>
+                                                                <div className="action-buttons">
+                                                                    <a
+                                                                        href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/view/' + submission.id}
+                                                                        key={submission.id}
+                                                                    >
+                                                                        <button className="btn btn-link text-decoration-none">
+                                                                            <i className="fa"><FontAwesomeIcon icon={faEye} />
+                                                                            </i> View
+                                                                        </button>
+                                                                    </a>
 
-                                                    <div className="card submission-card d-flex" style={{ padding: '1px' }}>
-                                                        <div className="card-body d-flex justify-content-between" style={{ padding: '10px 25px' }}>
-                                                            <h6 className="card-title text-left">{submission.description}</h6>
-                                                            <div className="action-buttons">
-                                                                <a
-                                                                    href={submission.type === 'indictable' ? '/indictable/' + submission.id : '/view/' + submission.id}
-                                                                    key={submission.id}
-                                                                >
-                                                                    <button className="btn btn-link text-decoration-none">
-                                                                        <i className="fa"><FontAwesomeIcon icon={faEye} />
-                                                                        </i> View
-                                                                    </button>
-                                                                </a>
-                                                                {/* <button className="btn btn-link btn-sm" onClick={() => handleDelete(submission.id)}>
-                                                                        <i className="fa"><FontAwesomeIcon icon={faX} />
-                                                                        </i>
-                                                                    </button> */}
 
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-
+                                                    
                                                 ))}
                                             </div>
-                                        )}
+                                        )} */}
 
                                         {/* Render "complete" submissions with a different background color */}
-                                        {/*
-                                        {groupedSubmissions['signed'] && (
-                                            <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
-                                                <h4 className="my-2 mb-4 fs-5">Signed Submissions</h4>
-                                                {groupedSubmissions['signed'].map((submission: any) => (
-                                                    <a
-                                                        href={'/verify/' + submission.id}
-                                                        key={submission.id}
-                                                    >
-                                                        <div className="card submission-card" style={{ padding: '1px' }}>
-                                                            <div className="card-body" style={{ padding: '10px 25px' }}>
-                                                                <h5 className="card-title text-left">{submission.description}</h5>
-                                                            </div>
+                                        {/* {groupedSubmissions['signed'] && (
+                                        <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
+                                            <h4 className="my-2 mb-4 fs-5">Signed Submissions</h4>
+                                            {groupedSubmissions['signed'].map((submission:any) => (
+                                                <a
+                                                    href={'/verify/' + submission.id}
+                                                    key={submission.id}
+                                                >
+                                                    <div className="card submission-card" style={{ padding: '1px' }}>
+                                                        <div className="card-body" style={{ padding: '10px 25px' }}>
+                                                            <h5 className="card-title text-left">{submission.description}</h5>
                                                         </div>
-                                                    </a>
-                                                ))}
-                                            </div>
-                                        )}
-                                        */}
+                                                    </div>
+                                                </a>
+                                            ))}
+                                        </div>
+                                        )} */}
 
 
                                         {/* {groupedSubmissions['verified'] && (
@@ -411,21 +469,21 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
 
                                         {groupedSubmissions['final'] && (
-                                            <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
-                                                <h4 className="my-2 mb-4 text-left fw-bold fs-5">Signed and Completed Submissions</h4>
-                                                {groupedSubmissions['final'].map((submission: any) => (
-                                                    <a
-                                                        href={'/sign/' + submission.id}
-                                                        key={submission.id}
-                                                    >
-                                                        <div className="card submission-card" style={{ padding: '1px' }}>
-                                                            <div className="card-body" style={{ padding: '10px 25px' }}>
-                                                                <h6 className="card-title text-left">{submission.description}</h6>
-                                                            </div>
+                                        <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
+                                            <h4 className="my-2 mb-4 text-left fw-bold fs-5">Signed and Completed Submissions</h4>
+                                            {groupedSubmissions['final'].map((submission:any) => (
+                                                <a
+                                                    href={viewComponent(submission) + '/sign/' + submission.id}
+                                                    key={submission.id}
+                                                >
+                                                    <div className="card submission-card" style={{ padding: '1px' }}>
+                                                        <div className="card-body" style={{ padding: '10px 25px' }}>
+                                                            <h6 className="card-title text-left">{submission.description}</h6>
                                                         </div>
-                                                    </a>
-                                                ))}
-                                            </div>
+                                                    </div>
+                                                </a>
+                                            ))}
+                                        </div>
                                         )}
 
 
