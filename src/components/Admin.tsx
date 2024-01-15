@@ -57,6 +57,10 @@ export const Admin = ({ }: SubmissionsProps) => {
         console.log("counting in accused: ",  count)
       }, [count]);
 
+      const viewSubmission = (id:number) => {
+        navigate(`/view/${id}`)
+    };
+
 
 
 
@@ -95,8 +99,8 @@ export const Admin = ({ }: SubmissionsProps) => {
                         <div className="card-body d-flex justify-content-between" style={{ padding: '10px 25px' }}>
                             <h5 className="card-title fs-6 text-left">{submission.description || (`Submission: ${submission.id}`)}</h5>
                             <div className="action-buttons">
-                                <button className="btn btn-link">
-                                    <i className="fa fa-edit"></i> Edit
+                                <button className="btn btn-link" onClick={() => viewSubmission(submission.id)}>
+                                    <i className="fa fa-edit"></i> View
                                 </button>
                                 <button className="btn btn-link">
                                     <i className="fa fa-trash"></i> Delete

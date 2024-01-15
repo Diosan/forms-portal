@@ -454,7 +454,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
                                             {createPassword ? (
                                                 <>
                                                     <form onSubmit={requestNewPassword} className="swf-form">
-                                                        <h4 className="mb-3">Forgot your password?</h4>
+                                                        <h4 className="mb-3">Create/update password</h4>
 
 
 
