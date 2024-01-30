@@ -16,6 +16,8 @@ import { Tooltip } from 'react-tooltip'
 
 import { countCharge, deleteCharge } from '../slices/charge';
 
+import { SetComplainant } from "./SetComplainant"
+
 type SubmissionProps = {
   new_submission: boolean
 }
@@ -82,8 +84,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
   const [complainantCourt, setComplainantCourt] = useState('High Court')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
   const [hasAccused, setHasAccused] = useState(false)
-
   const [chargeSaved, setChargeSaved] = useState(false)
+
+  const [savedComplainant, setSavedComplainant] = useState({})
+
   const accusedList = useSelector((state: RootState) => state.accused.accused);
 
   // State to track the active section
@@ -325,6 +329,34 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
     // console.log('Complainant saved ?')
 
+  }
+
+  const complainantSaved = async (complainant: any) => {
+    console.log('\n\n\n Complainant has been saved by the dedicated component ', complainant)
+    setComplainantFirstName(complainant.firstName)
+    setComplainantLastName(complainant.lastName)
+    setComplainantAgency(complainant.agency)
+    setComplainantCourtDistrict(complainant.courtDistrict)
+    setComplainantRegNum(complainant.regNum)
+    setComplainantRank(complainant.rank)
+    setComplainantUnit(complainant.unit)
+    setComplainantEmail(complainant.email)
+
+    setSavedComplainant(
+      {
+        complainantFirstName: complainant.firstName,
+        complainantLastName: complainant.lastName,
+        complainantAgency: complainant.agency,
+        complainantCourtDistrict: complainant.courtDistrict,
+        complainantRegNum: complainant.regNum,
+        complainantRank: complainant.rank,
+        complainantUnit: complainant.unit,
+        complainantEmail: complainant.email
+      }
+    )
+
+    setSubmissionComplainantSaved(true)
+    setEditingSubmissionComplainant(false)
   }
 
   const editTitle = () => {
@@ -620,15 +652,9 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
                           <div className="card fade show m-3" style={{ border: "none", backgroundColor: "#ddd" }} >
                             <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
-                            <form onSubmit={saveComplainant} className="m-3">
 
-                              {/* <div className="mb-3">
-                                    <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
-                                      <option>Select court</option>
-                                      <option value="High Court">High Court</option>
-                                      <option value="District Court">District Court</option>
-                                    </select>
-                                  </div> */}
+
+                            {/* <form onSubmit={saveComplainant} className="m-3">
 
                               <div className="mb-3">
                                 <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
@@ -676,21 +702,25 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                 <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
                               </div>
 
-                              {/* <div className="d-grid gap-2"> */}
-                              {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
                               <button
                                 type="submit"
                                 className="btn btn-md btn-primary ms-1 float-end" // Use btn-light for a button with no background
                               >
-                                {/* <i className="text-gray">
-                                        <FontAwesomeIcon icon={faCheck} />
-                                      </i>  */}
+
                                 Save and Continue
                               </button>
-                              {/* </div> */}
+                              
 
 
-                            </form>
+                            </form> */}
+
+                            <SetComplainant 
+                              submission_id={submissionId}
+                              adult_only={adultOnly}
+                              complainant_added={complainantSaved}
+                              complainant_saved={submissionComplainantSaved}
+                              saved_complainant={savedComplainant}
+                            />
 
                           </div>
 

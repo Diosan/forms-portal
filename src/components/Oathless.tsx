@@ -30,6 +30,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck, faAngleDoubleRight, faAngleDoubleLeft, faExpand, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from 'react-tooltip'
 
+import { SetComplainant } from "./SetComplainant"
+
 
 type SubmissionProps = {
   new_submission: boolean
@@ -88,6 +90,9 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
   const [complainantCourt, setComplainantCourt] = useState('High Court')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
   const [chargeSaved, setChargeSaved] = useState(false)
+
+  const [savedComplainant, setSavedComplainant] = useState({})
+
   const [hasAccused, setHasAccused] = useState(false)
   const checkHasAccused = (areThereAccused: boolean) => {
     setHasAccused(areThereAccused);
@@ -274,6 +279,34 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
 
     // console.log('Complainant saved ?')
 
+  }
+
+  const complainantSaved = async (complainant: any) => {
+    console.log('\n\n\n Complainant has been saved by the dedicated component ', complainant)
+    setComplainantFirstName(complainant.firstName)
+    setComplainantLastName(complainant.lastName)
+    setComplainantAgency(complainant.agency)
+    setComplainantCourtDistrict(complainant.courtDistrict)
+    setComplainantRegNum(complainant.regNum)
+    setComplainantRank(complainant.rank)
+    setComplainantUnit(complainant.unit)
+    setComplainantEmail(complainant.email)
+
+    setSavedComplainant(
+      {
+        complainantFirstName: complainant.firstName,
+        complainantLastName: complainant.lastName,
+        complainantAgency: complainant.agency,
+        complainantCourtDistrict: complainant.courtDistrict,
+        complainantRegNum: complainant.regNum,
+        complainantRank: complainant.rank,
+        complainantUnit: complainant.unit,
+        complainantEmail: complainant.email
+      }
+    )
+
+    setSubmissionComplainantSaved(true)
+    setEditingSubmissionComplainant(false)
   }
 
   const editTitle = () => {
@@ -518,76 +551,75 @@ export const Oathless = ({ new_submission }: SubmissionProps) => {
                            
                               <div className="card fade show" style={{ border: "none", backgroundColor:"#ddd"}} >
                               <h4 className="text-center mb-4">Complainant Information</h4>
-                                <form onSubmit={saveComplainant}>
 
-                                  {/* <div className="mb-3">
-                                    <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
-                                      <option>Select court</option>
-                                      <option value="High Court">High Court</option>
-                                      <option value="District Court">District Court</option>
-                                    </select>
-                                  </div> */}
+                              
+                              {/* <form onSubmit={saveComplainant} className="m-3">
 
-                                  <div className="mb-3">
-                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
-                                      <option>Select court location</option>
-                                      {adultOnly == 'adult' || adultOnly == 'both' ?
-                                          <>
-                                            <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
-                                            <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
-                                            <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
-                                          </>
-                                        :
-                                          <>
-                                            <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
-                                            <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
-                                            <option value="Children Court – Tobago">Children Court – Tobago</option>
-                                          </> 
-                                      }
+                              <div className="mb-3">
+                                <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                  <option>Select court location</option>
+                                  {adultOnly == 'adult' || adultOnly == 'both' ?
+                                    <>
+                                      <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
+                                      <option value="Criminal Court - South Trinidad">Criminal Court - South Trinidad</option>
+                                      <option value="Criminal Court - Tobago">Criminal Court - Tobago</option>
+                                    </>
+                                    :
+                                    <>
+                                      <option value="Children Court - North Trinidad">Children Court - North Trinidad</option>
+                                      <option value="Children Court - South Trinidad">Children Court - South Trinidad</option>
+                                      <option value="Children Court - Tobago">Children Court - Tobago</option>
+                                    </>
+                                  }
 
 
-                                    </select>
-                                  </div>
+                                </select>
+                              </div>
 
-                                  <div className="mb-3">
-                                    <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
-                                      <option>Select complainant agency</option>
-                                      <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
-                                    </select>
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="rank" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
-                                  </div>
+                              <div className="mb-3">
+                                <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
+                                  <option>Select complainant agency</option>
+                                  <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
+                                </select>
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="rank" value={complainantRank} onChange={complainantRankChange} placeholder="Rank" />
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
+                              </div>
+                              <div className="mb-3">
+                                <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
+                              </div>
+                              <div className="mb-3">
+                                <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
+                              </div>
 
-                                  {/* <div className="d-grid gap-2"> */}
-                                  {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
-                                  <button
-                                    type="submit"
-                                    className="btn btn-md btn-light ms-1 float-end" // Use btn-light for a button with no background
-                                    >
-                                      <i className="text-gray">
-                                        <FontAwesomeIcon icon={faCheck} /> Update
-                                      </i>
-                                  </button>
-                                  {/* </div> */}
+                              <button
+                                type="submit"
+                                className="btn btn-md btn-primary ms-1 float-end" // Use btn-light for a button with no background
+                              >
+
+                                Save and Continue
+                              </button>
+                              
 
 
-                                </form>
+                            </form> */}
+
+                            <SetComplainant 
+                              submission_id={submissionId}
+                              adult_only={adultOnly}
+                              complainant_added={complainantSaved}
+                              complainant_saved={submissionComplainantSaved}
+                              saved_complainant={savedComplainant}
+                            />
 
                               </div>
                               <br />
