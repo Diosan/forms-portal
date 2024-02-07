@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../store/store"
 import { Navigate, useNavigate } from "react-router-dom"
-import { login, logout, resendOTP, verifyOtp } from "../slices/auth";
+import { login, logout, resendOTP, verifyOtp, verifyPassPhrase } from "../slices/auth";
 import { clearMessage } from "../slices/message"
 import { RootState } from '../store';
 import AuthService from "../services/AuthService"
@@ -106,12 +106,19 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
     const [signinOTP, setSigninOTP] = useState('')
     const [signinVerifyError, setSigninVerifyError] = useState(false)
 
+    const [verificationMode, setVerificationMode] = useState('OTP')
+    const [passPhrase, setPassPhrase] = useState('')
+
 
 
 
     const [confirmMessage, setConfirmMessage] = useState("")
 
     const [emailSent, setEmailSent] = useState(false)
+
+    const passPhraseChange = (event: any) => {
+        setPassPhrase(event.target.value)
+    }
 
     const agencyChange = (event: any) => {
         setAgency(event.target.value)
@@ -230,7 +237,9 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
                 setSigninError(false)
                 setLoading(false);
                 // window.location.reload();
-                console.log(response)
+                setVerificationMode(response.mode)
+                console.log('\n\n\n Successful login response: ', response)
+                console.log('\n\n\n')
             })
             .catch((error: any) => {
                 setLoading(false);
@@ -256,6 +265,47 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
         //console.log(">>> signin")
         try {
             dispatch(verifyOtp({ otp: signinOTP }) as any)
+            .unwrap()
+            .then(async (message: any) => {
+                //console.log("Reidrecting...")
+                //console.log(message)
+                let decoded = await auth.decodedToken()
+                //console.log(decoded)
+                if (isVerified) {
+                    navigate('/submissions');
+                }
+            })
+            .catch((error: any) => {
+                // Handle the error
+                //console.log(error)
+                setSigninVerifyError(true)
+            });
+
+        } catch (error) {
+            console.error('Error checking token validity:', error);
+            setChangePassword(false);
+        }finally {
+            setLoading(false); // Stop loading after the async operation is done
+        }
+
+    }
+
+    const passPhraseVerify = async (event: any) => {
+        event.preventDefault()
+        const newEmail = email
+        setEmail(newEmail);
+        
+        // Extracting the agency name
+        const domain = newEmail.split('@')[1];
+        const agencyName = domain ? domain.split('.')[0] : '';
+        setAgency(agencyName);
+
+        console.log(agencyName)
+        setLoading(true);
+        // const dispatch = useAppDispatch();
+        //console.log(">>> signin")
+        try {
+            dispatch(verifyPassPhrase({ pass_phrase: passPhrase }) as any)
             .unwrap()
             .then(async (message: any) => {
                 //console.log("Reidrecting...")
@@ -402,52 +452,101 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
 
                                     {otpRequired ?
                                         <>
+                                            { verificationMode == "OTP" ?
+                                                <>
+                                                    <form onSubmit={signinVerify} className="swf-form">
+                                                        <div className=" py-1 px-1 otp-card fade show">
+                                                            <h5 className="m-0">Two-Factor Authentication</h5>
+                                                            <br />
+                                                            <div className="fs-6 mb-1">Enter the 6-digit code sent to your email.</div>
+                                                            {signinVerifyError ?
+                                                                <div className="alert p-1 mb-1 mt-3 alert-danger fade show text-center text-danger fw-normal">
+                                                                    Incorrect Code, Please Try Again.
+                                                                </div>
+                                                                : <></>
+                                                            }
+                                                            <div className="">
+                                                                <input
+                                                                    name="otpCode"
+                                                                    placeholder="******"
+                                                                    style={{ fontSize: "16px", letterSpacing: '7px', textAlign: 'center' }}
+                                                                    className="px-2 py-1 fs-3 mt-2 mb-3 stretched-text-input"
+                                                                    maxLength={6}
+                                                                    value={signinOTP}
+                                                                    onChange={signinOTPChange}
+                                                                    minLength={6}
+                                                                    pattern="\d{6}"
+                                                                />
 
-                                            <form onSubmit={signinVerify} className="swf-form">
-                                                <div className=" py-1 px-1 otp-card fade show">
-                                                    <h5 className="m-0">Two-Factor Authentication</h5>
-                                                    <br />
-                                                    <div className="fs-6 mb-1">Enter the 6-digit code sent to your email.</div>
-                                                    {signinVerifyError ?
-                                                        <div className="alert p-1 mb-1 mt-3 alert-danger fade show text-center text-danger fw-normal">
-                                                            Incorrect Code, Please Try Again.
+                                                                <div className="text-center">
+                                                                    
+                                                                    <button type="submit" className="mt-1 btn btn-primary"  disabled={loading}>
+                                                                        {loading ? (
+                                                                            <>
+                                                                                <FontAwesomeIcon icon={faSpinner} spin />
+                                                                                &nbsp;Confirming...
+                                                                            </> 
+                                                                        ) : (
+                                                                            "Confirm"
+                                                                        )}
+                                                                    </button>                                                            
+                                                                </div>
+
+
+                                                            </div>
+                                                            <div className="text-center mt-3"><span className="d-block mobile-text">Didn't received the code?</span></div>
                                                         </div>
-                                                        : <></>
-                                                    }
-                                                    <div className="">
-                                                        <input
-                                                            name="otpCode"
-                                                            placeholder="******"
-                                                            style={{ fontSize: "16px", letterSpacing: '7px', textAlign: 'center' }}
-                                                            className="px-2 py-1 fs-3 mt-2 mb-3 stretched-text-input"
-                                                            maxLength={6}
-                                                            value={signinOTP}
-                                                            onChange={signinOTPChange}
-                                                            minLength={6}
-                                                            pattern="\d{6}"
-                                                        />
+                                                    </form>
+                                                    <div className="font-weight-bold p-0 mt-0 text-center cursor"><button onClick={handleResendOTP} className="btn btn-sm btn-link" >Resend</button></div>
+                                                </>
+                                                :
+                                                <>
+                                                    <form onSubmit={passPhraseVerify} className="swf-form">
+                                                        <div className=" py-1 px-1 otp-card fade show">
+                                                            <h5 className="m-0">Pass Phrase Verification</h5>
+                                                            <br />
+                                                            <div className="fs-6 mb-1">Paste the 12 word emergency pass phrase that was sent to your email.</div>
+                                                            {signinVerifyError ?
+                                                                <div className="alert p-1 mb-1 mt-3 alert-danger fade show text-center text-danger fw-normal">
+                                                                    Incorrect Code, Please Try Again.
+                                                                </div>
+                                                                : <></>
+                                                            }
+                                                            <div className="">
+                                                                <input
+                                                                    name="passPhrase"
+                                                                    placeholder=""
+                                                                    style={{ fontSize: "16px", letterSpacing: '7px', textAlign: 'center' }}
+                                                                    className="px-2 py-1 fs-3 mt-2 mb-3 stretched-text-input"
+                                                                    maxLength={256}
+                                                                    value={passPhrase}
+                                                                    onChange={passPhraseChange}
+                                                                    minLength={20}
+                                                                    // pattern="\d{6}"
+                                                                />
 
-                                                        <div className="text-center">
-                                                            
-                                                            <button type="submit" className="mt-1 btn btn-primary"  disabled={loading}>
-                                                                {loading ? (
-                                                                    <>
-                                                                        <FontAwesomeIcon icon={faSpinner} spin />
-                                                                        &nbsp;Confirming...
-                                                                    </> 
-                                                                ) : (
-                                                                    "Confirm"
-                                                                )}
-                                                            </button>                                                            
+                                                                <div className="text-center">
+                                                                    
+                                                                    <button type="submit" className="mt-1 btn btn-primary"  disabled={loading}>
+                                                                        {loading ? (
+                                                                            <>
+                                                                                <FontAwesomeIcon icon={faSpinner} spin />
+                                                                                &nbsp;Confirming...
+                                                                            </> 
+                                                                        ) : (
+                                                                            "Confirm"
+                                                                        )}
+                                                                    </button>                                                            
+                                                                </div>
+
+
+                                                            </div>
+                                                            {/* <div className="text-center mt-3"><span className="d-block mobile-text">Didn't received the code?</span></div> */}
                                                         </div>
-
-
-                                                    </div>
-                                                    <div className="text-center mt-3"><span className="d-block mobile-text">Didn't received the code?</span></div>
-                                                </div>
-                                            </form>
-                                            <div className="font-weight-bold p-0 mt-0 text-center cursor"><button onClick={handleResendOTP} className="btn btn-sm btn-link" >Resend</button></div>
-
+                                                    </form>
+                                                    {/* <div className="font-weight-bold p-0 mt-0 text-center cursor"><button onClick={handleResendOTP} className="btn btn-sm btn-link" >Resend</button></div> */}
+                                                </>
+                                            }
 
                                         </>
                                         : <>

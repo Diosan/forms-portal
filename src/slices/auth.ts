@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { setMessage } from "./message";
 import AuthService from "../services/auth.service";
-import {VerifyOtpResponse}  from "../services/auth.service";
+import {VerifyOtpResponse, VerifyPassPhraseResponse}  from "../services/auth.service";
 import axios from "axios";
 
 
@@ -26,6 +26,11 @@ interface AuthState {
 interface VerifyOtpPayload {
   otp: string;
 }
+
+interface VerifyPassPhrasePayload {
+  pass_phrase: string;
+}
+
 
 interface RegisterPayload {
   username: string;
@@ -109,7 +114,7 @@ export const login = createAsyncThunk(
   async ({ username, password }: LoginPayload, thunkAPI) => {
     try {
       // console.log("..trying to login - at slice")
-      const response = await AuthService.login(username, password);
+      const response: any = await AuthService.login(username, password);
       thunkAPI.dispatch(setMessage(response.message));
 
       if (typeof response.token === 'string') {
@@ -125,7 +130,7 @@ export const login = createAsyncThunk(
       }
 
        // update your state to indicate the user needs to provide OTP sent to their account
-       return { user: null, otpRequired: true, token: response.token };
+       return { user: null, otpRequired: true, token: response.token, mode: response.mode };
 
     } catch (error: any) {
       console.log(error)
@@ -184,6 +189,28 @@ export const verifyOtp = createAsyncThunk(
     }
   }
 );
+
+
+export const verifyPassPhrase = createAsyncThunk(
+  "auth/verifyOtp",
+  async ({ pass_phrase }: VerifyPassPhrasePayload, thunkAPI) => {
+    try {
+      const response: VerifyPassPhraseResponse = await AuthService.verifyPassPhrase(pass_phrase);
+      if (response.outcome === 'success') {
+        console.log(response)
+        localStorage.setItem("id_token", response.token);
+        localStorage.setItem("userToken", response.token);
+        return { verified: true, token: response.token };
+      } else {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+    } catch (error: any) {
+      // Error handling as before
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 
 export const resendOTP = createAsyncThunk(
   "auth/resendOtp",
