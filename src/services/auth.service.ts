@@ -38,6 +38,12 @@ export interface VerifyOtpResponse {
     message?: string; 
 }
 
+export interface VerifyPassPhraseResponse {
+  outcome: string;
+  token: string;  
+  message?: string; 
+}
+
 
 interface AuthResponse {
     user: User;
@@ -71,6 +77,7 @@ const login = (email: string, password: string): Promise<LoginResponse> => {
     
     return axios.post(API_URL + '/api/authenticate/login', { email, password }, {withCredentials:true})
       .then((response: { data: LoginResponse }) => {
+        console.log('\n\n\n Sign in response from server: ', response.data);
         if (response.data.outcome === 'success') {
           // Ensure that user data is always defined
           // //console.log(response.data)
@@ -95,6 +102,15 @@ const verifyOtp = (otp: string): Promise<VerifyOtpResponse> => {
       // throw error;
       return { outcome: 'error', message: error.response.data.message || 'OTP verification failed' };
     });
+};
+
+const verifyPassPhrase = (pass_phrase: string): Promise<VerifyPassPhraseResponse> => {
+  return axios.post(API_URL + '/api/authenticate/verify-passphrase', { pass_phrase })
+  .then(response => response.data)
+  .catch(error => {
+    // throw error;
+    return { outcome: 'error', message: error.response.data.message || 'Pass phrase verification failed' };
+  });
 };
 
 
@@ -192,6 +208,7 @@ const authService = {
   logout,
   getHome,
   verifyOtp,
+  verifyPassPhrase,
   registrationVerify,
   resendOTP,
   resendSigningOtp,
