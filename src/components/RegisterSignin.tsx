@@ -452,7 +452,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
 
                                     {otpRequired ?
                                         <>
-                                            { verificationMode == "OTP" ?
+                                            { verificationMode.toLowerCase() == "otp" ?
                                                 <>
                                                     <form onSubmit={signinVerify} className="swf-form">
                                                         <div className=" py-1 px-1 otp-card fade show">
