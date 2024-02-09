@@ -1246,7 +1246,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     useEffect(() => {
         (async () => {
-            let config = await axios.get(API_URL + '/api/submissions/' + submission_id, {
+            let config = await axios.get(API_URL + '/api/configuration/mode', {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
