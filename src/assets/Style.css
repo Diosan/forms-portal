@@ -117,8 +117,9 @@
     border-radius:0!important;
     color:#000;
     border:1px solid #ccc!important;
+    /* border:none!important; */
     background-color: #fff!important;
-    padding: 10px 10px!important;
+    padding: 7px 10px!important;
 }
 
 .form-control{

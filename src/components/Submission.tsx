@@ -548,7 +548,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
 
 
-                <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#333", color: "#fff" }}>
+                <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor: "#0078b6", color: "#fff" }}>
                   <div className="row" style={{ maxWidth: "200px", margin: "0 auto", color: "#fff", textDecoration: "none" }} >
                     <a style={{ color: "#fff", textDecoration: "none" }} href="/submissions" className="m-0 btn-link new-submission-btn float-start">
                       <FontAwesomeIcon icon={faArrowLeftLong} />
@@ -567,7 +567,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                   }
                 </div>
                 {!submissionTitleSaved || editingSubmissionTitle ?
-                  <div className="mb-3 px-3 pt-2" style={{ backgroundColor: "#ddd", color: "#222" }}>
+                  <div className="mb-3 px-3 pt-2" style={{ backgroundColor: "#e3eaf0", color: "#222" }}>
                     <form onSubmit={saveTitle} >
                       <fieldset>
                         <div className="form-group field field-string">
@@ -619,10 +619,10 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                             }
                             <button
                               type="submit"
-                              className="btn btn-md btn-dark ms-1  my-2 mt-3" // Use btn-light for a button with no background
+                              className="btn btn-md btn-primary ms-1  my-2 mt-3" // Use btn-light for a button with no background
                             >
                               <i className="text-gray">
-                                <FontAwesomeIcon icon={faCheck} />
+                                {/* <FontAwesomeIcon icon={faCheck} /> */}
                               </i> Continue
                             </button>
                           </div>
@@ -650,7 +650,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                       {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
                         <div>
 
-                          <div className="card fade show m-3" style={{ border: "none", backgroundColor: "#ddd" }} >
+                          <div className="card fade show m-3" style={{ border: "none", borderRadius:0, backgroundColor: "#e3eaf0" }} >
                             <h4 className="text-center mt-3 mb-1">Complainant Information</h4>
 
 
