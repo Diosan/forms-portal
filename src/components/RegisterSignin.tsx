@@ -513,7 +513,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
                                                                 : <></>
                                                             }
                                                             <div className="">
-                                                                <input
+                                                                <textarea
                                                                     name="passPhrase"
                                                                     placeholder=""
                                                                     style={{ fontSize: "16px", letterSpacing: '7px', textAlign: 'center' }}
