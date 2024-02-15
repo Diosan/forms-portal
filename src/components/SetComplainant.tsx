@@ -39,6 +39,7 @@ export const SetComplainant = ({submission_id, adult_only, complainant_added, co
     const [complainantUnit, setComplainantUnit] = useState('')
     const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
     const [complainantCourt, setComplainantCourt] = useState('High Court')
+    const [complainantAgencyText, setComplainantAgencyText] = useState('')
 
 
     
@@ -104,7 +105,10 @@ export const SetComplainant = ({submission_id, adult_only, complainant_added, co
 
     }, [])
 
-
+    const agencyText = (agency: string) => {
+        let fullText = ''
+        return fullText
+    }
 
     const saveComplainant = async (event: any) => {
         event.preventDefault()
@@ -189,10 +193,10 @@ export const SetComplainant = ({submission_id, adult_only, complainant_added, co
                 <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required disabled>
                     <option>Select complainant agency</option>
                     <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
-                    <option value="DPP">DPP (Director Of Public Prosections)</option>
+                    <option value="DPP">DPP (Director Of Public Prosecutions)</option>
                     <option value="PRISONS">Prisons (Trinidad & Tobago Prison Service)</option> 
                     <option value="CUSTOMS">Customs (Ministry of Finance - Customs and Excise Division)</option>
-                    <option value="IRD">IRD (Ministry of Finance, Inland Revenue)</option>
+                    <option value="IRD">IRD (Ministry of Finance, Inland Revenue Division)</option>
                 </select>
                 </div>
                 <div className="mb-3">
