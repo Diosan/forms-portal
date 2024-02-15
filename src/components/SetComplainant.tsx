@@ -186,14 +186,14 @@ export const SetComplainant = ({submission_id, adult_only, complainant_added, co
                 </div>
 
                 <div className="mb-3">
-                {/* <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
+                <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required disabled>
                     <option>Select complainant agency</option>
                     <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                     <option value="DPP">DPP (Director Of Public Prosections)</option>
                     <option value="PRISONS">Prisons (Trinidad & Tobago Prison Service)</option> 
                     <option value="CUSTOMS">Customs (Ministry of Finance - Customs and Excise Division)</option>
                     <option value="IRD">IRD (Ministry of Finance, Inland Revenue)</option>
-                </select> */}
+                </select>
                 </div>
                 <div className="mb-3">
                 <input type="text" className="form-control" id="regName" value={complainantRegNum} onChange={complainantRegNumberChange} placeholder="Regimental number" required />
