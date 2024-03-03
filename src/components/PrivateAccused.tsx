@@ -96,6 +96,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [UNODC, setUNODC] = useState('')
 
+    const [offenceKnown, setOffenceKnown] = useState('Yes')
+
 
     const UNODCChange = async (event: any) => {
 
@@ -195,6 +197,19 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
         setUNODC('')
         setChargeName('')
 
+    }
+
+    const offenceKnownChange = async (event: any) => {
+        setOffenceKnown(event.target.value);
+        if(event.target.value == 'No') {
+            setUNODC('Unknown')
+            setCodeCategory('unknown')
+            setChargeName('Unknown')
+        } else {
+            setUNODC('')
+            setCodeCategory('') 
+            setChargeName('')
+        }
     }
 
     const addNewCharge = async () => {
@@ -601,6 +616,16 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                     { showAddNewCharge || accusedCharges.length == 0 ?
 
                         <>  
+
+                            <br/>
+                            <div className="form-group field field-string">
+                                <label>Do you know what type of crime was committed ?</label>
+                                <select name="offence-known" className="form-control" value={offenceKnown} onChange={offenceKnownChange}>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+
                             <br/>
                             <div className="form-group field field-string">                  
                                 <label>What type of crime was committed ?</label><br/>
@@ -616,6 +641,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                     <option value="cat9">ACTS AGAINST PUBLIC SAFETY</option>
                                     <option value="cat10">ACTS AGAINST THE NATURAL</option>
                                     <option value="cat11">OTHER CRIMINAL ACTS</option>
+                                    <option value="unknown">UNKNOWN</option>
 
                                 </select>
                             </div>
