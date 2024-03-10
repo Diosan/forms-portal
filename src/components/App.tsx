@@ -15,6 +15,8 @@ import { Summons } from './Summons'
 import { Warrant } from './Warrant'
 import  SimpleRef  from './SimpleRef'
 import { Indictable } from './Indictable'
+import { IndictableComplaint } from './IndictableComplaint';
+import { IndictablePreliminaryCompleted } from './IndictablePreliminaryCompleted';
 import { CompletedSubmission } from './CompleteSubmission'
 import { CompletedIndictment } from './CompleteIndictment'
 import { Sign } from './Sign'
@@ -73,6 +75,10 @@ function App() {
         <Route path= "/consent/sign/:id" element={ <PrivateRoute><SignConsent /></PrivateRoute> } />
         <Route path= "/indictable" element={ <PrivateRoute><Indictable new_submission={ true } /></PrivateRoute>} />
         <Route path= "/indictable/:id" element={ <PrivateRoute><Indictable new_submission={ false } /></PrivateRoute>} />
+        <Route path= "/indictable_complaint" element={ <PrivateRoute><IndictableComplaint new_submission={ true } /></PrivateRoute>} />
+        <Route path= "/indictable_complaint/:id" element={ <PrivateRoute><IndictableComplaint new_submission={ false } /></PrivateRoute>} />
+        <Route path= "/indictable_pcompleted" element={ <PrivateRoute><IndictablePreliminaryCompleted new_submission={ true } /></PrivateRoute>} />
+        <Route path= "/indictable_pcompleted/:id" element={ <PrivateRoute><IndictablePreliminaryCompleted new_submission={ false } /></PrivateRoute>} />
         <Route path= "/verify/:id" element={ <PrivateRoute><Verify /></PrivateRoute> } />
         <Route path= "/not_police" element={ <PrivateRoute><NotPolice new_submission={ true }/></PrivateRoute>} />
         <Route path= "/not_police/:id" element={ <PrivateRoute><NotPolice new_submission={false }/></PrivateRoute>} />

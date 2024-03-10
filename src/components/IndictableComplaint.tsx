@@ -52,7 +52,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const Indictable = ({ new_submission }: SubmissionProps) => {
+export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
     // alert('Performing requestSignature in Submission component')
@@ -484,7 +484,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictment with NO complaint {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictment WITH complaint {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
