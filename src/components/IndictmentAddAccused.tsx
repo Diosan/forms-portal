@@ -128,7 +128,7 @@ const IndictmentAddAccused = ({submission_id, accused_added}: AddAccusedProps) =
 
 
     useEffect(() => {
-        axios.get(API_URL + '/schema/accused')
+        axios.get(API_URL + '/schema/indictment_accused')
         .then((response) => {
           console.log(response.data)
         setAccusedSchema(response.data.schema)
