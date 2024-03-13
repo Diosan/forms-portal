@@ -67,6 +67,8 @@ const IndictmentAddAccused = ({submission_id, accused_added}: AddAccusedProps) =
       countryName: form.formData.countryCode,
       submissionId: submission_id,
       email: form.formData.email,
+      phone: form.formData.phone,
+      bailStatus: form.formData.bailStatus,
       dateOfBirth: form.formData.dateOfBirth,
       aproximateAge: form.formData.aproximateAge,
       gender: form.formData.gender,
