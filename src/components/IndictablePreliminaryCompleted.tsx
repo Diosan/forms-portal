@@ -16,7 +16,8 @@ import { Tooltip } from 'react-tooltip'
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
-import { Charges } from "./Charges"
+import { IndictmentCharges } from "./IndictmentCharges"
+// import { Charges } from "./Charges"
 import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
@@ -671,7 +672,7 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
                   <></>
                   :
                   <div className="p-2" style={{ backgroundColor: "#fff" }}>
-                    <Charges
+                    <IndictmentCharges
                       submission_id={submissionId}
                       request_signature={requestSignature}
                       hasAccused={checkHasAccused}

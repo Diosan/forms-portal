@@ -609,7 +609,7 @@ export const PrivateSubmission = ({ new_submission }: SubmissionProps) => {
                                   Who am I ?
                                 </label>
                                 <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="whoAmI" value={complainantType} onChange={adultOnlyChange} required>
-                                  <option value="adult">I am an adult, filing against an adult accused (above the age of 18 years</option>
+                                  <option value="adult">I am an adult, filing against an adult accused (above the age of 18 years)</option>
                                   <option value="institution">I am an adult, filing on behalf of an justice-sector institution</option>
                                   <option value="child"> I am an adult, filing on behalf of a child, against a child</option>
                                 </select>
