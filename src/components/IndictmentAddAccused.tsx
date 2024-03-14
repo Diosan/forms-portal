@@ -72,7 +72,7 @@ const IndictmentAddAccused = ({submission_id, accused_added}: AddAccusedProps) =
       dateOfBirth: form.formData.dateOfBirth,
       aproximateAge: form.formData.aproximateAge,
       gender: form.formData.gender,
-      adulthood: form.formData.adulthood,
+      adulthood: "Adult",
       tntNational: form.formData.tntNational,
       tntResident: form.formData.tntResident,
       otherNational: form.formData.otherNational,

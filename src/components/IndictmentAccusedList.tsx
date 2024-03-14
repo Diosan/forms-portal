@@ -4,7 +4,8 @@ import { useAppSelector  } from "../store/store"
 import AddCharge from "./AddCharge"
 import ChargeList from "./ChargeList"
 import { useDispatch, useSelector } from 'react-redux';
-import Accused from "./Accused"
+import IndictmentAccused from "./IndictmentAccused";
+// import Accused from "./Accused"
 const API_URL = import.meta.env.VITE_API_URL
 import { useAppDispatch, RootState } from "../store";
 import { setAccused } from "../slices/accused";
@@ -150,7 +151,7 @@ const IndictmentAccusedList = ({submission_id, request_signature, submission_acc
 
 
 
-                            <Accused 
+                            <IndictmentAccused 
                                 request_signature={requestSignature} 
                                 accused_id={accused.id}
                                 editable={editable} 

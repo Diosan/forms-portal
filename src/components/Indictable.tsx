@@ -677,6 +677,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                       request_signature={requestSignature}
                       hasAccused={checkHasAccused}
                       editable={editable}
+                      preliminary_completed={true}
                     />
                   </div>
                 }

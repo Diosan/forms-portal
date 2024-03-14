@@ -28,6 +28,7 @@ type ChargesProps = {
     request_signature: any,
     editable: boolean,
     hasAccused: any,
+    preliminary_completed: boolean
 }
 
 interface Accused {
@@ -38,7 +39,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const IndictmentCharges = ({submission_id, request_signature, editable, hasAccused}: ChargesProps) => {
+export const IndictmentCharges = ({submission_id, request_signature, editable, hasAccused, preliminary_completed}: ChargesProps) => {
 
     const [accusedSchema, setAccusedSchema] = useState({})
     const [accusedUI, setAccusedUI] = useState({})
