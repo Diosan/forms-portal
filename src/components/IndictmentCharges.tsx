@@ -187,7 +187,8 @@ export const IndictmentCharges = ({submission_id, request_signature, editable, h
                     <>
                         <IndictmentAddAccused
                         submission_id={submission_id}
-                        accused_added={accusedAdded} 
+                        accused_added={accusedAdded}
+                        preliminary_completed={preliminary_completed}
                         />               
                 </>
                 {/* </>

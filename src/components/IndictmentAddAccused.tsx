@@ -24,7 +24,8 @@ import AuthService from "../services/AuthService"
 
 type AddAccusedProps = {
   submission_id: number,
-  accused_added: any
+  accused_added: any,
+  preliminary_completed: boolean
 }
 
 
@@ -33,7 +34,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-const IndictmentAddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
+const IndictmentAddAccused = ({submission_id, accused_added, preliminary_completed}: AddAccusedProps) => {
 
   const navigate = useNavigate()
 
