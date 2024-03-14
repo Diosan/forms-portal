@@ -131,7 +131,8 @@ const IndictmentAddAccused = ({submission_id, accused_added, preliminary_complet
 
 
     useEffect(() => {
-        axios.get(API_URL + '/schema/indictment_accused')
+        let accusedForm = preliminary_completed? 'preliminary_completed_accused' : 'indictment_accused';
+        axios.get(API_URL + '/schema/' + accusedForm)
         .then((response) => {
           console.log(response.data)
         setAccusedSchema(response.data.schema)
