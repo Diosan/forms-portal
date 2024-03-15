@@ -168,7 +168,7 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
         title: submissionTitle,
         email: decoded.email,
         userId: decoded.id,
-        type: 'indictment'
+        type: 'indictment_preliminary_completed'
       }
       console.log('Submission is : ', submission)
       await axios.post(API_URL + '/api/submissions/update_title', submission, 

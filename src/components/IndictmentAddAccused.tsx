@@ -89,9 +89,23 @@ const IndictmentAddAccused = ({submission_id, accused_added, preliminary_complet
 
     await axios.post(API_URL + '/api/submissions/save_accused', accused)
     .then((response) => {
+
       switch(response.data.outcome) {
         case 'success':
           console.log('Accused successfully saved', response.data.accused)
+
+          if(preliminary_completed) {
+            axios.post(
+              API_URL + '/api/accuseds/relateds', 
+              {
+                offence: form.formData.previousCase,
+                accusedId: response.data.accused.id
+              }
+            ) .then((response) => {
+              console.log('Related matter successfully saved', response.data.related)
+            })
+          }
+
           // navigate('/submission/' + submission_id)
           // window.location.reload()
           accused_added(response.data.accused)  
