@@ -92,6 +92,7 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
   const [complainantFirstName, setComplainantFirstName] = useState('')
   const [complainantLastName, setComplainantLastName] = useState('')
   const [complainantEmail, setComplainantEmail] = useState('')
+  const [complainantPhone, setComplainantPhone] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
   const [complainantRank, setComplainantRank] = useState('')
   const [complainantUnit, setComplainantUnit] = useState('')
@@ -152,6 +153,10 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
 
   const complainantEmailChange = (event: any) => {
     setComplainantEmail(event.target.value)
+  }
+
+  const complainantPhoneChange = (event: any) => {
+    setComplainantPhone(event.target.value)
   }
 
   const saveTitle = async (event: any) => {
@@ -243,9 +248,10 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
       agency: "DPP",
       court: complainantCourt,
       courtDistrict: complainantCourtDistrict,
-      firstName: "TTLAWADMIN",
-      lastName: "TTLAWADMIN",
-      email: "dpp@link868.com",
+      firstName: complainantFirstName,
+      lastName: complainantLastName,
+      email: complainantEmail,
+      phone: complainantPhone,
       regNum: "N/A",
       rank: "N/A",
       unit: "N/A",
@@ -629,6 +635,8 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
                                   </div>
+                                  */}
+
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
                                   </div>
@@ -637,10 +645,17 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
                                   </div>
                                   <div className="mb-3">
                                     <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
-                                  </div> */}
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="phone" className="form-control" id="phone" value={complainantPhone} onChange={complainantPhoneChange} placeholder="Phone" required />
+                                  </div> 
 
                                   {/* <div className="d-grid gap-2"> */}
                                   {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
+
+
+
+
                                   <button
                                     type="submit"
                                     className="btn btn-md btn-primary ms-1 float-end" // Use btn-light for a button with no background
