@@ -587,7 +587,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
                           <div className=" mt-2">
                             <input
-                              className="form-control fs-5 mt-0 mb-0 flex-grow-1"
+                              className="form-control fs-6 mt-0 mb-0 flex-grow-1"
                               type="text"
                               value={submissionTitle}
                               placeholder="E.g. Your name VS Accused Name"
@@ -598,7 +598,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                 <label className="control-label fs-6  my-2">
                                   Category Of Accused
                                 </label>
-                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
+                                <select className='form-select fs-6 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
                                   <option value="adult">Adult only</option>
                                   <option value="child">Child only</option>
                                   <option value="both">Both</option>
@@ -606,7 +606,7 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
                                 <label className="control-label fs-6 my-2">
                                   Matter Type
                                 </label>
-                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
+                                <select className='form-select fs-6 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
                                   <option>Select matter type</option>
                                   <option value="Indictable">Indictable</option>
                                   <option value="Summary">Summary</option>
@@ -641,7 +641,12 @@ export const Submission = ({ new_submission }: SubmissionProps) => {
 
 
 
-              <div className="px-2 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
+              <div className="px-2 py-3" 
+              style={{
+                backgroundColor: "#fff", // Assuming default or fallback is not to set the color
+                color: (!submissionComplainantSaved || editingSubmissionComplainant) && editable ? "#222" : undefined, // Assuming default or fallback is not to set the color
+              }}
+              >
 
                 <div id="swf-complainant" style={{ display: visibleSections.complainant || visibleSections.all ? 'block' : 'none' }}>
                   {submissionTitleSaved ?

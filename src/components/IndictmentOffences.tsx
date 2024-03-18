@@ -8,10 +8,11 @@ type OffencesProps = {
     last_name: string;
     accused_id: number;
     alias: string;
-    key: number
+    key: number;
+    accused_sequence_id: number;
 };
 
-export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, key }: OffencesProps) => {
+export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, key, accused_sequence_id }: OffencesProps) => {
     const [offences, setOffences] = useState<{ [key: number]: any[] }>({});
     const [accusedCount, setAccusedCount] = useState<number>(0); // Initialize with 1
     const [globalAccusedCount, setGlobalAccusedCount] = useState(0);
@@ -39,12 +40,16 @@ export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, k
         setGlobalAccusedCount(count => count + 1);
     }, [accused_id]);
 
+
     return (
         <>
-            {Object.keys(offences).map((index, accused_id) => (
+            
+            {Object.keys(offences).map((key, index ) => (
 
+                
+                <div key={index} style={{ margin: "0 0 20px 0", padding: "0", borderBottom: "1px solid #666" }}>
+                   
 
-                <div key={accused_id} style={{ margin: "0 0 20px 0", padding: "0", borderBottom: "1px solid #666" }}>
 
                     <div className="d-block">
                         {/* <td style={{ width: "160px" }}><label>Name of Accused: </label></td> */}
@@ -67,10 +72,10 @@ export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, k
                             </tr>
                             </table>
                             <table className="mb-2">
-                            <tr  style={{ fontWeight: "bold", fontSize: "10pt", paddingLeft: "20px"}}>
+                            <tr  style={{ fontWeight: "normal", fontSize: "10pt", paddingLeft: "20px"}}>
                                 <td colSpan={2}>
                                     {alias !== "" && (
-                                        <strong>otherwise called &nbsp;{alias}&nbsp;</strong>
+                                        <><span>otherwise called</span>  <strong>&nbsp;{alias}&nbsp;</strong></>
                                     )}
                                     is charged with the following offences:
                                 </td>
@@ -88,7 +93,7 @@ export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, k
                         {/* <label style={{ fontSize: "10pt", margin:"0 0 7px 0" }}>Offences</label> */}
 
 
-                        {offences[parseInt(index)].map((offence: any, offenceIndex) => (
+                        {offences[parseInt(key)].map((offence: any, offenceIndex) => (
                             <div key={offenceIndex}>
 
                                 <div style={{ margin: "0 0 10px 0" }}>

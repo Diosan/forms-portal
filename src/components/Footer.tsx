@@ -62,7 +62,7 @@ export const Footer = () => {
             <div>
 
               <div className="copyright">
-                <span style={{ color: "#444", fontSize: "12px", lineHeight:"1.2rem", textDecoration: "none" }}>SWIF Version: 1.0.6</span>
+                <span style={{ color: "#444", fontSize: "12px", lineHeight:"1.2rem", textDecoration: "none" }}>SWIF Version: 1.0.7</span>
                 
                 &nbsp; &nbsp;
                 <span>

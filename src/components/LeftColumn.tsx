@@ -127,17 +127,17 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                                     </>
                                     :
                                     <>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment with NO complaint </a></li>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_complaint"> Indictment WITH complaint </a></li>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_pcompleted"> Indictment (Preliminary Inquiry completed) </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment with no complaint </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_complaint"> Indictment with complaint </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_pcompleted"> Indictment  -<br />Preliminary Inquiry completed </a></li>
 
                                     </>
                                 }
                                 {(agency == 'ttlawcourts' || agency == 'link868') &&
                                     <>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment with NO complaint </a></li>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_complaint"> Indictment WITH complaint </a></li>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_pcompleted"> Indictment (Preliminary Inquiry completed) </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment  <br />with no complaint </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_complaint"> Indictment  <br />with complaint </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_pcompleted"> Indictment -<br />Preliminary Inquiry completed </a></li>
 
                                     </>
                                 }

@@ -72,7 +72,7 @@ function NameDisplay({ data }: NameDisplayProps) {
         return data.slice(0, maxNames).map((person: any, index: number) => (
             // <div key={index}>{person.firstName} {person.lastName}</div>
             <div style={{ fontSize: "10pt", lineHeight: "18pt" }} key={index}>
-                <table>
+                <table  style={{ borderBottom:"1px solid #ccc" }}>
                     <tr>
                         <td>
                             <span>{person.firstName} </span><br /><span className="fw-normal" style={{ fontSize: "9pt" }}>Accused First Name</span>
@@ -83,7 +83,7 @@ function NameDisplay({ data }: NameDisplayProps) {
                     </tr>
                     {person.alias && (
                         <tr>
-                            <td>
+                            <td style={{ fontWeight: "normal" }}>
                                 <span>otherwise called</span>
                             </td>
                             <td>
@@ -392,7 +392,7 @@ export const SignDPP = ({ }: SignProps) => {
                                             last_name={accused.lastName}
                                             alias={accused.alias || ""}
                                             accused_id={accused.id}
-                                            key={i}
+                                            key={i +1}
                                         />
                                     ))}
                                 </tbody>

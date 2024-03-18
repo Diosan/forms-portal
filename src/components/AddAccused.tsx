@@ -179,7 +179,7 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
             onSubmit={processForm}
             onError={log('errors')}
         >
-            <div className="gap-2 pb-5"  style={{borderBottom:"10px solid #eee"}}>
+            <div className="gap-2 pb-5"  style={{borderBottom:"0px solid #eee"}}>
             <a className="btn btn-light mx-2" onClick={hideAccusedForm}>Cancel</a>
             <button className="btn btn-secondary mx-2" type="submit">Save this Accused</button>
             </div>
