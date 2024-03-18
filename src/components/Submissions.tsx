@@ -271,7 +271,7 @@ export const Submissions = ({ }: SubmissionsProps) => {
                 path = '/consent'
                 break
             case 'indictment':
-                path = '/indictable'
+                path = '/indictment'
                 break;
             default:
                 path = ''
