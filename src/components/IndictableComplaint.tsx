@@ -16,8 +16,8 @@ import { Tooltip } from 'react-tooltip'
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
-// import { Charges } from "./Charges"
 import { IndictmentCharges } from "./IndictmentCharges"
+// import { Charges } from "./Charges"
 import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
@@ -53,7 +53,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const Indictable = ({ new_submission }: SubmissionProps) => {
+export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
     // alert('Performing requestSignature in Submission component')
@@ -92,6 +92,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
   const [complainantFirstName, setComplainantFirstName] = useState('')
   const [complainantLastName, setComplainantLastName] = useState('')
   const [complainantEmail, setComplainantEmail] = useState('')
+  const [complainantPhone, setComplainantPhone] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
   const [complainantRank, setComplainantRank] = useState('')
   const [complainantUnit, setComplainantUnit] = useState('')
@@ -154,6 +155,10 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
     setComplainantEmail(event.target.value)
   }
 
+  const complainantPhoneChange = (event: any) => {
+    setComplainantPhone(event.target.value)
+  }
+
   const saveTitle = async (event: any) => {
     event.preventDefault()
 
@@ -168,7 +173,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
         title: submissionTitle,
         email: decoded.email,
         userId: decoded.id,
-        type: 'indictment'
+        type: 'indictment_complaint'
       }
       console.log('Submission is : ', submission)
       await axios.post(API_URL + '/api/submissions/update_title', submission, 
@@ -243,9 +248,10 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
       agency: "DPP",
       court: complainantCourt,
       courtDistrict: complainantCourtDistrict,
-      firstName: "DPP",
-      lastName: "DPP",
-      email: "DPP",
+      firstName: complainantFirstName,
+      lastName: complainantLastName,
+      email: complainantEmail,
+      phone: complainantPhone,
       regNum: "N/A",
       rank: "N/A",
       unit: "N/A",
@@ -400,6 +406,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
             setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
+            setComplainantPhone(returned_submission.data.complainant.phone)
             break
           case 'charge_saved':
             setSubmissionComplainantSaved(true)
@@ -412,6 +419,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
             setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
+            setComplainantPhone(returned_submission.data.complainant.phone)
             setChargeSaved(true)
             break
           case 'signature_requested':
@@ -426,6 +434,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
             setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
+            setComplainantPhone(returned_submission.data.complainant.phone)
             setChargeSaved(true)
             break
           default:
@@ -442,6 +451,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
           setComplainantUnit(returned_submission.data.complainant.unit)
           setComplainantRegNum(returned_submission.data.complainant.regNum)
           setComplainantEmail(returned_submission.data.complainant.email)
+          setComplainantPhone(returned_submission.data.complainant.phone)
         
           console.log('Complainant: ', returned_submission.data.complainant)
 
@@ -485,7 +495,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictment with NO complaint {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictment WITH complaint {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
@@ -628,7 +638,7 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                                   </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
-                                  </div>
+                                  </div> */}
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
                                   </div>
@@ -637,7 +647,10 @@ export const Indictable = ({ new_submission }: SubmissionProps) => {
                                   </div>
                                   <div className="mb-3">
                                     <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
-                                  </div> */}
+                                  </div>
+                                  <div className="mb-3">
+                                    <input type="phone" className="form-control" id="phone" value={complainantPhone} onChange={complainantPhoneChange} placeholder="Phone" required />
+                                  </div>  
 
                                   {/* <div className="d-grid gap-2"> */}
                                   {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}

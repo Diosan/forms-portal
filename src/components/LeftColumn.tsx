@@ -118,7 +118,7 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                                 <li className="nav-item active jud-header-item"><a className="nav-link" href="/">Home  </a></li>
                                 {agency !== 'dpp' ?
                                     <>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions</a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/submissions"> My Submissions </a></li>
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/submission"> Complaint With Oath</a></li>
                                         {/* <li className="nav-item jud-header-item"><a className="nav-link" href="/consent"> Complaint With Oath, With Consent</a></li> */}
                                         <li className="nav-item jud-header-item"><a className="nav-link" href="/oathless"> Complaint Without Oath</a></li>
@@ -127,12 +127,18 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
                                     </>
                                     :
                                     <>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment</a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment with NO complaint </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_complaint"> Indictment WITH complaint </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_pcompleted"> Indictment (Preliminary Inquiry completed) </a></li>
+
                                     </>
                                 }
-                                {agency == 'ttlawcourts' &&
+                                {(agency == 'ttlawcourts' || agency == 'link868') &&
                                     <>
-                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment</a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable"> Indictment with NO complaint </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_complaint"> Indictment WITH complaint </a></li>
+                                        <li className="nav-item jud-header-item"><a className="nav-link" href="/indictable_pcompleted"> Indictment (Preliminary Inquiry completed) </a></li>
+
                                     </>
                                 }
                                 <li className="nav-item jud-header-item"><button onClick={handleLogout} style={{ width: "100%" }} className="nav-link m-0 text-left">Logout</button></li>
