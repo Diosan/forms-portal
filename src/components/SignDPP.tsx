@@ -227,6 +227,9 @@ export const SignDPP = ({ }: SignProps) => {
                         case 'indictment':
                             setSubmissionType('INDICTMENT')
                             break;
+                        case 'indictment_preliminary_completed':
+                                setSubmissionType('INDICTMENT PRELIMINARY INQUIRY COMPLETE')
+                                break;
                         default:
                             setSubmissionType('COMPLAINT ON OATH')
                     }
