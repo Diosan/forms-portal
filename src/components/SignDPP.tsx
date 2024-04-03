@@ -143,6 +143,8 @@ export const SignDPP = ({ }: SignProps) => {
     const [court, setCourt] = useState('')
     const [district, setDistrict] = useState('')
     const [submissionType, setSubmissionType] = useState('')
+    const [relatedMatters, setRelatedMatters] = useState(false)
+    const [previousCases, setPreviousCases] = useState('')
 
     const signSubmission = () => {
         console.log('Signing form ')
@@ -266,10 +268,27 @@ export const SignDPP = ({ }: SignProps) => {
 
         }
 
+        const fetchPrevious = async () => {
+            await axios.get(API_URL + '/api/submissions/previous/' + id,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+            }).then(previous => {
+                setRelatedMatters(true)
+                setPreviousCases(previous.data.cases)
+                console.log('\n\n\n --------- PREVIOUS --------- \n\n')
+                console.log(previous)
+                console.log('\n\n --------- END PREVIOUS --------- \n\n\n')
+            })
+        }
+
         if (auth.loggedIn()) {
 
             console.log('\n\n\n You are logged in \n\n\n')
             fetchSubmission()
+            fetchPrevious()
 
         } else {
 
@@ -298,7 +317,7 @@ export const SignDPP = ({ }: SignProps) => {
     return (
         <div className="d-flex container-pdf">
 
-
+            
 
             <div className="container submissions-container" style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "30px 30px 30px 300px", flexGrow: 1 }}>
 
@@ -358,7 +377,7 @@ export const SignDPP = ({ }: SignProps) => {
                             </tbody>
                         </table>
 
-                        <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt", borderBottom: "1px solid #666", marginBottom:"30px"  }}>
+                        <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt", borderBottom: "1px solid #666", marginBottom:"15px"  }}>
                             {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt" }}>REPUBLIC OF TRINIDAD AND TOBAGO</div> */}
                             {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "13pt" }}>{submissionType}</div> */}
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>IN THE {court.toUpperCase()} OF JUSTICE</div>
@@ -368,7 +387,12 @@ export const SignDPP = ({ }: SignProps) => {
 
                         </div>
 
-
+                        { !relatedMatters ? <></>
+                            :
+                            <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt", marginBottom:"15px", paddingBottom:"5px" }}>
+                                Previous Cases: {previousCases}
+                            </div>
+                        }
 
 
 
