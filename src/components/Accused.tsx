@@ -99,7 +99,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const UNODCChange = async (event: any) => {
 
-        setUNODC(event.target.value)
+        // setUNODC(event.target.value)
         
         const selectedOption = document.querySelector(`#codelist option[value="${event.target.value}"]`);
 
