@@ -54,6 +54,9 @@ function App() {
   return (
     <>
     {/* <Header /> */}
+
+    <div style={{ color: 'white', background: 'red', textAlign: 'right', padding: '10px' }} > Demo!  Demo! Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  </div>
+
     <LeftColumn setCreatePassword={setCreatePassword} />
 
       <Routes>
