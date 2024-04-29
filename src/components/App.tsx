@@ -58,8 +58,8 @@ function App() {
     {/* <Header /> */}
 
     { OPERATION_MODE == 'DEMO' ?
-      <div style={{ color: 'white', background: 'red', textAlign: 'right', padding: '10px' }} >
-        Demo!  Demo! Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  
+      <div style={{ color: 'white', background: 'red', textAlign: 'center', padding: '10px' }} >
+        Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  
       </div>
       : <></>
     }
