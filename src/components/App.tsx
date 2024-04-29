@@ -64,6 +64,13 @@ function App() {
       : <></>
     }
 
+    { OPERATION_MODE == 'DEVELOPMENT' ?
+      <div style={{ color: 'white', background: 'green', textAlign: 'center', padding: '10px' }} >
+        DEVELOPMENT MODE
+      </div>
+      : <></>
+    }
+
 
     <LeftColumn setCreatePassword={setCreatePassword} />
 
