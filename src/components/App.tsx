@@ -1,3 +1,5 @@
+
+const OPERATION_MODE = import.meta.env.VITE_OPERATION_MODE 
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import { Routes, Route } from 'react-router-dom';
@@ -55,7 +57,13 @@ function App() {
     <>
     {/* <Header /> */}
 
-    <div style={{ color: 'white', background: 'red', textAlign: 'right', padding: '10px' }} > Demo!  Demo! Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  </div>
+    { OPERATION_MODE == 'DEMO' ?
+      <div style={{ color: 'white', background: 'red', textAlign: 'right', padding: '10px' }} >
+        Demo!  Demo! Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  Demo!  
+      </div>
+      : <></>
+    }
+
 
     <LeftColumn setCreatePassword={setCreatePassword} />
 
