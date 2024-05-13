@@ -98,6 +98,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [offenceKnown, setOffenceKnown] = useState('Yes')
 
+    const [policeReport, setPoliceReport] = useState('No')
+
 
     const UNODCChange = async (event: any) => {
 
@@ -210,6 +212,10 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             setCodeCategory('') 
             setChargeName('')
         }
+    }
+
+    const policeReportChange = async (event: any) => {
+        setPoliceReport(event.target.value);
     }
 
     const addNewCharge = async () => {
@@ -473,7 +479,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             {   previousRecord ?
                     <>
                         { editable ?
-                            <div className="add-charge">
+                            <div className="add-charge"> 
                                 <Form 
                                     schema={pendingSchema}
                                     uiSchema={pendingUI}
@@ -625,6 +631,15 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                     <option value="No">No</option>
                                 </select>
                             </div>
+
+                            <div className="form-group field field-string">
+                                <label>Have you reported this incident to the Police ?</label>
+                                <select name="offence-known" className="form-control" value={policeReport} onChange={policeReportChange}>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+
 
                             <br/>
                             <div className="form-group field field-string">                  
