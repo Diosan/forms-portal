@@ -100,6 +100,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [policeReport, setPoliceReport] = useState('No')
 
+    const [policeReportInfo, setPoliceReportInfo] = useState('')
+
 
     const UNODCChange = async (event: any) => {
 
@@ -216,6 +218,10 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const policeReportChange = async (event: any) => {
         setPoliceReport(event.target.value);
+    }
+
+    const policeReportInfoChange = async (event: any) => {
+        setPoliceReportInfo(event.target.value);
     }
 
     const addNewCharge = async () => {
@@ -634,12 +640,24 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
                             <div className="form-group field field-string">
                                 <label>Have you reported this incident to the Police ?</label>
-                                <select name="offence-known" className="form-control" value={policeReport} onChange={policeReportChange}>
+                                <select name="police-report" className="form-control" value={policeReport} onChange={policeReportChange}>
                                     <option value="Yes">Yes</option>
                                     <option value="No">No</option>
                                 </select>
                             </div>
 
+                            { policeReport == 'Yes' ?
+                                <>
+                                    <div className="form-group field field-string">
+                                        <label>Police Report Information</label>
+                                        <textarea name="police-report-info" className="form-control" value={policeReportInfo} onChange={policeReportInfoChange} placeholder="Which Police Station? Date of Police Report? Police Report Receipt number" >
+
+                                        </textarea>
+                                    </div>
+                                </>
+                                :
+                                <></>
+                            }
 
                             <br/>
                             <div className="form-group field field-string">                  
