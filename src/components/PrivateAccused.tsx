@@ -246,7 +246,9 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
           accusedId: accused_id,
           dateOfOffence: form.formData.dateOfOffence,
           statementOfOffence: form.formData.particulars,
-          particulars: form.formData.particulars
+          particulars: form.formData.particulars,
+          policeReport: policeReport == 'Yes',
+          policeReportInfo: policeReportInfo
         }
     
         await axios.post(API_URL + '/api/accuseds/charges', charge)
