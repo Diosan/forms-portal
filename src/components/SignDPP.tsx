@@ -390,7 +390,7 @@ export const SignDPP = ({ }: SignProps) => {
                         { !relatedMatters ? <></>
                             :
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "11pt", lineHeight: "12pt", marginBottom:"15px", paddingBottom:"5px" }}>
-                                Previous Cases: {previousCases}
+                                Originating Case No(s): {previousCases}
                             </div>
                         }
 
