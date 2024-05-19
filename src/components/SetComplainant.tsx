@@ -100,6 +100,8 @@ export const SetComplainant = ({submission_id, adult_only, complainant_added, co
             } else {
                 console.log('\n\n\n Setting users default agency: ', decoded.agency.toUpperCase())
                 setComplainantAgency(decoded.agency.toUpperCase())
+                let userEmail = await localStorage.getItem('email')!
+                setComplainantEmail(userEmail)
             }
         })()
 

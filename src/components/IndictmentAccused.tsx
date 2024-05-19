@@ -99,7 +99,7 @@ const IndictmentAccused = ({accused_id, request_signature, editable}: AccusedPro
 
     const UNODCChange = async (event: any) => {
 
-        setUNODC(event.target.value)
+        // setUNODC(event.target.value)
         
         const selectedOption = document.querySelector(`#codelist option[value="${event.target.value}"]`);
 
@@ -355,7 +355,7 @@ const IndictmentAccused = ({accused_id, request_signature, editable}: AccusedPro
 
     useEffect(() => {
         // console.log('Is component reloading constantly');
-        axios.get(API_URL + '/schema/charge')
+        axios.get(API_URL + '/schema/indictment_charge')
         .then((response) => {
             setChargeSchema(response.data.schema)
             setChargeUI(response.data.UI)

@@ -212,7 +212,7 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
         userId: decoded.id,
         matterType: matterType,
         adultOnly: adultOnly,
-        type: 'indictment'
+        type: 'indictment_preliminary_completed'
       }
       axios.post(API_URL + '/api/submissions', submission, {
       headers: {

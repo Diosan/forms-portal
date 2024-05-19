@@ -151,7 +151,7 @@ export const RequestSignature = ({ submission_id, complainant_email }: RequestSi
             console.log('Fetched submission: ', submission.data.submission)
             // console.log('indictment variable being set to: ', submission.data.submission.type == 'indictment')
             // setIndictment(submission.data.submission.type == 'indictment')
-            setIndictment(submission?.data?.submission?.type == 'indictment')
+            setIndictment(submission?.data?.submission?.type == 'indictment' || submission?.data?.submission?.type == 'indictment_preliminary_completed')
 
         }
 

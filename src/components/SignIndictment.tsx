@@ -1185,7 +1185,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                 let the_email = await complainant_email
                 // console.log('\n\n\n the_email: ', the_email)
                 console.log('\n\n\n Checking for additional notes: ', submission.data.submission)
-                if (submission.data.submission.additionalNotes == null) {
+                if (submission.data.submission.additionalNotes == null || submission.data.submission.additionalNotes.length === 0) {
                     console.log('addtionalNotes is null')
                     setAdditionalNotes(false)
                 } else {
