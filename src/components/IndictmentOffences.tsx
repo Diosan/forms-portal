@@ -6,6 +6,9 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type OffencesProps = {
+
+
+
     first_name: string;
     last_name: string;
     accused_id: number;
@@ -14,7 +17,7 @@ type OffencesProps = {
     accused_sequence_id: number;
 };
 
-export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, key, accused_sequence_id }: OffencesProps) => {
+export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, key }: OffencesProps) => {   
     const [offences, setOffences] = useState<{ [key: number]: any[] }>({});
     const [accusedCount, setAccusedCount] = useState<number>(0); // Initialize with 1
     const [globalAccusedCount, setGlobalAccusedCount] = useState(0);
