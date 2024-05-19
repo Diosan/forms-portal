@@ -6,11 +6,17 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type OffencesProps = {
+
+
+    
     first_name: string;
     last_name: string;
     accused_id: number;
     alias: string;
     key: number
+
+
+
 };
 
 export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, key }: OffencesProps) => {
