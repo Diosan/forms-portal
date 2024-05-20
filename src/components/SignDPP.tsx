@@ -383,7 +383,7 @@ export const SignDPP = ({ }: SignProps) => {
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>IN THE {court.toUpperCase()} OF JUSTICE</div>
                             <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "10pt" }}>CRIMINAL DIVISION {"("} {district.toUpperCase()} {")"} </div>
                             {/* <div style={{ textAlign: "left", fontWeight: "bold", fontSize: "9pt", marginTop: "20px", marginBottom: "20px" }}>Matter Type: {matterType}</div> */}
-                            <p> INDICTMENT BY THE DIRECTOR OF PUBLIC PROSECUTIONS ({submissionType}) </p>
+                            <p> INDICTMENT BY THE DIRECTOR OF PUBLIC PROSECUTIONS {submissionType == 'INDICTMENT PRELIMINARY INQUIRY COMPLETE' ? '(PRELIMINARY INQUIRY COMPLETED)' : ''} </p>
 
                         </div>
 
