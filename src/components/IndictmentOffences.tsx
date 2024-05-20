@@ -14,7 +14,7 @@ type OffencesProps = {
     accused_id: number;
     alias: string;
     key: number;
-    accused_sequence_id: number;
+    
 };
 
 export const IndictmentOffences = ({ first_name, last_name, alias, accused_id, key }: OffencesProps) => {   
