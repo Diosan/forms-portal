@@ -125,8 +125,16 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                 console.log('Charge found: ', charge)
                 await setChargeName(charge.name)
                 await setUNODC(charge.ICCS)
+            } else {
+                console.log('Charge not found ')
+                await setChargeName('')
+                await setUNODC('')
             }
 
+        } else {
+            console.log('Charge not found ')
+            await setChargeName('')
+            await setUNODC('')
         }
 
         
@@ -219,47 +227,54 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const newCharge = async (form: any) => {
 
-        setShowAddNewCharge(false)
+        if(!UNODC) {
 
-        console.log('Submitted form data: ', form.formData)
-        console.log('\n\n\n UNODC: ', UNODC)
+            alert('Charge code and name cannot be empty')
 
-        setFormData({})
-    
-        let charge = {
-          name: chargeName,
-          ICCS: UNODC, 
-          UNODC: UNODC,
-          counts: form.formData.count,
-          accusedId: accused_id,
-          dateOfOffence: form.formData.dateOfOffence,
-          statementOfOffence: form.formData.particulars,
-          particulars: form.formData.particulars
+        } else {
+
+            setShowAddNewCharge(false)
+
+            console.log('Submitted form data: ', form.formData)
+            console.log('\n\n\n UNODC: ', UNODC)
+
+            setFormData({})
+        
+            let charge = {
+            name: chargeName,
+            ICCS: UNODC, 
+            UNODC: UNODC,
+            counts: form.formData.count,
+            accusedId: accused_id,
+            dateOfOffence: form.formData.dateOfOffence,
+            statementOfOffence: form.formData.particulars,
+            particulars: form.formData.particulars
+            }
+        
+            await axios.post(API_URL + '/api/accuseds/charges', charge)
+            .then((response) => {
+        
+            switch(response.data.outcome) {
+                case 'success':
+                console.log('New Charge successfully saved', response.data.charge)
+                
+                dispatch(countCharge(1))
+                setAccusedCharges([response.data.charge, ...accusedCharges]) //response.data.charge
+
+                //   navigate('/submission/' + submission_id)
+                //   window.location.reload()   
+                request_signature()        
+                break
+                case 'error':
+                console.log('Error saving charge')
+                break
+                default:
+                console.log('Unknown accused save outcome')
+                break
+            }
+        
+            })
         }
-    
-        await axios.post(API_URL + '/api/accuseds/charges', charge)
-        .then((response) => {
-    
-          switch(response.data.outcome) {
-            case 'success':
-              console.log('New Charge successfully saved', response.data.charge)
-              
-            dispatch(countCharge(1))
-            setAccusedCharges([response.data.charge, ...accusedCharges]) //response.data.charge
-
-            //   navigate('/submission/' + submission_id)
-            //   window.location.reload()   
-              request_signature()        
-              break
-            case 'error':
-              console.log('Error saving charge')
-              break
-            default:
-              console.log('Unknown accused save outcome')
-              break
-          }
-    
-        })
         
     }
 
@@ -661,14 +676,16 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                         type="text" 
                                         className="form-control" 
                                         value={UNODC}
-                                        disabled /> 
+                                        disabled
+                                        required /> 
 
                                     <label>Charge name:</label>
                                     <input
                                         type="text" 
                                         className="form-control" 
                                         value={chargeName}
-                                        disabled /> 
+                                        disabled
+                                        required /> 
                                     
 
                                     <datalist id="codelist">
