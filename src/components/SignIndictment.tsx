@@ -95,7 +95,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     const [oathType, setOathType] = useState('oath')
 
-    const [acknowledged, setAcknowledged] = useState(false)
+    const [acknowledged, setAcknowledged] = useState(true)
     const [additionalAcknowledged, setAdditionalAcknowledged] = useState(false)
 
     const passPhraseChange = (event: any) => {
@@ -1444,14 +1444,14 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                 <div style={{ margin: "10px 0 0 0", padding: "15px " }}>
                     <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 20px 10px" }}>
 
-                        <div className="form-group field field-boolean">
+                        {/* <div className="form-group field field-boolean">
                             <div className="checkbox">
                                 <label>
                                     <input value="test" type="checkbox" onChange={acknowledgedChange} />
                                     <span>Summary of evidence is included in appendix A below.</span>
                                 </label>
                             </div>
-                        </div>
+                        </div> */}
 
                         {additionalNotes ?
                             <div className="form-group field field-boolean">
