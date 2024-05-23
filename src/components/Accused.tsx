@@ -616,6 +616,8 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
                         <>  
                             <br/>
+                            <p className="text-info" style= {{fontWeight: 'bold', fontSize: '0.9em', float: 'left', clear: 'both', width: '100%', textAlign: 'left'}}>1. Select Category and Search by Charge name or number</p>
+
                             <div className="form-group field field-string">                  
                                 <label className="control-label">Category</label><br/>
                                 <select name="offence-category" className="form-control" value={codeCategory} onChange={codeCategoryChange}>
@@ -643,18 +645,22 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                         list="codelist"
                                         onChange={UNODCChange}
                                     />
+
+                                    <p className="text-info" style= {{fontWeight: 'bold', fontSize: '0.9em'}}>2. ICCS Code and Charge Name will be automatically populated below</p>
+                                    <p style= {{marginBottom: '3px', fontWeight: 'bold', fontSize: '0.9em'}}>ICCS Code: {UNODC}</p>
+                                    <p style= {{marginTop: '3px', fontWeight: 'bold', fontSize: '0.9em'}}>Charge Name: {chargeName}</p>
     
-                                    <label>ICCS Code:</label>
+                                    {/* <label>ICCS Code:</label> */}
                                     <input
-                                        type="text" 
+                                        type="hidden" 
                                         className="form-control" 
                                         value={UNODC}
                                         disabled
                                         required /> 
 
-                                    <label>Charge name:</label>
+                                    {/* <label>Charge name:</label> */}
                                     <input
-                                        type="text" 
+                                        type="hidden" 
                                         className="form-control" 
                                         value={chargeName}
                                         disabled
