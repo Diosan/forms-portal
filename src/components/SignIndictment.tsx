@@ -609,7 +609,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             // Send the request to the server
             // console.log('\n\n\n\ submission_id: ' + submission_id)
 
-            let signing_email = submissionType == 'INDICTMENT' ? await localStorage.getItem('email') : complainant_email
+            let signing_email = submissionType == 'INDICTMENT' || submissionType == 'INDICTMENT PRELIMINARY INQUIRY COMPLETE' ? await localStorage.getItem('email') : complainant_email
             let signing_type = submissionType == 'INDICTMENT' ? 'indictment' : 'complaint'
             
             axios.post(`${API_URL}/api/submissions/sign_submission`,
