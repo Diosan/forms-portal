@@ -137,7 +137,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
         console.log('\n\n\n Sending OTP')
         goToAnchor();
         let signing_name = submissionType == 'INDICTMENT' ? signingName : complainant_name
-        let signing_email = submissionType == 'INDICTMENT' ? await localStorage.getItem('email') : complainant_email
+        let signing_email = submissionType == 'INDICTMENT' || submissionType == 'INDICTMENT PRELIMINARY INQUIRY COMPLETE' ? await localStorage.getItem('email') : complainant_email
         let otp_send = await axios.post(
             API_URL + '/api/submissions/send_otp',
             {
@@ -609,7 +609,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             // Send the request to the server
             // console.log('\n\n\n\ submission_id: ' + submission_id)
 
-            let signing_email = submissionType == 'INDICTMENT' ? await localStorage.getItem('email') : complainant_email
+            let signing_email = submissionType == 'INDICTMENT' || submissionType == 'INDICTMENT PRELIMINARY INQUIRY COMPLETE' ? await localStorage.getItem('email') : complainant_email
             let signing_type = submissionType == 'INDICTMENT' ? 'indictment' : 'complaint'
 
             console.log(oathType)
