@@ -98,6 +98,10 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
 
     const [offenceKnown, setOffenceKnown] = useState('Yes')
 
+    const [policeReport, setPoliceReport] = useState('No')
+
+    const [policeReportInfo, setPoliceReportInfo] = useState('')
+
 
     const UNODCChange = async (event: any) => {
 
@@ -220,6 +224,14 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
         }
     }
 
+    const policeReportChange = async (event: any) => {
+        setPoliceReport(event.target.value);
+    }
+
+    const policeReportInfoChange = async (event: any) => {
+        setPoliceReportInfo(event.target.value);
+    }
+
     const addNewCharge = async () => {
         setShowAddNewCharge(true)
     }
@@ -248,7 +260,9 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             accusedId: accused_id,
             dateOfOffence: form.formData.dateOfOffence,
             statementOfOffence: form.formData.particulars,
-            particulars: form.formData.particulars
+            particulars: form.formData.particulars,
+          policeReport: policeReport == 'Yes',
+          policeReportInfo: policeReportInfo
             }
         
             await axios.post(API_URL + '/api/accuseds/charges', charge)
@@ -488,7 +502,7 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
             {   previousRecord ?
                     <>
                         { editable ?
-                            <div className="add-charge">
+                            <div className="add-charge"> 
                                 <Form 
                                     schema={pendingSchema}
                                     uiSchema={pendingUI}
@@ -642,6 +656,27 @@ const Accused = ({accused_id, request_signature, editable}: AccusedProps) => {
                                     <option value="No">No</option>
                                 </select>
                             </div>
+
+                            <div className="form-group field field-string">
+                                <label>Have you reported this incident to the Police ?</label>
+                                <select name="police-report" className="form-control" value={policeReport} onChange={policeReportChange}>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+
+                            { policeReport == 'Yes' ?
+                                <>
+                                    <div className="form-group field field-string">
+                                        <label>Police Report Information</label>
+                                        <textarea name="police-report-info" className="form-control" value={policeReportInfo} onChange={policeReportInfoChange} placeholder="Which Police Station? Date of Police Report? Police Report Receipt number" >
+
+                                        </textarea>
+                                    </div>
+                                </>
+                                :
+                                <></>
+                            }
 
                             <br/>
                             <div className="form-group field field-string">                  
