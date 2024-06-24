@@ -49,6 +49,8 @@ import { Admin } from './Admin';
 
 import { Complainant } from './Complainant';
 
+import Tagger from "./Tag";
+
 function App() {
   console.log("APP")
   const [createPassword, setCreatePassword] = useState<boolean>(false);
@@ -111,6 +113,8 @@ function App() {
         <Route  path= "/admin9876543210" element={ <PrivateRoute><Admin /></PrivateRoute>} />
 
         <Route  path= "/complainant" element={ <PrivateRoute><Complainant /></PrivateRoute>} />
+
+        <Route  path= "/tagger" element={ <PrivateRoute><Tagger /></PrivateRoute>} />
 
         
         
