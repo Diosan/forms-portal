@@ -84,6 +84,7 @@ function App() {
         <Route path= "/submission" element={<PrivateRoute><Submission new_submission={true} /></PrivateRoute>} />
         <Route path= "/private" element={<PrivateRoute><PrivateSubmission new_submission={true} /></PrivateRoute>} />
         <Route path= "/consent" element={<PrivateRoute><Consent new_submission={true} /></PrivateRoute>} />
+        <Route path= "/consent/:id" element={ <PrivateRoute><Consent new_submission={false }/></PrivateRoute>} />
         <Route path="/oathless" element={<PrivateRoute><Oathless new_submission={true} /></PrivateRoute>} />
         <Route path= "/submission/:id" element={ <PrivateRoute><Submission new_submission={false }/></PrivateRoute>} />
         <Route  path= "/submissions" element={ <PrivateRoute><Submissions /></PrivateRoute>} />

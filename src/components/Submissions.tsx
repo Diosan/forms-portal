@@ -83,6 +83,8 @@ export const Submissions = ({ }: SubmissionsProps) => {
     const dispatch = useAppDispatch();
 
     const [submissions, setSubmissions] = useState<Submission[]>([]);
+    const [consented_submissions, setConsentedSubmissions] = useState<Submission[]>([]);
+    const [agency, setAgency] = useState('')
     const state = useSelector((state: RootState) => state.auth);
     const { isLoggedIn, otpRequired, token, isVerified } = state
 
@@ -146,6 +148,33 @@ export const Submissions = ({ }: SubmissionsProps) => {
         }
     }, [isLoggedIn, isVerified, token, otpRequired]);
 
+        // Pull agency from local storage when component mounts
+        useEffect(() => {
+            const storedAgency = localStorage.getItem('agency');
+            if (storedAgency) {
+                setAgency(storedAgency);
+            }
+        }, []); // Empty dependency array means this effect runs once on mount
+    
+        // Update local storage when agency changes
+        useEffect(() => {
+            if (agency) {
+                localStorage.setItem('agency', agency);
+                setAgency(agency);
+            }
+        }, [agency]); // This effect runs every time 'agency' changes
+    
+        useEffect(() => {
+            const interval = setInterval(() => {
+                const storedAgency = localStorage.getItem('agency');
+                if (storedAgency !== agency) {
+                    setAgency(storedAgency || ''); // Update the state if different
+                }
+            }, 300); // every 300 milliseconds
+    
+            return () => clearInterval(interval); // Clear interval on component unmount
+        }, [agency]); // Run effect when 'agency' changes
+
 
     console.log(">>> STATE <<<")
     console.log(state)
@@ -165,9 +194,11 @@ export const Submissions = ({ }: SubmissionsProps) => {
 
 
     useEffect(() => {
+
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
+
         axios.get(API_URL + '/api/submissions', config)
             .then((response) => {
                 console.log('Submissions fetched from server: ', response.data);
@@ -186,6 +217,13 @@ export const Submissions = ({ }: SubmissionsProps) => {
                 setSubmissions(sortedSubmissions);
                 console.log('Sorted Submissions: ', sortedSubmissions);
             });
+        
+        axios.get(API_URL + '/api/submissions/consented', config)
+            .then((response) => {
+                const consentedData = response?.data?.submissions?.rows || [];
+                setConsentedSubmissions(consentedData);
+            });
+
     }, [refreshKey]);
 
 
@@ -485,6 +523,24 @@ export const Submissions = ({ }: SubmissionsProps) => {
                                             ))}
                                         </div>
                                         )}
+
+                                        {(agency == 'ttlawcourts' || agency == 'link868' || agency == 'dpp' ) &&
+                                        <div className="mt-4 group-submission complete-group" style={{ backgroundColor: '#fff' }}>
+                                            <h4 className="my-2 mb-4 text-left fw-bold fs-5">Consented Submissions</h4>
+                                            {consented_submissions.map((submission:any) => (
+                                                <a
+                                                    href={viewComponent(submission) + '/sign/' + submission.id}
+                                                    key={submission.id}
+                                                >
+                                                    <div className="card submission-card" style={{ padding: '1px' }}>
+                                                        <div className="card-body" style={{ padding: '10px 25px' }}>
+                                                            <h6 className="card-title text-left">{submission.description}</h6>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            ))}
+                                        </div>
+                                        }
 
 
                                     </div>
