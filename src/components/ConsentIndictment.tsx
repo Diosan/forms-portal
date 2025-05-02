@@ -451,8 +451,8 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
                                 A <strong>Signing code</strong> has been sent to your registered email address. Please enter the code into the box below to authenticate and complete the signing process..
                             </div>
                             <div className="text-center mb-4">
-                                <div style={{ display: "block", margin: "0 auto", width: "200px" }}>
-                                    <textarea name="police-report-info" className="form-control" value={consentNote} onChange={consentNoteChange} placeholder="Note for this consent" >
+                                <div style={{ display: "block", width: "100%", marginTop: "30px", marginBottom: "30px" }}>
+                                    <textarea name="consent-note-info" className="form-control" value={consentNote} onChange={consentNoteChange} placeholder="Note for this consent" rows={6} >
                                     </textarea>
                                 </div>
                             </div>

@@ -49,7 +49,7 @@ import { Admin } from './Admin';
 
 import { Complainant } from './Complainant';
 
-import Tagger from "./Tag";
+// import Tagger from "./Tag";
 
 function App() {
   console.log("APP")
@@ -115,7 +115,7 @@ function App() {
 
         <Route  path= "/complainant" element={ <PrivateRoute><Complainant /></PrivateRoute>} />
 
-        <Route  path= "/tagger" element={ <PrivateRoute><Tagger /></PrivateRoute>} />
+        {/*  <Route  path= "/tagger" element={ <PrivateRoute><Tagger /></PrivateRoute>} /> */}
 
         
         

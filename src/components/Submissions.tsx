@@ -218,9 +218,10 @@ export const Submissions = ({ }: SubmissionsProps) => {
                 console.log('Sorted Submissions: ', sortedSubmissions);
             });
         
-        axios.get(API_URL + '/api/submissions/consented', config)
+        axios.get(API_URL + '/api/submissions/consented/0', config)
             .then((response) => {
                 const consentedData = response?.data?.submissions?.rows || [];
+                console.log('Consented submissions response: ', response);
                 setConsentedSubmissions(consentedData);
             });
 
