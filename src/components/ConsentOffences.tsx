@@ -45,7 +45,7 @@ export const ConsentOffences = ({ first_name, last_name, accused_id, accused_ind
 
                 <div key={accused_id}  style={{margin:"0 0 20px 0", padding:"0"}}>
                     
-                    <div style={{fontSize:"11pt"}}><span style={{fontSize:"10pt", fontWeight:"bold"}}>Accused Number {accused_index} </span>: {first_name + " " + last_name}</div>
+                    <div style={{fontSize:"12pt"}}><span style={{fontSize:"11pt", fontWeight:"bold"}}>Accused Number {accused_index} </span>: {first_name + " " + last_name}</div>
                     <div style={{}}>
                     <label style={{ fontSize: "10pt", margin:"0 0 7px 0" }}>Offences</label>
 
