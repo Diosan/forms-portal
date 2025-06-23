@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 const API_URL = import.meta.env.VITE_API_URL
+const DPP_EMAIL = import.meta.env.VITE_DPP_EMAIL
 import axios from "axios"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import Form from 'react-jsonschema-form'
@@ -615,29 +616,60 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             console.log(oathType)
             // return
             
-            axios.post(`${API_URL}/api/submissions/sign_submission`,
-                {
-                    submission_id: submission_id,
-                    email: signing_email,
-                    otp: signOTP,
-                    html: htmlContent,
-                    type: signing_type,
-                    isOathOrAffirmation: oathType
-                })
-                .then(response => {
-                    console.log(response || "")
-                    if (response.data.outcome == 'success') {
-                        setSigned(true)
-                        goToCompletedSubmission();
-                    } else {
-                        alert('Verification failed. Try again');
-                        return
-                    }
+            if(submissionType !== 'COMPLAINT ON OATH WITH CONSENT') {
 
-                })
-                .catch(error => {
-                    console.error('Error server:', error);
-                });
+                axios.post(`${API_URL}/api/submissions/sign_submission`,
+                    {
+                        submission_id: submission_id,
+                        email: signing_email,
+                        otp: signOTP,
+                        html: htmlContent,
+                        type: signing_type,
+                        isOathOrAffirmation: oathType
+                    })
+                    .then(response => {
+                        console.log(response || "")
+                        if (response.data.outcome == 'success') {
+                            setSigned(true)
+                            goToCompletedSubmission();
+                        } else {
+                            alert('Verification failed. Try again');
+                            return
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error('Error server:', error);
+                    });
+
+            } else {
+
+                axios.post(`${API_URL}/api/submissions/sign_consent`,
+                    {
+                        submission_id: submission_id,
+                        email: signing_email,
+                        otp: signOTP,
+                        html: htmlContent,
+                        type: signing_type,
+                        isOathOrAffirmation: oathType,
+                        recipients: signing_email + ', ' + DPP_EMAIL
+                    })
+                    .then(response => {
+                        console.log(response || "")
+                        if (response.data.outcome == 'success') {
+                            setSigned(true)
+                            goToCompletedSubmission();
+                        } else {
+                            alert('Verification failed. Try again');
+                            return
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error('Error server:', error);
+                    });
+            }                
+
         } catch (error) {
             console.error('Error', error);
         }
