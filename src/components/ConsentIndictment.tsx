@@ -411,7 +411,9 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
                 <>
                     
                     <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
-
+                    <br></br>
+                    <div className="text-center">Click button below to enter endorsement and request consent code</div>
+                    <br></br>
                 </>
                 : <>
                     {!isFinalSigned ?
@@ -447,17 +449,23 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
                         <div className="" style={{}}>
                             <br />
 
-                            <div className="text-center mb-2" style={{ fontSize: "11pt", margin: "0 20px" }}>
-                                A <strong>Signing code</strong> has been sent to your registered email address. Please enter the code into the box below to authenticate and complete the signing process..
-                            </div>
+
+
+                            <label style={{}}>Enter written consent</label>
                             <div className="text-center mb-4">
-                                <div style={{ display: "block", width: "100%", marginTop: "30px", marginBottom: "30px" }}>
-                                    <textarea name="consent-note-info" className="form-control" value={consentNote} onChange={consentNoteChange} placeholder="Note for this consent" rows={6} >
+                                <div style={{ display: "block", width: "100%", marginTop: "10px", marginBottom: "30px" }}>
+                                    
+                                    <textarea name="consent-note-info" className="form-control" value={consentNote} onChange={consentNoteChange} placeholder="Enter endorsement here" rows={6} >
                                     </textarea>
                                 </div>
                             </div>
+
+                            <div className="text-center mb-2" style={{ fontSize: "11pt", margin: "0 20px 40px 20px" }}>
+                                A <strong>Signing code</strong> has been sent to your registered email address. Please enter the code into the box below to authenticate and complete the signing process..
+                            </div>
+
                             <div className="text-center mb-4">
-                                <div style={{ display: "block", margin: "0 auto", width: "200px" }}><input
+                                <div style={{ display: "block", margin: "20px auto", width: "200px" }}><input
                                     type="text"
                                     name="otpCode"
                                     placeholder="******"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 const API_URL = import.meta.env.VITE_API_URL
 const DPP_EMAIL = import.meta.env.VITE_DPP_EMAIL
+const DPP_NAME = import.meta.env.VITE_DPP_NAME
 import axios from "axios"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import Form from 'react-jsonschema-form'
@@ -49,8 +50,9 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
     const [signatureName, setSignatureName] = useState('')
     const [signatureDate, setSignatureDate] = useState('')
     const [consentHash, setConsentHash] = useState('')
-    const [consentName, setConsentName] = useState('')
+    const [consentName, setConsentName] = useState(DPP_NAME)
     const [consentDate, setConsentDate] = useState('')
+    const [consentNote, setConsentNote] = useState('')
     const [verificationHash, setVerificationHash] = useState('')
     const [verificationName, setVerificationName] = useState('')
     const [verificationDate, setVerificationDate] = useState('')
@@ -1206,7 +1208,8 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                     console.log('\n\n\n Signature for consented submission: ', retrieved_signature.data)
                     setConsentHash(retrieved_signature.data.consent.hash)
                     setConsentDate(retrieved_signature.data.consent.createdAt)
-                    setConsentName(retrieved_signature.data.user.firstName + ' ' + retrieved_signature.data.user.lastName)
+                    setConsentNote(retrieved_signature.data.consent.note)
+                    // setConsentName(retrieved_signature.data.user.firstName + ' ' + retrieved_signature.data.user.lastName)
                     
 
                 } else {
@@ -1315,15 +1318,19 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
     return (
 
-        <div id="acnhor-sign" style={{ border: "10px solid #eee", backgroundColor: "#f9f9f9", padding: "20px", margin: "25px 0 0 0" }} >
+        <div>
 
-
-
-            {/* {!otpSent && signed ? */}
-            {!otpSent && !signed && !already_signed && !isFinalSigned ?
+        
+        {!otpSent && !signed && !already_signed && !isFinalSigned ?
                 <>
-
                     { subType == 'complaint_with_consent' && subStatus == 'consented' ?
+
+                        <div style={{ border: "10px solid #eee", backgroundColor: "#f9f9f9", padding: "20px", margin: "25px 0 0 0" }} >
+                        <div style={{ marginBottom: "20px" }}>
+                            <p style={{ fontSize: "11pt", lineHeight: "14pt", margin: "0 0 10px" }}>
+                                {consentNote} 
+                            </p>
+                        </div>
                         <div className="text-center">
                             <div className="signature-container" style={{ margin: "20 auto" }}>
                                 <div className=" signature-format" style={{ backgroundColor: "#ebf7ff" }}>
@@ -1344,6 +1351,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                                     {/* <!-- Row 2 --> */}
                                     <div className="col-12 col">
                                         <div className="name-placeholder fw-bold  text-left">{consentName}</div>
+                                        <div className="name-placeholder text-left">Director Of Public Prosecutions</div>
                                     </div>
 
                                     {/* <!-- Row 3 --> */}
@@ -1355,9 +1363,25 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
                             </div>
                             <br/><br/>
                         </div>
+                        </div>
 
                         : <></>
                     }
+                </>
+                : <></> }
+                
+
+        
+
+        <div id="acnhor-sign" style={{ border: "10px solid #eee", backgroundColor: "#f9f9f9", padding: "20px", margin: "25px 0 0 0" }} >
+
+
+
+            {/* {!otpSent && signed ? */}
+            {!otpSent && !signed && !already_signed && !isFinalSigned ?
+                <>
+
+
 
                     {submissionType == 'INDICTMENT' ?
                         <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
@@ -1768,7 +1792,7 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
 
                             {/* <!-- Row 2 --> */}
                             <div className="col-12 col">
-                                <div className="name-placeholder fw-bold  text-left">{verificationName}</div>
+                                <div className="name-placeholder fw-bold  text-left">George Bush</div>
                             </div>
 
                             {/* <!-- Row 3 --> */}
@@ -1830,6 +1854,9 @@ export const SignIndictment = ({ submission_id, complainant_email, submissionTyp
             }
             <div id="anchorSign"></div>
 
-        </div>)
+        </div>
+        
+        </div>
+        )
 
 }
