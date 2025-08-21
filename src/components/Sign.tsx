@@ -448,7 +448,14 @@ export const Sign = ({ }: SignProps) => {
                                             </tr>
                                             <tr>
                                                 <td><label>Address: </label></td>
-                                                <td colSpan={3}>{accused.address}</td>
+                                                <td colSpan={3}>{accused.addressLine1}
+                                                    {accused.addressLine2 == null ? <></> : <>{', ' + accused.addressLine2}</>}
+                                                    {accused.addressLine3 == null ? <></> : <>{', ' + accused.addressLine3}</>}
+                                                    {accused.cityTown == null ? <></> : <>{', ' + accused.cityTown}</>}
+                                                    {accused.postalCode == null ? <></> : <>{', ' + accused.postalCode}</>}
+                                                    {accused.communityCode == null ? <></> : <>{', ' + accused.communityCode}</>}
+                                                    {accused.countryName == null ? <></> : <>{', ' + accused.countryName}</>}
+                                                </td>
                                             </tr>
 
                                             <tr>
