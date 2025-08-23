@@ -536,7 +536,7 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
                               <label className="control-label fs-6  my-2">
                                 Category Of Accused
                               </label>
-                                <select className='form-select fs-6 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
+                                <select className='form-select fs-6 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} required>
                                   <option value="adult">Adult only</option>
                                   <option value="child">Child only</option>
                                   <option value="both">Both</option>
@@ -544,7 +544,7 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
                                 <label className="control-label fs-6 my-2">
                                 Matter Type
                               </label>
-                                <select className='form-select fs-6 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
+                                <select className='form-select fs-6 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} required>
                                   <option>Select matter type</option>
                                   <option value="Indictable">Indictable</option>
                                   <option value="Summary">Summary</option>
@@ -600,7 +600,7 @@ export const IndictablePreliminaryCompleted = ({ new_submission }: SubmissionPro
                                   </div> */}
 
                                   <div className="mb-3">
-                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} required>
                                       <option>Select court location</option>
                                       {adultOnly == 'adult' || adultOnly == 'both' ?
                                           <>

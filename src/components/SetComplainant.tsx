@@ -171,7 +171,7 @@ export const SetComplainant = ({submission_id, adult_only, complainant_added, co
                     </div> */}
 
                 <div className="mb-3">
-                <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} required>
                     <option>Select court location</option>
                     {adult_only == 'adult' || adult_only == 'both' ?
                     <>
@@ -192,7 +192,7 @@ export const SetComplainant = ({submission_id, adult_only, complainant_added, co
                 </div>
 
                 <div className="mb-3">
-                <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required disabled style={{ display: 'none' }}>
+                <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} required disabled style={{ display: 'none' }}>
                     <option>Select complainant agency</option>
                     <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                     <option value="DPP">DPP (Director Of Public Prosecutions)</option>

@@ -371,7 +371,7 @@ export const RegisterSignin = ({}: RegisterSigninProps) => {
                                  : <>
                                      <form onSubmit={register} >
                                          <div className="mb-3">
-                                             <select className='form-select' id="agency" value={agency} onChange={agencyChange} placeholder="Select your agency">
+                                             <select className='form-select' id="agency" value={agency} onChange={agencyChange} >
                                                  <option>Select your agency</option>
                                                  <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                                              </select>

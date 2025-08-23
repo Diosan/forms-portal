@@ -416,7 +416,7 @@ export const NotPolice = ({ new_submission }: SubmissionProps) => {
                               onChange={submissionTitleChange}
                             />
                             {!submissionTitleSaved ?
-                              <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
+                              <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} required>
                                 <option>Select matter type</option>
                                 <option value="Indictable">Indictable</option>
                                 <option value="Summary">Summary</option>
@@ -470,7 +470,7 @@ export const NotPolice = ({ new_submission }: SubmissionProps) => {
                                 <form onSubmit={saveComplainant}>
 
                                   <div className="mb-3">
-                                    <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
+                                    <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} required>
                                       <option>Select court</option>
                                       <option value="High Court">High Court</option>
                                       <option value="District Court">District Court</option>
@@ -478,7 +478,7 @@ export const NotPolice = ({ new_submission }: SubmissionProps) => {
                                   </div>
 
                                   <div className="mb-3">
-                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
+                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} required>
                                       <option>Select court district</option>
                                       <option value="North Trinidad">North Trinidad</option>
                                       <option value="South Trinidad">South Trinidad</option>
@@ -487,7 +487,7 @@ export const NotPolice = ({ new_submission }: SubmissionProps) => {
                                   </div>
 
                                   <div className="mb-3">
-                                    <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} placeholder="Select your agency" required>
+                                    <select className='form-select' id="agency" value={complainantAgency} onChange={complainantAgencyChange} required>
                                       <option>Select complainant agency</option>
                                       <option value="TTPS">TTPS (Trinidad & Tobago Police Service)</option>
                                     </select>
