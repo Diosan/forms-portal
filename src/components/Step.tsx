@@ -13,6 +13,8 @@ type StepProps = {
     // myRef: typeof React.createRef
 }
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const log = (type: any) => console.log.bind(console, type);
 
 export const Step = ({isActive, step, title}: StepProps) => {
@@ -27,7 +29,7 @@ export const Step = ({isActive, step, title}: StepProps) => {
     }
 
     useEffect(() => {
-        axios.get('https://swif.ttlawcourts.org/schema/' + step)
+        axios.get( API_URL + '/schema/' + step)
         .then((response) => {
           setSchema(response.data.schema)
           setUI(response.data.UI)
