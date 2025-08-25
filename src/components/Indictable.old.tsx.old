@@ -6,18 +6,11 @@ import Form from 'react-jsonschema-form'
 import validator from '@rjsf/validator-ajv8'
 import "../assets/Submission.css"
 import "../assets/Style.css"
-import { Tooltip } from 'react-tooltip'
-
-
-// import * as ReactTooltip from 'react-tooltip';
-
-
 
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
-import { IndictmentCharges } from "./IndictmentCharges"
-// import { Charges } from "./Charges"
+import { Charges } from "./Charges"
 import { RequestSignature } from "./RequestSignature"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
@@ -34,7 +27,7 @@ import axios from "axios";
 import dotenv from "dotenv"
 import { login, logout, verifyOtp } from "../slices/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faQuestionCircle, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeftLong, faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -53,7 +46,7 @@ const log = (type: any) => console.log.bind(console, type)
 
 
 
-export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
+export const Indictable = ({ new_submission }: SubmissionProps) => {
 
   const requestSignature = () => {
     // alert('Performing requestSignature in Submission component')
@@ -64,10 +57,6 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
 
   const auth = new AuthService
   const dispatch = useAppDispatch();
-
-  const count = useSelector((state: RootState) => state.charge.charge_count);
-  const accusedCount = useSelector((state: RootState) => state.accused.count);
-  const charge_count = useSelector((state: RootState) => state.charge.charge_count);
 
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
@@ -92,14 +81,12 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
   const [complainantFirstName, setComplainantFirstName] = useState('')
   const [complainantLastName, setComplainantLastName] = useState('')
   const [complainantEmail, setComplainantEmail] = useState('')
-  const [complainantPhone, setComplainantPhone] = useState('')
   const [complainantRegNum, setComplainantRegNum] = useState('')
   const [complainantRank, setComplainantRank] = useState('')
   const [complainantUnit, setComplainantUnit] = useState('')
   const [complainantCourtDistrict, setComplainantCourtDistrict] = useState('')
   const [complainantCourt, setComplainantCourt] = useState('High Court')
   const [editingSubmissionComplainant, setEditingSubmissionComplainant] = useState(false)
-  const [hasAccused, setHasAccused] = useState(false)
 
   const [chargeSaved, setChargeSaved] = useState(false)
 
@@ -121,11 +108,6 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
   // const complainantCourtChange = (event: any) => {
   //   setComplainantCourt(event.target.value)
   // }
-
-  const checkHasAccused = (areThereAccused: boolean) => {
-    setHasAccused(areThereAccused);
-    console.log("Are there accused: ", areThereAccused)
-  };
 
   const complainantAgencyChange = (event: any) => {
     setComplainantAgency(event.target.value)
@@ -155,16 +137,12 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
     setComplainantEmail(event.target.value)
   }
 
-  const complainantPhoneChange = (event: any) => {
-    setComplainantPhone(event.target.value)
-  }
-
   const saveTitle = async (event: any) => {
     event.preventDefault()
 
     // console.log('Before decoding token')
     let decoded = await auth.decodedToken()
-    console.log("Decoded", decoded)
+    console.log(decoded)
 
     if (submissionTitleSaved) {
       console.log('submissionId is ' + submissionId)
@@ -172,17 +150,10 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
         id: submissionId,
         title: submissionTitle,
         email: decoded.email,
-        userId: decoded.id,
-        type: 'indictment_complaint'
+        userId: decoded.id
       }
       console.log('Submission is : ', submission)
-      await axios.post(API_URL + '/api/submissions/update_title', submission, 
-        { 
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
-          }
-      })
+      await axios.post(API_URL + '/api/submissions/update_title', submission)
         .then((response) => {
 
           console.log('Posted update to submission title')
@@ -214,11 +185,7 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
         adultOnly: adultOnly,
         type: 'indictment'
       }
-      axios.post(API_URL + '/api/submissions', submission, {
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-      }})
+      axios.post(API_URL + '/api/submissions', submission)
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -248,26 +215,21 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
       agency: "DPP",
       court: complainantCourt,
       courtDistrict: complainantCourtDistrict,
-      firstName: complainantFirstName,
-      lastName: complainantLastName,
-      email: complainantEmail,
-      phone: complainantPhone,
+      firstName: "N/A",
+      lastName: "N/A",
+      email: "off_harry@link868.com",
       regNum: "N/A",
       rank: "N/A",
       unit: "N/A",
       submissionId: submissionId
     }
 
+    setComplainantEmail("off_harry@link868.com")
+
     console.log('Complainant being sent to server: ', complainant);
 
     if (!submissionComplainantSaved) {
-      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant, 
-      { 
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
-          }
-      })
+      await axios.post(API_URL + '/api/submissions/saveComplainant', complainant)
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -285,11 +247,7 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
 
         })
     } else {
-      await axios.post(API_URL + '/api/submissions/update_complainant',complainant, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }})
+      await axios.post(API_URL + '/api/submissions/update_complainant', complainant)
         .then((response) => {
 
           switch (response.data.outcome) {
@@ -348,23 +306,6 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
 
   }
 
-    // useEffect to track changes in accusedList
-    useEffect(() => {
-      console.log("chargesCount: ", count)
-      if (count > 0) {
-        setHasAccused(true)
-        console.log('accused count: ', accusedCount, 'charges count: ', count);
-      }
-      else {
-        setHasAccused(false)
-        console.log('Accused list is empty.');
-      }
-    }, [accusedCount, count]);
-  
-    useEffect(() => {
-      console.log('The charge Count has changed:', count);
-    }, [accusedCount]);
-
   // useEffect(() => {
   //   axios.get(API_URL + '/schema/main')
   //   .then((response) => {
@@ -379,17 +320,8 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
     (async () => {
       if (!new_submission) {
         setSubmissionId(parseInt('' + id))
-        let returned_submission = await axios.get(API_URL + '/api/submissions/' + id, {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
-          }})
-        console.log('Returned submission: ', returned_submission.data)
-        if(returned_submission?.data?.submission?.status == 'final'){
-          navigate(`/indictment/sign/${id}`)
-        }
-
-
+        let returned_submission = await axios.get(API_URL + '/api/submissions/' + id)
+        // console.log('Returned submission: ', returned_submission.data)
         setSubmissionTitle(returned_submission.data.submission.description)
         setSubmissionTitleSaved(true)
 
@@ -406,7 +338,6 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
             setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
-            setComplainantPhone(returned_submission.data.complainant.phone)
             break
           case 'charge_saved':
             setSubmissionComplainantSaved(true)
@@ -419,7 +350,6 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
             setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
-            setComplainantPhone(returned_submission.data.complainant.phone)
             setChargeSaved(true)
             break
           case 'signature_requested':
@@ -434,7 +364,6 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
             setComplainantRank(returned_submission.data.complainant.rank)
             setComplainantUnit(returned_submission.data.complainant.unit)
             setComplainantEmail(returned_submission.data.complainant.email)
-            setComplainantPhone(returned_submission.data.complainant.phone)
             setChargeSaved(true)
             break
           default:
@@ -451,23 +380,12 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
           setComplainantUnit(returned_submission.data.complainant.unit)
           setComplainantRegNum(returned_submission.data.complainant.regNum)
           setComplainantEmail(returned_submission.data.complainant.email)
-          setComplainantPhone(returned_submission.data.complainant.phone)
         
           console.log('Complainant: ', returned_submission.data.complainant)
 
       }
     })();
   }, [id, new_submission, editingSubmissionTitle]);
-
-  const goToAnchor = () => {
-    setTimeout(() => {
-        console.log('Anchor');
-        const anchorElement = document.getElementById('anchorSign');
-        if (anchorElement) {
-            anchorElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }, 300); // 500 milliseconds delay
-}
 
 
 
@@ -483,7 +401,7 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
       {auth.loggedIn() ?
         <>
           <div className="swf-container container"
-            style={{ borderRadius: "5px", maxWidth: "800px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
+            style={{ borderRadius: "5px", maxWidth: "900px", padding: "20px 40px", margin: "10px 30px 30px 300px", flexGrow: 1 }}
           >
 
 
@@ -495,7 +413,7 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                       <FontAwesomeIcon icon={faArrowLeftLong} />
                     </a>
                   </div>
-                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictment with complaint {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
+                  <h5 className="fw-bold mx-3 mb-0 flex-grow-1">Indictment {submissionTitleSaved ? '(' + submissionTitle + ')' : ''}</h5>
                   {!submissionTitleSaved || editingSubmissionTitle ?
                     <></>
                     : <>
@@ -512,25 +430,13 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                     <form onSubmit={saveTitle} >
                       <fieldset>
                         <div className="form-group field field-string">
-
-                        
-
-                          <Tooltip style={{maxWidth:"200px"}} id="my-tooltip" />
-
-                        
-                          <label id="" className="control-label fs-6">
-                            In house reference <a
-                              data-tooltip-id="my-tooltip"
-                              data-tooltip-content= "Enter a short description that helps you quickly identify this submission (Eg. John Doe, Dec 13 2023)"
-                              data-tooltip-place="top"
-                            >
-                            <FontAwesomeIcon icon={faQuestionCircle} />
-                              </a>
+                          <label className="control-label fs-6">
+                            In house reference
                           </label>
 
                           <div className=" mt-2">
                             <input
-                              className="form-control fs-6 mt-0 mb-0 flex-grow-1"
+                              className="form-control fs-5 mt-0 mb-0 flex-grow-1"
                               type="text"
                               value={submissionTitle}
                               onChange={submissionTitleChange}
@@ -540,7 +446,7 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                               <label className="control-label fs-6  my-2">
                                 Category Of Accused
                               </label>
-                                <select className='form-select fs-6 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} required>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="adultOnly" value={adultOnly} onChange={adultOnlyChange} placeholder="Select your agency" required>
                                   <option value="adult">Adult only</option>
                                   <option value="child">Child only</option>
                                   <option value="both">Both</option>
@@ -548,7 +454,7 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                                 <label className="control-label fs-6 my-2">
                                 Matter Type
                               </label>
-                                <select className='form-select fs-6 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} required>
+                                <select className='form-select fs-5 mt-0 mb-0 flex-grow-1' id="matterType" value={matterType} onChange={matterTypeChange} placeholder="Select your agency" required>
                                   <option>Select matter type</option>
                                   <option value="Indictable">Indictable</option>
                                   <option value="Summary">Summary</option>
@@ -570,7 +476,7 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                           </div>
 
 
-                          {/* <input className="form-control fs-6 mt-2" type="text" value={submissionTitle} onChange={submissionTitleChange} /> */}
+                          {/* <input className="form-control fs-5 mt-2" type="text" value={submissionTitle} onChange={submissionTitleChange} /> */}
                         </div>
                         {/* <button type="submit" className="btn btn-sm btn-primary float-end">Save</button> */}
                       </fieldset>
@@ -583,17 +489,25 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
 
 
 
-              <div className="px-2 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
+              <div className="px-4 py-3" style={{ backgroundColor: "#fff", color: "#222" }}>
+
+
+
+
+
+
 
                 {submissionTitleSaved ?
                   <div>
                             
+
+                          
                           {(!submissionComplainantSaved || editingSubmissionComplainant) && editable ?
                             <div>
                            
-                              <div className="card fade show m-3" style={{ border: "none", backgroundColor:"#ddd"}} >
-                              <h4 className="text-center mt-3 mb-1">Location</h4>
-                                <form onSubmit={saveComplainant} className="m-3">
+                              <div className="card fade show" style={{ border: "none", backgroundColor:"#ddd"}} >
+                              <h4 className="text-center mb-4">Complainant Information</h4>
+                                <form onSubmit={saveComplainant}>
 
                                   {/* <div className="mb-3">
                                     <select className='form-select' id="court" value={complainantCourt} onChange={complainantCourtChange} placeholder="Select your agency" required>
@@ -604,19 +518,19 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                                   </div> */}
 
                                   <div className="mb-3">
-                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} required>
+                                    <select className='form-select' id="court-district" value={complainantCourtDistrict} onChange={complainantCourtDistrictChange} placeholder="Select your agency" required>
                                       <option>Select court location</option>
                                       {adultOnly == 'adult' || adultOnly == 'both' ?
                                           <>
                                             <option value="Criminal Court - North Trinidad">Criminal Court - North Trinidad</option>
-                                            <option value="Criminal Court - South Trinidad">Criminal Court - South Trinidad</option>
-                                            <option value="Criminal Court - Tobago">Criminal Court - Tobago</option>
+                                            <option value="Criminal Court – South Trinidad">Criminal Court – South Trinidad</option>
+                                            <option value="Criminal Court – Tobago">Criminal Court – Tobago</option>
                                           </>
                                         :
                                           <>
-                                            <option value="Children Court - North Trinidad">Children Court - North Trinidad</option>
-                                            <option value="Children Court - South Trinidad">Children Court - South Trinidad</option>
-                                            <option value="Children Court - Tobago">Children Court - Tobago</option>
+                                            <option value="Children Court – North Trinidad">Children Court – North Trinidad</option>
+                                            <option value="Children Court – South Trinidad">Children Court – South Trinidad</option>
+                                            <option value="Children Court – Tobago">Children Court – Tobago</option>
                                           </> 
                                       }
 
@@ -638,7 +552,7 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                                   </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="unit" value={complainantUnit} onChange={complainantUnitChange} placeholder="Station/Unit" />
-                                  </div> */}
+                                  </div>
                                   <div className="mb-3">
                                     <input type="text" className="form-control" id="firstName" value={complainantFirstName} onChange={complainantFirstNameChange} placeholder="First Name" required />
                                   </div>
@@ -646,22 +560,18 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                                     <input type="text" className="form-control" id="lastName" value={complainantLastName} onChange={complainantLastNameChange} placeholder="Last Name" required />
                                   </div>
                                   <div className="mb-3">
-                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email Address" required />
-                                  </div>
-                                  <div className="mb-3">
-                                    <input type="phone" className="form-control" id="phone" value={complainantPhone} onChange={complainantPhoneChange} placeholder="Phone" required />
-                                  </div>  
+                                    <input type="email" className="form-control" id="email1" value={complainantEmail} onChange={complainantEmailChange} placeholder="Email" required />
+                                  </div> */}
 
                                   {/* <div className="d-grid gap-2"> */}
                                   {/* <button type="submit" className="btn btn-md btn-primary float-end" >Save</button> */}
                                   <button
                                     type="submit"
-                                    className="btn btn-md btn-primary ms-1 float-end" // Use btn-light for a button with no background
+                                    className="btn btn-md btn-light ms-1 float-end" // Use btn-light for a button with no background
                                     >
-                                      {/* <i className="text-gray">
-                                        <FontAwesomeIcon icon={faCheck} />
-                                      </i>  */}
-                                      Save and Continue
+                                      <i className="text-gray">
+                                        <FontAwesomeIcon icon={faCheck} /> Update
+                                      </i>
                                   </button>
                                   {/* </div> */}
 
@@ -674,6 +584,48 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                             : <></>
                           }
 
+                          {submissionComplainantSaved && !editingSubmissionComplainant ?
+                            <>
+                              
+                              <div className="card fade show p-2" style={{ border: "none" }}>
+                                {/* <div className="fade show">
+                                  <a href="#" className="float-end" onClick={editComplainant}>Edit</a>
+                                </div> */}
+                                
+
+                                {/* <div className="px-2 py-2 d-flex align-items-center" style={{ backgroundColor:"#444", color:"#fff", borderBottom: "1px solid #ddd" }}>
+                                  <h5 className="fw-bold m-0 px-2 flex-grow-1 text-left">Complainant</h5>
+                                  {!submissionTitleSaved || editingSubmissionTitle ?
+                                    <></>
+                                    : <>
+                                      <button style={{ color: "#fff", textDecoration: "none" }} onClick={editComplainant} type="button" className="btn btn-link btn-xs">
+                                        <FontAwesomeIcon icon={faPencilAlt} />
+                                      </button>
+
+                                    </>
+                                  }
+                                </div> */}
+
+
+                                {/* <div className="card-body" style={{ border: "1px solid #ddd", backgroundColor: "#eee" }}>
+                                  <div className="text-left complainant-details mt-2">
+                                    <label>Name:</label> {complainantFirstName + ' ' + complainantLastName}
+                                    <br /><label>Agency:</label> {complainantAgency}
+                                    <br /><label>Court:</label> {complainantCourt}
+                                    <br /><label>Court District:</label> {complainantCourtDistrict}
+                                    <br /><label>Regimental Number:</label> {complainantRegNum}
+                                    <br /><label>Rank:</label> {complainantRank}
+                                    <br /><label>Station/Unit:</label> {complainantUnit}
+                                    <br /><label>Email:</label> {complainantEmail}
+                                  </div>
+
+                                </div> */}
+
+
+                              </div>
+                            </>
+                            : <></>
+                          }
 
                   </div>
                   : <></>
@@ -685,22 +637,18 @@ export const IndictableComplaint = ({ new_submission }: SubmissionProps) => {
                   <></>
                   :
                   <div className="p-2" style={{ backgroundColor: "#fff" }}>
-                    <IndictmentCharges
+                    <Charges
                       submission_id={submissionId}
                       request_signature={requestSignature}
-                      hasAccused={checkHasAccused}
                       editable={editable}
-                      preliminary_completed={false}
                     />
                   </div>
                 }
 
-
                 {chargeSaved ?
-                  <div className="" style={{backgroundColor:"#fff", border:"10px solid #eee", borderRadius:"none!important"}}>
-                    <h5 className="fw-bold m-0 mt-4 mb-2 px-2 flex-grow-1 text-center">Director of Public Prosecutions</h5>
-                    <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
-                  </div>
+                  <>
+                  <RequestSignature submission_id={submissionId} complainant_email={complainantEmail} />
+                  </>
                   : <></>
                 }
 

@@ -3,28 +3,26 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-type OffencesProps = {
+type ConsentOffencesProps = {
     first_name: string;
     last_name: string;
     accused_id: number;
-    key:number
+    accused_index:string
 };
 
-export const Convictions = ({ first_name, last_name, accused_id, key }: OffencesProps) => {
-    const [pendings, setPendings] = useState<{ [key: number]: any[] }>({});
-    const [convictions, setConvictions] = useState<{ [key: number]: any[] }>({});
+export const ConsentOffences = ({ first_name, last_name, accused_id, accused_index }: ConsentOffencesProps) => {
+    const [offences, setOffences] = useState<{ [key: number]: any[] }>({});
     const [accusedCount, setAccusedCount] = useState<number>(0); // Initialize with 1
     const [globalAccusedCount, setGlobalAccusedCount] = useState(0);
 
 
     useEffect(() => {
+        const fetchOffences = async () => {
+            let charges = await axios.get(API_URL + "/api/accuseds/charges/" + accused_id);
+            const groupedOffences = { ...offences };
 
-        const fetchPendings = async () => {
-            let charges = await axios.get(API_URL + "/api/accuseds/convictions/" + accused_id);
-            const groupedOffences = { ...pendings };
-
-            groupedOffences[accused_id] = charges.data.convictions;
-            setPendings(groupedOffences);
+            groupedOffences[accused_id] = charges.data.charges;
+            setOffences(groupedOffences);
 
             console.log(groupedOffences);
 
@@ -32,10 +30,7 @@ export const Convictions = ({ first_name, last_name, accused_id, key }: Offences
             setAccusedCount((count) => count + 1);
         };
 
-
-
-        fetchPendings();
-        
+        fetchOffences();
     }, [accused_id]);
 
     // Increment global accused count when a new accused is rendered
@@ -45,38 +40,34 @@ export const Convictions = ({ first_name, last_name, accused_id, key }: Offences
 
     return (
         <>
-            {Object.keys(pendings).map((index, accused_id) => (
+            {Object.keys(offences).map((index, accused_id) => (
                                             
 
-                <div key={index}  style={{margin:"0 0 20px 0", padding:"0"}}>
+                <div key={accused_id}  style={{margin:"0 0 20px 0", padding:"0"}}>
                     
-                    {/* <div style={{fontSize:"11pt"}}><span style={{fontSize:"10pt", fontWeight:"bold"}}>Accused </span>- {first_name + " " + last_name}</div> */}
+                    <div style={{fontSize:"12pt"}}><span style={{fontSize:"11pt", fontWeight:"bold"}}>Accused Number {accused_index} </span>: {first_name + " " + last_name}</div>
                     <div style={{}}>
-                    <label style={{ fontSize: "10pt", margin:"0 0 7px 0" }}>Convictions</label>
+                    <label style={{ fontSize: "10pt", margin:"0 0 7px 0" }}>Offences</label>
 
 
-                    {pendings[parseInt(index)].map((offence: any, index) => (
-                        <>
+                    {offences[parseInt(index)].map((offence: any, index) => (
+                        <div key={index}>
                         
                             <div style={{margin:"0 0 10px 0", borderBottom:"1px solid #666"}}>
                                 <table style={{ fontSize: "10pt" }}>
                                     <tr key={offence.index}>
-                                        {/* <td style={{ textAlign:"left", width: "90px"}}><div style={{fontWeight:"bold", textAlign:"left",fontSize:"9pt"}}>ICCS Code</div>
+                                        <td style={{ textAlign:"left", width: "90px"}}><div style={{fontWeight:"bold", textAlign:"left",fontSize:"9pt"}}>ICCS Code</div>
                                         <div>{offence.ICCS}</div>
-                                        </td> */}
+                                        </td>
                                         <td style={{ width: "630px", border: "none" }}>
                                             <table style={{ fontSize: "10pt", margin:"0 0 0 0", padding:"0 0 0 7px", borderLeft:"1px solid #888"}}>
                                                 <tr key={offence.id}>
                                                     <td style={{ width: "120px", border: "none" }}><label style={{ padding: "0 0 0 7px" }}>Name of Offence</label></td>
-                                                    <td style={{ width: "400px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.offence} </div></td>                                                    
+                                                    <td style={{ width: "400px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.name} </div></td>
                                                 </tr>
                                                 <tr key={offence.id}>
                                                     <td style={{ width: "170px", border: "none" }}><label style={{ padding: "0 0 0 7px" }}>Period of Offence</label></td>
                                                     <td style={{ width: "470px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.dateOfOffence} </div></td>
-                                                </tr>
-                                                <tr key={offence.id}>
-                                                    <td style={{ width: "120px", border: "none" }}><label style={{ padding: "0 0 0 7px" }}>Sentence</label></td>
-                                                    <td style={{ width: "400px", border: "none" }}><div style={{ fontSize: "10pt" }}>{offence.sentence} </div></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -85,7 +76,7 @@ export const Convictions = ({ first_name, last_name, accused_id, key }: Offences
                                 </table>
 
 
-                                {/* <div>
+                                <div>
                                     <div style={{ textAlign:"left", width: "700px", fontWeight: "bold", fontSize: "10pt", margin:"10px 0 2px 0" }}>Statement of Offence</div>
                                 </div>
 
@@ -99,12 +90,12 @@ export const Convictions = ({ first_name, last_name, accused_id, key }: Offences
 
                                 <div>
                                     <div style={{ fontSize: "10pt", lineHeight:"13pt",   margin:"0 0 10px" }}>{offence.particulars} </div>
-                                </div> */}
+                                </div>
 
 
                             </div>
                             
-                        </>
+                        </div>
                         
                     ))}
                     </div>
