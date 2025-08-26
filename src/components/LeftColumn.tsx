@@ -28,6 +28,7 @@ export const LeftColumn = (({ setCreatePassword }: LeftColumnProps) => {
         event.preventDefault()
         localStorage.removeItem("email")
         localStorage.removeItem("agency")
+        localStorage.clear()
         dispatch(logout() as any)
             .unwrap()
             .then(() => {
