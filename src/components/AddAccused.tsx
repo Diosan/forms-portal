@@ -81,6 +81,7 @@ const AddAccused = ({submission_id, accused_added}: AddAccusedProps) => {
       identificationType: form.formData.identificationType,
       previousCriminalRecord: form.formData.previousCriminalRecord,
       relatedMatters: form.formData.relatedMatters,
+      bailStatus: form.formData.bailStatus,
       alias: form.formData.alias
     }
 
