@@ -194,6 +194,10 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
                 let user_email = await localStorage.getItem('email')
                 // import.meta.env.VITE_DPP_EMAIL
 
+                console.log("================================================================================");
+                console.log("\n\n CONSENT NOTE: " + consentNote + "\n\n");
+                console.log("================================================================================");
+
                 let submission_consent = await axios.post(`${API_URL}/api/submissions/consent_submission`,
                 {
                     submission_id: submission_id,
