@@ -473,6 +473,8 @@ export const Sign = ({ }: SignProps) => {
                                             <tr>
                                                 <td><label>Previous Criminal Record: </label></td>
                                                 <td>{accused.previousCriminalRecord}</td>
+                                                <td><label>Bail Status: </label></td>
+                                                <td>{accused.bailStatus}</td>
                                             </tr>
                                         </tbody>
                                     </table>
