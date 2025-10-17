@@ -12,6 +12,7 @@ import "../assets/Submission.css"
 import "../assets/Sign.css"
 import "../assets/Style.css"
 import "../assets/Signature.css"
+import "../assets/Bail.css"
 // import "../assets/javascript/submission"
 import { Step } from "./Step"
 import { Complainant } from "./Complainant"
@@ -473,8 +474,8 @@ export const Sign = ({ }: SignProps) => {
                                             <tr>
                                                 <td><label>Previous Criminal Record: </label></td>
                                                 <td>{accused.previousCriminalRecord}</td>
-                                                <td><label>Bail Status: </label></td>
-                                                <td>{accused.bailStatus}</td>
+                                                <td style={accused.bailStatus == 'Bail granted by Justice of Peace' ? {color: 'red' } : { }} ><label  >Bail Status transcend: </label></td>
+                                                <td style={accused.bailStatus == 'Bail granted by Justice of Peace' ? {color: 'red' } : { }} >{accused.bailStatus}</td>
                                             </tr>
                                         </tbody>
                                     </table>
