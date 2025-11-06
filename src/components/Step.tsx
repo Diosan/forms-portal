@@ -5,6 +5,7 @@ import { RJSFSchema, UiSchema } from '@rjsf/utils';
 import Form from 'react-jsonschema-form';
 import validator from '@rjsf/validator-ajv8';
 import '../assets/Step.css'
+const API_URL = import.meta.env.VITE_API_URL;
 
 type StepProps = {
     isActive: boolean,
@@ -27,7 +28,7 @@ export const Step = ({isActive, step, title}: StepProps) => {
     }
 
     useEffect(() => {
-        axios.get('https://swif.ttlawcourts.org/schema/' + step)
+        axios.get(`${API_URL}/schema/` + step)
         .then((response) => {
           setSchema(response.data.schema)
           setUI(response.data.UI)
