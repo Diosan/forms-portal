@@ -17,6 +17,7 @@ import { Step } from "./Step"
 import { Complainant } from "./Complainant"
 import { Charges } from "./Charges"
 import { Offences } from "./Offences"
+import { ConsentOffences } from "./ConsentOffences"
 import AuthService from "../services/AuthService"
 import { Navigate, useNavigate } from "react-router-dom"
 import {
@@ -420,11 +421,11 @@ export const SignConsent = ({ }: SignProps) => {
                                         <tbody style={{ fontSize: "10pt", }}>
                                             <tr>
                                                 <td style={{ width: "160px" }}><label>Name of Accused: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
+                                                <td colSpan={3}> {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
                                             </tr>
                                             <tr>
                                                 <td style={{ width: "160px" }}><label>Alias: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.alias}</td>
+                                                <td colSpan={3}> {accused.alias}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -497,12 +498,14 @@ export const SignConsent = ({ }: SignProps) => {
                                 <tbody>
 
                                     {accuseds.map((accused: any, i: number) => (
-                                        <Offences
+                                        <div>
+                                        <ConsentOffences
                                             first_name={accused.firstName}
                                             last_name={accused.lastName}
                                             accused_id={accused.id}
-                                            key={i}
+                                            accused_index={(i+1).toString()}
                                         />
+                                        </div>
                                     ))}
                                 </tbody>
                             </table>

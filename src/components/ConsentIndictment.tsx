@@ -66,6 +66,8 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
 
     const [signingName, setSigningName] = useState('')
 
+    const [consentNote, setConsentNote] = useState('')
+
     const [oathType, setOathType] = useState('oath')
 
     const [acknowledged, setAcknowledged] = useState(false)
@@ -83,6 +85,10 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
 
     const oathTypeChange = (event: any) => {
         setOathType(event.target.value)
+    }
+
+    const consentNoteChange = (event: any) => {
+        setConsentNote(event.target.value)
     }
 
     const commisionedChange = (event: any) => {
@@ -191,6 +197,7 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
                 let submission_consent = await axios.post(`${API_URL}/api/submissions/consent_submission`,
                 {
                     submission_id: submission_id,
+                    note: consentNote,
                     email: user_email,
                     otp: signOTP
                 })
@@ -404,7 +411,9 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
                 <>
                     
                     <h5 className="m-0 text-center fw-bold">DIRECTOR OF PUBLIC PROSECUTIONS</h5>
-
+                    <br></br>
+                    <div className="text-center">Click button below to enter endorsement and request consent code</div>
+                    <br></br>
                 </>
                 : <>
                     {!isFinalSigned ?
@@ -440,11 +449,23 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
                         <div className="" style={{}}>
                             <br />
 
-                            <div className="text-center mb-2" style={{ fontSize: "11pt", margin: "0 20px" }}>
+
+
+                            <label style={{}}>Enter written consent</label>
+                            <div className="text-center mb-4">
+                                <div style={{ display: "block", width: "100%", marginTop: "10px", marginBottom: "30px" }}>
+                                    
+                                    <textarea name="consent-note-info" className="form-control" value={consentNote} onChange={consentNoteChange} placeholder="Enter endorsement here" rows={6} >
+                                    </textarea>
+                                </div>
+                            </div>
+
+                            <div className="text-center mb-2" style={{ fontSize: "11pt", margin: "0 20px 40px 20px" }}>
                                 A <strong>Signing code</strong> has been sent to your registered email address. Please enter the code into the box below to authenticate and complete the signing process..
                             </div>
+
                             <div className="text-center mb-4">
-                                <div style={{ display: "block", margin: "0 auto", width: "200px" }}><input
+                                <div style={{ display: "block", margin: "20px auto", width: "200px" }}><input
                                     type="text"
                                     name="otpCode"
                                     placeholder="******"
@@ -460,7 +481,7 @@ export const ConsentIndictment = ({ submission_id, complainant_email, submission
 
 
 
-                                <div className="text-center m-1"><button type="submit" className="btn btn-md btn-primary" >Sign and Submit</button></div>
+                                <div className="text-center m-1"><button type="submit" className="btn btn-md btn-primary" >Sign and Submit Consent</button></div>
 
 
                             </div>

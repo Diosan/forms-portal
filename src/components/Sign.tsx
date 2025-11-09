@@ -418,11 +418,11 @@ export const Sign = ({ }: SignProps) => {
                                         <tbody style={{ fontSize: "10pt", }}>
                                             <tr>
                                                 <td style={{ width: "160px" }}><label>Name of Accused: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
+                                                <td colSpan={3}> {accused.firstName} {accused.lastName} <strong>- {accused.adulthood}.</strong></td>
                                             </tr>
                                             <tr>
                                                 <td style={{ width: "160px" }}><label>Alias: </label></td>
-                                                <td colSpan={3}>{i + 1} {accused.alias}</td>
+                                                <td colSpan={3}> {accused.alias}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -448,7 +448,14 @@ export const Sign = ({ }: SignProps) => {
                                             </tr>
                                             <tr>
                                                 <td><label>Address: </label></td>
-                                                <td colSpan={3}>{accused.address}</td>
+                                                <td colSpan={3}>{accused.addressLine1}
+                                                    {accused.addressLine2 == null ? <></> : <>{', ' + accused.addressLine2}</>}
+                                                    {accused.addressLine3 == null ? <></> : <>{', ' + accused.addressLine3}</>}
+                                                    {accused.cityTown == null ? <></> : <>{', ' + accused.cityTown}</>}
+                                                    {accused.postalCode == null ? <></> : <>{', ' + accused.postalCode}</>}
+                                                    {accused.communityCode == null ? <></> : <>{', ' + accused.communityCode}</>}
+                                                    {accused.countryName == null ? <></> : <>{', ' + accused.countryName}</>}
+                                                </td>
                                             </tr>
 
                                             <tr>
