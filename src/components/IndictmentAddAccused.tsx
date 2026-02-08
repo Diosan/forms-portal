@@ -94,7 +94,7 @@ const IndictmentAddAccused = ({submission_id, accused_added, preliminary_complet
         case 'success':
           console.log('Accused successfully saved', response.data.accused)
 
-          if(preliminary_completed) {
+          // if(preliminary_completed) {
             axios.post(
               API_URL + '/api/accuseds/relateds', 
               {
@@ -104,7 +104,7 @@ const IndictmentAddAccused = ({submission_id, accused_added, preliminary_complet
             ) .then((response) => {
               console.log('Related matter successfully saved', response.data.related)
             })
-          }
+          // }
 
           // navigate('/submission/' + submission_id)
           // window.location.reload()
@@ -145,7 +145,8 @@ const IndictmentAddAccused = ({submission_id, accused_added, preliminary_complet
 
 
     useEffect(() => {
-        let accusedForm = preliminary_completed? 'preliminary_completed_accused' : 'indictment_accused';
+        // let accusedForm = preliminary_completed? 'preliminary_completed_accused' : 'indictment_accused';
+        let accusedForm = 'preliminary_completed_accused';
         axios.get(API_URL + '/schema/' + accusedForm)
         .then((response) => {
           console.log(response.data)
