@@ -71,7 +71,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
     }, [dispatch]);
 
     useEffect(() => {
-        console.log(location?.state?.setChangePassword || false)
+        //console.log(location?.state?.setChangePassword || false)
         setCreatePassword(location?.state?.setChangePassword || false);
     }, []);
 
@@ -225,7 +225,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
         const agencyName = domain ? domain.split('.')[0] : '';
         setAgency(agencyName);
 
-        console.log(agencyName)
+        //console.log(agencyName)
         localStorage.setItem('email', email)
         localStorage.setItem('agency', agencyName)
         setLoading(true);
@@ -238,7 +238,7 @@ export const RegisterSignin = ({ createPassword, setCreatePassword }: RegisterSi
                 setLoading(false);
                 // window.location.reload();
                 setVerificationMode(response.mode)
-                console.log('\n\n\n Successful login response: ', response)
+                // console.log('\n\n\n Successful login response: ', response)
                 console.log('\n\n\n')
             })
             .catch((error: any) => {
